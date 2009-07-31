@@ -1,3 +1,6 @@
+0.3.4
+	Fixed bug with data format that mades gbirthday to crash.
+
 0.3.3
 	Rewrote about window with gtk.AboutDialog.
 	Added function to check and blink if there are birthdays today at midnight.

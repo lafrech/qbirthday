@@ -339,7 +339,7 @@ gtk.about_dialog_set_url_hook(on_url, None)
 def create_dialog(uno):
 	global dlg
 	dlg = gtk.AboutDialog()
-	dlg.set_version("0.3.3")
+	dlg.set_version("0.3.4")
 	dlg.set_comments("Birthday reminder for Evolution Contacts")
 	dlg.set_name("GBirthday")
 	image = gtk.gdk.pixbuf_new_from_file(imageslocation + 'gbirthday.png')
@@ -347,8 +347,9 @@ def create_dialog(uno):
 	dlg.set_icon_from_file(imageslocation + 'birthday.png')
 	dlg.set_copyright(u"Copyright \u00A9 2007 Alex Mallo")
 	dlg.set_license(" Licensed under the GNU General Public License Version 2\n\n Power Manager is free software; you can redistribute it and\/or\nmodify it under the terms of the GNU General Public License\nas published by the Free Software Foundation; either version 2\nof the License, or (at your option) any later version.\n\n Power Manager is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.\n\n You should have received a copy of the GNU General Public License\nalong with this program; if not, write to the Free Software\nFoundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA\n02110-1301, USA.")
-	dlg.set_authors(["Alex Mallo <dernalis@gmail.com>"])
+	dlg.set_authors(["Alex Mallo <dernalis@gmail.com>","Internatinalization:", "Robert Widburger <robert@wildburguer.com>"])
 	dlg.set_artists(["Alex Mallo <dernalis@gmail.com>"])
+	dlg.set_translator_credits("English: Robert Widburger <robert@wildburguer.com>\nGerman: Robert Widburger <robert@wildburguer.com>")
 	dlg.set_website("http://dernalis.googlepages.com/gbirthday.html")
 	def close(w, res):
 		if res == gtk.RESPONSE_CANCEL:
@@ -448,7 +449,7 @@ def StatusIcon(parent=None):
 def check_new_day():
 	global dia
 	fecha = time.asctime(time.localtime(time.time()))
-	sem, mes, nada, diahoy, hora, anho = fecha.split(" ",5)
+	sem, mes, nada, diahoy, hora = fecha.split(" ",5)
 	if dia != diahoy:
 		icon.set_blinking(AddressBook.checktoday(AB))
 		dia = diahoy
@@ -487,7 +488,7 @@ if __name__ == '__main__':
     AB = AddressBook(0)
     icono = StatusIcon()
     fecha = time.asctime(time.localtime(time.time()))
-    sem, mes, nada, dia, hora, anho = fecha.split(" ",5)
+    sem, mes, nada, dia, hora = fecha.split(" ",5)
 #    h, dia, seg = hora.split(":",2)
     gobject.timeout_add(60000, check_new_day)
     gtk.main()
