@@ -14,10 +14,12 @@ from datetime import date
 import time
 import subprocess
 import gobject
+import locale
 
 
 addressBookLocation = os.path.join(os.environ['HOME'], '.evolution/addressbook/local/system/')
-imageslocation = "/usr/share/gbirthday/"
+imageslocation = "/usr/share/gbirthday/pics/"
+languageslocation ="/usr/share/gbirthday/languages/"
 cumpleshoy = False
 
 class AddressBook:
@@ -73,7 +75,6 @@ class AddressBook:
 		    ano = sDate.year - int(ano)
 
 		    temporal = [icono, bday, name, str(d), d, sDate.month, sDate.day, ano]
-		    #cumplelista.append(bday + ': ' + name + ' -->  ' + str(d) + ' days')
 		    cumplelista.append(temporal)
         return cumplelista
 
@@ -140,14 +141,14 @@ def make_menu(event_button, event_time, icon):
     menu = gtk.Menu()
     cerrar = gtk.Image()
     cerrar.set_from_stock(gtk.STOCK_CLOSE, gtk.ICON_SIZE_MENU,)
-    recargar = gtk.ImageMenuItem('Reload')
+    recargar = gtk.ImageMenuItem(langTxt['menu_reload'])
     recarga_img = gtk.Image()
     recarga_img.set_from_stock(gtk.STOCK_REFRESH, gtk.ICON_SIZE_MENU,)
     recargar.set_image(recarga_img)
     recargar.show()
     recargar.connect_object("activate", recargar_gbirthday, "reload")
     menu.append(recargar)
-    blink_menu = gtk.ImageMenuItem('Stop blinking')
+    blink_menu = gtk.ImageMenuItem(langTxt['menu_blink'])
     blink_img = gtk.Image()
     blink_img.set_from_stock(gtk.STOCK_STOP, gtk.ICON_SIZE_MENU,)
     blink_menu.set_image(blink_img)
@@ -155,7 +156,7 @@ def make_menu(event_button, event_time, icon):
     blink_menu.connect_object("activate", stop_blinking, "stop blinking")
     menu.append(blink_menu)
 
-    preferences_menu = gtk.ImageMenuItem('Preferences')
+    preferences_menu = gtk.ImageMenuItem(langTxt['menu_preferences'])
     preferences_img = gtk.Image()
     preferences_img.set_from_stock(gtk.STOCK_PREFERENCES, gtk.ICON_SIZE_MENU,)
     preferences_menu.set_image(preferences_img)
@@ -163,7 +164,7 @@ def make_menu(event_button, event_time, icon):
     preferences_menu.connect_object("activate", preferences_window, "about")
     menu.append(preferences_menu)
 
-    about_menu = gtk.ImageMenuItem('About')
+    about_menu = gtk.ImageMenuItem(langTxt['menu_about'])
     about_img = gtk.Image()
     about_img.set_from_stock(gtk.STOCK_ABOUT, gtk.ICON_SIZE_MENU,)
     about_menu.set_image(about_img)
@@ -171,7 +172,7 @@ def make_menu(event_button, event_time, icon):
     about_menu.connect_object("activate", create_dialog, None)
     menu.append(about_menu)
 
-    salir = gtk.ImageMenuItem('Quit')
+    salir = gtk.ImageMenuItem(langTxt['menu_quit'])
     salir.set_image(cerrar)
     salir.show()
     salir.connect_object("activate", cerrar_gbirthday, "file.quit")
@@ -192,20 +193,14 @@ def on_left_click(icon, event_button, event_time):
 		closebdwindow('focus_out_event', closebdwindow, "")
 
 def openwindow():
-        # Create a new window
+
+	global langTxt
 	global showbd 
 	global showbdcheck
 	showbd = gtk.Window(gtk.WINDOW_TOPLEVEL)
-        # Set the window title
         showbd.set_decorated(False)
 	showbd.set_position(gtk.WIN_POS_MOUSE)
 	showbd.set_icon_from_file(imageslocation + 'birthday.png')
-
-        # Set a handler for delete_event that immediately
-        # exits GTK.
-        #showbd.connect("delete_event", self.delete_event)
-
-        # Sets the border width of the window.
         showbd.set_border_width(0)
 
     	lista=AddressBook.manageBdays(AB)
@@ -220,42 +215,40 @@ def openwindow():
 	box.pack_start(table, False , False, 0)
 	frame.add(box)
 	table.set_col_spacings(10)
-	monthtext = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
 	fila = 0
 	event_box = gtk.EventBox()
 	table.attach(event_box, 0, 6, 0, 1)
 	event_box.show()
 	label = gtk.Label("GBirthday")
 	if len(lista) > 0:
-		label.set_markup('<b>Birthdays</b>')
+		label.set_markup('<b>' + langTxt['txt_birthday'] + '</b>')
 	else:
-		label.set_markup('<b>\n    No birthdays within selected range    \n</b>')
+		label.set_markup('<b>\n    ' + langTxt['txt_empty'] + '    \n</b>')
 	label.set_justify(gtk.JUSTIFY_RIGHT)
 	event_box.add(label)
 	label.show()
 	style = label.get_style()
-	#event_box.modify_bg(gtk.STATE_NORMAL, event_box.get_colormap().alloc_color("grey"))
 	event_box.modify_bg(gtk.STATE_NORMAL, style.bg[gtk.STATE_NORMAL])
 	fila = fila +1
-	# Create second button
 	for cumple in lista:
 		image = gtk.Image()
 		image.set_from_file(imageslocation + cumple[0])
         	table.attach(image, 0, 1, fila, fila+1)
         	image.show()
 
+		langMonth = time.strftime('%B', (2000, int(cumple[5]), 1, 1, 0, 0, 0, 0, 0))
 		if cumple[4] == 0:
-			label = gtk.Label("<b>" + monthtext[cumple[5] - 1] + "</b>")
-			label.set_markup("<b>" + monthtext[cumple[5] - 1] + "</b>")
+			label = gtk.Label("<b>" + langMonth + "</b>")
+			label.set_markup("<b>" + langMonth + "</b>")
 		elif cumple[4] < 0:
-			label = gtk.Label(monthtext[cumple[5] - 1])
-			label.set_markup("<span foreground='grey'>" + monthtext[cumple[5] - 1] + "</span>")
+			label = gtk.Label(langMonth)
+			label.set_markup("<span foreground='grey'>" + langMonth + "</span>")
 		else:
-			label = gtk.Label(monthtext[cumple[5] - 1])
+			label = gtk.Label(langMonth)
 		align = gtk.Alignment(0.0, 0.5, 0, 0)
 		align.add(label)
 		align.show()
-        	table.attach(align, 1, 2, fila, fila+1)
+        	table.attach(align, int(langTxt['pos_month']), int(langTxt['pos_month'])+1, fila, fila+1)
         	label.show()
 
 		if cumple[4] == 0:
@@ -269,7 +262,7 @@ def openwindow():
 		align = gtk.Alignment(1.0, 0.5, 0, 0)
 		align.add(label)
 		align.show()
-        	table.attach(align, 2, 3, fila, fila+1)
+        	table.attach(align, int(langTxt['pos_day']), int(langTxt['pos_day'])+1, fila, fila+1)
         	label.show()
 
 		if cumple[4] == 0:
@@ -287,18 +280,18 @@ def openwindow():
         	label.show()
 
 		if cumple[4] == 0:
-			label = gtk.Label("Today")
-			label.set_markup("<b>Today</b>")
+			label = gtk.Label(langTxt['txt_today'])
+			label.set_markup("<b>" + langTxt['txt_today'] + "</b>")
 		elif cumple[4] == -1:
-			label = gtk.Label("Yesterday")
-			label.set_markup("<span foreground='grey'>Yesterday</span>")
+			label = gtk.Label(langTxt['txt_yesterday'])
+			label.set_markup("<span foreground='grey'>" + langTxt['txt_yesterday'] + "</span>")
 		elif cumple[4] < -1:
-			label = gtk.Label(str(cumple[4] * -1) + " Days ago")
-			label.set_markup("<span foreground='grey'>" + str(cumple[4] * -1) + " Days ago</span>")
+			label = gtk.Label(langTxt['txt_daysago'].replace(u"###", str(cumple[4] * -1)))
+			label.set_markup("<span foreground='grey'>" + langTxt['txt_daysago'].replace(u"###", str(cumple[4] * -1)) + "</span>")
 		elif cumple[4] == 1:
-			label = gtk.Label("Tomorrow")
+			label = gtk.Label(langTxt['txt_tomorrow'])
 		else:
-			label = gtk.Label(cumple[3] + " Days")
+			label = gtk.Label(cumple[3] + " " + langTxt['txt_days'])
 		align = gtk.Alignment(0.0, 0.5, 0, 0)
 		align.add(label)
 		align.show()
@@ -306,13 +299,13 @@ def openwindow():
         	label.show()
 
 		if cumple[4] == 0:
-			label = gtk.Label("<b>" + str(cumple[7]) + " Years</b>")
-			label.set_markup("<b>" + str(cumple[7]) + " Years</b>")
+			label = gtk.Label("<b>" + str(cumple[7]) + " " + langTxt['txt_years'] + "</b>")
+			label.set_markup("<b>" + str(cumple[7]) + " " + langTxt['txt_years'] + "</b>")
 		elif cumple[4] < 0:
-			label = gtk.Label(str(cumple[7]) + " Years")
-			label.set_markup("<span foreground='grey'>" + str(cumple[7]) + " Years</span>")
+			label = gtk.Label(str(cumple[7]) + " " + langTxt['txt_years'])
+			label.set_markup("<span foreground='grey'>" + str(cumple[7]) + " " + langTxt['txt_years'] + "</span>")
 		else:
-			label = gtk.Label(str(cumple[7]) + " Years")
+			label = gtk.Label(str(cumple[7]) + " " + langTxt['txt_years'])
 		align = gtk.Alignment(1.0, 0.5, 0, 0)
 		align.add(label)
 		align.show()
@@ -339,17 +332,17 @@ gtk.about_dialog_set_url_hook(on_url, None)
 def create_dialog(uno):
 	global dlg
 	dlg = gtk.AboutDialog()
-	dlg.set_version("0.3.4")
-	dlg.set_comments("Birthday reminder for Evolution Contacts")
+	dlg.set_version("0.4.0")
+	dlg.set_comments(langTxt['about_comments'])
 	dlg.set_name("GBirthday")
 	image = gtk.gdk.pixbuf_new_from_file(imageslocation + 'gbirthday.png')
 	dlg.set_logo(image)
 	dlg.set_icon_from_file(imageslocation + 'birthday.png')
 	dlg.set_copyright(u"Copyright \u00A9 2007 Alex Mallo")
 	dlg.set_license(" Licensed under the GNU General Public License Version 2\n\n Power Manager is free software; you can redistribute it and\/or\nmodify it under the terms of the GNU General Public License\nas published by the Free Software Foundation; either version 2\nof the License, or (at your option) any later version.\n\n Power Manager is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.\n\n You should have received a copy of the GNU General Public License\nalong with this program; if not, write to the Free Software\nFoundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA\n02110-1301, USA.")
-	dlg.set_authors(["Alex Mallo <dernalis@gmail.com>","Internatinalization:", "Robert Widburger <robert@wildburguer.com>"])
+	dlg.set_authors(["Alex Mallo <dernalis@gmail.com>","Internatinalization:", "Robert Wildburger <r.wildburger@gmx.at>"])
 	dlg.set_artists(["Alex Mallo <dernalis@gmail.com>"])
-	dlg.set_translator_credits("English: Robert Widburger <robert@wildburguer.com>\nGerman: Robert Widburger <robert@wildburguer.com>")
+	dlg.set_translator_credits("English: Robert Wildburger <r.wildburger@gmx.at>\nFrench: Alex Mallo <dernalis@gmail.com>\nGerman: Robert Wildburger <r.wildburger@gmx.at>\nGalician: Alex Mallo <dernalis@gmail.com>\nPortuguese: Alex Mallo <dernalis@gmail.com>\nSpanish: Alex Mallo <dernalis@gmail.com>")
 	dlg.set_website("http://dernalis.googlepages.com/gbirthday.html")
 	def close(w, res):
 		if res == gtk.RESPONSE_CANCEL:
@@ -361,10 +354,9 @@ def preferences_window(textocw):
 	global imageslocation
 	global preferences
 	preferences = gtk.Window(gtk.WINDOW_TOPLEVEL)
-        # Set the window title
         preferences.set_decorated(True)
 	preferences.set_position(gtk.WIN_POS_CENTER)
-	preferences.set_title("Preferences")
+	preferences.set_title(langTxt['menu_preferences'])
 	preferences.set_icon_from_file(imageslocation + 'birthday.png')
 
 	box = gtk.VBox(False, 0)
@@ -374,11 +366,11 @@ def preferences_window(textocw):
 	table.set_col_spacings(10)
 	table.set_row_spacings(10)
 
-	label= gtk.Label("Past birthdays")
+	label= gtk.Label(langTxt['pref_past'])
 	table.attach(label, 0, 1, 0, 1)
 	label.show()
 
-	label= gtk.Label("Next birthdays")
+	label= gtk.Label(langTxt['pref_next'])
 	table.attach(label, 0, 1, 1, 2)
 	label.show()
 	
@@ -397,12 +389,11 @@ def preferences_window(textocw):
 	box.pack_start(table, False , False, 8)
 	table.show()
 
-	button = gtk.Button("Save & Close")
+	button = gtk.Button(langTxt['pref_button'])
 	box.pack_start(button, False , False, 2)
 	button.connect("clicked", cerrar_preferences, None)
 	button.show()
 	box.show()
-        # Sets the border width of the window.
 	preferences.set_border_width(5)
 	preferences.show()
 
@@ -448,8 +439,7 @@ def StatusIcon(parent=None):
     icon.connect('activate', on_left_click, 20, 20)
 def check_new_day():
 	global dia
-	fecha = time.asctime(time.localtime(time.time()))
-	sem, mes, nada, diahoy, hora = fecha.split(" ",5)
+	diahoy = time.strftime("%d", time.localtime(time.time()))
 	if dia != diahoy:
 		icon.set_blinking(AddressBook.checktoday(AB))
 		dia = diahoy
@@ -464,8 +454,12 @@ if __name__ == '__main__':
     global showbdcheck
     global dlg
     global dia
+    global langTxt
+    langTxt = {}
     dlg= None
     showbdcheck = 0
+    defaultLocale = locale.getdefaultlocale()[0]
+    shortLocale = locale.getdefaultlocale()[0][0:2].lower()
     try:
     	f = open(os.environ['HOME']+"/.gbirthday.conf",'r')
     except IOError:
@@ -484,11 +478,24 @@ if __name__ == '__main__':
 			elif label == "lastday": lastday = int(value)
 			else: print "Unhandled vale in gbirthday.conf: " + line
     	f.close()
-#    print time.asctime(time.localtime(time.time()))
+    try:
+    	langFile = open(languageslocation + defaultLocale  + ".lang",'r')
+    except IOError:
+    	try:
+    		langFile = open(languageslocation + shortLocale  + ".lang",'r')
+    	except IOError:
+    		try:
+    			langFile = open(languageslocation+"en.lang",'r')
+    		except IOError:
+    			print "Language file not found."
+
+    for langLine in langFile:
+    	langLine = langLine.replace("\n","")
+    	if langLine.startswith(u"#",0,1) == False:
+    		langLabel, langValue = langLine.split('=',1)
+    		langTxt[langLabel] = str(langValue)
     AB = AddressBook(0)
     icono = StatusIcon()
-    fecha = time.asctime(time.localtime(time.time()))
-    sem, mes, nada, dia, hora = fecha.split(" ",5)
-#    h, dia, seg = hora.split(":",2)
+    dia = time.strftime("%d", time.localtime(time.time()))
     gobject.timeout_add(60000, check_new_day)
     gtk.main()

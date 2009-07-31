@@ -1,3 +1,8 @@
+0.4.0
+	Added internationalization, by Robert Wildburger.
+	Added languages: German, Spanish, French, Portuguese and Galician.
+	Fixed stop blinking bug which made it start to blink again each minute.
+
 0.3.4
 	Fixed bug with data format that mades gbirthday to crash.
 

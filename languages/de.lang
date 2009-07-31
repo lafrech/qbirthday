@@ -1,0 +1,41 @@
+# about_language: Name of Translation (like 'English translation)
+about_language=Deutsche Übersetzung
+# about_translation: Name of translator (like 'Foo Bar')
+about_translation=Robert Wildburger
+# about_comments: subtitle in about-dialog
+about_comments=Geburtstags-Reminder für Evolution Kontakte
+# menu_reload: Menutitle 'Reload'
+menu_reload=Neu laden
+# menu_blink: Menutitle 'Stop blinking'
+menu_blink=Nicht blinken
+# menu_preferences: Menutitle 'Preferences'
+menu_preferences=Einstellungen
+# menu_about: Menutitle 'About'
+menu_about=Über Gbirthday
+# menu_quit: Menutitle 'Quit'
+menu_quit=Schließen
+# pref_past: Lable 'Missed birthdays'
+pref_past=Verpasste Geburtstage
+# pref_next: Lable 'Next birthdays'
+pref_next=Kommende Geburtstage
+# pref_button: Lable 'Save and close"
+pref_button=Speichern und schließen
+#pos_month & pos_day: For languages where day goes before month - pos_month=2 pos_day=1
+pos_month=2
+pos_day=1
+# txt_birthday: Lable 'Birthdays'
+txt_birthday=Geburtstage
+# txt_empty: Lable 'No birthdays in specified period'
+txt_empty=Keine Geburtstage in dem definierten Zeitraum
+# txt_today: Lable 'Today'
+txt_today=Heute
+# txt_yesterday: Lable 'Yesterday'
+txt_yesterday=Gestern
+# txt_daysago: Lable 'days ago'; if needed ### will be replaced with amount of days (like 'vor ### Tagen' => 'vor 5 Tagen')
+txt_daysago=vor ### Tagen
+# txt_tomorrow: Lable 'Tomorrow'
+txt_tomorrow=Morgen
+# txt_days: Lable 'Days'
+txt_days=Tage
+# txt_years: Lable 'Years'
+txt_years=Jahre

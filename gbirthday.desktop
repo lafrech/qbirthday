@@ -1,0 +1,16 @@
+[Desktop Entry]
+Name=GBirthday
+Version=0.4.0
+Comment=Birthday reminder for Evolution contacts
+Comment[en]=Birthday reminder for Evolution contacts
+Comment[de]=Geburtstags-Reminder für Evolution Kontakte
+Comment[es]=Recordatorio de cumpleaños para los contactos de Evolution
+Comment[fr]=Rappel d'anniversaire pour Paul contacts
+Comment[gl]=Recordatorio de aniversarios pros contactos do Evolution
+Comment[pt]=Lembrete dos aniversários para os contatos do Evolution
+Exec=gbirthday
+Terminal=false
+Type=Application
+Categories=Office;
+StartupNotify=false
+Icon=/usr/share/gbirthday/pics/birthday.png

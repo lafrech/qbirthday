@@ -16,4 +16,12 @@ if [ -s /usr/local/gbirthday ]
     then
         rm -rf /usr/local/gbirthday
     fi
+if [ -s /usr/bin/gbirthday ]
+    then
+        rm /usr/bin/gbirthday
+    fi
+if [ -s /usr/share/gbirthday ]
+    then
+        rm -rf /usr/share/gbirthday
+    fi
 
