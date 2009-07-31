@@ -152,6 +152,14 @@ def make_menu(event_button, event_time, icon):
     blink_menu.connect_object("activate", stop_blinking, "stop blinking")
     menu.append(blink_menu)
 
+    preferences_menu = gtk.ImageMenuItem('Preferences')
+    preferences_img = gtk.Image()
+    preferences_img.set_from_stock(gtk.STOCK_PREFERENCES, gtk.ICON_SIZE_MENU,)
+    preferences_menu.set_image(preferences_img)
+    preferences_menu.show()
+    preferences_menu.connect_object("activate", preferences_window, "about")
+    menu.append(preferences_menu)
+
     about_menu = gtk.ImageMenuItem('About')
     about_img = gtk.Image()
     about_img.set_from_stock(gtk.STOCK_ABOUT, gtk.ICON_SIZE_MENU,)
@@ -205,27 +213,28 @@ def openwindow():
 	box.show()
 	frame = gtk.Frame(None)
 	showbd.add(frame)
-        table = gtk.Table(7, 6, False)
+	table = gtk.Table(7, 6, False)
 	box.pack_start(table, False , False, 0)
-        frame.add(box)
+	frame.add(box)
 	table.set_col_spacings(10)
 	monthtext = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
 	fila = 0
+	event_box = gtk.EventBox()
+	table.attach(event_box, 0, 6, 0, 1)
+	event_box.show()
+	label = gtk.Label("GBirthday")
 	if len(lista) > 0:
-		event_box = gtk.EventBox()
-		table.attach(event_box, 0, 6, 0, 1)
-		event_box.show()
-		label = gtk.Label("GBirthday")
 		label.set_markup('<b>Birthdays</b>')
-		label.set_justify(gtk.JUSTIFY_RIGHT)
-        	event_box.add(label)
-        	label.show()
-
-		style = label.get_style()
-		#event_box.modify_bg(gtk.STATE_NORMAL, event_box.get_colormap().alloc_color("grey"))
-		event_box.modify_bg(gtk.STATE_NORMAL, style.bg[gtk.STATE_NORMAL])
-		fila = fila +1
-        # Create second button
+	else:
+		label.set_markup('<b>\n    No birthdays within selected range    \n</b>')
+	label.set_justify(gtk.JUSTIFY_RIGHT)
+	event_box.add(label)
+	label.show()
+	style = label.get_style()
+	#event_box.modify_bg(gtk.STATE_NORMAL, event_box.get_colormap().alloc_color("grey"))
+	event_box.modify_bg(gtk.STATE_NORMAL, style.bg[gtk.STATE_NORMAL])
+	fila = fila +1
+	# Create second button
 	for cumple in lista:
 		image = gtk.Image()
 		image.set_from_file(imageslocation + cumple[0])
@@ -338,8 +347,8 @@ def about_window(textocw):
 	box.pack_start(image, False , False, 8)
 	image.show()
 
-	label_version = gtk.Label("Gbirthday 0.3.1")
-	label_version.set_markup("<span size='xx-large'><b>GBirthday 0.3.1</b></span>")
+	label_version = gtk.Label("Gbirthday 0.3.2")
+	label_version.set_markup("<span size='xx-large'><b>GBirthday 0.3.2</b></span>")
 	box.pack_start(label_version, False , False, 0)
 	label_version.show()
 
@@ -360,11 +369,77 @@ def about_window(textocw):
         about.set_border_width(5)
         about.show()
 
+def preferences_window(textocw):
+	global imageslocation
+	global preferences
+	preferences = gtk.Window(gtk.WINDOW_TOPLEVEL)
+        # Set the window title
+        preferences.set_decorated(True)
+	preferences.set_position(gtk.WIN_POS_CENTER)
+	preferences.set_title("Preferences")
+	preferences.set_icon_from_file(imageslocation + 'birthday.png')
+
+	box = gtk.VBox(False, 0)
+	preferences.add(box)
+	
+	table = gtk.Table(2, 2, True)
+	table.set_col_spacings(10)
+	table.set_row_spacings(10)
+
+	label= gtk.Label("Past birthdays")
+	table.attach(label, 0, 1, 0, 1)
+	label.show()
+
+	label= gtk.Label("Next birthdays")
+	table.attach(label, 0, 1, 1, 2)
+	label.show()
+	
+	past = gtk.Adjustment(firstday, lower=-30, upper=0, step_incr=1, page_incr=0, page_size=0)
+	spin = gtk.SpinButton(past, climb_rate=0.0, digits=0)
+	spin.connect("focus_out_event", cambiar_preferencias,"firstday", spin)
+	table.attach(spin,1, 2, 0, 1)
+	spin.show()
+
+	next = gtk.Adjustment(lastday, lower=0, upper=90, step_incr=1, page_incr=0, page_size=0)
+	spin = gtk.SpinButton(next, climb_rate=0.0, digits=0)
+	spin.connect("focus_out_event", cambiar_preferencias,"lastday", spin)
+	table.attach(spin,1, 2, 1, 2)
+	spin.show()
+
+	box.pack_start(table, False , False, 8)
+	table.show()
+
+	button = gtk.Button("Save & Close")
+	box.pack_start(button, False , False, 2)
+	button.connect("clicked", cerrar_preferences, None)
+	button.show()
+	box.show()
+        # Sets the border width of the window.
+	preferences.set_border_width(5)
+	preferences.show()
+
+def cambiar_preferencias(uno, dos, opcion, spin):
+	global firstday
+	global lastday
+	spin.update()
+	if opcion == "firstday": firstday = spin.get_value_as_int()
+	elif opcion == "lastday": lastday = spin.get_value_as_int()
+	else: print "Valor no indicado"
+
 def cerrar_gbirthday(texto):
     gtk.main_quit()
 
 def cerrar_about(uno,texto):
     about.destroy()
+
+def cerrar_preferences(uno,texto):
+	global firstday
+	global lastday
+	f = open(os.environ['HOME']+"/.gbirthday.conf",'w')
+	f.write("firstday="+str(firstday) + "\n")
+	f.write("lastday="+str(lastday) + "\n")
+	f.close()
+	preferences.destroy()
 
 def recargar_gbirthday(texto):
     global AB
