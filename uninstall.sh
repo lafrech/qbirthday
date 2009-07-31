@@ -24,4 +24,8 @@ if [ -s /usr/share/gbirthday ]
     then
         rm -rf /usr/share/gbirthday
     fi
+if [ -s /usr/share/applications/gbirthday.desktop ]
+    then
+        rm -rf /usr/share/applications/gbirthday.desktop
+    fi
 

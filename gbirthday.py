@@ -7,6 +7,8 @@ Just a KBirthday clone for Gnome environment and working with evolution data ser
 ## pygtk-demo Status Icon: Nikos Kouremenos
 ## EvoBdayReminder.py: Axel Heim. http://www.axelheim.de/
 
+import pygtk
+pygtk.require('2.0')
 import gtk
 import bsddb, os, re
 import datetime
@@ -17,7 +19,7 @@ import gobject
 import locale
 
 
-addressBookLocation = os.path.join(os.environ['HOME'], '.evolution/addressbook/local/system/')
+addressBookLocation = os.path.join(os.environ['HOME'], '.evolution/addressbook/local/')
 imageslocation = "/usr/share/gbirthday/pics/"
 languageslocation ="/usr/share/gbirthday/languages/"
 cumpleshoy = False
@@ -26,19 +28,20 @@ class AddressBook:
     def __init__(self, book=None):
 
 	cumplelista=[]
-        location = addressBookLocation
-        for name in book or []:
-            location = os.path.join(location, 'subfolders', name)
-        location = os.path.join(location, 'addressbook.db')
-	addressbook=location
-        self.contacts = []
-        self.bdays = {}
-        file = bsddb.hashopen(addressbook)
-        for key in file.keys():
-            data = file[key]
-            if not data.startswith('BEGIN:VCARD'):
-                continue
-            self.contacts.append(Contact(data,self.bdays))
+	self.contacts = []
+       	self.bdays = {}
+	for addresser in os.listdir(addressBookLocation):
+		location = os.path.join(addressBookLocation, addresser)
+		for name in book or []:
+			location = os.path.join(location, 'subfolders', name)
+		location = os.path.join(location, 'addressbook.db')
+		addressbook = location
+        	file = bsddb.hashopen(addressbook)
+        	for key in file.keys():
+            		data = file[key]
+            		if not data.startswith('BEGIN:VCARD'):
+                		continue
+            		self.contacts.append(Contact(data,self.bdays))
 
     def manageBdays(self):
 
@@ -75,6 +78,7 @@ class AddressBook:
 		    ano = sDate.year - int(ano)
 
 		    temporal = [icono, bday, name, str(d), d, sDate.month, sDate.day, ano]
+		    #print temporal
 		    cumplelista.append(temporal)
         return cumplelista
 
@@ -127,9 +131,15 @@ class Contact:
             if label == 'BDAY':
                 mostRecentDate = value
 	    if (mostRecentName != '') & (mostRecentDate != ''):
-                bdays[mostRecentDate] = mostRecentName		
+                if bdays.has_key(mostRecentDate):
+                	indice = 1
+                	mostRecentDateOrig = mostRecentDate
+                	while bdays.has_key(mostRecentDate):
+                		mostRecentDate = mostRecentDateOrig + "T" + str(indice)
+                		indice = indice + 1
+                bdays[mostRecentDate] = mostRecentName
 		mostRecentName = ''
-                mostRecentDate = ''
+		mostRecentDate = ''
 
 def startswithany(s, patList):
     for pat in patList:
@@ -198,13 +208,13 @@ def openwindow():
 	global showbd 
 	global showbdcheck
 	showbd = gtk.Window(gtk.WINDOW_TOPLEVEL)
-        showbd.set_decorated(False)
+	showbd.set_decorated(False)
 	showbd.set_position(gtk.WIN_POS_MOUSE)
 	showbd.set_icon_from_file(imageslocation + 'birthday.png')
-        showbd.set_border_width(0)
+	showbd.set_border_width(0)
 
-    	lista=AddressBook.manageBdays(AB)
-    	listaiconos = []
+	lista=AddressBook.manageBdays(AB)
+	listaiconos = []
 
 	box = gtk.HBox()
 	box.set_border_width(5)
@@ -228,7 +238,7 @@ def openwindow():
 	event_box.add(label)
 	label.show()
 	style = label.get_style()
-	event_box.modify_bg(gtk.STATE_NORMAL, style.bg[gtk.STATE_NORMAL])
+	event_box.modify_bg(gtk.STATE_NORMAL, event_box.rc_get_style().bg[gtk.STATE_SELECTED])
 	fila = fila +1
 	for cumple in lista:
 		image = gtk.Image()
@@ -236,7 +246,7 @@ def openwindow():
         	table.attach(image, 0, 1, fila, fila+1)
         	image.show()
 
-		langMonth = time.strftime('%B', (2000, int(cumple[5]), 1, 1, 0, 0, 0, 0, 0))
+		langMonth = time.strftime('%B', (2000, int(cumple[5]), 1, 1, 0, 0, 0, 1, 0))
 		if cumple[4] == 0:
 			label = gtk.Label("<b>" + langMonth + "</b>")
 			label.set_markup("<b>" + langMonth + "</b>")
@@ -325,14 +335,14 @@ def closebdwindow(uno, dos, textocw):
 
 
 def on_url(d, link, data):
-        subprocess.Popen(["firefox", "http://dernalis.googlepages.com/gbirthday.html"])
+        subprocess.Popen(["firefox", "http://gbirthday.sourceforge.net/"])
 
 gtk.about_dialog_set_url_hook(on_url, None)
 
 def create_dialog(uno):
 	global dlg
 	dlg = gtk.AboutDialog()
-	dlg.set_version("0.4.0")
+	dlg.set_version("0.4.1")
 	dlg.set_comments(langTxt['about_comments'])
 	dlg.set_name("GBirthday")
 	image = gtk.gdk.pixbuf_new_from_file(imageslocation + 'gbirthday.png')
@@ -340,10 +350,10 @@ def create_dialog(uno):
 	dlg.set_icon_from_file(imageslocation + 'birthday.png')
 	dlg.set_copyright(u"Copyright \u00A9 2007 Alex Mallo")
 	dlg.set_license(" Licensed under the GNU General Public License Version 2\n\n Power Manager is free software; you can redistribute it and\/or\nmodify it under the terms of the GNU General Public License\nas published by the Free Software Foundation; either version 2\nof the License, or (at your option) any later version.\n\n Power Manager is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.\n\n You should have received a copy of the GNU General Public License\nalong with this program; if not, write to the Free Software\nFoundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA\n02110-1301, USA.")
-	dlg.set_authors(["Alex Mallo <dernalis@gmail.com>","Internatinalization:", "Robert Wildburger <r.wildburger@gmx.at>"])
+	dlg.set_authors(["Alex Mallo <dernalis@gmail.com>", "Robert Wildburger <r.wildburger@gmx.at>", "Stefan Jurco <stefan.jurco@gmail.com>"])
 	dlg.set_artists(["Alex Mallo <dernalis@gmail.com>"])
-	dlg.set_translator_credits("English: Robert Wildburger <r.wildburger@gmx.at>\nFrench: Alex Mallo <dernalis@gmail.com>\nGerman: Robert Wildburger <r.wildburger@gmx.at>\nGalician: Alex Mallo <dernalis@gmail.com>\nPortuguese: Alex Mallo <dernalis@gmail.com>\nSpanish: Alex Mallo <dernalis@gmail.com>")
-	dlg.set_website("http://dernalis.googlepages.com/gbirthday.html")
+	dlg.set_translator_credits("English: Robert Wildburger <r.wildburger@gmx.at>\nFrench: Alex Mallo <dernalis@gmail.com>\nGerman: Robert Wildburger <r.wildburger@gmx.at>\nGalician: Alex Mallo <dernalis@gmail.com>\nItalian: Alex Mallo <dernalis@gmail.com>\nPortuguese: Alex Mallo <dernalis@gmail.com>\nSlovak: Stefan Jurco <stefan.jurco@gmail.com>\nSpanish: Alex Mallo <dernalis@gmail.com>")
+	dlg.set_website("http://gbirthday.sf.net/")
 	def close(w, res):
 		if res == gtk.RESPONSE_CANCEL:
 			w.hide()
@@ -423,24 +433,40 @@ def cerrar_preferences(uno,texto):
 	preferences.destroy()
 
 def recargar_gbirthday(texto):
-    global AB
-    AB = AddressBook(0)
-    icon.set_blinking(AddressBook.checktoday(AB))
+	global AB
+	global icon
+	AB = AddressBook(0)
+	icon.set_blinking(AddressBook.checktoday(AB))
+	lista=AddressBook.manageBdays(AB)
+	if len(lista) > 0:
+		icon.set_from_file(imageslocation + 'birthday.png')
+	else:
+		icon.set_from_file(imageslocation + 'nobirthday.png')
 
 def stop_blinking(texto):
 	global icon
 	icon.set_blinking(False)
     
 def StatusIcon(parent=None):
-    global icon
-    icon = gtk.status_icon_new_from_file(imageslocation + 'birthday.png')
-    icon.set_blinking(AddressBook.checktoday(AB))
-    icon.connect('popup-menu', on_right_click)
-    icon.connect('activate', on_left_click, 20, 20)
+	global icon
+	icon = gtk.status_icon_new_from_file(imageslocation + 'birthday.png')
+	lista=AddressBook.manageBdays(AB)
+	if len(lista) > 0:
+		icon.set_from_file(imageslocation + 'birthday.png')
+	else:
+		icon.set_from_file(imageslocation + 'nobirthday.png')
+	icon.set_blinking(AddressBook.checktoday(AB))
+	icon.connect('popup-menu', on_right_click)
+	icon.connect('activate', on_left_click, 20, 20)
 def check_new_day():
 	global dia
 	diahoy = time.strftime("%d", time.localtime(time.time()))
 	if dia != diahoy:
+		lista=AddressBook.manageBdays(AB)
+		if len(lista) > 0:
+			icon.set_from_file(imageslocation + 'birthday.png')
+		else:
+			icon.set_from_file(imageslocation + 'nobirthday.png')
 		icon.set_blinking(AddressBook.checktoday(AB))
 		dia = diahoy
 	return True

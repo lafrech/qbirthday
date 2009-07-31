@@ -1,3 +1,13 @@
+0.4.1
+	Fixed bug with month text and python 2.4.
+	Fixed bug with birthdays in same day and year.
+	Forced pygtk version to 2. It needs 2.10 to work.
+	Added support for multiple evolution addressbooks, by Stefan Jurco.
+	Inproved title box background color, now gets value from gtk theme.
+	Set greyscale when no birthdays in selected period.
+	Added Slovak translation, by Stefan Jurco.
+	Added Italian translation, by Alex Mallo.
+
 0.4.0
 	Added internationalization, by Robert Wildburger.
 	Added languages: German, Spanish, French, Portuguese and Galician.
