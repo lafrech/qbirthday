@@ -42,10 +42,10 @@ class AddressBook:
         cumplelista = []
 	temporal = []
 
-        global D
-        global T
+        global firstday
+        global lastday
         
-        for d in range(-2,D+1):
+        for d in range(firstday,lastday+1):
             sDate = now + datetime.timedelta(d)
 
             for k in range(len(self.bdays)):
@@ -119,6 +119,7 @@ class Contact:
             label, value = line.split(':', 1)
             if label == 'X-EVOLUTION-FILE-AS': 
 		mostRecentName = value
+		mostRecentName = mostRecentName.replace("\,",",")
             if label == 'BDAY':
                 mostRecentDate = value
 	    if (mostRecentName != '') & (mostRecentDate != ''):
@@ -145,7 +146,7 @@ def make_menu(event_button, event_time, icon):
     menu.append(recargar)
     blink_menu = gtk.ImageMenuItem('Stop blinking')
     blink_img = gtk.Image()
-    blink_img.set_from_stock(gtk.STOCK_MEDIA_STOP, gtk.ICON_SIZE_MENU,)
+    blink_img.set_from_stock(gtk.STOCK_STOP, gtk.ICON_SIZE_MENU,)
     blink_menu.set_image(blink_img)
     blink_menu.show()
     blink_menu.connect_object("activate", stop_blinking, "stop blinking")
@@ -337,8 +338,8 @@ def about_window(textocw):
 	box.pack_start(image, False , False, 8)
 	image.show()
 
-	label_version = gtk.Label("Gbirthday 0.3.0")
-	label_version.set_markup("<span size='xx-large'><b>GBirthday 0.3.0</b></span>")
+	label_version = gtk.Label("Gbirthday 0.3.1")
+	label_version.set_markup("<span size='xx-large'><b>GBirthday 0.3.1</b></span>")
 	box.pack_start(label_version, False , False, 0)
 	label_version.show()
 
@@ -382,18 +383,32 @@ def StatusIcon(parent=None):
     icon.connect('activate', on_left_click, 20, 20)
 
 if __name__ == '__main__':
-    global D
-    global T
+    global firstday
+    global lastday
     global AB
     global icon
     global icono
     global showbdcheck
     showbdcheck = 0
-   
-    # enter the number of days for which Bday warnings shall be given
-    D = 30
-    # enter the number of seconds for which the script shall sleep after execution
-    T = 5
+    try:
+    	f = open(os.environ['HOME']+"/.gbirthday.conf",'r')
+    except IOError:
+		f = open(os.environ['HOME']+"/.gbirthday.conf",'w')
+		firstday = -2
+		lastday = 30
+		f.write("firstday="+str(firstday) + "\n")
+		f.write("lastday="+str(lastday) + "\n")
+		f.close()
+		print "Created configuration file."
+    else:
+    	for line in f:
+			line = line.replace("\n","")
+			label, value = line.split('=', 1)
+			if label == "firstday": firstday = int(value)
+			elif label == "lastday": lastday = int(value)
+			else: print "Unhandled vale in gbirthday.conf: " + line
+    	f.close()
+
     AB = AddressBook(0)
     icono = StatusIcon()
     gtk.main()

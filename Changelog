@@ -1,15 +1,19 @@
+0.3.1
+	Fixed file as "lastname, firstname" backslash character issue.
+	Added configuration File: ~/.gbirthday.conf.
+
 0.3.0
 	Set birthday data fake title background to label bg color.
 	Added birthday window fake frame.
 	Some about window lesser look improvements.
 	New icon set trying to follow tango guidelines
+	Changed stop blinking icon.
 
 0.2.4
 	Erased negative sign in lost birthdays.
 	Fixed double click bug that aviod birthday data window close.
 	Set birthday data window icon.
 	Deleted lots of obsolete debugging lines.
-	Changed stop blinking icon.
 	Added About window.
 	
 0.2.3
