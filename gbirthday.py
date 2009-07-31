@@ -12,9 +12,12 @@ import bsddb, os, re
 import datetime
 from datetime import date
 import time
+import subprocess
+import gobject
+
 
 addressBookLocation = os.path.join(os.environ['HOME'], '.evolution/addressbook/local/system/')
-imageslocation = "/usr/local/gbirthday/"
+imageslocation = "/usr/share/gbirthday/"
 cumpleshoy = False
 
 class AddressBook:
@@ -165,7 +168,7 @@ def make_menu(event_button, event_time, icon):
     about_img.set_from_stock(gtk.STOCK_ABOUT, gtk.ICON_SIZE_MENU,)
     about_menu.set_image(about_img)
     about_menu.show()
-    about_menu.connect_object("activate", about_window, "about")
+    about_menu.connect_object("activate", create_dialog, None)
     menu.append(about_menu)
 
     salir = gtk.ImageMenuItem('Quit')
@@ -327,48 +330,32 @@ def closebdwindow(uno, dos, textocw):
     showbdcheck = 0
     showbd.destroy()
 
-def about_window(textocw):
-	global imageslocation
-	global about
-	about = gtk.Window(gtk.WINDOW_TOPLEVEL)
-        # Set the window title
-        about.set_decorated(True)
-	about.set_position(gtk.WIN_POS_CENTER)
-	about.set_title("About GBirthday")
-	about.set_icon_from_file(imageslocation + 'birthday.png')
-        # Set a handler for delete_event that immediately
-        # exits GTK.
-        #showbd.connect("delete_event", showbd.delete_event)
-	box = gtk.VBox(False, 0)
-	about.add(box)
+
+def on_url(d, link, data):
+        subprocess.Popen(["firefox", "http://dernalis.googlepages.com/gbirthday.html"])
+
+gtk.about_dialog_set_url_hook(on_url, None)
+
+def create_dialog(uno):
+	global dlg
+	dlg = gtk.AboutDialog()
+	dlg.set_version("0.3.3")
+	dlg.set_comments("Birthday reminder for Evolution Contacts")
+	dlg.set_name("GBirthday")
+	image = gtk.gdk.pixbuf_new_from_file(imageslocation + 'gbirthday.png')
+	dlg.set_logo(image)
+	dlg.set_icon_from_file(imageslocation + 'birthday.png')
+	dlg.set_copyright(u"Copyright \u00A9 2007 Alex Mallo")
+	dlg.set_license(" Licensed under the GNU General Public License Version 2\n\n Power Manager is free software; you can redistribute it and\/or\nmodify it under the terms of the GNU General Public License\nas published by the Free Software Foundation; either version 2\nof the License, or (at your option) any later version.\n\n Power Manager is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.\n\n You should have received a copy of the GNU General Public License\nalong with this program; if not, write to the Free Software\nFoundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA\n02110-1301, USA.")
+	dlg.set_authors(["Alex Mallo <dernalis@gmail.com>"])
+	dlg.set_artists(["Alex Mallo <dernalis@gmail.com>"])
+	dlg.set_website("http://dernalis.googlepages.com/gbirthday.html")
+	def close(w, res):
+		if res == gtk.RESPONSE_CANCEL:
+			w.hide()
+	dlg.connect("response", close)
+	dlg.run()
 	
-	image = gtk.Image()
-	image.set_from_file(imageslocation + 'gbirthday.png')
-	box.pack_start(image, False , False, 8)
-	image.show()
-
-	label_version = gtk.Label("Gbirthday 0.3.2")
-	label_version.set_markup("<span size='xx-large'><b>GBirthday 0.3.2</b></span>")
-	box.pack_start(label_version, False , False, 0)
-	label_version.show()
-
-	label_version = gtk.Label("Birthday reminder for Evolution Contacts")
-	box.pack_start(label_version, False , False, 0)
-	label_version.show()
-
-	label_version = gtk.Label(u"Copyright \u00A9 2007 Alex Mallo")
-	box.pack_start(label_version, False , False, 20)
-	label_version.show()
-
-	button = gtk.Button("Close")
-	box.pack_start(button, False , False, 2)
-	button.connect("clicked", cerrar_about,"texto")
-	button.show()
-	box.show()
-        # Sets the border width of the window.
-        about.set_border_width(5)
-        about.show()
-
 def preferences_window(textocw):
 	global imageslocation
 	global preferences
@@ -394,15 +381,15 @@ def preferences_window(textocw):
 	table.attach(label, 0, 1, 1, 2)
 	label.show()
 	
-	past = gtk.Adjustment(firstday, lower=-30, upper=0, step_incr=1, page_incr=0, page_size=0)
+	past = gtk.Adjustment(firstday, lower=-30, upper=0, step_incr=-1, page_incr=0, page_size=0)
 	spin = gtk.SpinButton(past, climb_rate=0.0, digits=0)
-	spin.connect("focus_out_event", cambiar_preferencias,"firstday", spin)
+	spin.connect("value-changed", cambiar_preferencias,"firstday", spin)
 	table.attach(spin,1, 2, 0, 1)
 	spin.show()
 
 	next = gtk.Adjustment(lastday, lower=0, upper=90, step_incr=1, page_incr=0, page_size=0)
 	spin = gtk.SpinButton(next, climb_rate=0.0, digits=0)
-	spin.connect("focus_out_event", cambiar_preferencias,"lastday", spin)
+	spin.connect("value-changed", cambiar_preferencias,"lastday", spin)
 	table.attach(spin,1, 2, 1, 2)
 	spin.show()
 
@@ -418,7 +405,7 @@ def preferences_window(textocw):
 	preferences.set_border_width(5)
 	preferences.show()
 
-def cambiar_preferencias(uno, dos, opcion, spin):
+def cambiar_preferencias(uno, opcion, spin):
 	global firstday
 	global lastday
 	spin.update()
@@ -427,7 +414,9 @@ def cambiar_preferencias(uno, dos, opcion, spin):
 	else: print "Valor no indicado"
 
 def cerrar_gbirthday(texto):
-    gtk.main_quit()
+	if dlg != None:
+		dlg.destroy()
+	gtk.main_quit()
 
 def cerrar_about(uno,texto):
     about.destroy()
@@ -447,8 +436,8 @@ def recargar_gbirthday(texto):
     icon.set_blinking(AddressBook.checktoday(AB))
 
 def stop_blinking(texto):
-    global icon
-    icon.set_blinking(False)
+	global icon
+	icon.set_blinking(False)
     
 def StatusIcon(parent=None):
     global icon
@@ -456,6 +445,14 @@ def StatusIcon(parent=None):
     icon.set_blinking(AddressBook.checktoday(AB))
     icon.connect('popup-menu', on_right_click)
     icon.connect('activate', on_left_click, 20, 20)
+def check_new_day():
+	global dia
+	fecha = time.asctime(time.localtime(time.time()))
+	sem, mes, nada, diahoy, hora, anho = fecha.split(" ",5)
+	if dia != diahoy:
+		icon.set_blinking(AddressBook.checktoday(AB))
+		dia = diahoy
+	return True
 
 if __name__ == '__main__':
     global firstday
@@ -464,6 +461,9 @@ if __name__ == '__main__':
     global icon
     global icono
     global showbdcheck
+    global dlg
+    global dia
+    dlg= None
     showbdcheck = 0
     try:
     	f = open(os.environ['HOME']+"/.gbirthday.conf",'r')
@@ -483,7 +483,11 @@ if __name__ == '__main__':
 			elif label == "lastday": lastday = int(value)
 			else: print "Unhandled vale in gbirthday.conf: " + line
     	f.close()
-
+#    print time.asctime(time.localtime(time.time()))
     AB = AddressBook(0)
     icono = StatusIcon()
+    fecha = time.asctime(time.localtime(time.time()))
+    sem, mes, nada, dia, hora, anho = fecha.split(" ",5)
+#    h, dia, seg = hora.split(":",2)
+    gobject.timeout_add(60000, check_new_day)
     gtk.main()

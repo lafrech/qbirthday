@@ -1,5 +1,8 @@
 0.3.3
-	Added webpage URL to about screen.
+	Rewrote about window with gtk.AboutDialog.
+	Added function to check and blink if there are birthdays today at midnight.
+	Improved preference spinners signals.
+	Set Past birthdays spinner as a reverse spinner.
 
 0.3.2
 	Added preferences window to set past and next birthdays range.

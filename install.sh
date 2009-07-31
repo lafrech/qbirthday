@@ -12,17 +12,25 @@ if [ -s /usr/local/bin/gbirthday ]
     then
         rm /usr/local/bin/gbirthday
     fi
+if [ -s /usr/bin/gbirthday ]
+    then
+        rm /usr/local/bin/gbirthday
+    fi
 if [ -s /usr/local/gbirthday ]
     then
         rm -rf /usr/local/gbirthday
     fi
+if [ -s /usr/share/gbirthday ]
+    then
+        rm -rf /usr/share/gbirthday
+    fi
 
 # Install new version
-mkdir /usr/local/gbirthday
-chmod 775 /usr/local/gbirthday
-cp *.png /usr/local/gbirthday/
-chmod 664 /usr/local/gbirthday/*.png
-cp gbirthday.py /usr/local/gbirthday/
-chmod 775 /usr/local/gbirthday/gbirthday.py
-ln -s /usr/local/gbirthday/gbirthday.py /usr/local/bin/gbirthday
-chmod 775 /usr/local/bin/gbirthday
+mkdir /usr/share/gbirthday
+chmod 775 /usr/share/gbirthday
+cp *.png /usr/share/gbirthday/
+chmod 664 /usr/share/gbirthday/*.png
+cp gbirthday.py /usr/share/gbirthday/
+chmod 775 /usr/share/gbirthday/gbirthday.py
+ln -s /usr/share/gbirthday/gbirthday.py /usr/bin/gbirthday
+chmod 775 /usr/bin/gbirthday
