@@ -26,7 +26,6 @@ class AddressBook:
             location = os.path.join(location, 'subfolders', name)
         location = os.path.join(location, 'addressbook.db')
 	addressbook=location
-	print 'Recargando.....'
         self.contacts = []
         self.bdays = {}
         file = bsddb.hashopen(addressbook)
@@ -58,8 +57,6 @@ class AddressBook:
 
                 if bdayKeys[k].find('-'+sDateMonth+'-'+sDateDay) != -1:
                     if d == 0:
-                        print 'Ohoh! Birthday today!!!'
-                        print ' '
 			cumpleshoy = True
 			icono = 'birthdaytoday.png'
    		    elif d < 0:
@@ -99,7 +96,6 @@ class AddressBook:
 
                 if bdayKeys[k].find('-'+sDateMonth+'-'+sDateDay) != -1:
                     if d == 0:
-                        print 'Checktoday'
 			cumpleshoy = True
 	return cumpleshoy
  
@@ -149,11 +145,20 @@ def make_menu(event_button, event_time, icon):
     menu.append(recargar)
     blink_menu = gtk.ImageMenuItem('Stop blinking')
     blink_img = gtk.Image()
-    blink_img.set_from_stock(gtk.STOCK_DIALOG_WARNING, gtk.ICON_SIZE_MENU,)
+    blink_img.set_from_stock(gtk.STOCK_MEDIA_STOP, gtk.ICON_SIZE_MENU,)
     blink_menu.set_image(blink_img)
     blink_menu.show()
-    blink_menu.connect_object("activate", stop_blinking, "reload")
+    blink_menu.connect_object("activate", stop_blinking, "stop blinking")
     menu.append(blink_menu)
+
+    about_menu = gtk.ImageMenuItem('About')
+    about_img = gtk.Image()
+    about_img.set_from_stock(gtk.STOCK_ABOUT, gtk.ICON_SIZE_MENU,)
+    about_menu.set_image(about_img)
+    about_menu.show()
+    about_menu.connect_object("activate", about_window, "about")
+    menu.append(about_menu)
+
     salir = gtk.ImageMenuItem('Quit')
     salir.set_image(cerrar)
     salir.show()
@@ -164,33 +169,44 @@ def make_menu(event_button, event_time, icon):
         event_time, icon)
 
 def on_right_click(icon, event_button, event_time):
-    print "Boton Derecho"
     make_menu(event_button, event_time, icon)
     
 def on_left_click(icon, event_button, event_time):
+	global showbdcheck
+	if showbdcheck == 0:
+		showbdcheck = 1
+		openwindow()
+	else:
+		closebdwindow('focus_out_event', closebdwindow, "")
+
+def openwindow():
         # Create a new window
 	global showbd 
+	global showbdcheck
 	showbd = gtk.Window(gtk.WINDOW_TOPLEVEL)
         # Set the window title
         showbd.set_decorated(False)
 	showbd.set_position(gtk.WIN_POS_MOUSE)
+	showbd.set_icon_from_file(imageslocation + 'birthday.png')
 
         # Set a handler for delete_event that immediately
         # exits GTK.
         #showbd.connect("delete_event", self.delete_event)
 
         # Sets the border width of the window.
-        showbd.set_border_width(5)
+        showbd.set_border_width(0)
 
     	lista=AddressBook.manageBdays(AB)
     	listaiconos = []
 
-        # Create a 2x2 table
-	event_box = gtk.EventBox()
-	showbd.add(event_box)
-	event_box.show()
+	box = gtk.HBox()
+	box.set_border_width(5)
+	box.show()
+	frame = gtk.Frame(None)
+	showbd.add(frame)
         table = gtk.Table(7, 6, False)
-        event_box.add(table)
+	box.pack_start(table, False , False, 0)
+        frame.add(box)
 	table.set_col_spacings(10)
 	monthtext = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
 	fila = 0
@@ -203,7 +219,10 @@ def on_left_click(icon, event_button, event_time):
 		label.set_justify(gtk.JUSTIFY_RIGHT)
         	event_box.add(label)
         	label.show()
-		event_box.modify_bg(gtk.STATE_NORMAL, event_box.get_colormap().alloc_color("grey"))
+
+		style = label.get_style()
+		#event_box.modify_bg(gtk.STATE_NORMAL, event_box.get_colormap().alloc_color("grey"))
+		event_box.modify_bg(gtk.STATE_NORMAL, style.bg[gtk.STATE_NORMAL])
 		fila = fila +1
         # Create second button
 	for cumple in lista:
@@ -261,8 +280,8 @@ def on_left_click(icon, event_button, event_time):
 			label = gtk.Label("Yesterday")
 			label.set_markup("<span foreground='grey'>Yesterday</span>")
 		elif cumple[4] < -1:
-			label = gtk.Label(cumple[3] + " Days ago")
-			label.set_markup("<span foreground='grey'>" + cumple[3] + " Days ago</span>")
+			label = gtk.Label(str(cumple[4] * -1) + " Days ago")
+			label.set_markup("<span foreground='grey'>" + str(cumple[4] * -1) + " Days ago</span>")
 		elif cumple[4] == 1:
 			label = gtk.Label("Tomorrow")
 		else:
@@ -289,26 +308,70 @@ def on_left_click(icon, event_button, event_time):
 		fila = fila +1
 
         table.show()
+	frame.show()
         showbd.show()
 	showbd.connect('focus_out_event', closebdwindow,"texto")
 
 def closebdwindow(uno, dos, textocw):
-    print "pierde foco"
+    global showbdcheck
+    showbdcheck = 0
     showbd.destroy()
 
+def about_window(textocw):
+	global imageslocation
+	global about
+	about = gtk.Window(gtk.WINDOW_TOPLEVEL)
+        # Set the window title
+        about.set_decorated(True)
+	about.set_position(gtk.WIN_POS_CENTER)
+	about.set_title("About GBirthday")
+	about.set_icon_from_file(imageslocation + 'birthday.png')
+        # Set a handler for delete_event that immediately
+        # exits GTK.
+        #showbd.connect("delete_event", showbd.delete_event)
+	box = gtk.VBox(False, 0)
+	about.add(box)
+	
+	image = gtk.Image()
+	image.set_from_file(imageslocation + 'gbirthday.png')
+	box.pack_start(image, False , False, 8)
+	image.show()
+
+	label_version = gtk.Label("Gbirthday 0.3.0")
+	label_version.set_markup("<span size='xx-large'><b>GBirthday 0.3.0</b></span>")
+	box.pack_start(label_version, False , False, 0)
+	label_version.show()
+
+	label_version = gtk.Label("Birthday reminder for Evolution Contacts")
+	box.pack_start(label_version, False , False, 0)
+	label_version.show()
+
+	label_version = gtk.Label(u"Copyright \u00A9 2007 Alex Mallo")
+	box.pack_start(label_version, False , False, 20)
+	label_version.show()
+
+	button = gtk.Button("Close")
+	box.pack_start(button, False , False, 2)
+	button.connect("clicked", cerrar_about,"texto")
+	button.show()
+	box.show()
+        # Sets the border width of the window.
+        about.set_border_width(5)
+        about.show()
+
 def cerrar_gbirthday(texto):
-    print "Cierre de la aplicacion"
     gtk.main_quit()
+
+def cerrar_about(uno,texto):
+    about.destroy()
 
 def recargar_gbirthday(texto):
     global AB
-    print 'pulsado reload'
     AB = AddressBook(0)
     icon.set_blinking(AddressBook.checktoday(AB))
 
 def stop_blinking(texto):
     global icon
-    print 'pulsado stop blinking'
     icon.set_blinking(False)
     
 def StatusIcon(parent=None):
@@ -324,7 +387,9 @@ if __name__ == '__main__':
     global AB
     global icon
     global icono
-    
+    global showbdcheck
+    showbdcheck = 0
+   
     # enter the number of days for which Bday warnings shall be given
     D = 30
     # enter the number of seconds for which the script shall sleep after execution

@@ -1,8 +1,23 @@
+0.3.0
+	Set birthday data fake title background to label bg color.
+	Added birthday window fake frame.
+	Some about window lesser look improvements.
+	New icon set trying to follow tango guidelines
+
+0.2.4
+	Erased negative sign in lost birthdays.
+	Fixed double click bug that aviod birthday data window close.
+	Set birthday data window icon.
+	Deleted lots of obsolete debugging lines.
+	Changed stop blinking icon.
+	Added About window.
+	
 0.2.3
 	Changed name shown from "Full Name" to "File as".
-	Best Alignement on Birthday Window.
+	Best Alignement on birthday bindow.
 	Bold text on today birthdays.
 	Grey text on lost birthdays.
+
 0.2.2
 	Added path to resources folder on image loading.
 	Added ugly install script.
@@ -12,19 +27,15 @@
 	Best title look.
 
 0.2.0
-
-	Moved Birthday data to frameless left click window.
+	Moved birthday data to frameless left click (fake menu) window.
 	Splited data into a table.
 
 0.1.2
-
 	Added "Reload" option.
 	Added "Stop blinking" option.
 
 0.1.1
-
-	Solved Issue with 2 character months.
+	Fixed issue with 2 character months.
 
 0.1.0
-
-	First version, Just a popup menu with Birthday data and Quit.
+	First version, Just a popup menu with birthday data and quit.
