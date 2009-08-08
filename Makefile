@@ -27,11 +27,11 @@ uninstall:
 	rm -rvf $(DESTDIR)$(bindir)/gbirthday
 
 tar.gz:
-	rm -f *.tar.gz
+	rm -f *.tar.gz *.tar.lzma
 	tar --exclude=.git \
 		-zcvf gbirthday-$(version).tar.gz *
 
 tar.lzma:
-	rm -f *.tar.lzma
+	rm -f *.tar.lzma *.tar.gz
 	tar --use-compress-program=lzma --exclude=.git \
 		-cvf gbirthday-$(version).tar.lzma *
