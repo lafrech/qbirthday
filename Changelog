@@ -1,3 +1,9 @@
+0.4.2
+	Added Makefile for (un)install instead bash script
+	Added License file with GPLv2+
+	Pics are now installed into /usr/share/pixmaps
+	Swiched to .tar.lzma
+
 0.4.1
 	Fixed bug with month text and python 2.4.
 	Fixed bug with birthdays in same day and year.

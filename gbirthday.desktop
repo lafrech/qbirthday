@@ -14,4 +14,4 @@ Terminal=false
 Type=Application
 Categories=Office;
 StartupNotify=false
-Icon=/usr/share/gbirthday/pics/birthday.png
+Icon=gbirthday

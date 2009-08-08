@@ -1,37 +1,37 @@
 bindir = /usr/bin
 datadir = /usr/share
+pixmaps = $(datadir)/pixmaps
+version = master
+
 default:
 	echo Nothing to do.
 
 install:
-	echo Creating gbirthday folder
-	mkdir -p $(DESTDIR)$(datadir)/gbirthday
-	echo $(DESTDIR)
-	echo asdf
-	chmod 775 $(DESTDIR)$(datadir)/gbirthday
-	echo Creating pics folder
-	mkdir $(DESTDIR)$(datadir)/gbirthday/pics
-	chmod 775 $(DESTDIR)$(datadir)/gbirthday/pics
-	echo Moving pics to pics folder
-	cp -v pics/*.png $(DESTDIR)$(datadir)/gbirthday/pics
-	chmod 664 $(DESTDIR)$(datadir)/gbirthday/pics/*.png
-	echo moving python file to gbirthday folder
-	cp -v gbirthday.py $(DESTDIR)$(datadir)/gbirthday/
-	chmod 775 $(DESTDIR)$(datadir)/gbirthday/gbirthday.py
-	echo Creating languages folder
-	mkdir $(DESTDIR)$(datadir)/gbirthday/languages
-	chmod 775 $(DESTDIR)$(datadir)/gbirthday/languages/
-	echo Moving languages to languages floder
-	cp -v languages/*.lang $(DESTDIR)$(datadir)/gbirthday/languages/
-	echo Creating menu item
+	install -m 755 -d $(DESTDIR)$(datadir)/gbirthday
+	install -m 755 -d $(DESTDIR)$(pixmaps)/gbirthday
+	install -m 664 pics/*.png $(DESTDIR)$(pixmaps)/gbirthday/
+	install -m 755  gbirthday.py $(DESTDIR)$(datadir)/gbirthday/
+	install -m 755 -d $(DESTDIR)$(datadir)/gbirthday/languages/
+	install -m 644 languages/*.lang \
+		$(DESTDIR)$(datadir)/gbirthday/languages/
 	mkdir -p $(DESTDIR)$(datadir)/applications/
-	cp -v gbirthday.desktop $(DESTDIR)$(datadir)/applications/
-	echo Linking python file in bin folder
+	install -m 644 gbirthday.desktop $(DESTDIR)$(datadir)/applications/
 	mkdir -p $(DESTDIR)$(bindir)
-	mv $(DESTDIR)$(datadir)/gbirthday/gbirthday.py $(DESTDIR)$(bindir)/gbirthday
-	chmod 775 $(DESTDIR)$(bindir)/gbirthday
+	install -m 755 $(DESTDIR)$(datadir)/gbirthday/gbirthday.py \
+		$(DESTDIR)$(bindir)/gbirthday
 
 uninstall:
 	rm -rvf $(DESTDIR)$(datadir)/gbirthday
+	rm -rvf $(DESTDIR)$(pixmaps)/gbirthday
 	rm -rvf $(DESTDIR)$(datadir)/applications/gbirthday.desktop
 	rm -rvf $(DESTDIR)$(bindir)/gbirthday
+
+tar.gz:
+	rm -f *.tar.gz
+	tar --exclude=.git \
+		-zcvf gbirthday-$(version).tar.gz *
+
+tar.lzma:
+	rm -f *.tar.lzma
+	tar --use-compress-program=lzma --exclude=.git \
+		-cvf gbirthday-$(version).tar.lzma *
