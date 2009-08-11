@@ -1,11 +1,11 @@
 Name:			gbirthday
-Version:		0.4.1
-Release:		5%{?dist}
+Version:		0.4.2
+Release:		1%{?dist}
 Summary:		Birthday reminder for evolution
 Group:			User Interface/Desktops
 License:		GPLv2+
 URL:			http://gbirthday.sourceforge.net
-Source:			http://downloads.sourceforge.net/gbirthday/gbirthday-%{version}.tar.gz
+Source:			http://downloads.sourceforge.net/gbirthday/gbirthday-%{version}.tar.lzma
 BuildRoot:		%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildArch:		noarch
 
@@ -50,6 +50,9 @@ rm -rf %{buildroot}
 %config(noreplace) %{_sysconfdir}/xdg/autostart/%{name}.desktop
 
 %changelog
+* Tue Aug 11 2009 Thomas Spura <tomspur@fedoraproject.org> 0.4.2-1
+- new release
+
 * Sat Aug 8 2009 Thomas Spura <tomspur@fedoraproject.org> 0.4.1-5
 - desktop file is now config
 - only start if a system tray is present
