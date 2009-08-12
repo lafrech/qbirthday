@@ -6,6 +6,9 @@ version = master
 default:
 	echo Nothing to do.
 
+clean:
+	rm -f *.tar.*
+
 install:
 	install -m 755 -d $(DESTDIR)$(datadir)/gbirthday
 	install -m 755 -d $(DESTDIR)$(pixmaps)/gbirthday
