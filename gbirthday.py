@@ -144,10 +144,10 @@ class Contact:
             if label == 'BDAY':
                 mostRecentDate = value
 	    if (mostRecentName != '') & (mostRecentDate != ''):
-                if bdays.has_key(mostRecentDate):
+                if mostRecentDate in bdays:
                 	indice = 1
                 	mostRecentDateOrig = mostRecentDate
-                	while bdays.has_key(mostRecentDate):
+                	while mostRecentDate in bdays:
                 		mostRecentDate = mostRecentDateOrig + "T" + str(indice)
                 		indice = indice + 1
                 bdays[mostRecentDate] = mostRecentName

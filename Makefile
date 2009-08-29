@@ -12,7 +12,7 @@ clean:
 install:
 	install -m 755 -d $(DESTDIR)$(datadir)/gbirthday
 	install -m 755 -d $(DESTDIR)$(pixmaps)/gbirthday
-	install -m 664 pics/*.png $(DESTDIR)$(pixmaps)/gbirthday/
+	install -m 644 pics/*.png $(DESTDIR)$(pixmaps)/gbirthday/
 	install -m 755  gbirthday.py $(DESTDIR)$(datadir)/gbirthday/
 	install -m 755 -d $(DESTDIR)$(datadir)/gbirthday/languages/
 	install -m 644 languages/*.lang \
