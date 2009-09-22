@@ -559,7 +559,7 @@ class AddressBook:
     def add(self, name, birthday):
         '''add a new person'''
         birthday = str(birthday)
-        if self.bdays.has_key(birthday):
+        if birthday in self.bdays:
             # check for double entry - we assume that people with the same name
             # and the same birthday exists only once in our universe
             if not (name in self.bdays[birthday]):
