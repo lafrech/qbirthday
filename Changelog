@@ -1,3 +1,14 @@
+0.5.1
+	Fixed bug with Categories in Lightning-SQLite-Database
+
+0.5.0
+	Created 'Database'-Structure
+	Sdded support for CSV-files (comma-seperated value)
+	Added support for MySQL
+	Added support for Thunderbird/Icedove Lightning
+	Added support for Sunbrid / IceOwl
+	Fixed minor bugs
+
 0.4.2
 	Added Makefile for (un)install instead bash script
 	Added License file with GPLv2+

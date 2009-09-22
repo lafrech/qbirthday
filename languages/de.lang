@@ -3,7 +3,7 @@ about_language=Deutsche Übersetzung
 # about_translation: Name of translator (like 'Foo Bar')
 about_translation=Robert Wildburger
 # about_comments: subtitle in about-dialog
-about_comments=Geburtstags-Reminder für Evolution Kontakte
+about_comments=Geburtstags-Reminder
 # menu_reload: Menutitle 'Reload'
 menu_reload=Neu laden
 # menu_blink: Menutitle 'Stop blinking'
@@ -39,3 +39,17 @@ txt_tomorrow=Morgen
 txt_days=Tage
 # txt_years: Lable 'Years'
 txt_years=Jahre
+# txt_add: Label 'add'
+menu_add=Hinzufügen
+csv_no_file=Es konnte nicht gespeichert werden, keine CSV-Datei vorhanden.
+csv_not_exist=CSV-Datei existiert nicht
+csv_files=CSV-Dateien
+csv_choose=Durchsuchen...
+mysql_install=MySQLdb ist nicht installiert. Bitte MySQL für Python installieren
+mysql_not_connect=Konnte nicht mit MySQL-Server verbinden
+mysql_no_query=Konnte MySQL-Anfrage nicht ausführen
+mysql_name=MySQL-Datenbank
+pref_database=Datenbank
+add_name=Name
+add_birthday=Geburtstag
+add_database=in Datenbank/Datei speichern

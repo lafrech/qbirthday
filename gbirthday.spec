@@ -1,7 +1,7 @@
 Name:			gbirthday
-Version:		0.4.2
+Version:		0.5.1
 Release:		1%{?dist}
-Summary:		Birthday reminder for evolution
+Summary:		Birthday reminder for Evolution and some others
 Group:			User Interface/Desktops
 License:		GPLv2+
 URL:			http://gbirthday.sourceforge.net
@@ -16,7 +16,8 @@ Requires:		pygtk2
 
 %description
 GBirthday is a birthday reminder application that helps you to remember 
-your evolution contacts' birthdays.
+your Evolution, Thunderbird, Sunbird contacts' birthdays or from a MySQL
+Server or a CSV File.
 It puts an icon on notification area which will blink when there is any 
 of your contacts' birthday today. You can also check if there is any of 
 your contacs' birthday on next days.
@@ -50,6 +51,10 @@ rm -rf %{buildroot}
 %config(noreplace) %{_sysconfdir}/xdg/autostart/%{name}.desktop
 
 %changelog
+* Wed Sep 23 2009 Thomas Spura <tomspur@fedoraproject.org> 0.5.1-1
+- New Release
+- Changing description (now also supports Thunderbird, Sunbird...
+
 * Tue Aug 11 2009 Thomas Spura <tomspur@fedoraproject.org> 0.4.2-1
 - new release
 
