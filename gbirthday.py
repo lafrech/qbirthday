@@ -41,6 +41,19 @@ import gobject
 import locale
 import uuid
 
+""" parse locales from python module
+Do you say "1. January" or "January 1."?
+"""
+import locale
+locale.setlocale(locale.LC_ALL, '')
+day_at_place, month_at_place = 1, 2
+if time.strftime('%x', (2000, 3, 1, 1, 0, 0, 0, 1, 0)).startswith("03"):
+    day_at_place, month_at_place = 2, 1
+
+import gettext
+gettext.bindtextdomain("gbirthday")
+_ = gettext.gettext
+
 import ConfigParser
 
 imageslocation = "/usr/share/pixmaps/gbirthday/"
@@ -219,8 +232,8 @@ class Lightning(DataBase):
             self.cursor.execute (qry)
             self.conn.commit()
         except Exception, msg:
-            showErrorMsg(translate('sqlite_no_query', 
-                'Could not execute SQLite-query') + ': %s\n %s' % (qry, str(msg)))
+            showErrorMsg(_('Could not execute SQLite-query')
+                            + ': %s\n %s' % (qry, str(msg)))
         ab.add(name, str(birthday))
 
 class Sunbird(Lightning):
@@ -245,8 +258,7 @@ class Sunbird(Lightning):
         elif (os.path.exists(iceowl)):
             self.get_config_file(iceowl)
         else:
-            showErrorMsg(translate('no_iceowl_sunbird', 
-                'neither iceowl nor sunbird installed'))
+            showErrorMsg(_('Neither iceowl nor sunbird is installed'))
 
 class Evolution(DataBase):
     '''data import from the Evolution address book'''
@@ -328,15 +340,15 @@ class CSV(DataBase):
                             ab.add(name, date)
                             break
             else:
-                showErrorMsg(translate('csv_no_file', 
-                    'Could not save, CVS-file not set.') + ':' + filename)
+                showErrorMsg(_('Could not save, CVS-file not set.')
+                                + ':' + filename)
 
     def add(self, name, birthday):
         '''add new person with birthday to end of csv-file'''
         birthday = str(birthday)
         # TODO: show menu to select file?
         if len(csv_files) == 0:
-            showErrorMsg(translate('csv_not_exist', 'CSV-file does not exist'))
+            showErrorMsg(_('CSV-file does not exist'))
             return
         filename = csv_files[0]
         if (os.path.exists(filename)):
@@ -441,7 +453,7 @@ class MySQL(DataBase):
         try:
             import MySQLdb
         except:
-            showErrorMsg(translate('mysql_install', 'MySQLdb is not installed. Please install MySQL for Python'))
+            showErrorMsg(_('MySQLdb is not installed. Please install MySQL for Python'))
         try:
             self.conn = MySQLdb.connect (host = self.host, 
                                     port=int(self.port), 
@@ -450,7 +462,8 @@ class MySQL(DataBase):
                                     db = self.database)
             self.cursor = self.conn.cursor()
         except Exception, msg:
-            showErrorMsg(translate('mysql_not_connect', 'Could not connect to MySQL-Server') + str(msg))
+            showErrorMsg(_('Could not connect to MySQL-Server')
+                            + str(msg))
 
     def parse(self):
         '''connect to mysql-database and get data'''
@@ -462,8 +475,8 @@ class MySQL(DataBase):
             for row in rows:
                 ab.add(row[0], str(row[1]))
         except Exception, msg:
-            showErrorMsg(translate('mysql_no_query', 
-                'Could not execute MySQL-query') + ': %s\n %s' % (qry, str(msg)))
+            showErrorMsg(_('Could not execute MySQL-query')
+                            + ': %s\n %s' % (qry, str(msg)))
         self.conn.close()
 
     def add(self, name, birthday):
@@ -475,8 +488,8 @@ class MySQL(DataBase):
                 (self.table, self.name_row, self.date_row, name, birthday))
             self.cursor.execute (qry)
         except Exception, msg:
-            showErrorMsg(translate('mysql_no_query', 
-                'Could not execute MySQL-query') + ': %s\n %s' % (qry, str(msg)))
+            showErrorMsg(_('Could not execute MySQL-query')
+                            + ': %s\n %s' % (qry, str(msg)))
         self.conn.close()
         ab.add(name, birthday)
 
@@ -504,7 +517,7 @@ class MySQL(DataBase):
         '''create additional mysql config in config menu'''
         table = gtk.Table(1, 2)
 
-        label= gtk.Label(translate('mysql_name', 'MySQL-Database'))
+        label= gtk.Label(_('MySQL-Database')) # Label for MySQL, just translate 'Database'
         self.text = label
         table.attach(label, 0, 1, 0, 1)
         label.show()
@@ -665,14 +678,14 @@ def make_menu(event_button, event_time, icon):
     menu = gtk.Menu()
     cerrar = gtk.Image()
     cerrar.set_from_stock(gtk.STOCK_CLOSE, gtk.ICON_SIZE_MENU,)
-    recargar = gtk.ImageMenuItem(translate('menu_reload', 'Reload'))
+    recargar = gtk.ImageMenuItem(_('Reload'))
     recarga_img = gtk.Image()
     recarga_img.set_from_stock(gtk.STOCK_REFRESH, gtk.ICON_SIZE_MENU,)
     recargar.set_image(recarga_img)
     recargar.show()
     recargar.connect_object('activate', reload_gbirthday, 'reload')
     menu.append(recargar)
-    blink_menu = gtk.ImageMenuItem(translate('menu_blink', 'Stop blinking'))
+    blink_menu = gtk.ImageMenuItem(_('Stop blinking'))
     blink_img = gtk.Image()
     blink_img.set_from_stock(gtk.STOCK_STOP, gtk.ICON_SIZE_MENU,)
     blink_menu.set_image(blink_img)
@@ -680,7 +693,7 @@ def make_menu(event_button, event_time, icon):
     blink_menu.connect_object('activate', stop_blinking, 'stop blinking')
     menu.append(blink_menu)
 
-    add_menu = gtk.ImageMenuItem(translate('menu_add', 'Add'))
+    add_menu = gtk.ImageMenuItem(_('Add'))
     add_img = gtk.Image()
     add_img.set_from_stock(gtk.STOCK_ADD, gtk.ICON_SIZE_MENU,)
     add_menu.set_image(add_img)
@@ -688,8 +701,7 @@ def make_menu(event_button, event_time, icon):
     add_menu.connect_object("activate", add, "add birthday")
     menu.append(add_menu)
 
-    preferences_menu = gtk.ImageMenuItem(translate('menu_preferences', 
-        'Preferences'))
+    preferences_menu = gtk.ImageMenuItem(_('Preferences'))
     preferences_img = gtk.Image()
     preferences_img.set_from_stock(gtk.STOCK_PREFERENCES, gtk.ICON_SIZE_MENU,)
     preferences_menu.set_image(preferences_img)
@@ -697,7 +709,7 @@ def make_menu(event_button, event_time, icon):
     preferences_menu.connect_object("activate", preferences_window, "about")
     menu.append(preferences_menu)
 
-    about_menu = gtk.ImageMenuItem(translate('menu_about', 'About'))
+    about_menu = gtk.ImageMenuItem(_('About'))
     about_img = gtk.Image()
     about_img.set_from_stock(gtk.STOCK_ABOUT, gtk.ICON_SIZE_MENU,)
     about_menu.set_image(about_img)
@@ -705,7 +717,7 @@ def make_menu(event_button, event_time, icon):
     about_menu.connect_object("activate", create_dialog, None)
     menu.append(about_menu)
 
-    salir = gtk.ImageMenuItem(translate('menu_quit', 'Quit'))
+    salir = gtk.ImageMenuItem(_('Quit'))
     salir.set_image(cerrar)
     salir.show()
     salir.connect_object("activate", finish_gbirthday, "file.quit")
@@ -755,10 +767,9 @@ def openwindow():
     event_box.show()
     label = gtk.Label("GBirthday")
     if len(lista) > 0:
-        label.set_markup('<b>%s</b>' % translate('txt_birthday', 'Birthdays'))
+        label.set_markup('<b>%s</b>' % _('Birthdays'))
     else:
-        label.set_markup('<b>\n    %s    \n</b>' % translate('txt_empty', 
-            'No birthdays in specified period'))
+        label.set_markup('<b>\n    %s    \n</b>' % _('No birthdays in specified period'))
     label.set_justify(gtk.JUSTIFY_RIGHT)
     event_box.add(label)
     label.show()
@@ -783,8 +794,8 @@ def openwindow():
         align = gtk.Alignment(0.0, 0.5, 0, 0)
         align.add(label)
         align.show()
-        table.attach(align, int(translate('pos_month', 1)), 
-            int(translate('pos_month', 1))+1, fila, fila+1)
+        table.attach(align, month_at_place, 
+                        month_at_place+1, fila, fila+1)
         label.show()
 
         c = str(cumple[6])
@@ -799,8 +810,8 @@ def openwindow():
         align = gtk.Alignment(1.0, 0.5, 0, 0)
         align.add(label)
         align.show()
-        table.attach(align, int(translate('pos_day', 2)), 
-            int(translate('pos_day', 2))+1, fila, fila+1)
+        table.attach(align, day_at_place, 
+                        day_at_place+1, fila, fila+1)
         label.show()
 
         if cumple[4] == 0:
@@ -818,28 +829,27 @@ def openwindow():
         label.show()
 
         if cumple[4] == 0:
-            label = gtk.Label(translate('txt_today', 'Today'))
-            label.set_markup('<b>%s</b>' % translate('txt_today', 'Today'))
+            label = gtk.Label(_('Today'))
+            label.set_markup('<b>%s</b>' % _('Today'))
         elif cumple[4] == -1:
-            label = gtk.Label(translate('txt_yesterday', 'Yesterday'))
+            label = gtk.Label(_('Yesterday'))
             label.set_markup('<span foreground="grey">%s</span>' % 
-                translate('txt_yesterday', 'Yesterday'))
+                _('Yesterday'))
         elif cumple[4] < -1:
-            ago = translate('txt_daysago', '### Days ago').replace(
-                  '###', str(cumple[4] * -1))
+            ago = (_('%s Days ago') % str(cumple[4] * -1))
             label = gtk.Label(ago)
             label.set_markup('<span foreground="grey">%s</span>' % ago)
         elif cumple[4] == 1:
-            label = gtk.Label(translate('txt_tomorrow', 'Tomorrow'))
+            label = gtk.Label(_('Tomorrow'))
         else:
-            label = gtk.Label(cumple[3] + " " + translate('txt_days', 'Days'))
+            label = gtk.Label(cumple[3] + " " + _('Days'))
         align = gtk.Alignment(0.0, 0.5, 0, 0)
         align.add(label)
         align.show()
         table.attach(align, 4, 5, fila, fila+1)
         label.show()
 
-        years = '%s %s' % (str(cumple[7]), translate('txt_years', 'Years'))
+        years = '%s %s' % (str(cumple[7]), _('Years'))
         if cumple[4] == 0:
             label = gtk.Label('<b>%s</b>' % years)
             label.set_markup('<b>%s</b>' % years)
@@ -877,12 +887,12 @@ def create_dialog(uno):
     global dlg
     dlg = gtk.AboutDialog()
     dlg.set_version("0.5.2")
-    dlg.set_comments(translate('about_comments', 'Birthday reminder'))
+    dlg.set_comments(_('Birthday reminder'))
     dlg.set_name("GBirthday")
     image = gtk.gdk.pixbuf_new_from_file(imageslocation + 'gbirthday.png')
     dlg.set_logo(image)
     dlg.set_icon_from_file(imageslocation + 'birthday.png')
-    dlg.set_copyright(u'Copyright \u00A9 2007 Alex Mallo, 2009 Andreas Bresser')
+    dlg.set_copyright(u'Copyright \u00A9 2007 Alex Mallo, 2009 Andreas Bresser, 2009 Thomas Spura')
     dlg.set_license('''Licensed under the GNU General Public License Version 2
 
 GBirthday is free software; you can redistribute it and\/or
@@ -902,17 +912,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
     dlg.set_authors(['Alex Mallo <dernalis@gmail.com>', 
                      'Robert Wildburger <r.wildburger@gmx.at>', 
                      'Stefan Jurco <stefan.jurco@gmail.com>', 
-                     'Andreas Bresser <andreas@phidev.org>'])
+                     'Andreas Bresser <andreas@phidev.org>',
+                     'Thomas Spura <tomspur@fedoraproject.org>'])
     dlg.set_artists(['Alex Mallo <dernalis@gmail.com>'])
-    dlg.set_translator_credits(
-'''English: Robert Wildburger <r.wildburger@gmx.at>
-French: Alex Mallo <dernalis@gmail.com>
-German: Robert Wildburger <r.wildburger@gmx.at>
-Galician: Alex Mallo <dernalis@gmail.com>
-Italian: Alex Mallo <dernalis@gmail.com>
-Portuguese: Alex Mallo <dernalis@gmail.com>
-Slovak: Stefan Jurco <stefan.jurco@gmail.com>
-Spanish: Alex Mallo <dernalis@gmail.com>''')
+    dlg.set_translator_credits(_('translator-credit'))
     dlg.set_website('http://gbirthday.sf.net/')
     def close(w, res):
         if res == gtk.RESPONSE_CANCEL:
@@ -937,7 +940,7 @@ def preferences_db(widget, db):
     pref_db = gtk.Window(gtk.WINDOW_TOPLEVEL)
     pref_db.set_decorated(True)
     pref_db.set_position(gtk.WIN_POS_CENTER)
-    pref_db.set_title(translate('database_config', 'Database Configuration'))
+    pref_db.set_title(_('Database Configuration'))
     pref_db.set_icon_from_file(imageslocation + 'birthday.png')
     
     
@@ -953,7 +956,7 @@ def preferences_window(textocw=None):
     preferences = gtk.Window(gtk.WINDOW_TOPLEVEL)
     preferences.set_decorated(True)
     preferences.set_position(gtk.WIN_POS_CENTER)
-    preferences.set_title(translate('menu_preferences', 'Preferences'))
+    preferences.set_title(_('Preferences'))
     preferences.set_icon_from_file(imageslocation + 'birthday.png')
 
     box = gtk.VBox(False, 0)
@@ -963,15 +966,15 @@ def preferences_window(textocw=None):
     table.set_col_spacings(10)
     table.set_row_spacings(10)
 
-    label= gtk.Label(translate('pref_past', 'Past birthdays'))
+    label= gtk.Label(_('Past birthdays'))
     table.attach(label, 0, 1, 0, 1)
     label.show()
 
-    label= gtk.Label(translate('pref_next', 'Next birthdays'))
+    label= gtk.Label(_('Next birthdays'))
     table.attach(label, 0, 1, 1, 2)
     label.show()
 
-    label= gtk.Label(translate('pref_database', 'Database'))
+    label= gtk.Label(_('Database'))
     table.attach(label, 0, 1, 2, 3)
     label.show()
 
@@ -1000,7 +1003,7 @@ def preferences_window(textocw=None):
         chkDB.connect("toggled", db_select, db)
         hbox.pack_start(chkDB, False , False, 0)
         if db.HAS_CONFIG:
-            button = gtk.Button(translate('configure', 'Configure'))
+            button = gtk.Button(_('Configure'))
             button.connect("clicked", preferences_db, db)
             button.show()
             hbox.pack_start(button, False, False, 1)
@@ -1012,7 +1015,7 @@ def preferences_window(textocw=None):
     box.pack_start(table, True , True, 8)
     table.show()
 
-    button = gtk.Button(translate('pref_button', 'Save & Close'))
+    button = gtk.Button(_('Save & Close'))
     box.pack_start(button, False , False, 2)
     button.connect("clicked", finish_preferences, None)
     button.show()
@@ -1027,8 +1030,7 @@ def cambiar_preferencias(uno, opcion, spin):
     spin.update()
     if opcion == "firstday": firstday = spin.get_value_as_int()
     elif opcion == "lastday": lastday = spin.get_value_as_int()
-    else: showErrorMsg(translate('option_not_valid', 
-            'internal error: option not valid'))
+    else: showErrorMsg(_('Internal Error: Option %s not valid.') % opcion)
 
 def finish_gbirthday(texto):
     '''exit program'''
@@ -1089,7 +1091,7 @@ def add_single_manual(widget, window):
     add_window = gtk.Window(gtk.WINDOW_TOPLEVEL)
     add_window.set_decorated(True)
     add_window.set_position(gtk.WIN_POS_CENTER)
-    add_window.set_title(translate('menu_add', 'Add'))
+    add_window.set_title(_('Add'))
     add_window.set_icon_from_file(imageslocation + 'birthday.png')
 
     box = gtk.VBox(False, 0)
@@ -1099,15 +1101,15 @@ def add_single_manual(widget, window):
     table.set_col_spacings(10)
     table.set_row_spacings(10)
 
-    label= gtk.Label(translate('add_name', 'Name'))
+    label= gtk.Label(_('Name'))
     table.attach(label, 0, 1, 0, 1)
     label.show()
 
-    label= gtk.Label(translate('add_birthday', 'Birthday'))
+    label= gtk.Label(_('Birthday'))
     table.attach(label, 0, 1, 1, 2)
     label.show()
 
-    label= gtk.Label(translate('add_database', 'Save to file/database'))
+    label= gtk.Label(_('Save to file/database'))
     table.attach(label, 0, 1, 2, 3)
     label.show()
 
@@ -1132,7 +1134,7 @@ def add_single_manual(widget, window):
     box.pack_start(table, True , True, 8)
     table.show()
 
-    button = gtk.Button(translate('pref_button', 'Save & Close'))
+    button = gtk.Button(_('Save & Close'))
     box.pack_start(button, False , False, 2)
     button.connect("clicked", finish_add, combobox, name, date, add_window)
     button.show()
@@ -1146,7 +1148,7 @@ def add_from_file(widget, window):
     add_window = gtk.Window(gtk.WINDOW_TOPLEVEL)
     add_window.set_decorated(True)
     add_window.set_position(gtk.WIN_POS_CENTER)
-    add_window.set_title(translate('menu_add', 'Add'))
+    add_window.set_title(_('Add'))
     add_window.set_icon_from_file(imageslocation + 'birthday.png')
     
     box = gtk.VBox(False, 0)
@@ -1169,7 +1171,7 @@ def add_from_file(widget, window):
     db_combo.show()
     table.attach(db_combo,1, 2, 0, 1)
     
-    label= gtk.Label(translate('import_settings', 'Import Settings'))
+    label= gtk.Label(_('Import Settings'))
     table.attach(label, 0, 1, 1, 2)
     label.show()
     
@@ -1177,7 +1179,7 @@ def add_from_file(widget, window):
     table.attach(label, 1, 2, 1, 2)
     label.show()
     
-    label= gtk.Label(translate('add_database', 'Database'))
+    label= gtk.Label(_('Database'))
     table.attach(label, 0, 1, 2, 3)
     label.show()
     
@@ -1193,7 +1195,7 @@ def add_from_file(widget, window):
     box.pack_start(table, True , True, 8)
     table.show()
 
-    label= gtk.Label(translate('export_settings', 'Export Settings'))
+    label= gtk.Label(_('Export Settings'))
     table.attach(label, 0, 1, 3, 4)
     label.show()
     
@@ -1201,7 +1203,7 @@ def add_from_file(widget, window):
     table.attach(label, 1, 2, 3, 4)
     label.show()
 
-    button = gtk.Button(translate('pref_button', 'Save & Close'))
+    button = gtk.Button(_('Save & Close'))
     box.pack_start(button, False , False, 2)
     button.connect("clicked", finish_add, combobox, db_combo, '', add_window)
     button.show()
@@ -1219,20 +1221,18 @@ def add(texto):
     add_window = gtk.Window(gtk.WINDOW_TOPLEVEL)
     add_window.set_decorated(True)
     add_window.set_position(gtk.WIN_POS_CENTER)
-    add_window.set_title(translate('menu_add', 'Add'))
+    add_window.set_title(_('Add'))
     add_window.set_icon_from_file(imageslocation + 'birthday.png')
 
     box = gtk.VBox(False, 0)
     add_window.add(box)
     
-    manualButton = gtk.Button(translate('add_single', 
-        'Add single birthday manually'))
+    manualButton = gtk.Button(_('Add single birthday manually'))
     manualButton.connect("clicked", add_single_manual, add_window)
     box.pack_start(manualButton)
     manualButton.show()
     
-    fileButton = gtk.Button(translate('add_multiple', 
-        'Add multiple birthdays from file or database'))
+    fileButton = gtk.Button(_('Add multiple birthdays from file or database'))
     fileButton.connect("clicked", add_from_file, add_window)
     box.pack_start(fileButton)
     fileButton.show()
@@ -1264,14 +1264,6 @@ def start():
         if (db.TYPE in used_databases):
             db.parse()
 
-def translate(key, default):
-    global langTxt
-    if key in langTxt:
-        return langTxt[key]
-    else:
-        print 'Error:', key, 'in language file not found'
-        return default
-
 if __name__ == '__main__':
     global firstday
     global lastday
@@ -1281,29 +1273,8 @@ if __name__ == '__main__':
     global showbdcheck
     global dlg
     global dia
-    global langTxt
-    langTxt = {}
     dlg= None
     showbdcheck = 0
-
-    # get locale for translation and load translation file
-    defaultLocale = locale.getdefaultlocale()[0]
-    shortLocale = locale.getdefaultlocale()[0][0:2].lower()
-    try:
-        langFile = open(languageslocation + defaultLocale  + ".lang",'r')
-    except IOError:
-        try:
-            langFile = open(languageslocation + shortLocale  + ".lang",'r')
-        except IOError:
-            try:
-                langFile = open(languageslocation+"en.lang",'r')
-            except IOError:
-                showErrorMessage('Language file not found.')
-    for langLine in langFile:
-        langLine = langLine.replace("\n","")
-        if langLine.startswith(u"#",0,1) == False:
-            langLabel, langValue = langLine.split('=',1)
-            langTxt[langLabel] = str(langValue)
 
     # try to load settings
     try:
@@ -1337,7 +1308,7 @@ if __name__ == '__main__':
             elif label == "mysql_date_row": MySQL.date_row = value
             elif label == "databases" and len(value) > 2: 
                 used_databases = value.split(',')
-            else: showErrorMsg("Unhandled value in gbirthday.conf: " + line)
+            else: showErrorMsg(_("Unhandled value in gbirthday.conf: %s") % str(line))
         f.close()
 
     # load data and fill AddressBook
@@ -1353,4 +1324,3 @@ if __name__ == '__main__':
     #       (might not the best idea if user changes current time)
     gobject.timeout_add(60000, check_new_day)
     gtk.main()
-

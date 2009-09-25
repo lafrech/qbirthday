@@ -38,3 +38,6 @@ tar.lzma:
 	rm -f *.tar.lzma *.tar.gz
 	tar --use-compress-program=lzma --exclude=.git \
 		-cvf gbirthday-$(version).tar.lzma *
+
+pot:
+	po/pygettext.py -an -d gbirthday -p po gbirthday.py
