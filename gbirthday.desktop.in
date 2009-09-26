@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=GBirthday
+_Comment=Birthday reminder for E-Mail contacts
+Exec=gbirthday
+Terminal=false
+Type=Application
+Categories=Office;
+StartupNotify=false
+Icon=/usr/share/pixmaps/gbirthday/gbirthday.png

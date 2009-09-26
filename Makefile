@@ -40,4 +40,4 @@ tar.lzma:
 		-cvf gbirthday-$(version).tar.lzma *
 
 pot:
-	po/pygettext.py -an -d gbirthday -p po gbirthday.py
+	cd po && intltool-update --pot

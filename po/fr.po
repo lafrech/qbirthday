@@ -1,0 +1,4 @@
+
+#: gbirthday.desktop.in:4
+msgid "Birthday reminder for Evolution contacts"
+msgstr "Rappel d'anniversaire pour Paul contacts"
