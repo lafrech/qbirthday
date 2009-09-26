@@ -150,7 +150,7 @@ class Lightning(DataBase):
                 if os.path.isfile(location):
                     self.parse_birthday(location)
         else:
-            showErrorMsg('error reading profile file %s' % configfile)
+            showErrorMsg(_('Error reading profile file: %s' % configfile))
 
     def parse(self):
         '''open thunderbird sqlite-database'''
@@ -162,7 +162,7 @@ class Lightning(DataBase):
         try:
             import sqlite3
         except:
-            showErrorMsg('SQLite3 for python not installed')
+            showErrorMsg(_('SQLite3 for python not installed'))
         try:
             self.conn = sqlite3.connect (filename)
             self.cursor = self.conn.cursor()
@@ -293,7 +293,8 @@ class Evolution(DataBase):
                             continue
                         self.parse_birthday(data)
                 except bsddb.db.DBInvalidArgError, msg:
-                    showErrorMsg('Error reading Evolution addressbook: %s' % msg[1])
+                    showErrorMsg(_('Error reading Evolution addressbook: %s' %
+                                    msg[1]))
 
     def parse_birthday(self, data):
         '''parse evolution addressbook. the file is in VCard format.'''
@@ -1280,13 +1281,14 @@ if __name__ == '__main__':
     try:
         f = open(os.environ['HOME']+"/.gbirthday.conf",'r')
     except IOError:
+        # use defaults and *NOT* saving the defaults to disk!
         firstday = -2
         lastday = 30
         used_databases = ['evolution']
-        save_config()
-        print "Created configuration file."
+        #save_config()
+        #print "Created configuration file."
         # show settings dialog
-        preferences_window()
+        #preferences_window()
         # TODO: stop program until user settings are set?
     else:
         # parse config file

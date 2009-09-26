@@ -10,6 +10,7 @@ clean:
 	rm -f *.tar.*
 
 install:
+	intltool-merge -d ./po ./gbirthday.desktop.in ./gbirthday.desktop
 	install -p -m 755 -d $(DESTDIR)$(datadir)/gbirthday
 	install -p -m 755 -d $(DESTDIR)$(pixmaps)/gbirthday
 	install -p -m 644 pics/*.png $(DESTDIR)$(pixmaps)/gbirthday/
