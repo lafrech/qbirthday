@@ -38,10 +38,12 @@ desktop-file-install \
 	--dir=%{buildroot}%{_sysconfdir}/xdg/autostart/ \
 	%{buildroot}/%{_datadir}/applications/%{name}.desktop
 
+%find_lang %{name}
+
 %clean
 rm -rf %{buildroot}
 
-%files
+%files -f %{name}.lang
 %defattr(-,root,root,-)
 %doc Changelog COPYING
 %{_bindir}/gbirthday

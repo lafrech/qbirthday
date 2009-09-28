@@ -1,160 +1,174 @@
+# Russian translation of gbirthday.
+# Copyright (C) 2009 Free Software Foundation, Inc.
+# Alexander Logvinov <ports@logvinov.com>, 2009.
+# 
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: gbirthday\n"
+"Report-Msgid-Bugs-To: ports@logvinov.com\n"
+"POT-Creation-Date: 2009-09-28 20:23+1000\n"
+"PO-Revision-Date: 2009-09-28 20:48+1000\n"
+"Last-Translator: Alexander Logvinov <ports@logvinov.com>\n"
+"Language-Team: Russian\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
+"10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+
 #: ../gbirthday.desktop.in.h:1
-#, fuzzy
 msgid "Birthday reminder for E-Mail contacts"
-msgstr "      Evolution"
+msgstr "Напоминание о Днях рождения для контактов электронной почты"
 
 #: ../gbirthday.py:235
 msgid "Could not execute SQLite-query"
-msgstr ""
+msgstr "Произошла ошибка во время выполнения SQLite запроса"
 
 #: ../gbirthday.py:261
 msgid "Neither iceowl nor sunbird is installed"
-msgstr ""
+msgstr "Sunbird или Iceowl не установлен"
 
 #: ../gbirthday.py:343
 msgid "Could not save, CVS-file not set."
-msgstr ""
+msgstr "Не могу сохранить данные, не указан CVS файл."
 
 #: ../gbirthday.py:351
 msgid "CSV-file does not exist"
-msgstr ""
+msgstr "CSV файл не существует"
 
 #: ../gbirthday.py:456
 msgid "MySQLdb is not installed. Please install MySQL for Python"
-msgstr ""
+msgstr "MySQLdb не установлен. Пожалуйста установите поддержку MySQL для Python"
 
 #: ../gbirthday.py:465
 msgid "Could not connect to MySQL-Server"
-msgstr ""
+msgstr "Произошла·ошибка·во·время·соединения·с·MySQL·сервером:"
 
 #: ../gbirthday.py:478 ../gbirthday.py:491
 msgid "Could not execute MySQL-query"
-msgstr ""
+msgstr "Произошла ошибка во время выполнения MySQL запроса"
 
 #: ../gbirthday.py:520
 msgid "MySQL-Database"
-msgstr ""
+msgstr "База данных MySQL"
 
 #: ../gbirthday.py:681
 msgid "Reload"
-msgstr ""
+msgstr "Загрузить данные"
 
 #: ../gbirthday.py:688
 msgid "Stop blinking"
-msgstr ""
+msgstr "Остановить индикацию"
 
 #: ../gbirthday.py:696 ../gbirthday.py:1094 ../gbirthday.py:1151
 msgid "Add"
-msgstr ""
+msgstr "Добавить"
 
 #: ../gbirthday.py:704 ../gbirthday.py:959
 msgid "Preferences"
-msgstr ""
+msgstr "Настройки"
 
 #: ../gbirthday.py:712
 msgid "About"
-msgstr ""
+msgstr "О программе"
 
 #: ../gbirthday.py:720
 msgid "Quit"
-msgstr ""
+msgstr "Выход"
 
 #: ../gbirthday.py:770
-#, fuzzy
 msgid "Birthdays"
-msgstr "    GBirthday"
+msgstr "Дни рождения"
 
 #: ../gbirthday.py:772
 msgid "No birthdays in specified period"
-msgstr ""
+msgstr "В указанном периоде Дней рождений нет"
 
 #: ../gbirthday.py:832 ../gbirthday.py:833
 msgid "Today"
-msgstr ""
+msgstr "Сегодня"
 
 #: ../gbirthday.py:835 ../gbirthday.py:837
 msgid "Yesterday"
-msgstr ""
+msgstr "Вчера"
 
 #: ../gbirthday.py:839
 #, python-format
 msgid "%s Days ago"
-msgstr ""
+msgstr "%s дня(ей) назад"
 
 #: ../gbirthday.py:843
 msgid "Tomorrow"
-msgstr ""
+msgstr "Завтра"
 
 #: ../gbirthday.py:845
 msgid "Days"
-msgstr ""
+msgstr "дня(ей)"
 
 #: ../gbirthday.py:852
 msgid "Years"
-msgstr ""
+msgstr "лет"
 
 #: ../gbirthday.py:890
-#, fuzzy
 msgid "Birthday reminder"
-msgstr "    GBirthday"
+msgstr "Напоминание о Днях рождения"
 
 #: ../gbirthday.py:918
 msgid "translator-credit"
-msgstr ""
+msgstr "Александр Логвинов"
 
 #: ../gbirthday.py:943
 msgid "Database Configuration"
-msgstr ""
+msgstr "Конфигурация базы данных"
 
 #: ../gbirthday.py:969
-#, fuzzy
 msgid "Past birthdays"
-msgstr "    GBirthday"
+msgstr "Предыдущие Дни рождения"
 
 #: ../gbirthday.py:973
-#, fuzzy
 msgid "Next birthdays"
-msgstr "    GBirthday"
+msgstr "Следующие Дни рождения"
 
 #: ../gbirthday.py:977 ../gbirthday.py:1182
 msgid "Database"
-msgstr ""
+msgstr "Базы данных"
 
 #: ../gbirthday.py:1006
 msgid "Configure"
-msgstr ""
+msgstr "Настройка"
 
 #: ../gbirthday.py:1018 ../gbirthday.py:1137 ../gbirthday.py:1206
 msgid "Save & Close"
-msgstr ""
+msgstr "Сохранить и выйти"
 
 #: ../gbirthday.py:1033
 #, python-format
 msgid "Internal Error: Option %s not valid."
-msgstr ""
+msgstr "Произошла внутреняя ошибка. Опция %s неверна."
 
 #: ../gbirthday.py:1104
 msgid "Name"
-msgstr ""
+msgstr "Имя"
 
 #: ../gbirthday.py:1108
-#, fuzzy
 msgid "Birthday"
-msgstr "    GBirthday"
+msgstr "День рождения"
 
 #: ../gbirthday.py:1112
 msgid "Save to file/database"
-msgstr ""
+msgstr "Сохранить в файл или базу данных"
 
 #: ../gbirthday.py:1174
 msgid "Import Settings"
-msgstr ""
+msgstr "Импорт настроек"
 
 #: ../gbirthday.py:1198
 msgid "Export Settings"
-msgstr ""
+msgstr "Экспорт настроек"
 
 #: ../gbirthday.py:1311
 #, python-format
 msgid "Unhandled value in gbirthday.conf: %s"
-msgstr ""
+msgstr "Необработанное значение в gbirthday.conf: %s"
+
