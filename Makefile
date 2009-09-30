@@ -8,6 +8,7 @@ default:
 
 clean:
 	rm -f *.tar.*
+	rm -f gbirthday.desktop
 
 install:
 	intltool-merge -d ./po ./gbirthday.desktop.in ./gbirthday.desktop
@@ -32,13 +33,11 @@ uninstall:
 	rm -rvf $(DESTDIR)$(bindir)/gbirthday
 	rm -rvf $(DESTDIR)$(datadir)/locale/*/LC_MESSAGES/gbirthday.mo
 
-tar.gz:
-	rm -f *.tar.gz *.tar.lzma
+tar.gz:	clean
 	tar --exclude=.git \
 		-zcvf gbirthday-$(version).tar.gz *
 
-tar.lzma:
-	rm -f *.tar.lzma *.tar.gz
+tar.lzma: clean
 	tar --use-compress-program=lzma --exclude=.git \
 		-cvf gbirthday-$(version).tar.lzma *
 
