@@ -44,3 +44,7 @@ tar.lzma:
 
 pot:
 	cd po && intltool-update --pot
+
+rpm:	tar.lzma
+	cp gbirthday-*.tar.lzma ~/rpmbuild/SOURCES
+	rpmbuild -ba gbirthday.spec

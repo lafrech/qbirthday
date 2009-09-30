@@ -1,3 +1,9 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: gbirthday\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit"
 
 #: gbirthday.desktop.in:4
 msgid "Birthday reminder for Evolution contacts"
