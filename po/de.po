@@ -1,24 +1,39 @@
 # German translation of gbirthday
 # Thomas Spura <tomspur@fedoraproject.org>, 2009
-
 msgid ""
 msgstr ""
 "Project-Id-Version: gbirthday\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-10-02 13:33+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit"
+"Content-Transfer-Encoding: 8bit\n"
 
 #: ../gbirthday.desktop.in.h:1
 msgid "Birthday reminder for E-Mail contacts"
 msgstr "Geburtstagserinnerer für E-Mail Kontakte"
 
-#: ../gbirthday.py:235
+#: ../gbirthday.py:152
+#, python-format
+msgid "Error reading profile file: %s"
+msgstr "Fehler beim Lesen der Profile-Datei: %s"
+
+#: ../gbirthday.py:164
+msgid "SQLite3 for python not installed"
+msgstr "SQLite3 für Pyhton ist nicht installiert"
+
+#: ../gbirthday.py:234
 msgid "Could not execute SQLite-query"
 msgstr "SQLite-Anfrage konnte nicht ausgeführt werden."
 
-#: ../gbirthday.py:261
+#: ../gbirthday.py:260
 msgid "Neither iceowl nor sunbird is installed"
 msgstr "Weder Iceowl noch Sunbird ist installiert."
+
+#: ../gbirthday.py:295
+#, python-format
+msgid "Error reading Evolution addressbook: %s"
+msgstr "Fehler beim Lesen des Evolution-Adressbuchs: %s"
 
 #: ../gbirthday.py:343
 msgid "Could not save, CVS-file not set."
@@ -52,11 +67,11 @@ msgstr "Neuladen"
 msgid "Stop blinking"
 msgstr "Nicht blinken"
 
-#: ../gbirthday.py:696 ../gbirthday.py:1094 ../gbirthday.py:1151
+#: ../gbirthday.py:696 ../gbirthday.py:1102 ../gbirthday.py:1159
 msgid "Add"
 msgstr "Hinzufügen"
 
-#: ../gbirthday.py:704 ../gbirthday.py:959
+#: ../gbirthday.py:704 ../gbirthday.py:967
 msgid "Preferences"
 msgstr "Einstellungen"
 
@@ -76,89 +91,95 @@ msgstr "Geburtstage"
 msgid "No birthdays in specified period"
 msgstr "Keine Geburtstage in angegebener Zeitspanne."
 
-#: ../gbirthday.py:832 ../gbirthday.py:833
+#: ../gbirthday.py:835 ../gbirthday.py:836
 msgid "Today"
 msgstr "Heute"
 
-#: ../gbirthday.py:835 ../gbirthday.py:837
+#: ../gbirthday.py:838 ../gbirthday.py:840
 msgid "Yesterday"
 msgstr "Gestern"
 
-#: ../gbirthday.py:839
+#: ../gbirthday.py:842
 #, python-format
 msgid "%s Days ago"
 msgstr "vor %s Tagen"
 
-#: ../gbirthday.py:843
+#: ../gbirthday.py:846
 msgid "Tomorrow"
 msgstr "Morgen"
 
-#: ../gbirthday.py:845
+#: ../gbirthday.py:848
 msgid "Days"
 msgstr "Tage"
 
-#: ../gbirthday.py:852
+#: ../gbirthday.py:855
 msgid "Years"
 msgstr "Jahre"
 
-#: ../gbirthday.py:890
+#: ../gbirthday.py:893
 msgid "Birthday reminder"
 msgstr "Geburtstagserinnerer"
 
-#: ../gbirthday.py:918
+#: ../gbirthday.py:921 ../gbirthday.py:923
 msgid "translator-credit"
 msgstr "Thomas Spura <tomspur@fedoraproject.org>"
 
-#: ../gbirthday.py:943
+#: ../gbirthday.py:926
+msgid ""
+"There are no translations or the translator doesn't want to get credits for "
+"that."
+msgstr "Es sind keine Übersetzungen verfügbar oder der Übersetzer möchte seinen Namen nicht angeben."
+
+#: ../gbirthday.py:951
 msgid "Database Configuration"
 msgstr "Datenbank-Konfiguration"
 
-#: ../gbirthday.py:969
+#: ../gbirthday.py:977
 msgid "Past birthdays"
 msgstr "Letzte Geburtstage"
 
-#: ../gbirthday.py:973
+#: ../gbirthday.py:981
 msgid "Next birthdays"
 msgstr "Nächste Geburtstage"
 
-#: ../gbirthday.py:977 ../gbirthday.py:1182
+#: ../gbirthday.py:985 ../gbirthday.py:1190
 msgid "Database"
 msgstr "Datenbank"
 
-#: ../gbirthday.py:1006
+#: ../gbirthday.py:1014
 msgid "Configure"
 msgstr "Einrichten"
 
-#: ../gbirthday.py:1018 ../gbirthday.py:1137 ../gbirthday.py:1206
+#: ../gbirthday.py:1026 ../gbirthday.py:1145 ../gbirthday.py:1214
 msgid "Save & Close"
 msgstr "Speichern & Schließen"
 
-#: ../gbirthday.py:1033
+#: ../gbirthday.py:1041
 #, python-format
 msgid "Internal Error: Option %s not valid."
 msgstr "Interner Fehler: Option %s ungültig"
 
-#: ../gbirthday.py:1104
+#: ../gbirthday.py:1112
 msgid "Name"
 msgstr "Name"
 
-#: ../gbirthday.py:1108
+#: ../gbirthday.py:1116
 msgid "Birthday"
 msgstr "Geburtstag"
 
-#: ../gbirthday.py:1112
+#: ../gbirthday.py:1120
 msgid "Save to file/database"
 msgstr "In Datei/Datenbank speichern"
 
-#: ../gbirthday.py:1174
+#: ../gbirthday.py:1182
 msgid "Import Settings"
 msgstr "Einstellungen importieren"
 
-#: ../gbirthday.py:1198
+#: ../gbirthday.py:1206
 msgid "Export Settings"
 msgstr "Einstellungen exportieren"
 
-#: ../gbirthday.py:1311
+#: ../gbirthday.py:1320
 #, python-format
 msgid "Unhandled value in gbirthday.conf: %s"
 msgstr "Fehlerhafter Eintrag in gbirthday.conf: %s"
