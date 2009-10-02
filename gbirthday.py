@@ -782,7 +782,10 @@ def openwindow():
         table.attach(image, 0, 1, fila, fila+1)
         image.show()
 
-        lang_month = time.strftime('%B', (2000, int(cumple[5]), 1, 1, 0, 0, 0, 1, 0))
+        try:
+            lang_month = unicode (time.strftime('%B', (2000, int(cumple[5]), 1, 1, 0, 0, 0, 1, 0)) )
+        except:
+            lang_month = str(cumple[5])
         if cumple[4] == 0:
             label = gtk.Label('<b>%s</b>' % lang_month)
             label.set_markup('<b>%s</b>' % lang_month)
