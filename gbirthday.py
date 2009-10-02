@@ -51,8 +51,7 @@ if time.strftime('%x', (2000, 3, 1, 1, 0, 0, 0, 1, 0)).startswith("03"):
     day_at_place, month_at_place = 2, 1
 
 import gettext
-gettext.bindtextdomain("gbirthday")
-_ = gettext.gettext
+gettext.install("gbirthday")
 
 import ConfigParser
 
