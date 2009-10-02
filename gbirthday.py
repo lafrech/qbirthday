@@ -918,7 +918,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
                      'Andreas Bresser <andreas@phidev.org>',
                      'Thomas Spura <tomspur@fedoraproject.org>'])
     dlg.set_artists(['Alex Mallo <dernalis@gmail.com>'])
-    dlg.set_translator_credits(_('translator-credit'))
+    cred = _('translator-credit')
+    if cred != 'translator-credit':
+        dlg.set_translator_credits(_('translator-credit'))
+    else:
+        dlg.set_translator_credits(
+                _("There are no translations or the translator doesn't want to get credits for that.") )
     dlg.set_website('http://gbirthday.sf.net/')
     def close(w, res):
         if res == gtk.RESPONSE_CANCEL:

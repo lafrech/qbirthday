@@ -7,6 +7,7 @@ default:
 	echo Nothing to do.
 
 clean:
+	rm -f po/untitled.pot
 	rm -f *.tar.*
 	rm -f gbirthday.desktop
 
