@@ -1,7 +1,7 @@
 bindir = /usr/bin
 datadir = /usr/share
 pixmaps = $(datadir)/pixmaps
-version = master
+version = 0.5.1
 
 default:
 	echo Nothing to do.

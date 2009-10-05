@@ -28,6 +28,8 @@ and relatively easy to extend for other data servers.
 ## pygtk-demo Status Icon: Nikos Kouremenos
 ## EvoBdayReminder.py: Axel Heim. http://www.axelheim.de/
 
+VERSION = "0.5.1"
+
 import pygtk
 pygtk.require('2.0')
 import gtk
@@ -889,7 +891,7 @@ def create_dialog(uno):
     '''create about dialog'''
     global dlg
     dlg = gtk.AboutDialog()
-    dlg.set_version("0.5.2")
+    dlg.set_version(VERSION)
     dlg.set_comments(_('Birthday reminder'))
     dlg.set_name("GBirthday")
     image = gtk.gdk.pixbuf_new_from_file(imageslocation + 'gbirthday.png')
