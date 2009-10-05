@@ -1,3 +1,8 @@
+0.5.2
+	Added gettext support for easier translation
+	Translation system added at:
+	    http://www.transifex.net/projects/p/gbirthday/
+
 0.5.1
 	Fixed bug with Categories in Lightning-SQLite-Database
 
