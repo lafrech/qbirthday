@@ -36,11 +36,11 @@ uninstall:
 
 tar.gz:	clean
 	tar --exclude=.git \
-		-zcvf gbirthday-$(version).tar.gz *
+		-zcf gbirthday-$(version).tar.gz *
 
 tar.lzma: clean
 	tar --use-compress-program=lzma --exclude=.git \
-		-cvf gbirthday-$(version).tar.lzma *
+		-cf gbirthday-$(version).tar.lzma *
 
 pot:
 	cd po && intltool-update --pot
