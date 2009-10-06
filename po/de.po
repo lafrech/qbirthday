@@ -157,7 +157,7 @@ msgstr "Speichern & Schließen"
 #: ../gbirthday.py:1041
 #, python-format
 msgid "Internal Error: Option %s not valid."
-msgstr "Interner Fehler: Option %s ungültig"
+msgstr "Interner Fehler: Option %s ungültig."
 
 #: ../gbirthday.py:1112
 msgid "Name"
