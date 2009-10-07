@@ -1,0 +1,4 @@
+Required packages for proper working:
+(when imported, exceptions won't always be caugth in a try-except)
+
+bsddb, MySQLdb, pygtk, gtk, configparser
