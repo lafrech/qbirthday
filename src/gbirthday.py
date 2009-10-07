@@ -40,7 +40,6 @@ from datetime import date
 import time
 import subprocess
 import gobject
-import locale
 import uuid
 
 """ parse locales from python module
@@ -58,7 +57,6 @@ gettext.install("gbirthday")
 import ConfigParser
 
 imageslocation = "/usr/share/pixmaps/gbirthday/"
-languageslocation ="/usr/share/gbirthday/languages/"
 
 birthday_today = False # someone has birthday today?!
 
@@ -72,12 +70,18 @@ class DataBase:
      and add it into the AddressBook (ab.add())
      you have to add your Database to the databases-list
     '''
-    TITLE = 'Unknown'  # Title that will be displayed to the user
-    TYPE = 'none'      # type that is used as identifier (e.g. for config file)
-    CAN_SAVE = True    # new entries can be saved
-    HAS_CONFIG = True  # additional config options for database connection or
-                       # filename(s)
-    widget = None      # the widget for additional config
+    def __init__(self, title='Unknown', type='none', can_save=True,
+            has_config=True, widget=None):
+        # Title that will be displayed to the user
+        self.TITLE = title
+        # type that is used as identifier (e.g. for config file)
+        self.TYPE = type
+        # new entries can be saved
+        self.CAN_SAVE = can_save
+        # additional config options for database connection or fukebane(s)
+        self.HAS_CONFIG = can_save
+        # the widget for additional config
+        self.widget = widget
 
     def parse(self):
         '''load file / open database connection'''
@@ -121,14 +125,11 @@ class DataBase:
 
 class Lightning(DataBase):
     '''Thunderbird/Lightning implementation'''
-    TITLE = 'Thunderbird/Icedove Lightning'  # Title that will be displayed to the user
-    TYPE = 'lightning'      # type that is used as identifier (e.g. for config file)
-    CAN_SAVE = True    # new entries can be saved
-    HAS_CONFIG = False # additional config options for database connection or
-                       # filename(s)
-    widget = None      # the widget for additional config
-    THUNDERBIRD_LOCATION = os.path.join(os.environ['HOME'], 
-        '.mozilla-thunderbird')
+    def __init__(self, title='Thunderbird/Icedove Lightning', type='lightning',
+                has_config=False):
+        DataBase.__init__(self, title=title, type=type, has_config=has_config)
+        self.THUNDERBIRD_LOCATION = os.path.join(os.environ['HOME'],
+            '.mozilla.thunderbird')
 
     def get_config_file(self, configfile):
         profilefile = os.path.join(configfile, 'profiles.ini')
@@ -239,14 +240,11 @@ class Lightning(DataBase):
 
 class Sunbird(Lightning):
     '''Sunbird/Iceowl implementation (based on lightning)'''
-    TITLE = 'Sunbird/Iceowl'
-    TYPE = 'sunbird'
-    CAN_SAVE = True   # new entries can be saved
-    HAS_CONFIG = False # additional config options for database connection or
-                       # filename(s)
-    widget = None      # the widget for additional config
-    MOZILLA_LOCATION = os.path.join(os.environ['HOME'], 
-        '.mozilla')
+    def __init__(self):
+        Lightning.__init__(self, title='Sunbird/Iceowl', type='sunbird',
+                            has_config=False)
+        self.MOZILLA_LOCATION = os.path.join(os.environ['HOME'],
+                '.mozilla')
 
     # load file / open database connection
     def parse(self):
@@ -263,13 +261,12 @@ class Sunbird(Lightning):
 
 class Evolution(DataBase):
     '''data import from the Evolution address book'''
-    TITLE = 'Evolution'
-    TYPE = 'evolution'
-    CAN_SAVE = False
-    HAS_CONFIG = False
-    ADDRESS_BOOK_LOCATION = os.path.join(os.environ['HOME'], 
-        '.evolution/addressbook/local/')
-    _splitRE = re.compile(r'\r?\n')
+    def __init__(self):
+        DataBase.__init__(self, title='Evolution', type='evolution',
+                        can_save=False, has_config=False)
+        self.ADDRESS_BOOK_LOCATION = os.path.join(os.environ['HOME'],
+                        '.evolution/addressbook/local/')
+        self._splitRE = re.compile(r'\r?\n')
 
     def parse(self, book=None):
         
@@ -317,7 +314,7 @@ class Evolution(DataBase):
             if label == 'BDAY':
                 mostRecentDate = value
             # if BDAY and  set create Person-data
-            if (mostRecentName != '') and (mostRecentDate != ''):
+            if mostRecentName and mostRecentDate:
                 # if there already is a birthday add it to the list
                 ab.add(mostRecentName, mostRecentDate)
                 mostRecentName = ''
@@ -325,9 +322,9 @@ class Evolution(DataBase):
 
 class CSV(DataBase):
     '''import from CSV-file'''
-    TITLE = 'CSV-file (comma seperated value)'
-    TYPE = 'csv'
-    _seperators=['; ', ', ', ': ']   # possible seperators
+    def __init__(self):
+        DataBase.__init__(self, title='CSV-file (comma seperated value)', type='csv')
+        self._seperators=['; ', ', ', ': ']   # possible seperators
 
     def parse(self):
         '''open and parse file'''
@@ -436,19 +433,18 @@ def choose_file(widget, entry):
 
 class MySQL(DataBase):
     '''MySQL database import'''
-    TITLE = 'MySQL'
-    TYPE = 'mysql'
+    def __init__(self):
+        DataBase.__init__(self, title='MySQL', type='mysql')
+        self.host = 'localhost'
+        self.port = '3306'
+        self.username = ''
+        self.password = ''
+        self.database = ''
+        self.table = 'person'
+        self.name_row = 'name'
+        self.date_row = 'date'
 
-    host = 'localhost'
-    port = '3306'
-    username = ''
-    password = ''
-    database = ''
-    table = 'person'
-    name_row = 'name'
-    date_row = 'date'
-
-    entries = []
+        self.entries = []
     
     def connect(self):
         '''establish connection'''
