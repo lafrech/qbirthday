@@ -12,6 +12,7 @@ BuildArch:		noarch
 BuildRequires:	desktop-file-utils
 Requires:		evolution
 Requires:		python
+Requires:		MySQL-python
 Requires:		pygtk2
 
 %description

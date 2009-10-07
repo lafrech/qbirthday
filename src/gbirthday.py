@@ -164,12 +164,12 @@ class Lightning(DataBase):
         try:
             import sqlite3
         except:
-            showErrorMsg(_('SQLite3 for python not installed'))
+            showErrorMsg(_("Package %s is not installed." % "SQLite3"))
         try:
             self.conn = sqlite3.connect (filename)
             self.cursor = self.conn.cursor()
         except Exception, msg:
-            showErrorMsg('sqlite3 could not connect' + str(msg))
+            showErrorMsg(_('sqlite3 could not connect: %s' % str(msg)) )
 
 
     def parse_birthday(self, filename):
@@ -277,12 +277,11 @@ class Evolution(DataBase):
                 location = os.path.join(self.ADDRESS_BOOK_LOCATION, addresser)
                 for name in book or []:
                     location = os.path.join(location, 'subfolders', name)
-                location = os.path.join(location, 'addressbook.db')
-                addressbook = location
+                addressbook = os.path.join(location, 'addressbook.db')
                 try:
                     import bsddb
                 except:
-                    showErrorMsg('package bsddb not installed')
+                    showErrorMsg(_("Package %s is not installed." % "bsddb")
                 try:
                     bsfile = bsddb.hashopen(addressbook)
                     for key in bsfile.keys():
@@ -451,7 +450,7 @@ class MySQL(DataBase):
         try:
             import MySQLdb
         except:
-            showErrorMsg(_('MySQLdb is not installed. Please install MySQL for Python'))
+            showErrorMsg(_("Package %s is not installed." % "MySQLdb" ))
         try:
             self.conn = MySQLdb.connect (host = self.host, 
                                     port=int(self.port), 
