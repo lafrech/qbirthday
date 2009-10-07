@@ -3,6 +3,8 @@ datadir = /usr/share
 pixmaps = $(datadir)/pixmaps
 version = 0.5.1
 
+install = install -p
+
 default:
 	echo Nothing to do.
 
@@ -13,17 +15,17 @@ clean:
 
 install:
 	intltool-merge -d ./po ./gbirthday.desktop.in ./gbirthday.desktop
-	install -p -m 755 -d $(DESTDIR)$(datadir)/gbirthday
-	install -p -m 755 -d $(DESTDIR)$(pixmaps)/gbirthday
-	install -p -m 644 pics/*.png $(DESTDIR)$(pixmaps)/gbirthday/
-	install -p -m 755  gbirthday.py $(DESTDIR)$(datadir)/gbirthday/
-	install -p -m 755 -d $(DESTDIR)$(datadir)/gbirthday/languages/
-	install -p -m 644 languages/*.lang \
+	$(install) -m 755 -d $(DESTDIR)$(datadir)/gbirthday
+	$(install) -m 755 -d $(DESTDIR)$(pixmaps)/gbirthday
+	$(install) -m 644 pics/*.png $(DESTDIR)$(pixmaps)/gbirthday/
+	$(install) -m 755  gbirthday.py $(DESTDIR)$(datadir)/gbirthday/
+	$(install) -m 755 -d $(DESTDIR)$(datadir)/gbirthday/languages/
+	$(install) -m 644 languages/*.lang \
 		$(DESTDIR)$(datadir)/gbirthday/languages/
 	mkdir -p $(DESTDIR)$(datadir)/applications/
-	install -p -m 644 gbirthday.desktop $(DESTDIR)$(datadir)/applications/
+	$(install) -m 644 gbirthday.desktop $(DESTDIR)$(datadir)/applications/
 	mkdir -p $(DESTDIR)$(bindir)
-	install -p -m 755 $(DESTDIR)$(datadir)/gbirthday/gbirthday.py \
+	$(install) -m 755 $(DESTDIR)$(datadir)/gbirthday/gbirthday.py \
 		$(DESTDIR)$(bindir)/gbirthday
 	cd po && python install_po.py $(DESTDIR)
 
