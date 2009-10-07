@@ -4,6 +4,7 @@ pixmaps = $(datadir)/pixmaps
 version = 0.5.1
 
 install = install -p
+mkdir = mkdir -p
 
 default:
 	echo Nothing to do.
@@ -19,10 +20,10 @@ install:
 	$(install) -m 755 -d $(DESTDIR)$(pixmaps)/gbirthday
 	$(install) -m 644 pics/*.png $(DESTDIR)$(pixmaps)/gbirthday/
 	$(install) -m 755  src/* $(DESTDIR)$(datadir)/gbirthday/
-	mkdir -p $(DESTDIR)$(datadir)/applications/
+	$(mkdir) $(DESTDIR)$(datadir)/applications/
 	$(install) -m 644 gbirthday.desktop \
 		$(DESTDIR)$(datadir)/applications/
-	mkdir -p $(DESTDIR)$(bindir)
+	$(mkdir) $(DESTDIR)$(bindir)
 	ln -s $(datadir)/gbirthday/gbirthday.py \
 		$(DESTDIR)$(bindir)/gbirthday
 	cd po && python install_po.py $(DESTDIR)
