@@ -22,7 +22,7 @@ install:
 	mkdir -p $(DESTDIR)$(datadir)/applications/
 	$(install) -m 644 gbirthday.desktop $(DESTDIR)$(datadir)/applications/
 	mkdir -p $(DESTDIR)$(bindir)
-	$(install) -m 755 $(DESTDIR)$(datadir)/gbirthday/gbirthday.py \
+	ln -s $(datadir)/gbirthday/gbirthday.py \
 		$(DESTDIR)$(bindir)/gbirthday
 	cd po && python install_po.py $(DESTDIR)
 
