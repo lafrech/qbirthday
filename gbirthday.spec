@@ -46,7 +46,7 @@ rm -rf %{buildroot}
 
 %files -f %{name}.lang
 %defattr(-,root,root,-)
-%doc Changelog COPYING
+%doc Changelog COPYING README
 %{_bindir}/gbirthday
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/gbirthday/
