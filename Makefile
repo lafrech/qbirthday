@@ -18,9 +18,10 @@ install:
 	$(install) -m 755 -d $(DESTDIR)$(datadir)/gbirthday
 	$(install) -m 755 -d $(DESTDIR)$(pixmaps)/gbirthday
 	$(install) -m 644 pics/*.png $(DESTDIR)$(pixmaps)/gbirthday/
-	$(install) -m 755  gbirthday.py $(DESTDIR)$(datadir)/gbirthday/
+	$(install) -m 755  src/* $(DESTDIR)$(datadir)/gbirthday/
 	mkdir -p $(DESTDIR)$(datadir)/applications/
-	$(install) -m 644 gbirthday.desktop $(DESTDIR)$(datadir)/applications/
+	$(install) -m 644 gbirthday.desktop \
+		$(DESTDIR)$(datadir)/applications/
 	mkdir -p $(DESTDIR)$(bindir)
 	ln -s $(datadir)/gbirthday/gbirthday.py \
 		$(DESTDIR)$(bindir)/gbirthday
