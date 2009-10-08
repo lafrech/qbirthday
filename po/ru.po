@@ -114,7 +114,7 @@ msgstr "Напоминание о Днях рождения"
 
 #: ../gbirthday.py:918
 msgid "translator-credit"
-msgstr "Alexander Logvinov (ports@logvinov.com)"
+msgstr "Alexander Logvinov <ports@logvinov.com>"
 
 #: ../gbirthday.py:943
 msgid "Database Configuration"
