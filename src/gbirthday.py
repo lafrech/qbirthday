@@ -51,8 +51,14 @@ day_at_place, month_at_place = 1, 2
 if time.strftime('%x', (2000, 3, 1, 1, 0, 0, 0, 1, 0)).startswith("03"):
     day_at_place, month_at_place = 2, 1
 
-import gettext
-gettext.install("gbirthday")
+# for FreeBSD users: it no i18n is whished, no gettext package won't be
+# available and standard messages are displayed insted a try to use
+# translated strings
+try:
+    import gettext
+    gettext.install("gbirthday")
+except ImportError:
+    _ = lambda x: x
 
 import ConfigParser
 
@@ -281,7 +287,7 @@ class Evolution(DataBase):
                 try:
                     import bsddb
                 except:
-                    showErrorMsg(_("Package %s is not installed." % "bsddb")
+                    showErrorMsg(_("Package %s is not installed." % "bsddb") )
                 try:
                     bsfile = bsddb.hashopen(addressbook)
                     for key in bsfile.keys():
