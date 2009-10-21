@@ -39,13 +39,13 @@ tar.gz:	clean
 	tar --exclude=.git \
 		-zcf gbirthday-$(version).tar.gz *
 
-tar.lzma: clean
-	tar --use-compress-program=lzma --exclude=.git \
-		-cf gbirthday-$(version).tar.lzma *
+tar.xz: clean
+	tar --use-compress-program=xz --exclude=.git \
+		-cf gbirthday-$(version).tar.xz *
 
 pot:
 	cd po && intltool-update --pot
 
-rpm:	tar.lzma
-	cp gbirthday-*.tar.lzma ~/rpmbuild/SOURCES
+rpm:	tar.xz
+	cp gbirthday-*.tar.xz ~/rpmbuild/SOURCES
 	rpmbuild -ba gbirthday.spec

@@ -5,7 +5,7 @@ Summary:		Birthday reminder for Evolution and some others
 Group:			User Interface/Desktops
 License:		GPLv2+
 URL:			http://gbirthday.sourceforge.net
-Source:			http://downloads.sourceforge.net/gbirthday/gbirthday-%{version}.tar.lzma
+Source:                 http://downloads.sourceforge.net/gbirthday/gbirthday-%{version}.tar.xz
 BuildRoot:		%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildArch:		noarch
 
