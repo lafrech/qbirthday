@@ -13,6 +13,8 @@ clean:
 	rm -f po/untitled.pot
 	rm -f *.tar.*
 	rm -f gbirthday.desktop
+	rm -rf gbirthday-$(version) BUILDROOT noarch
+	rm -f gbirthday*.src.rpm
 
 install:
 	intltool-merge -d ./po ./gbirthday.desktop.in ./gbirthday.desktop
