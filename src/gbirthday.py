@@ -652,7 +652,6 @@ def showErrorMsg(message, title=None, parent=None):
 class StatusIcon():
     def __init__(self):
         '''create status icon'''
-     #   global icon
         self.icon = gtk.status_icon_new_from_file(imageslocation + 'birthday.png')
         list=ab.manageBdays()
         if len(list) > 0:
@@ -691,7 +690,7 @@ class StatusIcon():
                 self.icon.set_from_file(imageslocation + 'birthday.png')
             else:
                 self.icon.set_from_file(imageslocation + 'nobirthday.png')
-            icon.set_blinking(AddressBook.checktoday(ab))
+            self.icon.set_blinking(AddressBook.checktoday(ab))
             current_day = new_day
         return True
 
@@ -809,9 +808,142 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
         global showbdcheck
         if showbdcheck == 0:
             showbdcheck = 1
-            openwindow()
+            self.openwindow()
         else:
             closebdwindow('focus_out_event', closebdwindow, "")
+
+    def openwindow(self):
+        '''open window that includes all birthdays'''
+        global showbd
+        global showbdcheck
+        showbd = gtk.Window(gtk.WINDOW_TOPLEVEL)
+        showbd.set_decorated(False)
+        showbd.set_position(gtk.WIN_POS_MOUSE)
+        showbd.set_icon_from_file(imageslocation + 'birthday.png')
+        showbd.set_border_width(0)
+
+        list=AddressBook.manageBdays(ab)
+
+        box = gtk.HBox()
+        box.set_border_width(5)
+        box.show()
+        frame = gtk.Frame(None)
+        showbd.add(frame)
+        table = gtk.Table(7, 6, False)
+        box.pack_start(table, False , False, 0)
+        frame.add(box)
+        table.set_col_spacings(10)
+        fila = 0
+        event_box = gtk.EventBox()
+        table.attach(event_box, 0, 6, 0, 1)
+        event_box.show()
+        label = gtk.Label("GBirthday")
+        if len(list) > 0:
+            label.set_markup('<b>%s</b>' % _('Birthdays'))
+        else:
+            label.set_markup('<b>\n    %s    \n</b>' % _('No birthdays in specified period'))
+        label.set_justify(gtk.JUSTIFY_RIGHT)
+        event_box.add(label)
+        label.show()
+        style = label.get_style()
+        event_box.modify_bg(gtk.STATE_NORMAL, event_box.rc_get_style().bg[gtk.STATE_SELECTED])
+        fila = fila +1
+        for cumple in list:
+            image = gtk.Image()
+            image.set_from_file(imageslocation + cumple[0])
+            table.attach(image, 0, 1, fila, fila+1)
+            image.show()
+
+            try:
+                lang_month = unicode (time.strftime('%B', (2000, int(cumple[5]), 1, 1, 0, 0, 0, 1, 0)) )
+            except:
+                lang_month = str(cumple[5])
+            if cumple[4] == 0:
+                label = gtk.Label('<b>%s</b>' % lang_month)
+                label.set_markup('<b>%s</b>' % lang_month)
+            elif cumple[4] < 0:
+                label = gtk.Label(lang_month)
+                label.set_markup('<span foreground="grey">%s</span>' % lang_month)
+            else:
+                label = gtk.Label(lang_month)
+            align = gtk.Alignment(0.0, 0.5, 0, 0)
+            align.add(label)
+            align.show()
+            table.attach(align, month_at_place,
+                            month_at_place+1, fila, fila+1)
+            label.show()
+
+            c = str(cumple[6])
+            if cumple[4] == 0:
+                label = gtk.Label("<b>%s</b>" % c)
+                label.set_markup("<b>%s</b>" % c)
+            elif cumple[4] < 0:
+                label = gtk.Label(str(cumple[6]))
+                label.set_markup('<span foreground="grey">%s</span>' % c)
+            else:
+                label = gtk.Label(str(cumple[6]))
+            align = gtk.Alignment(1.0, 0.5, 0, 0)
+            align.add(label)
+            align.show()
+            table.attach(align, day_at_place,
+                            day_at_place+1, fila, fila+1)
+            label.show()
+
+            if cumple[4] == 0:
+                label = gtk.Label("<b>" + cumple[2] + "</b>")
+                label.set_markup("<b>" + cumple[2] + "</b>")
+            elif cumple[4] < 0:
+                label = gtk.Label(cumple[2])
+                label.set_markup("<span foreground='grey'>" + cumple[2] + "</span>")
+            else:
+                label = gtk.Label(cumple[2])
+            align = gtk.Alignment(0.0, 0.5, 0, 0)
+            align.add(label)
+            table.attach(align, 3, 4, fila, fila+1)
+            align.show()
+            label.show()
+
+            if cumple[4] == 0:
+                label = gtk.Label(_('Today'))
+                label.set_markup('<b>%s</b>' % _('Today'))
+            elif cumple[4] == -1:
+                label = gtk.Label(_('Yesterday'))
+                label.set_markup('<span foreground="grey">%s</span>' %
+                                _('Yesterday'))
+            elif cumple[4] < -1:
+                ago = (_('%s Days ago') % str(cumple[4] * -1))
+                label = gtk.Label(ago)
+                label.set_markup('<span foreground="grey">%s</span>' % ago)
+            elif cumple[4] == 1:
+                label = gtk.Label(_('Tomorrow'))
+            else:
+                label = gtk.Label(cumple[3] + " " + _('Days'))
+            align = gtk.Alignment(0.0, 0.5, 0, 0)
+            align.add(label)
+            align.show()
+            table.attach(align, 4, 5, fila, fila+1)
+            label.show()
+
+            years = '%s %s' % (str(cumple[7]), _('Years'))
+            if cumple[4] == 0:
+                label = gtk.Label('<b>%s</b>' % years)
+                label.set_markup('<b>%s</b>' % years)
+            elif cumple[4] < 0:
+                label = gtk.Label(years)
+                label.set_markup('<span foreground="grey">%s</span>' % years)
+            else:
+                label = gtk.Label(years)
+            align = gtk.Alignment(1.0, 0.5, 0, 0)
+            align.add(label)
+            align.show()
+            table.attach(align, 5, 6, fila, fila+1)
+            label.show()
+            fila = fila +1
+
+        table.show()
+        frame.show()
+        showbd.show()
+        showbd.connect('focus_out_event', closebdwindow, "text")
 
     def stop_blinking(self, text):
         '''stop blinking (only if icon blinks)'''
@@ -925,139 +1057,6 @@ def finish_add(uno, combo, name, calend, window):
 def save_list(l):
     '''create a string that can be saved in a file'''
     return str(l)[2:-2].replace("', '", ',')
-
-def openwindow():
-    '''open window that includes all birthdays'''
-    global showbd 
-    global showbdcheck
-    showbd = gtk.Window(gtk.WINDOW_TOPLEVEL)
-    showbd.set_decorated(False)
-    showbd.set_position(gtk.WIN_POS_MOUSE)
-    showbd.set_icon_from_file(imageslocation + 'birthday.png')
-    showbd.set_border_width(0)
-
-    list=AddressBook.manageBdays(ab)
-
-    box = gtk.HBox()
-    box.set_border_width(5)
-    box.show()
-    frame = gtk.Frame(None)
-    showbd.add(frame)
-    table = gtk.Table(7, 6, False)
-    box.pack_start(table, False , False, 0)
-    frame.add(box)
-    table.set_col_spacings(10)
-    fila = 0
-    event_box = gtk.EventBox()
-    table.attach(event_box, 0, 6, 0, 1)
-    event_box.show()
-    label = gtk.Label("GBirthday")
-    if len(list) > 0:
-        label.set_markup('<b>%s</b>' % _('Birthdays'))
-    else:
-        label.set_markup('<b>\n    %s    \n</b>' % _('No birthdays in specified period'))
-    label.set_justify(gtk.JUSTIFY_RIGHT)
-    event_box.add(label)
-    label.show()
-    style = label.get_style()
-    event_box.modify_bg(gtk.STATE_NORMAL, event_box.rc_get_style().bg[gtk.STATE_SELECTED])
-    fila = fila +1
-    for cumple in list:
-        image = gtk.Image()
-        image.set_from_file(imageslocation + cumple[0])
-        table.attach(image, 0, 1, fila, fila+1)
-        image.show()
-
-        try:
-            lang_month = unicode (time.strftime('%B', (2000, int(cumple[5]), 1, 1, 0, 0, 0, 1, 0)) )
-        except:
-            lang_month = str(cumple[5])
-        if cumple[4] == 0:
-            label = gtk.Label('<b>%s</b>' % lang_month)
-            label.set_markup('<b>%s</b>' % lang_month)
-        elif cumple[4] < 0:
-            label = gtk.Label(lang_month)
-            label.set_markup('<span foreground="grey">%s</span>' % lang_month)
-        else:
-            label = gtk.Label(lang_month)
-        align = gtk.Alignment(0.0, 0.5, 0, 0)
-        align.add(label)
-        align.show()
-        table.attach(align, month_at_place, 
-                        month_at_place+1, fila, fila+1)
-        label.show()
-
-        c = str(cumple[6])
-        if cumple[4] == 0:
-            label = gtk.Label("<b>%s</b>" % c)
-            label.set_markup("<b>%s</b>" % c)
-        elif cumple[4] < 0:
-            label = gtk.Label(str(cumple[6]))
-            label.set_markup('<span foreground="grey">%s</span>' % c)
-        else:
-            label = gtk.Label(str(cumple[6]))
-        align = gtk.Alignment(1.0, 0.5, 0, 0)
-        align.add(label)
-        align.show()
-        table.attach(align, day_at_place, 
-                        day_at_place+1, fila, fila+1)
-        label.show()
-
-        if cumple[4] == 0:
-            label = gtk.Label("<b>" + cumple[2] + "</b>")
-            label.set_markup("<b>" + cumple[2] + "</b>")
-        elif cumple[4] < 0:
-            label = gtk.Label(cumple[2])
-            label.set_markup("<span foreground='grey'>" + cumple[2] + "</span>")
-        else:
-            label = gtk.Label(cumple[2])
-        align = gtk.Alignment(0.0, 0.5, 0, 0)
-        align.add(label)
-        table.attach(align, 3, 4, fila, fila+1)
-        align.show()
-        label.show()
-
-        if cumple[4] == 0:
-            label = gtk.Label(_('Today'))
-            label.set_markup('<b>%s</b>' % _('Today'))
-        elif cumple[4] == -1:
-            label = gtk.Label(_('Yesterday'))
-            label.set_markup('<span foreground="grey">%s</span>' % 
-                _('Yesterday'))
-        elif cumple[4] < -1:
-            ago = (_('%s Days ago') % str(cumple[4] * -1))
-            label = gtk.Label(ago)
-            label.set_markup('<span foreground="grey">%s</span>' % ago)
-        elif cumple[4] == 1:
-            label = gtk.Label(_('Tomorrow'))
-        else:
-            label = gtk.Label(cumple[3] + " " + _('Days'))
-        align = gtk.Alignment(0.0, 0.5, 0, 0)
-        align.add(label)
-        align.show()
-        table.attach(align, 4, 5, fila, fila+1)
-        label.show()
-
-        years = '%s %s' % (str(cumple[7]), _('Years'))
-        if cumple[4] == 0:
-            label = gtk.Label('<b>%s</b>' % years)
-            label.set_markup('<b>%s</b>' % years)
-        elif cumple[4] < 0:
-            label = gtk.Label(years)
-            label.set_markup('<span foreground="grey">%s</span>' % years)
-        else:
-            label = gtk.Label(years)
-        align = gtk.Alignment(1.0, 0.5, 0, 0)
-        align.add(label)
-        align.show()
-        table.attach(align, 5, 6, fila, fila+1)
-        label.show()
-        fila = fila +1
-
-    table.show()
-    frame.show()
-    showbd.show()
-    showbd.connect('focus_out_event', closebdwindow, "text")
 
 def closebdwindow(uno, dos, textcw):
     '''close about window'''
@@ -1320,7 +1319,6 @@ class Conf:
         self.settings.write( file(os.environ['HOME']+"/.gbirthdayrc", "w") )
 
 if __name__ == '__main__':
-    global icon
     global status_icon
     global showbdcheck
     global dlg
