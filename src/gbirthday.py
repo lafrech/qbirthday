@@ -663,6 +663,13 @@ class StatusIcon():
         self.icon.connect('popup-menu', self.on_right_click)
         self.icon.connect('activate', self.on_left_click, 20, 20)
 
+        def on_url(d, link, data):
+            '''start default browser with gbirthday-website on click'''
+            import subprocess
+            subprocess.Popen(['sensible-browser', 'http://gbirthday.sourceforge.net/'])
+
+        gtk.about_dialog_set_url_hook(on_url, None)
+
     def reload_gbirthday(self, text):
         '''reload gbirthday, reload data from databases'''
         global ab
@@ -1057,13 +1064,6 @@ def closebdwindow(uno, dos, textcw):
     global showbdcheck
     showbdcheck = 0
     showbd.destroy()
-
-def on_url(d, link, data):
-    '''start default browser with gbirthday-website on click'''
-    import subprocess
-    subprocess.Popen(['sensible-browser', 'http://gbirthday.sourceforge.net/'])
-
-gtk.about_dialog_set_url_hook(on_url, None)
 
 def db_select(widget, db):
     '''callback for checkboxes and update used_databases'''
