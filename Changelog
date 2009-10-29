@@ -2,6 +2,8 @@
 	Added gettext support for easier translation
 	Translation system added at:
 	    http://www.transifex.net/projects/p/gbirthday/
+	Use python class ConfigParser for handling the config file
+	    !!! now in a different format !!!
 
 0.5.1
 	Fixed bug with Categories in Lightning-SQLite-Database
