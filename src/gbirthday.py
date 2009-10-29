@@ -594,18 +594,18 @@ class AddressBook:
                     if bdayKeys[k].find('-'+sDateMonth+'-'+sDateDay) != -1:
                         if d == 0:
                             birthday_today = True
-                            icono = 'birthdaytoday.png'
+                            pic = 'birthdaytoday.png'
                         elif d < 0:
-                            icono = 'birthdaylost.png'
+                            pic = 'birthdaylost.png'
                         else:
-                            icono = 'birthdaynext.png'
+                            pic = 'birthdaynext.png'
 
                         bday = bdayKeys[k]
                         
                         ano, mes, dia = bday.split('-', 2)
                         ano = sDate.year - int(ano)
 
-                        temporal = [icono, bday, name, str(d), d, 
+                        temporal = [pic, bday, name, str(d), d,
                             sDate.month, sDate.day, ano]
                         birthday_list.append(temporal)
         return birthday_list
@@ -649,84 +649,275 @@ def showErrorMsg(message, title=None, parent=None):
     errmsg.run()
     errmsg.destroy()
 
-def StatusIcon(parent=None):
-    '''create status icon'''
-    global icon
-    icon = gtk.status_icon_new_from_file(imageslocation + 'birthday.png')
-    list=ab.manageBdays()
-    if len(list) > 0:
-        icon.set_from_file(imageslocation + 'birthday.png')
-    else:
-        icon.set_from_file(imageslocation + 'nobirthday.png')
-    icon.set_blinking(AddressBook.checktoday(ab))
-    icon.connect('popup-menu', on_right_click)
-    icon.connect('activate', on_left_click, 20, 20)
+class StatusIcon():
+    def __init__(self):
+        '''create status icon'''
+     #   global icon
+        self.icon = gtk.status_icon_new_from_file(imageslocation + 'birthday.png')
+        list=ab.manageBdays()
+        if len(list) > 0:
+            self.icon.set_from_file(imageslocation + 'birthday.png')
+        else:
+            self.icon.set_from_file(imageslocation + 'nobirthday.png')
+        self.icon.set_blinking(AddressBook.checktoday(ab))
+        self.icon.connect('popup-menu', self.on_right_click)
+        self.icon.connect('activate', self.on_left_click, 20, 20)
 
-def make_menu(event_button, event_time, icon):
-    '''create menu window'''
-    menu = gtk.Menu()
-    cerrar = gtk.Image()
-    cerrar.set_from_stock(gtk.STOCK_CLOSE, gtk.ICON_SIZE_MENU,)
-    recargar = gtk.ImageMenuItem(_('Reload'))
-    recarga_img = gtk.Image()
-    recarga_img.set_from_stock(gtk.STOCK_REFRESH, gtk.ICON_SIZE_MENU,)
-    recargar.set_image(recarga_img)
-    recargar.show()
-    recargar.connect_object('activate', reload_gbirthday, 'reload')
-    menu.append(recargar)
-    blink_menu = gtk.ImageMenuItem(_('Stop blinking'))
-    blink_img = gtk.Image()
-    blink_img.set_from_stock(gtk.STOCK_STOP, gtk.ICON_SIZE_MENU,)
-    blink_menu.set_image(blink_img)
-    blink_menu.show()
-    blink_menu.connect_object('activate', stop_blinking, 'stop blinking')
-    menu.append(blink_menu)
+    def reload_gbirthday(self, text):
+        '''reload gbirthday, reload data from databases'''
+        global ab
+        start()
+        self.icon.set_blinking(AddressBook.checktoday(ab))
+        list=AddressBook.manageBdays(ab)
+        if len(list) > 0:
+            self.icon.set_from_file(imageslocation + 'birthday.png')
+        else:
+            self.icon.set_from_file(imageslocation + 'nobirthday.png')
 
-    add_menu = gtk.ImageMenuItem(_('Add'))
-    add_img = gtk.Image()
-    add_img.set_from_stock(gtk.STOCK_ADD, gtk.ICON_SIZE_MENU,)
-    add_menu.set_image(add_img)
-    add_menu.show()
-    add_menu.connect_object("activate", add, "add birthday")
-    menu.append(add_menu)
+    def check_new_day(self):
+        '''check for new birthday (check every 60 seconds)'''
+        global current_day
+        new_day = time.strftime("%d", time.localtime(time.time()))
+        if current_day != new_day:
+            list=AddressBook.manageBdays(ab)
+            if len(list) > 0:
+                self.icon.set_from_file(imageslocation + 'birthday.png')
+            else:
+                self.icon.set_from_file(imageslocation + 'nobirthday.png')
+            icon.set_blinking(AddressBook.checktoday(ab))
+            current_day = new_day
+        return True
 
-    preferences_menu = gtk.ImageMenuItem(_('Preferences'))
-    preferences_img = gtk.Image()
-    preferences_img.set_from_stock(gtk.STOCK_PREFERENCES, gtk.ICON_SIZE_MENU,)
-    preferences_menu.set_image(preferences_img)
-    preferences_menu.show()
-    preferences_menu.connect_object("activate", preferences_window, "about")
-    menu.append(preferences_menu)
+    def make_menu(self, event_button, event_time, icon):
+        '''create menu window'''
+        menu = gtk.Menu()
+        cerrar = gtk.Image()
+        cerrar.set_from_stock(gtk.STOCK_CLOSE, gtk.ICON_SIZE_MENU,)
+        recargar = gtk.ImageMenuItem(_('Reload'))
+        recarga_img = gtk.Image()
+        recarga_img.set_from_stock(gtk.STOCK_REFRESH, gtk.ICON_SIZE_MENU,)
+        recargar.set_image(recarga_img)
+        recargar.show()
+        recargar.connect_object('activate', self.reload_gbirthday, 'reload')
+        menu.append(recargar)
+        blink_menu = gtk.ImageMenuItem(_('Stop blinking'))
+        blink_img = gtk.Image()
+        blink_img.set_from_stock(gtk.STOCK_STOP, gtk.ICON_SIZE_MENU,)
+        blink_menu.set_image(blink_img)
+        blink_menu.show()
+        blink_menu.connect_object('activate', self.stop_blinking, 'stop blinking')
+        menu.append(blink_menu)
 
-    about_menu = gtk.ImageMenuItem(_('About'))
-    about_img = gtk.Image()
-    about_img.set_from_stock(gtk.STOCK_ABOUT, gtk.ICON_SIZE_MENU,)
-    about_menu.set_image(about_img)
-    about_menu.show()
-    about_menu.connect_object("activate", create_dialog, None)
-    menu.append(about_menu)
+        add_menu = gtk.ImageMenuItem(_('Add'))
+        add_img = gtk.Image()
+        add_img.set_from_stock(gtk.STOCK_ADD, gtk.ICON_SIZE_MENU,)
+        add_menu.set_image(add_img)
+        add_menu.show()
+        add_menu.connect_object("activate", add, "add birthday")
+        menu.append(add_menu)
 
-    salir = gtk.ImageMenuItem(_('Quit'))
-    salir.set_image(cerrar)
-    salir.show()
-    salir.connect_object("activate", finish_gbirthday, "file.quit")
-    menu.append(salir)
-    menu.popup(None, None,
-        gtk.status_icon_position_menu, event_button,
-        event_time, icon)
+        preferences_menu = gtk.ImageMenuItem(_('Preferences'))
+        preferences_img = gtk.Image()
+        preferences_img.set_from_stock(gtk.STOCK_PREFERENCES, gtk.ICON_SIZE_MENU,)
+        preferences_menu.set_image(preferences_img)
+        preferences_menu.show()
+        preferences_menu.connect_object("activate", self.preferences_window, "about")
+        menu.append(preferences_menu)
 
-def on_right_click(icon, event_button, event_time):
-    '''open menu window on right click'''
-    make_menu(event_button, event_time, icon)
-    
-def on_left_click(icon, event_button, event_time):
-    '''close/open window with list of birthdays'''
-    global showbdcheck
-    if showbdcheck == 0:
-        showbdcheck = 1
-        openwindow()
-    else:
-        closebdwindow('focus_out_event', closebdwindow, "")
+        about_menu = gtk.ImageMenuItem(_('About'))
+        about_img = gtk.Image()
+        about_img.set_from_stock(gtk.STOCK_ABOUT, gtk.ICON_SIZE_MENU,)
+        about_menu.set_image(about_img)
+        about_menu.show()
+        about_menu.connect_object("activate", self.create_dialog, None)
+        menu.append(about_menu)
+
+        salir = gtk.ImageMenuItem(_('Quit'))
+        salir.set_image(cerrar)
+        salir.show()
+        salir.connect_object("activate", self.finish_gbirthday, "file.quit")
+        menu.append(salir)
+        menu.popup(None, None,
+            gtk.status_icon_position_menu, event_button,
+            event_time, icon)
+
+    def create_dialog(self, uno):
+        '''create about dialog'''
+        global dlg
+        dlg = gtk.AboutDialog()
+        dlg.set_version(VERSION)
+        dlg.set_comments(_('Birthday reminder'))
+        dlg.set_name("GBirthday")
+        image = gtk.gdk.pixbuf_new_from_file(imageslocation + 'gbirthday.png')
+        dlg.set_logo(image)
+        dlg.set_icon_from_file(imageslocation + 'birthday.png')
+        dlg.set_copyright(u'Copyright \u00A9 2007 Alex Mallo, 2009 Andreas Bresser, 2009 Thomas Spura')
+        dlg.set_license('''Licensed under the GNU General Public License Version 2
+
+GBirthday is free software; you can redistribute it and\/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+GBirthday is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+02110-1301, USA.''')
+        dlg.set_authors(['Alex Mallo <dernalis@gmail.com>',
+                         'Robert Wildburger <r.wildburger@gmx.at>',
+                         'Stefan Jurco <stefan.jurco@gmail.com>',
+                         'Andreas Bresser <andreas@phidev.org>',
+                         'Thomas Spura <tomspur@fedoraproject.org>'])
+        dlg.set_artists(['Alex Mallo <dernalis@gmail.com>'])
+        cred = _('translator-credit')
+        if cred != 'translator-credit':
+            dlg.set_translator_credits(_('translator-credit'))
+        else:
+            dlg.set_translator_credits(
+                _("There are no translations or the translator doesn't want to get credits for that.") )
+        dlg.set_website('http://gbirthday.sf.net/')
+        def close(w, res):
+            if res == gtk.RESPONSE_CANCEL:
+                w.hide()
+        dlg.connect('response', close)
+        dlg.run()
+
+    def finish_gbirthday(self, text):
+        '''exit program'''
+        if dlg is not None:
+            dlg.destroy()
+        gtk.main_quit()
+
+    def on_right_click(self, icon, event_button, event_time):
+        '''open menu window on right click'''
+        self.make_menu(event_button, event_time, icon)
+
+    def on_left_click(self, icon, event_button, event_time):
+        '''close/open window with list of birthdays'''
+        global showbdcheck
+        if showbdcheck == 0:
+            showbdcheck = 1
+            openwindow()
+        else:
+            closebdwindow('focus_out_event', closebdwindow, "")
+
+    def stop_blinking(self, text):
+        '''stop blinking (only if icon blinks)'''
+        self.icon.set_blinking(False)
+
+    def preferences_window(self, textcw=None):
+        '''show settings window'''
+        global imageslocation
+        global preferences
+        global conf
+        preferences = gtk.Window(gtk.WINDOW_TOPLEVEL)
+        preferences.set_decorated(True)
+        preferences.set_position(gtk.WIN_POS_CENTER)
+        preferences.set_title(_('Preferences'))
+        preferences.set_icon_from_file(imageslocation + 'birthday.png')
+
+        box = gtk.VBox(False, 0)
+        preferences.add(box)
+
+        table = gtk.Table(3, 2, False)
+        table.set_col_spacings(10)
+        table.set_row_spacings(10)
+
+        label= gtk.Label(_('Past birthdays'))
+        table.attach(label, 0, 1, 0, 1)
+        label.show()
+
+        label= gtk.Label(_('Next birthdays'))
+        table.attach(label, 0, 1, 1, 2)
+        label.show()
+
+        label= gtk.Label(_('Database'))
+        table.attach(label, 0, 1, 2, 3)
+        label.show()
+
+        def get_new_preferences(uno, option, spin):
+            '''set value for settings by spinner'''
+            global conf
+            spin.update()
+            if option == "firstday": conf.firstday = spin.get_value_as_int()
+            elif option == "lastday": conf.lastday = spin.get_value_as_int()
+            else:
+                showErrorMsg(_('Internal Error: Option %s not valid.') % option)
+
+        past = gtk.Adjustment(int (conf.firstday), lower=-30, upper=0, step_incr=-1,
+                            page_incr=0, page_size=0)
+        spin = gtk.SpinButton(past, climb_rate=0.0, digits=0)
+        spin.connect("value-changed", get_new_preferences, "firstday", spin)
+        table.attach(spin,1, 2, 0, 1)
+        spin.show()
+
+        next = gtk.Adjustment(int (conf.lastday), lower=0, upper=90, step_incr=1,
+                            page_incr=0, page_size=0)
+        spin = gtk.SpinButton(next, climb_rate=0.0, digits=0)
+        spin.connect("value-changed", get_new_preferences, "lastday", spin)
+        table.attach(spin,1, 2, 1, 2)
+        spin.show()
+
+        vbox = gtk.VBox(False, 10)
+        for db in databases:
+            hbox = gtk.HBox(False, 2)
+            vbox.pack_start(hbox, False, False, 3)
+
+            chkDB = gtk.CheckButton(db.TITLE)
+            if db.TYPE in conf.used_databases:
+                chkDB.set_active(True)
+            chkDB.connect("toggled", db_select, db)
+            hbox.pack_start(chkDB, False , False, 0)
+            if db.HAS_CONFIG:
+                button = gtk.Button(_('Configure'))
+                button.connect("clicked", preferences_db, db)
+                button.show()
+                hbox.pack_start(button, False, False, 1)
+            hbox.show()
+            chkDB.show()
+        table.attach(vbox,1, 2, 2, 3)
+        vbox.show()
+
+        box.pack_start(table, True , True, 8)
+        table.show()
+
+        def finish_preferences(uno, texto):
+            '''save settings after user clicked save and exit'''
+            self.save_config()
+            preferences.destroy()
+        button = gtk.Button(_('Save & Close'))
+        box.pack_start(button, False , False, 2)
+        button.connect("clicked", finish_preferences, None)
+        button.show()
+        box.show()
+        preferences.set_border_width(5)
+        preferences.show()
+
+    def save_config(self):
+        '''save config in file'''
+        global conf
+        for db in databases:
+            db.update(conf)
+        conf.save()
+
+def finish_add(uno, combo, name, calend, window):
+    '''save new added person'''
+    for db in databases:
+        if db.TITLE == combo.get_active_text():
+            calend = list(calend.get_date())
+            calend[1] += 1
+            db.add(name.get_text(), datetime.date(*calend))
+    window.destroy()
+
+# not needed atm, will be possibly deleted
+def save_list(l):
+    '''create a string that can be saved in a file'''
+    return str(l)[2:-2].replace("', '", ',')
 
 def openwindow():
     '''open window that includes all birthdays'''
@@ -874,52 +1065,6 @@ def on_url(d, link, data):
 
 gtk.about_dialog_set_url_hook(on_url, None)
 
-def create_dialog(uno):
-    '''create about dialog'''
-    global dlg
-    dlg = gtk.AboutDialog()
-    dlg.set_version(VERSION)
-    dlg.set_comments(_('Birthday reminder'))
-    dlg.set_name("GBirthday")
-    image = gtk.gdk.pixbuf_new_from_file(imageslocation + 'gbirthday.png')
-    dlg.set_logo(image)
-    dlg.set_icon_from_file(imageslocation + 'birthday.png')
-    dlg.set_copyright(u'Copyright \u00A9 2007 Alex Mallo, 2009 Andreas Bresser, 2009 Thomas Spura')
-    dlg.set_license('''Licensed under the GNU General Public License Version 2
-
-GBirthday is free software; you can redistribute it and\/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
-
-GBirthday is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
-02110-1301, USA.''')
-    dlg.set_authors(['Alex Mallo <dernalis@gmail.com>', 
-                     'Robert Wildburger <r.wildburger@gmx.at>', 
-                     'Stefan Jurco <stefan.jurco@gmail.com>', 
-                     'Andreas Bresser <andreas@phidev.org>',
-                     'Thomas Spura <tomspur@fedoraproject.org>'])
-    dlg.set_artists(['Alex Mallo <dernalis@gmail.com>'])
-    cred = _('translator-credit')
-    if cred != 'translator-credit':
-        dlg.set_translator_credits(_('translator-credit'))
-    else:
-        dlg.set_translator_credits(
-                _("There are no translations or the translator doesn't want to get credits for that.") )
-    dlg.set_website('http://gbirthday.sf.net/')
-    def close(w, res):
-        if res == gtk.RESPONSE_CANCEL:
-            w.hide()
-    dlg.connect('response', close)
-    dlg.run()
-
 def db_select(widget, db):
     '''callback for checkboxes and update used_databases'''
     global conf
@@ -945,139 +1090,6 @@ def preferences_db(widget, db):
     db.create_config(pref_db)
     pref_db.set_modal(True)
     pref_db.show()
-
-
-def preferences_window(textcw=None):
-    '''show settings window'''
-    global imageslocation
-    global preferences
-    global conf
-    preferences = gtk.Window(gtk.WINDOW_TOPLEVEL)
-    preferences.set_decorated(True)
-    preferences.set_position(gtk.WIN_POS_CENTER)
-    preferences.set_title(_('Preferences'))
-    preferences.set_icon_from_file(imageslocation + 'birthday.png')
-
-    box = gtk.VBox(False, 0)
-    preferences.add(box)
-
-    table = gtk.Table(3, 2, False)
-    table.set_col_spacings(10)
-    table.set_row_spacings(10)
-
-    label= gtk.Label(_('Past birthdays'))
-    table.attach(label, 0, 1, 0, 1)
-    label.show()
-
-    label= gtk.Label(_('Next birthdays'))
-    table.attach(label, 0, 1, 1, 2)
-    label.show()
-
-    label= gtk.Label(_('Database'))
-    table.attach(label, 0, 1, 2, 3)
-    label.show()
-
-    past = gtk.Adjustment(int (conf.firstday), lower=-30, upper=0, step_incr=-1,
-        page_incr=0, page_size=0)
-    spin = gtk.SpinButton(past, climb_rate=0.0, digits=0)
-    spin.connect("value-changed", cambiar_preferencias,"firstday", spin)
-    table.attach(spin,1, 2, 0, 1)
-    spin.show()
-
-    next = gtk.Adjustment(int (conf.lastday), lower=0, upper=90, step_incr=1,
-        page_incr=0, page_size=0)
-    spin = gtk.SpinButton(next, climb_rate=0.0, digits=0)
-    spin.connect("value-changed", cambiar_preferencias,"lastday", spin)
-    table.attach(spin,1, 2, 1, 2)
-    spin.show()
-
-    vbox = gtk.VBox(False, 10)
-    for db in databases:
-        hbox = gtk.HBox(False, 2)
-        vbox.pack_start(hbox, False, False, 3)
-        
-        chkDB = gtk.CheckButton(db.TITLE)
-        if db.TYPE in conf.used_databases:
-            chkDB.set_active(True)
-        chkDB.connect("toggled", db_select, db)
-        hbox.pack_start(chkDB, False , False, 0)
-        if db.HAS_CONFIG:
-            button = gtk.Button(_('Configure'))
-            button.connect("clicked", preferences_db, db)
-            button.show()
-            hbox.pack_start(button, False, False, 1)
-        hbox.show()
-        chkDB.show()
-    table.attach(vbox,1, 2, 2, 3)
-    vbox.show()
-
-    box.pack_start(table, True , True, 8)
-    table.show()
-
-    button = gtk.Button(_('Save & Close'))
-    box.pack_start(button, False , False, 2)
-    button.connect("clicked", finish_preferences, None)
-    button.show()
-    box.show()
-    preferences.set_border_width(5)
-    preferences.show()
-
-def cambiar_preferencias(uno, option, spin):
-    '''set value for settings by spinner'''
-    global conf
-    spin.update()
-    if option == "firstday": conf.firstday = spin.get_value_as_int()
-    elif option == "lastday": conf.lastday = spin.get_value_as_int()
-    else:
-        showErrorMsg(_('Internal Error: Option %s not valid.') % option)
-
-def finish_gbirthday(text):
-    '''exit program'''
-    if dlg is not None:
-        dlg.destroy()
-    gtk.main_quit()
-
-def finish_preferences(uno,texto):
-    '''save settings after user clicked save and exit'''
-    save_config()
-    preferences.destroy()
-
-def finish_add(uno, combo, name, calend, window):
-    '''save new added person'''
-    for db in databases:
-        if db.TITLE == combo.get_active_text():
-            calend = list(calend.get_date())
-            calend[1] += 1
-            db.add(name.get_text(), datetime.date(*calend))
-    window.destroy()
-
-def save_list(l):
-    '''create a string that can be saved in a file'''
-    return str(l)[2:-2].replace("', '", ',')
-
-def save_config():
-    '''save config in file'''
-    global conf
-    for db in databases:
-        db.update(conf)
-    conf.save()
-
-def reload_gbirthday(texto):
-    '''reload gbirthday, reload data from databases'''
-    global conf
-    global icon
-    start()
-    icon.set_blinking(AddressBook.checktoday(conf.ab))
-    list=AddressBook.manageBdays(conf.ab)
-    if len(list) > 0:
-        icon.set_from_file(imageslocation + 'birthday.png')
-    else:
-        icon.set_from_file(imageslocation + 'nobirthday.png')
-
-def stop_blinking(texto):
-    '''stop blinking (only if icon blinks)'''
-    global icon
-    icon.set_blinking(False)
 
 def add_single_manual(widget, window):
     if window is not None: window.destroy()
@@ -1235,24 +1247,10 @@ def add(text):
     add_window.show()
 '''
 
-def check_new_day():
-    '''check for new birthday (check every 60 seconds)'''
-    global dia
-    diahoy = time.strftime("%d", time.localtime(time.time()))
-    if dia != diahoy:
-        list=AddressBook.manageBdays(ab)
-        if len(list) > 0:
-            icon.set_from_file(imageslocation + 'birthday.png')
-        else:
-            icon.set_from_file(imageslocation + 'nobirthday.png')
-        icon.set_blinking(AddressBook.checktoday(ab))
-        dia = diahoy
-    return True
-
 def start():
     '''(re)create AdressBook and parse data'''
-    global conf
-    conf.ab.bdays = {}
+    global ab
+    ab.bdays = {}
     for db in databases:
         if (db.TYPE in conf.used_databases):
             db.parse()
@@ -1323,10 +1321,10 @@ class Conf:
 
 if __name__ == '__main__':
     global icon
-    global icono
+    global status_icon
     global showbdcheck
     global dlg
-    global dia
+    global current_day
     dlg= None
     showbdcheck = 0
 
@@ -1335,16 +1333,16 @@ if __name__ == '__main__':
     conf = Conf()
 
     # load data and fill AddressBook
-    conf.ab = AddressBook()
+    ab = AddressBook()
     start()
 
     # show status icon
-    icono = StatusIcon()
-    dia = time.strftime("%d", time.localtime(time.time()))
+    status_icon = StatusIcon()
+    current_day = time.strftime("%d", time.localtime(time.time()))
 
     # check every 60 seconds for new day
     # TODO: update until end of day according to current clock settings?
     #       (might not the best idea if user changes current time)
     import gobject
-    gobject.timeout_add(60000, check_new_day)
+    gobject.timeout_add(60000, status_icon.check_new_day)
     gtk.main()
