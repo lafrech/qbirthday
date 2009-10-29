@@ -30,17 +30,12 @@ and relatively easy to extend for other data servers.
 
 VERSION = "0.5.1"
 
-import pygtk
-pygtk.require('2.0')
 import gtk
 
 import os, re
 import datetime
 from datetime import date
 import time
-import subprocess
-import gobject
-import uuid
 
 """ parse locales from python module
 Do you say "1. January" or "January 1."?
@@ -51,7 +46,7 @@ day_at_place, month_at_place = 1, 2
 if time.strftime('%x', (2000, 3, 1, 1, 0, 0, 0, 1, 0)).startswith("03"):
     day_at_place, month_at_place = 2, 1
 
-# for FreeBSD users: it no i18n is whished, no gettext package won't be
+# for FreeBSD users: if no i18n is whished, no gettext package won't be
 # available and standard messages are displayed insted a try to use
 # translated strings
 try:
@@ -101,7 +96,7 @@ class DataBase:
         '''create additional pygtk config in config menu'''
         pass
 
-    def update(self, f):
+    def update(self, conf):
         '''update and save values in file'''
         pass
 
@@ -193,6 +188,7 @@ class Lightning(DataBase):
             
 
     def add(self, name, birthday):
+        import uuid
         # create new uuid
         event_date = int(birthday.strftime("%s"))
         event_start = (event_date + 86400) * 1000000
@@ -327,13 +323,14 @@ class Evolution(DataBase):
 
 class CSV(DataBase):
     '''import from CSV-file'''
+    global conf
     def __init__(self):
         DataBase.__init__(self, title='CSV-file (comma seperated value)', type='csv')
         self._seperators=['; ', ', ', ': ']   # possible seperators
 
     def parse(self):
         '''open and parse file'''
-        for filename in csv_files:
+        for filename in conf.csv_files:
             if (os.path.exists(filename)):
                 for line in file(filename):
                     # check, if any of the seperators are in the text
@@ -351,14 +348,14 @@ class CSV(DataBase):
         '''add new person with birthday to end of csv-file'''
         birthday = str(birthday)
         # TODO: show menu to select file?
-        if len(csv_files) == 0:
+        if len(conf.csv_files) == 0:
             showErrorMsg(_('CSV-file does not exist'))
             return
-        filename = csv_files[0]
+        filename = conf.csv_files[0]
         if (os.path.exists(filename)):
-            f = file(csv_files[0], 'a')
+            f = file(conf.csv_files[0], 'a')
         else:
-            f = file(csv_files[0], 'w')
+            f = file(conf.csv_files[0], 'w')
         f.write(birthday + ', ' + name + '\n')
         f.close()
         ab.add(name, birthday)
@@ -368,13 +365,13 @@ class CSV(DataBase):
         print index
         if index >= 0:
             combobox.remove_text(index)
-            csv_files.remove(csv_files[index])
+            conf.csv_files.remove(conf.csv_files[index])
         return
 
     def add_file(self, widget, combobox, entry):
         filename = entry.get_text()
         combobox.append_text(filename)
-        csv_files.append(filename)
+        conf.csv_files.append(filename)
 
     def create_config(self, pref):
         '''create aditional options menu'''
@@ -383,7 +380,7 @@ class CSV(DataBase):
         hbox2 = gtk.HBox()
         vbox.pack_start(hbox)
         combobox = gtk.combo_box_new_text()
-        for csv_file in csv_files:
+        for csv_file in conf.csv_files:
             combobox.append_text(csv_file)
         combobox.set_active(0)
         combobox.show()
@@ -395,8 +392,8 @@ class CSV(DataBase):
         hbox.show()
         
         entry = gtk.Entry()
-        if len(csv_files) > 0:
-            entry.set_text(csv_files[0])
+        if len(conf.csv_files) > 0:
+            entry.set_text(conf.csv_files[0])
         hbox2.pack_start(entry)
         entry.show()
         
@@ -496,7 +493,7 @@ class MySQL(DataBase):
         self.conn.close()
         ab.add(name, birthday)
 
-    def update(self, f):
+    def update(self, conf):
         '''update and save values'''
         if self.entries and self.entries != []:
             self.host = self.entries[0].get_text()
@@ -507,14 +504,8 @@ class MySQL(DataBase):
             self.table = self.entries[5].get_text()
             self.name_row = self.entries[6].get_text()
             self.date_row = self.entries[7].get_text()
-            f.write("mysql_host=%s\n" % self.host)
-            f.write("mysql_port=%s\n" % self.port)
-            f.write("mysql_username=%s\n" % self.username)
-            f.write("mysql_password=%s\n" % self.password)
-            f.write("mysql_database=%s\n" % self.database)
-            f.write("mysql_table=%s\n" % self.table)
-            f.write("mysql_name_row=%s\n" % self.name_row)
-            f.write("mysql_date_row=%s\n" % self.date_row)
+
+            conf.MySQL = self
 
     def create_config(self, pref):
         '''create additional mysql config in config menu'''
@@ -557,10 +548,6 @@ class MySQL(DataBase):
     
 # list of all availabe databases
 databases = [Evolution(), Lightning(), Sunbird(), CSV(), MySQL()]
-# list of databases the user wants
-used_databases = ['evolution']
-# list of csv-files we want to read
-csv_files = []
 
 #other data classes and core program logic
 
@@ -589,10 +576,9 @@ class AddressBook:
         birthday_list = []
         temporal = []
 
-        global firstday
-        global lastday
+        global conf
         
-        for d in range(firstday,lastday+1):
+        for d in range(int (conf.firstday), int (conf.lastday)+1):
             sDate = now + datetime.timedelta(d)
 
             for k in range(len(self.bdays)):
@@ -667,8 +653,8 @@ def StatusIcon(parent=None):
     '''create status icon'''
     global icon
     icon = gtk.status_icon_new_from_file(imageslocation + 'birthday.png')
-    lista=ab.manageBdays()
-    if len(lista) > 0:
+    list=ab.manageBdays()
+    if len(list) > 0:
         icon.set_from_file(imageslocation + 'birthday.png')
     else:
         icon.set_from_file(imageslocation + 'nobirthday.png')
@@ -752,8 +738,7 @@ def openwindow():
     showbd.set_icon_from_file(imageslocation + 'birthday.png')
     showbd.set_border_width(0)
 
-    lista=AddressBook.manageBdays(ab)
-    listaiconos = []
+    list=AddressBook.manageBdays(ab)
 
     box = gtk.HBox()
     box.set_border_width(5)
@@ -769,7 +754,7 @@ def openwindow():
     table.attach(event_box, 0, 6, 0, 1)
     event_box.show()
     label = gtk.Label("GBirthday")
-    if len(lista) > 0:
+    if len(list) > 0:
         label.set_markup('<b>%s</b>' % _('Birthdays'))
     else:
         label.set_markup('<b>\n    %s    \n</b>' % _('No birthdays in specified period'))
@@ -779,7 +764,7 @@ def openwindow():
     style = label.get_style()
     event_box.modify_bg(gtk.STATE_NORMAL, event_box.rc_get_style().bg[gtk.STATE_SELECTED])
     fila = fila +1
-    for cumple in lista:
+    for cumple in list:
         image = gtk.Image()
         image.set_from_file(imageslocation + cumple[0])
         table.attach(image, 0, 1, fila, fila+1)
@@ -874,9 +859,9 @@ def openwindow():
     table.show()
     frame.show()
     showbd.show()
-    showbd.connect('focus_out_event', closebdwindow,"texto")
+    showbd.connect('focus_out_event', closebdwindow, "text")
 
-def closebdwindow(uno, dos, textocw):
+def closebdwindow(uno, dos, textcw):
     '''close about window'''
     global showbdcheck
     showbdcheck = 0
@@ -884,6 +869,7 @@ def closebdwindow(uno, dos, textocw):
 
 def on_url(d, link, data):
     '''start default browser with gbirthday-website on click'''
+    import subprocess
     subprocess.Popen(['sensible-browser', 'http://gbirthday.sourceforge.net/'])
 
 gtk.about_dialog_set_url_hook(on_url, None)
@@ -936,13 +922,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 
 def db_select(widget, db):
     '''callback for checkboxes and update used_databases'''
+    global conf
     if (widget.get_active()):
-        if not db.TYPE in used_databases:
-            used_databases.append(db.TYPE)
+        if not db.TYPE in conf.used_databases:
+            conf.used_databases.append(db.TYPE)
             db.activate()
     else:
-        if db.TYPE in used_databases:
-            used_databases.remove(db.TYPE)
+        if db.TYPE in conf.used_databases:
+            conf.used_databases.remove(db.TYPE)
             db.deactivate()
 
 def preferences_db(widget, db):
@@ -960,10 +947,11 @@ def preferences_db(widget, db):
     pref_db.show()
 
 
-def preferences_window(textocw=None):
+def preferences_window(textcw=None):
     '''show settings window'''
     global imageslocation
     global preferences
+    global conf
     preferences = gtk.Window(gtk.WINDOW_TOPLEVEL)
     preferences.set_decorated(True)
     preferences.set_position(gtk.WIN_POS_CENTER)
@@ -989,14 +977,14 @@ def preferences_window(textocw=None):
     table.attach(label, 0, 1, 2, 3)
     label.show()
 
-    past = gtk.Adjustment(firstday, lower=-30, upper=0, step_incr=-1, 
+    past = gtk.Adjustment(int (conf.firstday), lower=-30, upper=0, step_incr=-1,
         page_incr=0, page_size=0)
     spin = gtk.SpinButton(past, climb_rate=0.0, digits=0)
     spin.connect("value-changed", cambiar_preferencias,"firstday", spin)
     table.attach(spin,1, 2, 0, 1)
     spin.show()
 
-    next = gtk.Adjustment(lastday, lower=0, upper=90, step_incr=1, 
+    next = gtk.Adjustment(int (conf.lastday), lower=0, upper=90, step_incr=1,
         page_incr=0, page_size=0)
     spin = gtk.SpinButton(next, climb_rate=0.0, digits=0)
     spin.connect("value-changed", cambiar_preferencias,"lastday", spin)
@@ -1009,7 +997,7 @@ def preferences_window(textocw=None):
         vbox.pack_start(hbox, False, False, 3)
         
         chkDB = gtk.CheckButton(db.TITLE)
-        if db.TYPE in used_databases:
+        if db.TYPE in conf.used_databases:
             chkDB.set_active(True)
         chkDB.connect("toggled", db_select, db)
         hbox.pack_start(chkDB, False , False, 0)
@@ -1034,18 +1022,18 @@ def preferences_window(textocw=None):
     preferences.set_border_width(5)
     preferences.show()
 
-def cambiar_preferencias(uno, opcion, spin):
+def cambiar_preferencias(uno, option, spin):
     '''set value for settings by spinner'''
-    global firstday
-    global lastday
+    global conf
     spin.update()
-    if opcion == "firstday": firstday = spin.get_value_as_int()
-    elif opcion == "lastday": lastday = spin.get_value_as_int()
-    else: showErrorMsg(_('Internal Error: Option %s not valid.') % opcion)
+    if option == "firstday": conf.firstday = spin.get_value_as_int()
+    elif option == "lastday": conf.lastday = spin.get_value_as_int()
+    else:
+        showErrorMsg(_('Internal Error: Option %s not valid.') % option)
 
-def finish_gbirthday(texto):
+def finish_gbirthday(text):
     '''exit program'''
-    if dlg != None:
+    if dlg is not None:
         dlg.destroy()
     gtk.main_quit()
 
@@ -1069,25 +1057,19 @@ def save_list(l):
 
 def save_config():
     '''save config in file'''
-    global firstday
-    global lastday
-    f = open(os.environ['HOME']+'/.gbirthday.conf','w')
-    f.write('firstday=%i\n' % firstday)
-    f.write('lastday=%i\n' % lastday)
-    f.write('databases=%s\n' % save_list(used_databases))
-    f.write('csvfiles=%s\n' % save_list(csv_files))
+    global conf
     for db in databases:
-        db.update(f)
-    f.close()
+        db.update(conf)
+    conf.save()
 
 def reload_gbirthday(texto):
     '''reload gbirthday, reload data from databases'''
-    global ab
+    global conf
     global icon
     start()
-    icon.set_blinking(AddressBook.checktoday(ab))
-    lista=AddressBook.manageBdays(ab)
-    if len(lista) > 0:
+    icon.set_blinking(AddressBook.checktoday(conf.ab))
+    list=AddressBook.manageBdays(conf.ab)
+    if len(list) > 0:
         icon.set_from_file(imageslocation + 'birthday.png')
     else:
         icon.set_from_file(imageslocation + 'nobirthday.png')
@@ -1098,7 +1080,7 @@ def stop_blinking(texto):
     icon.set_blinking(False)
 
 def add_single_manual(widget, window):
-    if window != None: window.destroy()
+    if window is not None: window.destroy()
     add_window = gtk.Window(gtk.WINDOW_TOPLEVEL)
     add_window.set_decorated(True)
     add_window.set_position(gtk.WIN_POS_CENTER)
@@ -1225,7 +1207,7 @@ def add_from_file(widget, window):
     add_window.set_border_width(5)
     add_window.show()
 
-def add(texto):
+def add(text):
     '''Show Dialog to add new Person - not yet implemented!'''
     add_single_manual(None, None)
 '''
@@ -1258,8 +1240,8 @@ def check_new_day():
     global dia
     diahoy = time.strftime("%d", time.localtime(time.time()))
     if dia != diahoy:
-        lista=AddressBook.manageBdays(ab)
-        if len(lista) > 0:
+        list=AddressBook.manageBdays(ab)
+        if len(list) > 0:
             icon.set_from_file(imageslocation + 'birthday.png')
         else:
             icon.set_from_file(imageslocation + 'nobirthday.png')
@@ -1269,16 +1251,77 @@ def check_new_day():
 
 def start():
     '''(re)create AdressBook and parse data'''
-    global ab
-    ab.bdays = {}
+    global conf
+    conf.ab.bdays = {}
     for db in databases:
-        if (db.TYPE in used_databases):
+        if (db.TYPE in conf.used_databases):
             db.parse()
 
+class Conf:
+    def __init__(self):
+        import ConfigParser
+        self.firstday = self.lastday = None
+        self.ab = None
+        self.csv_files = None
+        self.MySQL = None
+        self.settings = ConfigParser.ConfigParser()
+        try:
+            self.settings.readfp( file(os.environ['HOME']+"/.gbirthdayrc") )
+        except IOError:
+            self.settings.add_section("main")
+            self.default_values()
+        else:
+            if self.settings.has_section("main"):
+                self.sync_to_mem()
+            else:
+                settings.add_section("main")
+                self.default_values()
+
+    def default_values(self):
+        self.firstday = -2
+        self.lastday = 30
+        self.used_databases = ['evolution']
+        self.csv_files = None
+
+    def sync_to_mem(self):
+        self.firstday = self.settings.get("main", "firstday")
+        self.lastday = self.settings.get("main", "lastday")
+        self.csv_files = self.settings.get("main", "csv_files")
+        self.used_databases = self.settings.get("main", "databases")
+        try:
+            MySQL.host = self.settings.get("mysql", "host")
+            MySQL.port = self.settings.get("mysql", "port")
+            MySQL.username = self.settings.get("mysql", "username")
+            MySQL.passwort = self.settings.get("mysql", "password")
+            MySQL.database = self.settings.get("mysql", "database")
+            MySQL.table = self.settings.get("mysql", "table")
+            MySQL.name_row = self.settings.get("mysql", "name_row")
+            MySQL.date_row = self.settings.get("mysql", "date_row")
+        except ConfigParser.NoSectionError:
+            pass
+
+    def sync_to_settings(self):
+        self.settings.set("main", "firstday", self.firstday)
+        self.settings.set("main", "lastday", self.lastday)
+        self.settings.set("main", "databases", self.used_databases)
+        self.settings.set("main", "csv_files", self.csv_files)
+        if self.MySQL:
+            if not self.settings.has_section("mysql"):
+                self.settings.add_section("mysql")
+            self.settings.set("mysql", "host", self.MySQL.host)
+            self.settings.set("mysql", "port", self.MySQL.port)
+            self.settings.set("mysql", "username", self.MySQL.username)
+            self.settings.set("mysql", "password", self.MySQL.password)
+            self.settings.set("mysql", "database", self.MySQL.database)
+            self.settings.set("mysql", "table", self.MySQL.table)
+            self.settings.set("mysql", "name_raw", self.MySQL.name_row)
+            self.settings.set("mysql", "date_raw", self.MySQL.date_raw)
+
+    def save(self):
+        self.sync_to_settings()
+        self.settings.write( file(os.environ['HOME']+"/.gbirthdayrc", "w") )
+
 if __name__ == '__main__':
-    global firstday
-    global lastday
-    global ab
     global icon
     global icono
     global showbdcheck
@@ -1288,43 +1331,11 @@ if __name__ == '__main__':
     showbdcheck = 0
 
     # try to load settings
-    try:
-        f = open(os.environ['HOME']+"/.gbirthday.conf",'r')
-    except IOError:
-        # use defaults and *NOT* saving the defaults to disk!
-        firstday = -2
-        lastday = 30
-        used_databases = ['evolution']
-        #save_config()
-        #print "Created configuration file."
-        # show settings dialog
-        #preferences_window()
-        # TODO: stop program until user settings are set?
-    else:
-        # parse config file
-        for line in f:
-            line = line.replace("\n","")
-            label, value = line.split('=', 1)
-            if label == "firstday": firstday = int(value)
-            elif label == "lastday": lastday = int(value)
-            elif label == "csvfiles":
-                if len(value) > 2: 
-                    csv_files = value.split(',')
-            elif label == "mysql_host": MySQL.host = value
-            elif label == "mysql_port": MySQL.port = value
-            elif label == "mysql_username": MySQL.username = value
-            elif label == "mysql_password": MySQL.password = value
-            elif label == "mysql_database": MySQL.database = value
-            elif label == "mysql_table": MySQL.table = value
-            elif label == "mysql_name_row": MySQL.name_row = value
-            elif label == "mysql_date_row": MySQL.date_row = value
-            elif label == "databases" and len(value) > 2: 
-                used_databases = value.split(',')
-            else: showErrorMsg(_("Unhandled value in gbirthday.conf: %s") % str(line))
-        f.close()
+    global conf
+    conf = Conf()
 
     # load data and fill AddressBook
-    ab = AddressBook()
+    conf.ab = AddressBook()
     start()
 
     # show status icon
@@ -1334,5 +1345,6 @@ if __name__ == '__main__':
     # check every 60 seconds for new day
     # TODO: update until end of day according to current clock settings?
     #       (might not the best idea if user changes current time)
+    import gobject
     gobject.timeout_add(60000, check_new_day)
     gtk.main()
