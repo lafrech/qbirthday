@@ -362,7 +362,6 @@ class CSV(DataBase):
     
     def remove_file(self, widget, combobox):
         index = combobox.get_active()
-        print index
         if index >= 0:
             combobox.remove_text(index)
             conf.csv_files.remove(conf.csv_files[index])
@@ -371,7 +370,10 @@ class CSV(DataBase):
     def add_file(self, widget, combobox, entry):
         filename = entry.get_text()
         combobox.append_text(filename)
-        conf.csv_files.append(filename)
+        if conf.csv_files:
+            conf.csv_files.append(filename)
+        else:
+            conf.csv_files = [filename]
 
     def create_config(self, pref):
         '''create aditional options menu'''
@@ -380,8 +382,9 @@ class CSV(DataBase):
         hbox2 = gtk.HBox()
         vbox.pack_start(hbox)
         combobox = gtk.combo_box_new_text()
-        for csv_file in conf.csv_files:
-            combobox.append_text(csv_file)
+        if conf.csv_files:
+            for csv_file in conf.csv_files:
+                combobox.append_text(csv_file)
         combobox.set_active(0)
         combobox.show()
         hbox.pack_start(combobox)
@@ -392,7 +395,7 @@ class CSV(DataBase):
         hbox.show()
         
         entry = gtk.Entry()
-        if len(conf.csv_files) > 0:
+        if conf.csv_files and len(conf.csv_files) > 0:
             entry.set_text(conf.csv_files[0])
         hbox2.pack_start(entry)
         entry.show()
@@ -719,7 +722,7 @@ class StatusIcon():
         add_img.set_from_stock(gtk.STOCK_ADD, gtk.ICON_SIZE_MENU,)
         add_menu.set_image(add_img)
         add_menu.show()
-        add_menu.connect_object("activate", add, "add birthday")
+        add_menu.connect_object("activate", self.add, "add birthday")
         menu.append(add_menu)
 
         preferences_menu = gtk.ImageMenuItem(_('Preferences'))
@@ -810,17 +813,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
             showbdcheck = 1
             self.openwindow()
         else:
-            closebdwindow('focus_out_event', closebdwindow, "")
+            self.closebdwindow('focus_out_event', self.closebdwindow, "")
 
     def openwindow(self):
         '''open window that includes all birthdays'''
         global showbd
         global showbdcheck
-        showbd = gtk.Window(gtk.WINDOW_TOPLEVEL)
-        showbd.set_decorated(False)
-        showbd.set_position(gtk.WIN_POS_MOUSE)
-        showbd.set_icon_from_file(imageslocation + 'birthday.png')
-        showbd.set_border_width(0)
+        showbd = self.gtk_get_top_window('', False, False)
 
         list=AddressBook.manageBdays(ab)
 
@@ -943,7 +942,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
         table.show()
         frame.show()
         showbd.show()
-        showbd.connect('focus_out_event', closebdwindow, "text")
+        showbd.connect('focus_out_event', self.closebdwindow, "text")
 
     def stop_blinking(self, text):
         '''stop blinking (only if icon blinks)'''
@@ -954,11 +953,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
         global imageslocation
         global preferences
         global conf
-        preferences = gtk.Window(gtk.WINDOW_TOPLEVEL)
-        preferences.set_decorated(True)
-        preferences.set_position(gtk.WIN_POS_CENTER)
-        preferences.set_title(_('Preferences'))
-        preferences.set_icon_from_file(imageslocation + 'birthday.png')
+        preferences = self.gtk_get_top_window(_('Preferences'))
 
         box = gtk.VBox(False, 0)
         preferences.add(box)
@@ -1002,6 +997,27 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
         table.attach(spin,1, 2, 1, 2)
         spin.show()
 
+        def db_select(widget, db):
+            '''callback for checkboxes and update used_databases'''
+            global conf
+            if (widget.get_active()):
+                if not db.TYPE in conf.used_databases:
+                    conf.used_databases.append(db.TYPE)
+                    db.activate()
+            else:
+                if db.TYPE in conf.used_databases:
+                    conf.used_databases.remove(db.TYPE)
+                    db.deactivate()
+
+        def preferences_db(widget, db):
+          #  global imageslocation
+            global preferences
+            pref_db = self.gtk_get_top_window(_('Database Configuration'))
+
+            db.create_config(pref_db)
+            pref_db.set_modal(True)
+            pref_db.show()
+
         vbox = gtk.VBox(False, 10)
         for db in databases:
             hbox = gtk.HBox(False, 2)
@@ -1044,207 +1060,184 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
             db.update(conf)
         conf.save()
 
-def finish_add(uno, combo, name, calend, window):
-    '''save new added person'''
-    for db in databases:
-        if db.TITLE == combo.get_active_text():
-            calend = list(calend.get_date())
-            calend[1] += 1
-            db.add(name.get_text(), datetime.date(*calend))
-    window.destroy()
+    def add(self, text):
+        '''Show Dialog to add new Person - not yet implemented!'''
+        self.add_single_manual(None, None)
+        '''
+        add_window = self.gtk_get_top_window(_('Add'))
+
+        box = gtk.VBox(False, 0)
+        add_window.add(box)
+
+        manualButton = gtk.Button(_('Add single birthday manually'))
+        manualButton.connect("clicked", self.add_single_manual, add_window)
+        box.pack_start(manualButton)
+        manualButton.show()
+
+        fileButton = gtk.Button(_('Add multiple birthdays from file or database'))
+        fileButton.connect("clicked", self.add_from_file, add_window)
+        box.pack_start(fileButton)
+        fileButton.show()
+
+        box.show()
+        add_window.set_border_width(5)
+        add_window.show()
+        '''
+
+    def add_single_manual(self, widget, window):
+        if window is not None: window.destroy()
+        add_window = self.gtk_get_top_window(_('Add'))
+
+        box = gtk.VBox(False, 0)
+        add_window.add(box)
+
+        table = gtk.Table(3, 2, False)
+        table.set_col_spacings(10)
+        table.set_row_spacings(10)
+
+        label= gtk.Label(_('Name'))
+        table.attach(label, 0, 1, 0, 1)
+        label.show()
+
+        label= gtk.Label(_('Birthday'))
+        table.attach(label, 0, 1, 1, 2)
+        label.show()
+
+        label= gtk.Label(_('Save to file/database'))
+        table.attach(label, 0, 1, 2, 3)
+        label.show()
+
+        name = gtk.Entry()
+        name.set_text("")
+        table.attach(name, 1, 2, 0, 1)
+        name.show()
+
+        date = gtk.Calendar()
+        table.attach(date, 1, 2, 1, 2)
+        date.show()
+
+        liststore = gtk.ListStore(str)
+        combobox = gtk.combo_box_new_text()
+        for db in databases:
+            if db.CAN_SAVE:
+                combobox.append_text(db.TITLE)
+        combobox.set_active(0)
+        combobox.show()
+        table.attach(combobox,1, 2, 2, 3)
+
+        box.pack_start(table, True , True, 8)
+        table.show()
+
+        button = gtk.Button(_('Save & Close'))
+        box.pack_start(button, False , False, 2)
+        button.connect("clicked", self.finish_add, combobox, name, date, add_window)
+        button.show()
+
+        box.show()
+        add_window.set_border_width(5)
+        add_window.show()
+
+    def finish_add(self, uno, combo, name, calend, window):
+        '''save new added person'''
+        for db in databases:
+            if db.TITLE == combo.get_active_text():
+                calend = list(calend.get_date())
+                calend[1] += 1
+                db.add(name.get_text(), datetime.date(*calend))
+        window.destroy()
+
+    def add_from_file(self, widget, window):
+        window.destroy()
+        add_window = self.gtk_get_top_window(_('Add'))
+
+        box = gtk.VBox(False, 0)
+        add_window.add(box)
+
+        table = gtk.Table(3, 2, False)
+        table.set_col_spacings(10)
+        table.set_row_spacings(10)
+
+
+        label= gtk.Label('select file/database')
+        table.attach(label, 0, 1, 0, 1)
+        label.show()
+
+        liststore = gtk.ListStore(str)
+        db_combo = gtk.combo_box_new_text()
+        for db in databases:
+            db_combo.append_text(db.TITLE)
+        db_combo.set_active(0)
+        db_combo.show()
+        table.attach(db_combo,1, 2, 0, 1)
+
+        label= gtk.Label(_('Import Settings'))
+        table.attach(label, 0, 1, 1, 2)
+        label.show()
+    
+        label= gtk.Label('not needed')
+        table.attach(label, 1, 2, 1, 2)
+        label.show()
+
+        label= gtk.Label(_('Database'))
+        table.attach(label, 0, 1, 2, 3)
+        label.show()
+
+        liststore = gtk.ListStore(str)
+        combobox = gtk.combo_box_new_text()
+        for db in databases:
+            if db.CAN_SAVE:
+                combobox.append_text(db.TITLE)
+        combobox.set_active(0)
+        combobox.show()
+        table.attach(combobox,1, 2, 2, 3)
+
+        box.pack_start(table, True , True, 8)
+        table.show()
+
+        label= gtk.Label(_('Export Settings'))
+        table.attach(label, 0, 1, 3, 4)
+        label.show()
+
+        label= gtk.Label('not needed')
+        table.attach(label, 1, 2, 3, 4)
+        label.show()
+
+        button = gtk.Button(_('Save & Close'))
+        box.pack_start(button, False , False, 2)
+        button.connect("clicked", self.finish_add, combobox, db_combo, '', add_window)
+        button.show()
+
+        box.show()
+
+        box.show()
+        add_window.set_border_width(5)
+        add_window.show()
+
+    @staticmethod
+    def closebdwindow(uno, dos, textcw):
+        '''close about window'''
+        global showbdcheck
+        showbdcheck = 0
+        showbd.destroy()
+
+    ### gtk helper functions ###
+    @staticmethod
+    def gtk_get_top_window(title, decorated=True, center=True):
+        global imageslocation
+        window = gtk.Window(gtk.WINDOW_TOPLEVEL)
+        window.set_decorated(decorated)
+        if center:
+            window.set_position(gtk.WIN_POS_CENTER)
+        else:
+            window.set_position(gtk.WIN_POS_MOUSE)
+        window.set_title(title)
+        window.set_icon_from_file(imageslocation + 'birthday.png')
+        return window
 
 # not needed atm, will be possibly deleted
 def save_list(l):
     '''create a string that can be saved in a file'''
     return str(l)[2:-2].replace("', '", ',')
-
-def closebdwindow(uno, dos, textcw):
-    '''close about window'''
-    global showbdcheck
-    showbdcheck = 0
-    showbd.destroy()
-
-def db_select(widget, db):
-    '''callback for checkboxes and update used_databases'''
-    global conf
-    if (widget.get_active()):
-        if not db.TYPE in conf.used_databases:
-            conf.used_databases.append(db.TYPE)
-            db.activate()
-    else:
-        if db.TYPE in conf.used_databases:
-            conf.used_databases.remove(db.TYPE)
-            db.deactivate()
-
-def preferences_db(widget, db):
-    global imageslocation
-    global preferences
-    pref_db = gtk.Window(gtk.WINDOW_TOPLEVEL)
-    pref_db.set_decorated(True)
-    pref_db.set_position(gtk.WIN_POS_CENTER)
-    pref_db.set_title(_('Database Configuration'))
-    pref_db.set_icon_from_file(imageslocation + 'birthday.png')
-    
-    
-    db.create_config(pref_db)
-    pref_db.set_modal(True)
-    pref_db.show()
-
-def add_single_manual(widget, window):
-    if window is not None: window.destroy()
-    add_window = gtk.Window(gtk.WINDOW_TOPLEVEL)
-    add_window.set_decorated(True)
-    add_window.set_position(gtk.WIN_POS_CENTER)
-    add_window.set_title(_('Add'))
-    add_window.set_icon_from_file(imageslocation + 'birthday.png')
-
-    box = gtk.VBox(False, 0)
-    add_window.add(box)
-
-    table = gtk.Table(3, 2, False)
-    table.set_col_spacings(10)
-    table.set_row_spacings(10)
-
-    label= gtk.Label(_('Name'))
-    table.attach(label, 0, 1, 0, 1)
-    label.show()
-
-    label= gtk.Label(_('Birthday'))
-    table.attach(label, 0, 1, 1, 2)
-    label.show()
-
-    label= gtk.Label(_('Save to file/database'))
-    table.attach(label, 0, 1, 2, 3)
-    label.show()
-
-    name = gtk.Entry()
-    name.set_text("")
-    table.attach(name, 1, 2, 0, 1)
-    name.show()
-
-    date = gtk.Calendar()
-    table.attach(date, 1, 2, 1, 2)
-    date.show()
-
-    liststore = gtk.ListStore(str)
-    combobox = gtk.combo_box_new_text()
-    for db in databases:
-        if db.CAN_SAVE:
-            combobox.append_text(db.TITLE)
-    combobox.set_active(0)
-    combobox.show()
-    table.attach(combobox,1, 2, 2, 3)
-
-    box.pack_start(table, True , True, 8)
-    table.show()
-
-    button = gtk.Button(_('Save & Close'))
-    box.pack_start(button, False , False, 2)
-    button.connect("clicked", finish_add, combobox, name, date, add_window)
-    button.show()
-    
-    box.show()
-    add_window.set_border_width(5)
-    add_window.show()
-
-def add_from_file(widget, window):
-    window.destroy()
-    add_window = gtk.Window(gtk.WINDOW_TOPLEVEL)
-    add_window.set_decorated(True)
-    add_window.set_position(gtk.WIN_POS_CENTER)
-    add_window.set_title(_('Add'))
-    add_window.set_icon_from_file(imageslocation + 'birthday.png')
-    
-    box = gtk.VBox(False, 0)
-    add_window.add(box)
-
-    table = gtk.Table(3, 2, False)
-    table.set_col_spacings(10)
-    table.set_row_spacings(10)
-    
-    
-    label= gtk.Label('select file/database')
-    table.attach(label, 0, 1, 0, 1)
-    label.show()
-    
-    liststore = gtk.ListStore(str)
-    db_combo = gtk.combo_box_new_text()
-    for db in databases:
-        db_combo.append_text(db.TITLE)
-    db_combo.set_active(0)
-    db_combo.show()
-    table.attach(db_combo,1, 2, 0, 1)
-    
-    label= gtk.Label(_('Import Settings'))
-    table.attach(label, 0, 1, 1, 2)
-    label.show()
-    
-    label= gtk.Label('not needed')
-    table.attach(label, 1, 2, 1, 2)
-    label.show()
-    
-    label= gtk.Label(_('Database'))
-    table.attach(label, 0, 1, 2, 3)
-    label.show()
-    
-    liststore = gtk.ListStore(str)
-    combobox = gtk.combo_box_new_text()
-    for db in databases:
-        if db.CAN_SAVE:
-            combobox.append_text(db.TITLE)
-    combobox.set_active(0)
-    combobox.show()
-    table.attach(combobox,1, 2, 2, 3)
-
-    box.pack_start(table, True , True, 8)
-    table.show()
-
-    label= gtk.Label(_('Export Settings'))
-    table.attach(label, 0, 1, 3, 4)
-    label.show()
-    
-    label= gtk.Label('not needed')
-    table.attach(label, 1, 2, 3, 4)
-    label.show()
-
-    button = gtk.Button(_('Save & Close'))
-    box.pack_start(button, False , False, 2)
-    button.connect("clicked", finish_add, combobox, db_combo, '', add_window)
-    button.show()
-    
-    box.show()
-    
-    box.show()
-    add_window.set_border_width(5)
-    add_window.show()
-
-def add(text):
-    '''Show Dialog to add new Person - not yet implemented!'''
-    add_single_manual(None, None)
-'''
-    add_window = gtk.Window(gtk.WINDOW_TOPLEVEL)
-    add_window.set_decorated(True)
-    add_window.set_position(gtk.WIN_POS_CENTER)
-    add_window.set_title(_('Add'))
-    add_window.set_icon_from_file(imageslocation + 'birthday.png')
-
-    box = gtk.VBox(False, 0)
-    add_window.add(box)
-    
-    manualButton = gtk.Button(_('Add single birthday manually'))
-    manualButton.connect("clicked", add_single_manual, add_window)
-    box.pack_start(manualButton)
-    manualButton.show()
-    
-    fileButton = gtk.Button(_('Add multiple birthdays from file or database'))
-    fileButton.connect("clicked", add_from_file, add_window)
-    box.pack_start(fileButton)
-    fileButton.show()
-    
-    box.show()
-    add_window.set_border_width(5)
-    add_window.show()
-'''
 
 def start():
     '''(re)create AdressBook and parse data'''
