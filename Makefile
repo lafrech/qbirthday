@@ -1,7 +1,7 @@
 bindir = /usr/bin
 datadir = /usr/share
 pixmaps = $(datadir)/pixmaps
-version = 0.5.1
+version = 0.5.2
 
 install = install -p
 mkdir = mkdir -p

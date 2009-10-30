@@ -1,6 +1,6 @@
 Name:			gbirthday
-Version:		0.5.1
-Release:		1%{?dist}
+Version:		0.5.2
+Release:		3%{?dist}
 Summary:		Birthday reminder for Evolution and some others
 Group:			User Interface/Desktops
 License:		GPLv2+
@@ -11,6 +11,7 @@ BuildArch:		noarch
 
 BuildRequires:	desktop-file-utils
 BuildRequires:	gettext
+BuildRequires:  intltool
 Requires:		evolution
 Requires:		python
 Requires:		MySQL-python
@@ -55,6 +56,15 @@ rm -rf %{buildroot}
 %config(noreplace) %{_sysconfdir}/xdg/autostart/%{name}.desktop
 
 %changelog
+* Fri Oct 30 2009 Thomas Spura <tomspur@fedoraproject.org> 0.5.2-3
+- BR: intltool
+
+* Fri Oct 30 2009 Thomas Spura <tomspur@fedoraproject.org> 0.5.2-2
+- little problem with 'make tag'
+
+* Fri Oct 30 2009 Thomas Spura <tomspur@fedoraproject.org> 0.5.2-1
+- New Release
+
 * Wed Sep 23 2009 Thomas Spura <tomspur@fedoraproject.org> 0.5.1-1
 - New Release
 - Changing description (now also supports Thunderbird, Sunbird...

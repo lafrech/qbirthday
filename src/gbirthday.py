@@ -28,7 +28,7 @@ and relatively easy to extend for other data servers.
 ## pygtk-demo Status Icon: Nikos Kouremenos
 ## EvoBdayReminder.py: Axel Heim. http://www.axelheim.de/
 
-VERSION = "0.5.1"
+VERSION = "0.5.2"
 
 import gtk
 
