@@ -20,8 +20,7 @@ clean:
 
 install:
 	intltool-merge -d ./po ./gbirthday.desktop.in ./gbirthday.desktop
-	$(mkdir) $(DESTDIR)$(pixmaps)/gbirthday
-	$(install) -m 644 pics/*.png $(DESTDIR)$(pixmaps)/gbirthday/
+	$(mkdir) $(DESTDIR)$(pixmaps)
 	$(install) -m 644 pics/gbirthday.png $(DESTDIR)$(pixmaps)
 	$(mkdir) $(DESTDIR)$(sitelib)
 	$(cp) src/gbirthday/ $(DESTDIR)$(sitelib)

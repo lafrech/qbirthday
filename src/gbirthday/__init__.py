@@ -57,7 +57,7 @@ except ImportError:
 
 import ConfigParser
 
-imageslocation = "/usr/share/pixmaps/gbirthday/"
+imageslocation = os.sep.join(__file__.split(os.sep)[:-1])+"/pics/"
 
 birthday_today = False # someone has birthday today?!
 

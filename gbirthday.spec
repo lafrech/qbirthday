@@ -54,7 +54,6 @@ rm -rf %{buildroot}
 %{_bindir}/gbirthday
 %{_datadir}/applications/%{name}.desktop
 %{python_sitelib}/gbirthday/
-%{_datadir}/pixmaps/gbirthday
 %{_datadir}/pixmaps/gbirthday.png
 %config(noreplace) %{_sysconfdir}/xdg/autostart/%{name}.desktop
 
