@@ -1,3 +1,6 @@
+0.5.3
+	Install into python_sitelib
+
 0.5.2
 	Added gettext support for easier translation
 	Translation system added at:
