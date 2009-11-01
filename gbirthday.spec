@@ -1,3 +1,5 @@
+%{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
+
 Name:			gbirthday
 Version:		0.5.2
 Release:		3%{?dist}
@@ -32,7 +34,7 @@ your contacs' birthday on next days.
 
 %install
 rm -rf %{buildroot}
-make install DESTDIR=%{buildroot} libdir=%{_libdir}
+make install DESTDIR=%{buildroot} sitelib=%{python_sitelib}
 desktop-file-validate %{buildroot}/%{_datadir}/applications/%{name}.desktop
 mkdir -p %{buildroot}%{_sysconfdir}/xdg/autostart/
 desktop-file-install \
@@ -51,7 +53,7 @@ rm -rf %{buildroot}
 %doc Changelog COPYING README
 %{_bindir}/gbirthday
 %{_datadir}/applications/%{name}.desktop
-%{_datadir}/gbirthday/
+%{python_sitelib}/gbirthday/
 %{_datadir}/pixmaps/gbirthday
 %config(noreplace) %{_sysconfdir}/xdg/autostart/%{name}.desktop
 
