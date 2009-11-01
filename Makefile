@@ -32,11 +32,11 @@ install:
 	cd po && python install_po.py $(DESTDIR)
 
 uninstall:
-	rm -rvf $(DESTDIR)$(datadir)/gbirthday
-	rm -rvf $(DESTDIR)$(pixmaps)/gbirthday
-	rm -rvf $(DESTDIR)$(datadir)/applications/gbirthday.desktop
 	rm -rvf $(DESTDIR)$(bindir)/gbirthday
+	rm -rvf $(DESTDIR)$(datadir)/applications/gbirthday.desktop
 	rm -rvf $(DESTDIR)$(datadir)/locale/*/LC_MESSAGES/gbirthday.mo
+	rm -rvf $(DESTDIR)$(pixmaps)/gbirthday.png
+	rm -rvf $(DESTDIR)$(sitelib)/gbirthday
 
 tar.gz:	clean
 	tar --exclude=.git \
