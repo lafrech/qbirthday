@@ -32,7 +32,7 @@ your contacs' birthday on next days.
 
 %install
 rm -rf %{buildroot}
-make install DESTDIR=%{buildroot}
+make install DESTDIR=%{buildroot} libdir=%{_libdir}
 desktop-file-validate %{buildroot}/%{_datadir}/applications/%{name}.desktop
 mkdir -p %{buildroot}%{_sysconfdir}/xdg/autostart/
 desktop-file-install \

@@ -84,7 +84,7 @@ class DataBase:
         # the widget for additional config
         self.widget = widget
 
-    def parse(self):
+    def parse(self, ab):
         '''load file / open database connection'''
         pass
 
@@ -131,6 +131,7 @@ class Lightning(DataBase):
         DataBase.__init__(self, title=title, type=type, has_config=has_config)
         self.THUNDERBIRD_LOCATION = os.path.join(os.environ['HOME'],
             '.mozilla.thunderbird')
+        self.ab = None
 
     def get_config_file(self, configfile):
         profilefile = os.path.join(configfile, 'profiles.ini')
@@ -155,10 +156,11 @@ class Lightning(DataBase):
         else:
             showErrorMsg(_('Error reading profile file: %s' % configfile))
 
-    def parse(self):
+    def parse(self, ab):
         '''open thunderbird sqlite-database'''
         if (os.path.exists(self.THUNDERBIRD_LOCATION)):
             self.get_config_file(self.THUNDERBIRD_LOCATION)
+        self.ab = ab
 
     def connect(self, filename):
         '''"connect" to sqlite3-database'''
@@ -184,7 +186,7 @@ class Lightning(DataBase):
         self.cursor.execute(qry)
         for row in self.cursor:
             bday = datetime.datetime.utcfromtimestamp(int(row[1]) / 1000000)
-            ab.add(row[0], str(bday).split(' ')[0])
+            self.ab.add(row[0], str(bday).split(' ')[0])
             
 
     def add(self, name, birthday):
@@ -249,7 +251,7 @@ class Sunbird(Lightning):
                 '.mozilla')
 
     # load file / open database connection
-    def parse(self):
+    def parse(self, ab):
         sunbird = os.path.join(self.MOZILLA_LOCATION, 'sunbird')
         iceowl = os.path.join(self.MOZILLA_LOCATION, 'iceowl')
 
@@ -270,7 +272,7 @@ class Evolution(DataBase):
                         '.evolution/addressbook/local/')
         self._splitRE = re.compile(r'\r?\n')
 
-    def parse(self, book=None):
+    def parse(self, book=None, ab=None):
         
         '''load and parse parse Evolution data files'''
         # get list of address books and extract their persons
@@ -290,12 +292,12 @@ class Evolution(DataBase):
                         data = bsfile[key]
                         if not data.startswith('BEGIN:VCARD'):
                             continue
-                        self.parse_birthday(data)
+                        self.parse_birthday(data, ab)
                 except bsddb.db.DBInvalidArgError, msg:
                     showErrorMsg(_('Error reading Evolution addressbook: %s' %
                                     msg[1]))
 
-    def parse_birthday(self, data):
+    def parse_birthday(self, data, ab):
         '''parse evolution addressbook. the file is in VCard format.'''
         lines = self._splitRE.split(data)
         mostRecentName = ''
@@ -327,9 +329,11 @@ class CSV(DataBase):
     def __init__(self):
         DataBase.__init__(self, title='CSV-file (comma seperated value)', type='csv')
         self._seperators=['; ', ', ', ': ']   # possible seperators
+        self.ab = None
 
-    def parse(self):
+    def parse(self, ab):
         '''open and parse file'''
+        self.ab = ab
         for filename in conf.csv_files:
             if (os.path.exists(filename)):
                 for line in file(filename):
@@ -358,7 +362,7 @@ class CSV(DataBase):
             f = file(conf.csv_files[0], 'w')
         f.write(birthday + ', ' + name + '\n')
         f.close()
-        ab.add(name, birthday)
+        self.ab.add(name, birthday)
     
     def remove_file(self, widget, combobox):
         index = combobox.get_active()
@@ -448,6 +452,7 @@ class MySQL(DataBase):
         self.table = 'person'
         self.name_row = 'name'
         self.date_row = 'date'
+        self.ab = None
 
         self.entries = []
     
@@ -468,7 +473,7 @@ class MySQL(DataBase):
             showErrorMsg(_('Could not connect to MySQL-Server')
                             + str(msg))
 
-    def parse(self):
+    def parse(self, ab):
         '''connect to mysql-database and get data'''
         self.connect()
         try:
@@ -494,7 +499,7 @@ class MySQL(DataBase):
             showErrorMsg(_('Could not execute MySQL-query')
                             + ': %s\n %s' % (qry, str(msg)))
         self.conn.close()
-        ab.add(name, birthday)
+        self.ab.add(name, birthday)
 
     def update(self, conf):
         '''update and save values'''
@@ -653,9 +658,10 @@ def showErrorMsg(message, title=None, parent=None):
     errmsg.destroy()
 
 class StatusIcon():
-    def __init__(self):
+    def __init__(self, ab):
         '''create status icon'''
         self.icon = gtk.status_icon_new_from_file(imageslocation + 'birthday.png')
+        self.ab = ab
         list=ab.manageBdays()
         if len(list) > 0:
             self.icon.set_from_file(imageslocation + 'birthday.png')
@@ -674,10 +680,9 @@ class StatusIcon():
 
     def reload_gbirthday(self, text):
         '''reload gbirthday, reload data from databases'''
-        global ab
-        start()
-        self.icon.set_blinking(AddressBook.checktoday(ab))
-        list=AddressBook.manageBdays(ab)
+        start(self.ab)
+        self.icon.set_blinking(AddressBook.checktoday(self.ab))
+        list=AddressBook.manageBdays(self.ab)
         if len(list) > 0:
             self.icon.set_from_file(imageslocation + 'birthday.png')
         else:
@@ -688,12 +693,12 @@ class StatusIcon():
         global current_day
         new_day = time.strftime("%d", time.localtime(time.time()))
         if current_day != new_day:
-            list=AddressBook.manageBdays(ab)
+            list=AddressBook.manageBdays(self.ab)
             if len(list) > 0:
                 self.icon.set_from_file(imageslocation + 'birthday.png')
             else:
                 self.icon.set_from_file(imageslocation + 'nobirthday.png')
-            self.icon.set_blinking(AddressBook.checktoday(ab))
+            self.icon.set_blinking(AddressBook.checktoday(self.ab))
             current_day = new_day
         return True
 
@@ -821,7 +826,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
         global showbdcheck
         showbd = self.gtk_get_top_window('', False, False)
 
-        list=AddressBook.manageBdays(ab)
+        list=AddressBook.manageBdays(self.ab)
 
         box = gtk.HBox()
         box.set_border_width(5)
@@ -1239,13 +1244,12 @@ def save_list(l):
     '''create a string that can be saved in a file'''
     return str(l)[2:-2].replace("', '", ',')
 
-def start():
+def start(ab):
     '''(re)create AdressBook and parse data'''
-    global ab
     ab.bdays = {}
     for db in databases:
         if (db.TYPE in conf.used_databases):
-            db.parse()
+            db.parse(ab=ab)
 
 class Conf:
     def __init__(self):
@@ -1311,7 +1315,7 @@ class Conf:
         self.sync_to_settings()
         self.settings.write( file(os.environ['HOME']+"/.gbirthdayrc", "w") )
 
-if __name__ == '__main__':
+def main():
     global status_icon
     global showbdcheck
     global dlg
@@ -1325,10 +1329,10 @@ if __name__ == '__main__':
 
     # load data and fill AddressBook
     ab = AddressBook()
-    start()
+    start(ab)
 
     # show status icon
-    status_icon = StatusIcon()
+    status_icon = StatusIcon(ab)
     current_day = time.strftime("%d", time.localtime(time.time()))
 
     # check every 60 seconds for new day
@@ -1337,3 +1341,6 @@ if __name__ == '__main__':
     import gobject
     gobject.timeout_add(60000, status_icon.check_new_day)
     gtk.main()
+
+if __name__ == '__main__':
+    main()
