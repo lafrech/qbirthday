@@ -1,23 +1,23 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 
-Name:			gbirthday
-Version:		0.5.2
-Release:		3%{?dist}
-Summary:		Birthday reminder for Evolution and some others
-Group:			User Interface/Desktops
-License:		GPLv2+
-URL:			http://gbirthday.sourceforge.net
-Source:                 http://downloads.sourceforge.net/gbirthday/gbirthday-%{version}.tar.xz
-BuildRoot:		%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
-BuildArch:		noarch
+Name:           gbirthday
+Version:        0.5.2
+Release:        3%{?dist}
+Summary:        Birthday reminder for Evolution and some others
+Group:          User Interface/Desktops
+License:        GPLv2+
+URL:            http://gbirthday.sourceforge.net
+Source:         http://downloads.sourceforge.net/gbirthday/gbirthday-%{version}.tar.xz
+BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
+BuildArch:      noarch
 
-BuildRequires:	desktop-file-utils
-BuildRequires:	gettext
+BuildRequires:  desktop-file-utils
+BuildRequires:  gettext
 BuildRequires:  intltool
-Requires:		evolution
-Requires:		python
-Requires:		MySQL-python
-Requires:		pygtk2
+Requires:       evolution
+Requires:       python
+Requires:       MySQL-python
+Requires:       pygtk2
 
 %description
 GBirthday is a birthday reminder application that helps you to remember 
@@ -38,10 +38,10 @@ make install DESTDIR=%{buildroot} sitelib=%{python_sitelib}
 desktop-file-validate %{buildroot}/%{_datadir}/applications/%{name}.desktop
 mkdir -p %{buildroot}%{_sysconfdir}/xdg/autostart/
 desktop-file-install \
-	--add-category="TrayIcon" \
-	--add-only-show-in="GNOME;KDE;XFCE;" \
-	--dir=%{buildroot}%{_sysconfdir}/xdg/autostart/ \
-	%{buildroot}/%{_datadir}/applications/%{name}.desktop
+        --add-category="TrayIcon" \
+        --add-only-show-in="GNOME;KDE;XFCE;" \
+        --dir=%{buildroot}%{_sysconfdir}/xdg/autostart/ \
+        %{buildroot}/%{_datadir}/applications/%{name}.desktop
 
 %find_lang %{name}
 
