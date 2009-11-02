@@ -403,6 +403,27 @@ class CSV(DataBase):
         hbox2.pack_start(entry)
         entry.show()
         
+        def choose_file(widget, entry):
+            chooser = gtk.FileChooserDialog(title=None,action=gtk.FILE_CHOOSER_ACTION_OPEN,
+                                          buttons=(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_OPEN,gtk.RESPONSE_OK))
+            filter = gtk.FileFilter()
+            filter.set_name("All files")
+            filter.add_pattern("*")
+            chooser.add_filter(filter)
+
+            filter = gtk.FileFilter()
+            filter.set_name("CSV-Files")
+            filter.add_mime_type("text/csv")
+            filter.add_pattern("*.csv")
+            chooser.add_filter(filter)
+
+            response = chooser.run()
+            if response == gtk.RESPONSE_OK:
+                filename = chooser.get_filename()
+                entry.set_text(filename)
+
+            chooser.destroy()
+
         search_button = gtk.Button('select')
         search_button.connect("clicked", choose_file, entry)
         search_button.show()
@@ -418,26 +439,6 @@ class CSV(DataBase):
         pref.add(vbox)
         vbox.show()
 
-def choose_file(widget, entry):
-    chooser = gtk.FileChooserDialog(title=None,action=gtk.FILE_CHOOSER_ACTION_OPEN,
-                                  buttons=(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_OPEN,gtk.RESPONSE_OK))
-    filter = gtk.FileFilter()
-    filter.set_name("All files")
-    filter.add_pattern("*")
-    chooser.add_filter(filter)
-
-    filter = gtk.FileFilter()
-    filter.set_name("CSV-Files")
-    filter.add_mime_type("text/csv")
-    filter.add_pattern("*.csv")
-    chooser.add_filter(filter)
-
-    response = chooser.run()
-    if response == gtk.RESPONSE_OK:
-        filename = chooser.get_filename()
-        entry.set_text(filename)
-        
-    chooser.destroy()
 
 class MySQL(DataBase):
     '''MySQL database import'''
@@ -785,8 +786,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
                 'Andreas Bresser <andreas@phidev.org>',
                 'Stefan Jurco <stefan.jurco@gmail.com>',
                 'Alex Mallo <dernalis@gmail.com>',
-                'Thomas Spura <tomspur@fedoraproject.org>'
-                'Robert Wildburger <r.wildburger@gmx.at>',
+                'Thomas Spura <tomspur@fedoraproject.org>',
+                'Robert Wildburger <r.wildburger@gmx.at>'
                         ])
         dlg.set_artists(['Alex Mallo <dernalis@gmail.com>'])
         cred = _('translator-credit')
