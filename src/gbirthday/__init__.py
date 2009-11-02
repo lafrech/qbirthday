@@ -781,15 +781,17 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 02110-1301, USA.''')
-        dlg.set_authors(['Alex Mallo <dernalis@gmail.com>',
-                         'Robert Wildburger <r.wildburger@gmx.at>',
-                         'Stefan Jurco <stefan.jurco@gmail.com>',
-                         'Andreas Bresser <andreas@phidev.org>',
-                         'Thomas Spura <tomspur@fedoraproject.org>'])
+        dlg.set_authors([
+                'Andreas Bresser <andreas@phidev.org>',
+                'Stefan Jurco <stefan.jurco@gmail.com>',
+                'Alex Mallo <dernalis@gmail.com>',
+                'Thomas Spura <tomspur@fedoraproject.org>'
+                'Robert Wildburger <r.wildburger@gmx.at>',
+                        ])
         dlg.set_artists(['Alex Mallo <dernalis@gmail.com>'])
         cred = _('translator-credit')
         if cred != 'translator-credit':
-            dlg.set_translator_credits(_('translator-credit'))
+            dlg.set_translator_credits(cred)
         else:
             dlg.set_translator_credits(
                 _("There are no translations or the translator doesn't want to get credits for that.") )
