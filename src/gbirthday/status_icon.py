@@ -3,7 +3,7 @@ import time
 import os
 
 # own imports
-from adressbook import *
+from addressbook import *
 from __init__ import databases, current_day
 
 imageslocation = os.sep.join(__file__.split(os.sep)[:-1])+"/pics/"
