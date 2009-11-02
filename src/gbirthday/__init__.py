@@ -65,9 +65,7 @@ from status_icon import *
     
 # list of all availabe databases
 databases = [Evolution(), Lightning(), Sunbird(), CSV(), MySQL()]
-
-#other data classes and core program logic
-
+current_day = time.strftime("%d", time.localtime(time.time()))
 
 '''pygtk-functions'''
 
@@ -162,7 +160,6 @@ def main():
     global status_icon
     global showbdcheck
     global dlg
-    global current_day
     dlg= None
     showbdcheck = 0
 
@@ -176,7 +173,6 @@ def main():
 
     # show status icon
     status_icon = StatusIcon(ab, conf)
-    current_day = time.strftime("%d", time.localtime(time.time()))
 
     # check every 60 seconds for new day
     # TODO: update until end of day according to current clock settings?
