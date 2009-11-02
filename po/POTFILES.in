@@ -1,3 +1,6 @@
 # files added by intltool-prepare
 gbirthday.desktop.in
+src/gbirthday/addressbook.py
+src/gbirthday/databases.py
 src/gbirthday/__init__.py
+src/gbirthday/status_icon.py
