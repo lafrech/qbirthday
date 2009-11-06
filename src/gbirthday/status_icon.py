@@ -4,7 +4,8 @@ import os
 
 # own imports
 from addressbook import *
-from __init__ import databases, current_day
+from __init__ import databases, current_day, showbdcheck
+from __init__ import month_at_place, day_at_place
 
 imageslocation = os.sep.join(__file__.split(os.sep)[:-1])+"/pics/"
 
@@ -14,6 +15,7 @@ class StatusIcon():
         self.icon = gtk.status_icon_new_from_file(imageslocation + 'birthday.png')
         self.ab = ab
         self.conf = conf
+        self.showbd = None
         list=ab.manageBdays(conf)
         if len(list) > 0:
             self.icon.set_from_file(imageslocation + 'birthday.png')
@@ -177,20 +179,20 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
             self.openwindow()
         else:
             self.closebdwindow('focus_out_event', self.closebdwindow, "")
+            #self.openwindow()
 
     def openwindow(self):
         '''open window that includes all birthdays'''
-        global showbd
         global showbdcheck
-        showbd = self.gtk_get_top_window('', False, False)
+        self.showbd = self.gtk_get_top_window('', False, False)
 
-        list=AddressBook.manageBdays(self.ab)
+        list=self.ab.manageBdays(self.conf)
 
         box = gtk.HBox()
         box.set_border_width(5)
         box.show()
         frame = gtk.Frame(None)
-        showbd.add(frame)
+        self.showbd.add(frame)
         table = gtk.Table(7, 6, False)
         box.pack_start(table, False , False, 0)
         frame.add(box)
@@ -304,8 +306,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 
         table.show()
         frame.show()
-        showbd.show()
-        showbd.connect('focus_out_event', self.closebdwindow, "text")
+        self.showbd.show()
+        self.showbd.connect('focus_out_event', self.closebdwindow, "text")
 
     def stop_blinking(self, text):
         '''stop blinking (only if icon blinks)'''
@@ -576,12 +578,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
         add_window.set_border_width(5)
         add_window.show()
 
-    @staticmethod
-    def closebdwindow(uno, dos, textcw):
+    def closebdwindow(self, uno, dos, textcw):
         '''close about window'''
         global showbdcheck
         showbdcheck = 0
-        showbd.destroy()
+        if self.showbd:
+            self.showbd.destroy()
 
     ### gtk helper functions ###
     @staticmethod

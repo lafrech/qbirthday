@@ -156,9 +156,9 @@ class Conf:
         self.sync_to_settings()
         self.settings.write( file(os.environ['HOME']+"/.gbirthdayrc", "w") )
 
+showbdcheck = None
 def main():
     global status_icon
-    global showbdcheck
     global dlg
     dlg= None
     showbdcheck = 0
