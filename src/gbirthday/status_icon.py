@@ -4,7 +4,7 @@ import os
 
 # own imports
 from addressbook import *
-from __init__ import databases, current_day, showbdcheck
+from __init__ import databases, current_day
 from __init__ import month_at_place, day_at_place
 
 imageslocation = os.sep.join(__file__.split(os.sep)[:-1])+"/pics/"
@@ -173,9 +173,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 
     def on_left_click(self, icon, event_button, event_time):
         '''close/open window with list of birthdays'''
-        global showbdcheck
-        if showbdcheck == 0:
-            showbdcheck = 1
+        if not self.showbd:
             self.openwindow()
         else:
             self.closebdwindow('focus_out_event', self.closebdwindow, "")
@@ -183,7 +181,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 
     def openwindow(self):
         '''open window that includes all birthdays'''
-        global showbdcheck
         self.showbd = self.gtk_get_top_window('', False, False)
 
         list=self.ab.manageBdays(self.conf)
@@ -580,10 +577,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 
     def closebdwindow(self, uno, dos, textcw):
         '''close about window'''
-        global showbdcheck
-        showbdcheck = 0
         if self.showbd:
             self.showbd.destroy()
+            self.showbd = None
 
     ### gtk helper functions ###
     @staticmethod
