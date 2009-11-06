@@ -77,9 +77,6 @@ class AddressBook:
         bdayKeys = self.bdays.keys()
         birthday_today = False
 
-        global D
-        global T
-        
         for d in range(0,1):
             sDate = now + datetime.timedelta(d)
 
