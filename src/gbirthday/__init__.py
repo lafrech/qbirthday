@@ -13,7 +13,7 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 '''GBirthday
 
-A KBirthday clone for Gnome environment, working with different 
+A KBirthday clone for Gnome environment, working with different
 data servers:
  - CSV-file (comma-seperated value)
  - MySQL
@@ -62,18 +62,19 @@ birthday_today = False # someone has birthday today?!
 # own imports
 from databases import *
 from status_icon import *
-    
+
 # list of all availabe databases
 databases = [Evolution(), Lightning(), Sunbird(), CSV(), MySQL()]
 current_day = time.strftime("%d", time.localtime(time.time()))
 
 '''pygtk-functions'''
 
+
 def showErrorMsg(message, title=None, parent=None):
     '''show an error error message as MessageDialog'''
     if (not title):
         title = 'Error'
-    errmsg = gtk.MessageDialog(parent, type=gtk.MESSAGE_ERROR, 
+    errmsg = gtk.MessageDialog(parent, type=gtk.MESSAGE_ERROR,
         buttons=gtk.BUTTONS_OK, flags=gtk.DIALOG_MODAL,
         message_format=message)
     errmsg.set_title(title)
@@ -81,9 +82,12 @@ def showErrorMsg(message, title=None, parent=None):
     errmsg.destroy()
 
 # not needed atm, will be possibly deleted
+
+
 def save_list(l):
     '''create a string that can be saved in a file'''
     return str(l)[2:-2].replace("', '", ',')
+
 
 def start(ab, conf):
     '''(re)create AdressBook and parse data'''
@@ -92,7 +96,9 @@ def start(ab, conf):
         if (db.TYPE in conf.used_databases):
             db.parse(ab=ab, conf=conf)
 
+
 class Conf:
+
     def __init__(self):
         import ConfigParser
         self.firstday = self.lastday = None
@@ -101,7 +107,7 @@ class Conf:
         self.MySQL = None
         self.settings = ConfigParser.ConfigParser()
         try:
-            self.settings.readfp( file(os.environ['HOME']+"/.gbirthdayrc") )
+            self.settings.readfp(file(os.environ['HOME'] + "/.gbirthdayrc"))
         except IOError:
             self.settings.add_section("main")
             self.default_values()
@@ -154,13 +160,15 @@ class Conf:
 
     def save(self):
         self.sync_to_settings()
-        self.settings.write( file(os.environ['HOME']+"/.gbirthdayrc", "w") )
+        self.settings.write(file(os.environ['HOME'] + "/.gbirthdayrc", "w"))
 
 showbdcheck = None
+
+
 def main():
     global status_icon
     global dlg
-    dlg= None
+    dlg = None
     showbdcheck = 0
 
     # try to load settings
