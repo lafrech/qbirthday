@@ -14,12 +14,13 @@
 import datetime
 from datetime import date
 
+
 class AddressBook:
     '''AdressBook that saves birthday and names'''
     bdays = {} # list of all birthdays. Format:
                # {birthday: [Name1, Name2]}
                # for example
-               # {'1970-01-01': ['Bar, Foo', 'Time'], 
+               # {'1970-01-01': ['Bar, Foo', 'Time'],
                #  '1967-12-12': ['Power, Max']}
 
     def add(self, name, birthday):
@@ -38,21 +39,22 @@ class AddressBook:
         bdayKeys = self.bdays.keys()
         birthday_list = []
         temporal = []
-        
-        for d in range(int (conf.firstday), int (conf.lastday)+1):
+
+        for d in range(int(conf.firstday), int(conf.lastday) + 1):
             sDate = now + datetime.timedelta(d)
 
             for k in range(len(self.bdays)):
                 sDateDay = str(sDate.day)
-                
+
                 for name in self.bdays[bdayKeys[k]]:
-                    if len(sDateDay) != 2: 
+                    if len(sDateDay) != 2:
                         sDateDay = '0' + sDateDay
                     sDateMonth = str(sDate.month)
-                    if len(sDateMonth) != 2: 
+                    if len(sDateMonth) != 2:
                         sDateMonth = '0' + sDateMonth
 
-                    if bdayKeys[k].find('-'+sDateMonth+'-'+sDateDay) != -1:
+                    if bdayKeys[k].find('-' + sDateMonth
+                                        + '-' + s DateDay) != -1:
                         if d == 0:
                             birthday_today = True
                             pic = 'birthdaytoday.png'
@@ -62,7 +64,7 @@ class AddressBook:
                             pic = 'birthdaynext.png'
 
                         bday = bdayKeys[k]
-                        
+
                         ano, mes, dia = bday.split('-', 2)
                         ano = sDate.year - int(ano)
 
@@ -77,19 +79,19 @@ class AddressBook:
         bdayKeys = self.bdays.keys()
         birthday_today = False
 
-        for d in range(0,1):
+        for d in range(0, 1):
             sDate = now + datetime.timedelta(d)
 
             for k in range(len(self.bdays)):
                 sDateDay = str(sDate.day)
-                if len(sDateDay) != 2: 
+                if len(sDateDay) != 2:
                     sDateDay = '0' + sDateDay
                 sDateMonth = str(sDate.month)
-                if len(sDateMonth) != 2: 
+                if len(sDateMonth) != 2:
                     sDateMonth = '0' + sDateMonth
 
-                if bdayKeys[k].find('-'+sDateMonth+'-'+sDateDay) != -1:
+                if bdayKeys[k].find('-' + sDateMonth + '-'
+                                    + sDateDay) != -1:
                     if d == 0:
                         birthday_today = True
         return birthday_today
-
