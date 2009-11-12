@@ -25,6 +25,7 @@ import os
 import re
 import gtk
 
+
 class DataBase:
     '''
      inheritance class for all databases
@@ -33,6 +34,7 @@ class DataBase:
      and add it into the AddressBook (ab.add())
      you have to add your Database to the databases-list
     '''
+
     def __init__(self, title='Unknown', type='none', can_save=True,
             has_config=True, widget=None):
         # Title that will be displayed to the user
@@ -64,7 +66,7 @@ class DataBase:
 
     def activate(self):
         '''
-        someone clicked on the checkbox for this DataBase, so show optional 
+        someone clicked on the checkbox for this DataBase, so show optional
         settings
         (just set the created pygtk elements to visible)
         '''
@@ -76,21 +78,24 @@ class DataBase:
 
     def deactivate(self):
         '''
-        someone clicked on the checkbox for this DataBase, so hide optional 
+        someone clicked on the checkbox for this DataBase, so hide optional
         settings
         (just hide the visible elements)
-        ''' 
+        '''
         if (self.widget):
             self.widget.set_sensitive(False)
             self.text.set_sensitive(False)
             #self.widget.hide()
             #self.text.hide()
 
+
 class CSV(DataBase):
     '''import from CSV-file'''
+
     def __init__(self):
-        DataBase.__init__(self, title='CSV-file (comma seperated value)', type='csv')
-        self._seperators=['; ', ', ', ': ']   # possible seperators
+        DataBase.__init__(self, title='CSV-file (comma seperated value)',
+                            type='csv')
+        self._seperators = ['; ', ', ', ': ']   # possible seperators
         self.ab = None
 
     def parse(self, ab, conf):
@@ -126,7 +131,7 @@ class CSV(DataBase):
         f.write(birthday + ', ' + name + '\n')
         f.close()
         self.ab.add(name, birthday)
-    
+
     def remove_file(self, widget, combobox, conf):
         index = combobox.get_active()
         if index >= 0:
@@ -160,16 +165,20 @@ class CSV(DataBase):
         remove_button.show()
         hbox.pack_start(remove_button, 0)
         hbox.show()
-        
+
         entry = gtk.Entry()
         if conf.csv_files and len(conf.csv_files) > 0:
             entry.set_text(conf.csv_files[0])
         hbox2.pack_start(entry)
         entry.show()
-        
+
         def choose_file(widget, entry):
-            chooser = gtk.FileChooserDialog(title=None,action=gtk.FILE_CHOOSER_ACTION_OPEN,
-                                          buttons=(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_OPEN,gtk.RESPONSE_OK))
+            chooser = gtk.FileChooserDialog(title=None,
+                                action=gtk.FILE_CHOOSER_ACTION_OPEN,
+                                buttons=(gtk.STOCK_CANCEL,
+                                        gtk.RESPONSE_CANCEL,
+                                        gtk.STOCK_OPEN,
+                                        gtk.RESPONSE_OK))
             filter = gtk.FileFilter()
             filter.set_name("All files")
             filter.add_pattern("*")
@@ -192,19 +201,21 @@ class CSV(DataBase):
         search_button.connect("clicked", choose_file, entry)
         search_button.show()
         hbox2.pack_start(search_button)
-        
+
         add_button = gtk.Button('add')
         add_button.connect("clicked", self.add_file, combobox, entry, conf)
         add_button.show()
         hbox2.pack_start(add_button)
-        
+
         vbox.pack_start(hbox2)
         hbox2.show()
         pref.add(vbox)
         vbox.show()
 
+
 class Evolution(DataBase):
     '''data import from the Evolution address book'''
+
     def __init__(self):
         DataBase.__init__(self, title='Evolution', type='evolution',
                         can_save=False, has_config=False)
@@ -213,7 +224,6 @@ class Evolution(DataBase):
         self._splitRE = re.compile(r'\r?\n')
 
     def parse(self, book=None, ab=None, conf=None):
-        
         '''load and parse parse Evolution data files'''
         # get list of address books and extract their persons
         if (os.path.exists(self.ADDRESS_BOOK_LOCATION)):
@@ -225,7 +235,7 @@ class Evolution(DataBase):
                 try:
                     import bsddb
                 except:
-                    showErrorMsg(_("Package %s is not installed." % "bsddb") )
+                    showErrorMsg(_("Package %s is not installed." % "bsddb"))
                 try:
                     bsfile = bsddb.hashopen(addressbook)
                     for key in bsfile.keys():
@@ -243,7 +253,7 @@ class Evolution(DataBase):
         mostRecentName = ''
         mostRecentDate = ''
         for line in lines:
-            # ignore blank lines, lines without colon and 
+            # ignore blank lines, lines without colon and
             # lines that are just \x00
             if not line.strip() or line == '\x00' or \
                line.find(':') == -1:
@@ -251,8 +261,8 @@ class Evolution(DataBase):
             label, value = line.split(':', 1)
             # parse file, if the name is set in 'X-EVOLUTION-FILE-AS'
             # use it as display name
-            if label == 'X-EVOLUTION-FILE-AS': 
-                mostRecentName = value.replace("\,",",")
+            if label == 'X-EVOLUTION-FILE-AS':
+                mostRecentName = value.replace("\,", ",")
             # if 'BDAY' is set use BDAY als birthday
             if label == 'BDAY':
                 mostRecentDate = value
@@ -263,8 +273,10 @@ class Evolution(DataBase):
                 mostRecentName = ''
                 mostRecentDate = ''
 
+
 class Lightning(DataBase):
     '''Thunderbird/Lightning implementation'''
+
     def __init__(self, title='Thunderbird/Icedove Lightning', type='lightning',
                 has_config=False):
         DataBase.__init__(self, title=title, type=type, has_config=has_config)
@@ -286,7 +298,8 @@ class Lightning(DataBase):
             # get all data from profiles
             for profile in profiles:
                 if profiles[profile]['isrelative']:
-                    location = os.path.join(configfile, profiles[profile]['path'])
+                    location = os.path.join(configfile,
+                                        profiles[profile]['path'])
                 else:
                     location = profiles[profile]['path']
                 location = os.path.join(location, 'storage.sdb')
@@ -308,11 +321,10 @@ class Lightning(DataBase):
         except:
             showErrorMsg(_("Package %s is not installed." % "SQLite3"))
         try:
-            self.conn = sqlite3.connect (filename)
+            self.conn = sqlite3.connect(filename)
             self.cursor = self.conn.cursor()
         except Exception, msg:
-            showErrorMsg(_('sqlite3 could not connect: %s' % str(msg)) )
-
+            showErrorMsg(_('sqlite3 could not connect: %s' % str(msg)))
 
     def parse_birthday(self, filename):
         self.connect(filename)
@@ -326,7 +338,6 @@ class Lightning(DataBase):
         for row in self.cursor:
             bday = datetime.datetime.utcfromtimestamp(int(row[1]) / 1000000)
             self.ab.add(row[0], str(bday).split(' ')[0])
-            
 
     def add(self, name, birthday):
         import uuid
@@ -335,54 +346,56 @@ class Lightning(DataBase):
         event_start = (event_date + 86400) * 1000000
         event_end = (event_date + 172800) * 1000000
         uid = str(uuid.uuid4())
-        create_time = str(int(time.time())*1000000)
+        create_time = str(int(time.time()) * 1000000)
         try:
             qry = '''SELECT id from cal_calendars LIMIT 1;'''
-            self.cursor.execute (qry)
+            self.cursor.execute(qry)
             rows = self.cursor.fetchall()
             calender_id = rows[0][0]
             # lets assume there is at least one calendar
             # TODO: implement code to insert new calendar if it none exists!
-            
+
             qry = '''INSERT INTO "cal_events"
-                (cal_id, id, time_created, last_modified, title, flags, 
+                (cal_id, id, time_created, last_modified, title, flags,
                 event_start, event_start_tz, event_end, event_end_tz)
                 VALUES
-                ('%s', '%s', '%s', '%s', '%s', 28, '%s', 'floating', '%s', 
-                 'floating'); ''' % (calender_id, uid, create_time, 
+                ('%s', '%s', '%s', '%s', '%s', 28, '%s', 'floating', '%s',
+                 'floating'); ''' % (calender_id, uid, create_time,
                               create_time, name, event_start, event_end)
             self.cursor.execute(qry)
-            
+
             qry = '''INSERT INTO cal_properties
                      (item_id, key, value)
                      VALUES
                      ('%s', 'CATEGORIES', 'Birthday');''' % uid
-            self.cursor.execute (qry)
+            self.cursor.execute(qry)
             qry = '''INSERT INTO cal_properties
                      (item_id, key, value)
                      VALUES
                      ('%s', 'TRANSP', 'TRANSPARENT');''' % uid
-            self.cursor.execute (qry)
+            self.cursor.execute(qry)
             qry = '''INSERT INTO cal_properties
                      (item_id, key, value)
                      VALUES
                      ('%s', 'X-MOZ-GENERATION', '1');''' % uid
-            self.cursor.execute (qry)
+            self.cursor.execute(qry)
             # birthday repeats yearly
-            qry = '''INSERT INTO "cal_recurrence" 
-                     (item_id, recur_index, recur_type, is_negative, count, 
+            qry = '''INSERT INTO "cal_recurrence"
+                     (item_id, recur_index, recur_type, is_negative, count,
                      interval)
                      VALUES
-                     ('%s', 1, 'YEARLY', 0, -1, 1);''' %uid
-            self.cursor.execute (qry)
+                     ('%s', 1, 'YEARLY', 0, -1, 1);''' % uid
+            self.cursor.execute(qry)
             self.conn.commit()
         except Exception, msg:
             showErrorMsg(_('Could not execute SQLite-query')
                             + ': %s\n %s' % (qry, str(msg)))
         ab.add(name, str(birthday))
 
+
 class MySQL(DataBase):
     '''MySQL database import'''
+
     def __init__(self):
         DataBase.__init__(self, title='MySQL', type='mysql')
         self.host = 'localhost'
@@ -396,19 +409,19 @@ class MySQL(DataBase):
         self.ab = None
 
         self.entries = []
-    
+
     def connect(self):
         '''establish connection'''
         try:
             import MySQLdb
         except:
-            showErrorMsg(_("Package %s is not installed." % "MySQLdb" ))
+            showErrorMsg(_("Package %s is not installed." % "MySQLdb"))
         try:
-            self.conn = MySQLdb.connect (host = self.host, 
-                                    port=int(self.port), 
-                                    user = self.username, 
-                                    passwd = self.password, 
-                                    db = self.database)
+            self.conn = MySQLdb.connect(host=self.host,
+                                    port=int(self.port),
+                                    user=self.username,
+                                    passwd=self.password,
+                                    db=self.database)
             self.cursor = self.conn.cursor()
         except Exception, msg:
             showErrorMsg(_('Could not connect to MySQL-Server')
@@ -418,9 +431,10 @@ class MySQL(DataBase):
         '''connect to mysql-database and get data'''
         self.connect()
         try:
-            qry = "SELECT %s, %s FROM %s" % (self.name_row, self.date_row, self.table)
-            self.cursor.execute (qry)
-            rows = self.cursor.fetchall ()
+            qry = ("SELECT %s, %s FROM %s"
+                        % (self.name_row, self.date_row, self.table))
+            self.cursor.execute(qry)
+            rows = self.cursor.fetchall()
             for row in rows:
                 ab.add(row[0], str(row[1]))
         except Exception, msg:
@@ -433,9 +447,9 @@ class MySQL(DataBase):
         birthday = str(birthday)
         self.connect()
         try:
-            qry = ("INSERT INTO %s (%s, %s) VALUES ('%s', '%s')" % 
+            qry = ("INSERT INTO %s (%s, %s) VALUES ('%s', '%s')" %
                 (self.table, self.name_row, self.date_row, name, birthday))
-            self.cursor.execute (qry)
+            self.cursor.execute(qry)
         except Exception, msg:
             showErrorMsg(_('Could not execute MySQL-query')
                             + ': %s\n %s' % (qry, str(msg)))
@@ -460,14 +474,15 @@ class MySQL(DataBase):
         '''create additional mysql config in config menu'''
         table = gtk.Table(1, 2)
 
-        label= gtk.Label(_('MySQL-Database')) # Label for MySQL, just translate 'Database'
+        # Label for MySQL, just translate 'Database'
+        label = gtk.Label(_('MySQL-Database'))
         self.text = label
         table.attach(label, 0, 1, 0, 1)
         label.show()
 
         values = [
-                  ['Host', self.host], 
-                  ['Port', self.port], 
+                  ['Host', self.host],
+                  ['Port', self.port],
                   ['Username', self.username],
                   ['Password', self.password],
                   ['Database', self.database],
@@ -481,22 +496,24 @@ class MySQL(DataBase):
         for value in values:
             label = gtk.Label(value[0])
             label.show()
-            sqltable.attach(label, 0, 1, i, i+1)
+            sqltable.attach(label, 0, 1, i, i + 1)
 
             entry = gtk.Entry()
             entry.set_text(value[1])
             entry.show()
             self.entries.append(entry)
-            sqltable.attach(entry, 1, 2, i, i+1)
-            i+=1
+            sqltable.attach(entry, 1, 2, i, i + 1)
+            i += 1
         sqltable.show()
-        table.attach(sqltable,1, 2, 0, 1)
+        table.attach(sqltable, 1, 2, 0, 1)
         self.widget = sqltable
         table.show()
         pref.add(table)
 
+
 class Sunbird(Lightning):
     '''Sunbird/Iceowl implementation (based on lightning)'''
+
     def __init__(self):
         Lightning.__init__(self, title='Sunbird/Iceowl', type='sunbird',
                             has_config=False)

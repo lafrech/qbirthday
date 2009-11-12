@@ -54,7 +54,7 @@ class AddressBook:
                         sDateMonth = '0' + sDateMonth
 
                     if bdayKeys[k].find('-' + sDateMonth
-                                        + '-' + s DateDay) != -1:
+                                        + '-' + sDateDay) != -1:
                         if d == 0:
                             birthday_today = True
                             pic = 'birthdaytoday.png'
