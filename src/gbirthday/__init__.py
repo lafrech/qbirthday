@@ -69,19 +69,6 @@ from status_icon import *
 databases = [Evolution(), Lightning(), Sunbird(), CSV(), MySQL()]
 current_day = time.strftime("%d", time.localtime(time.time()))
 
-'''pygtk-functions'''
-
-
-def showErrorMsg(message, title=None, parent=None):
-    '''show an error error message as MessageDialog'''
-    if (not title):
-        title = 'Error'
-    errmsg = gtk.MessageDialog(parent, type=gtk.MESSAGE_ERROR,
-        buttons=gtk.BUTTONS_OK, flags=gtk.DIALOG_MODAL,
-        message_format=message)
-    errmsg.set_title(title)
-    errmsg.run()
-    errmsg.destroy()
 
 # not needed atm, will be possibly deleted
 
@@ -130,7 +117,8 @@ class Conf:
         self.firstday = self.settings.get("main", "firstday")
         self.lastday = self.settings.get("main", "lastday")
         self.csv_files = self.settings.get("main", "csv_files")
-        self.used_databases = self.settings.get("main", "databases")
+        used_db = self.settings.get("main", "databases")
+        self.used_databases = used_db.split("|")
         try:
             MySQL.host = self.settings.get("mysql", "host")
             MySQL.port = self.settings.get("mysql", "port")
@@ -146,7 +134,13 @@ class Conf:
     def sync_to_settings(self):
         self.settings.set("main", "firstday", self.firstday)
         self.settings.set("main", "lastday", self.lastday)
-        self.settings.set("main", "databases", self.used_databases)
+        used_db = ""
+        for db in self.used_databases:
+            used_db += db
+            used_db += "|"
+        # db[:-1] because of removing the latest "|"
+        print used_db
+        self.settings.set("main", "databases", used_db[:-1])
         self.settings.set("main", "csv_files", self.csv_files)
         if self.MySQL:
             if not self.settings.has_section("mysql"):

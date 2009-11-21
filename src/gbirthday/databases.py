@@ -27,6 +27,7 @@ import os
 import re
 import gtk
 
+from gtk_funcs import showErrorMsg
 
 class DataBase:
     '''

@@ -34,6 +34,7 @@ class StatusIcon():
         self.ab = ab
         self.conf = conf
         self.showbd = None
+        self.dlg = None
         list = ab.manageBdays(conf)
         if len(list) > 0:
             self.icon.set_from_file(imageslocation + 'birthday.png')
@@ -137,7 +138,7 @@ class StatusIcon():
 
     def create_dialog(self, uno):
         '''create about dialog'''
-        global dlg
+        dlg = self.dlg
         dlg = gtk.AboutDialog()
         dlg.set_version(VERSION)
         dlg.set_comments(_('Birthday reminder'))
@@ -187,8 +188,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 
     def finish_gbirthday(self, text):
         '''exit program'''
-        if dlg is not None:
-            dlg.destroy()
+        if self.dlg is not None:
+            self.dlg.destroy()
         gtk.main_quit()
 
     def on_right_click(self, icon, event_button, event_time):
@@ -393,14 +394,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 
         def db_select(widget, db):
             '''callback for checkboxes and update used_databases'''
-            global conf
             if (widget.get_active()):
-                if not db.TYPE in conf.used_databases:
-                    conf.used_databases.append(db.TYPE)
+                if not db.TYPE in self.conf.used_databases:
+                    self.conf.used_databases.append(db.TYPE)
                     db.activate()
             else:
-                if db.TYPE in conf.used_databases:
-                    conf.used_databases.remove(db.TYPE)
+                if db.TYPE in self.conf.used_databases:
+                    self.conf.used_databases.remove(db.TYPE)
                     db.deactivate()
 
         def preferences_db(widget, db):
@@ -449,10 +449,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 
     def save_config(self):
         '''save config in file'''
-        global conf
         for db in databases:
-            db.update(conf)
-        conf.save()
+            db.update(self.conf)
+        self.conf.save()
 
     def add(self, text):
         '''Show Dialog to add new Person - not yet implemented!'''
