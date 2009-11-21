@@ -1,5 +1,7 @@
 0.5.3
 	Install into python_sitelib
+	Follow indention as described in PEP8
+	Bugfixing (fedora bug #539774)
 
 0.5.2
 	Added gettext support for easier translation

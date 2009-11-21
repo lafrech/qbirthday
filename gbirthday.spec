@@ -1,8 +1,8 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 
 Name:           gbirthday
-Version:        0.5.2
-Release:        3%{?dist}
+Version:        0.5.3
+Release:        1%{?dist}
 Summary:        Birthday reminder for Evolution and some others
 Group:          User Interface/Desktops
 License:        GPLv2+
@@ -58,6 +58,9 @@ rm -rf %{buildroot}
 %config(noreplace) %{_sysconfdir}/xdg/autostart/%{name}.desktop
 
 %changelog
+* Sat Nov 21 2009 Thomas Spura <tomspur@fedoraproject.org> 0.5.3-1
+- new version
+
 * Fri Oct 30 2009 Thomas Spura <tomspur@fedoraproject.org> 0.5.2-3
 - BR: intltool
 
