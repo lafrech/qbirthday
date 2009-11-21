@@ -71,7 +71,7 @@ class StatusIcon():
         global current_day
         new_day = time.strftime("%d", time.localtime(time.time()))
         if current_day != new_day:
-            list = AddressBook.manageBdays(self.ab)
+            list = AddressBook.manageBdays(self.ab, self.conf)
             if len(list) > 0:
                 self.icon.set_from_file(imageslocation + 'birthday.png')
             else:
