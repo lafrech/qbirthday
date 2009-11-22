@@ -1,3 +1,7 @@
+0.5.4
+	Fix 00:00 bug
+	Don't show 'do not blink', when nobody has birthday today
+
 0.5.3
 	Install into python_sitelib
 	Follow indention as described in PEP8

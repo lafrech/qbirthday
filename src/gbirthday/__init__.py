@@ -58,9 +58,6 @@ except ImportError:
 
 import ConfigParser
 
-
-birthday_today = False # someone has birthday today?!
-
 # own imports
 from databases import *
 from status_icon import *
@@ -139,7 +136,6 @@ class Conf:
             used_db += db
             used_db += "|"
         # db[:-1] because of removing the latest "|"
-        print used_db
         self.settings.set("main", "databases", used_db[:-1])
         self.settings.set("main", "csv_files", self.csv_files)
         if self.MySQL:
