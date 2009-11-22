@@ -58,6 +58,12 @@ except ImportError:
 
 import ConfigParser
 
+notification = True
+try:
+    import pynotify
+except ImportError:
+    notification = False
+
 # own imports
 from databases import *
 from status_icon import *
