@@ -1,7 +1,7 @@
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 
 Name:           gbirthday
-Version:        0.5.3
+Version:        0.5.4
 Release:        1%{?dist}
 Summary:        Birthday reminder for Evolution and some others
 Group:          User Interface/Desktops
@@ -14,6 +14,7 @@ BuildArch:      noarch
 BuildRequires:  desktop-file-utils
 BuildRequires:  gettext
 BuildRequires:  intltool
+Requires:       notify-python
 Requires:       evolution
 Requires:       python
 Requires:       MySQL-python
@@ -58,6 +59,9 @@ rm -rf %{buildroot}
 %config(noreplace) %{_sysconfdir}/xdg/autostart/%{name}.desktop
 
 %changelog
+* Sat Nov 21 2009 Thomas Spura <tomspur@fedoraproject.org> 0.5.4-1
+- new version
+
 * Sat Nov 21 2009 Thomas Spura <tomspur@fedoraproject.org> 0.5.3-1
 - new version
 
