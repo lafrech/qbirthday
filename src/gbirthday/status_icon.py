@@ -93,7 +93,7 @@ class StatusIcon():
         recargar.connect_object('activate', self.reload_gbirthday, 'reload')
         menu.append(recargar)
 
-        if self.ab.checktoday():
+        if self.icon.get_blinking():
             blink_menu = gtk.ImageMenuItem(_('Stop blinking'))
             blink_img = gtk.Image()
             blink_img.set_from_stock(gtk.STOCK_STOP, gtk.ICON_SIZE_MENU,)
