@@ -330,6 +330,7 @@ class Lightning(DataBase):
             showErrorMsg(_('sqlite3 could not connect: %s' % str(msg)))
 
     def parse_birthday(self, filename):
+        import datetime
         self.connect(filename)
         qry = '''SELECT title, event_start FROM cal_events ce
               INNER JOIN cal_properties cp
@@ -343,7 +344,7 @@ class Lightning(DataBase):
             self.ab.add(row[0], str(bday).split(' ')[0])
 
     def add(self, name, birthday):
-        import uuid
+        import time, uuid
         # create new uuid
         event_date = int(birthday.strftime("%s"))
         event_start = (event_date + 86400) * 1000000
