@@ -42,7 +42,7 @@ class StatusIcon():
             self.icon.set_from_file(imageslocation + 'nobirthday.png')
         self.icon.set_blinking(AddressBook.checktoday(ab))
         self.icon.connect('popup-menu', self.on_right_click)
-        self.icon.connect('activate', self.on_left_click, 20, 20)
+        self.icon.connect('button_press_event', self.on_left_click, 20)
 
         def on_url(d, link, data):
             '''start default browser with gbirthday-website on click'''
@@ -200,11 +200,18 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 
     def on_left_click(self, icon, event_button, event_time):
         '''close/open window with list of birthdays'''
-        if not self.showbd:
-            self.openwindow()
-        else:
-            self.closebdwindow('focus_out_event', self.closebdwindow, "")
-            #self.openwindow()
+        if event_button.button == 1: # left-click
+            if event_button.type is not gtk.gdk._2BUTTON_PRESS:
+                if not self.showbd:
+                    self.openwindow()
+                else:
+                    self.closebdwindow('focus_out_event', self.closebdwindow, "")
+            else:
+                self.icon.set_blinking(False)
+        else: # right-click
+            # this is currently handled in on_right_click on its own
+            pass
+
 
     def openwindow(self):
         '''open window that includes all birthdays'''
