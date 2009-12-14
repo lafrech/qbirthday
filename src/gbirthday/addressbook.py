@@ -28,6 +28,11 @@ class AddressBook:
     def add(self, name, birthday):
         '''add a new person'''
         birthday = str(birthday)
+
+        # if birthday is in format JJJJMMDD modify it to JJJJ-MM-DD
+        if not birthday.find("-") is -1:
+            birthday = birthday[:4] + "-" + birthday[4:6] + "-" + birthday[-2:]
+
         if birthday in self.bdays:
             # check for double entry - we assume that people with the same name
             # and the same birthday exists only once in our universe

@@ -2,6 +2,7 @@
 	On double click, don't blink anymore.
 	Don't show 'don't blink', when not blinking atm
 	Bugfixing (fedora bug #546539)
+	Bugfixing (fedora bug #546869): wrong format of date from evolution
 
 0.5.4
 	Fix 00:00 bug
