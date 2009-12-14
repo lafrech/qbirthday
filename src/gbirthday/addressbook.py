@@ -30,7 +30,7 @@ class AddressBook:
         birthday = str(birthday)
 
         # if birthday is in format JJJJMMDD modify it to JJJJ-MM-DD
-        if not birthday.find("-") is -1:
+        if birthday.find("-") is -1:
             birthday = birthday[:4] + "-" + birthday[4:6] + "-" + birthday[-2:]
 
         if birthday in self.bdays:
