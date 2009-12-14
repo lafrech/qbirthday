@@ -16,6 +16,7 @@ BuildRequires:  gettext
 BuildRequires:  intltool
 Requires:       notify-python
 Requires:       evolution
+Requires:       gnome-python2-evolution
 Requires:       python
 Requires:       MySQL-python
 Requires:       pygtk2

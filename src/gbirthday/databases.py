@@ -228,53 +228,29 @@ class Evolution(DataBase):
 
     def parse(self, book=None, ab=None, conf=None):
         '''load and parse parse Evolution data files'''
-        # get list of address books and extract their persons
-        if (os.path.exists(self.ADDRESS_BOOK_LOCATION)):
-            for addresser in os.listdir(self.ADDRESS_BOOK_LOCATION):
-                location = os.path.join(self.ADDRESS_BOOK_LOCATION, addresser)
-                for name in book or []:
-                    location = os.path.join(location, 'subfolders', name)
-                addressbook = os.path.join(location, 'addressbook.db')
-                try:
-                    import bsddb
-                except:
-                    showErrorMsg(_("Package %s is not installed." % "bsddb"))
-                try:
-                    bsfile = bsddb.hashopen(addressbook)
-                    for key in bsfile.keys():
-                        data = bsfile[key]
-                        if not data.startswith('BEGIN:VCARD'):
-                            continue
-                        self.parse_birthday(data, ab)
-                except bsddb.db.DBInvalidArgError, msg:
-                    showErrorMsg(_('Error reading Evolution addressbook: %s' %
-                                    msg[1]))
+        try:
+            import evolution
+        except ImportError:
+            showErrorMsg(_("For correctly usage, you need to install gnome-python2-evolution."))
+            return
+
+        for title, book in evolution.ebook.list_addressbooks():
+            ebook = evolution.ebook.open_addressbook(book)
+            for contact in ebook.get_all_contacts():
+                # contact.props.birth_date{.year, .month, .day} non-existing
+                # -> using vcard
+                vcard = contact.get_vcard_string()
+                self.parse_birthday((contact.props.full_name, vcard), ab)
 
     def parse_birthday(self, data, ab):
         '''parse evolution addressbook. the file is in VCard format.'''
-        lines = self._splitRE.split(data)
-        mostRecentName = ''
-        mostRecentDate = ''
+        full_name, vcard = data
+        lines = self._splitRE.split(vcard)
         for line in lines:
-            # ignore blank lines, lines without colon and
-            # lines that are just \x00
-            if not line.strip() or line == '\x00' or \
-               line.find(':') == -1:
-                continue
-            label, value = line.split(':', 1)
-            # parse file, if the name is set in 'X-EVOLUTION-FILE-AS'
-            # use it as display name
-            if label == 'X-EVOLUTION-FILE-AS':
-                mostRecentName = value.replace("\,", ",")
-            # if 'BDAY' is set use BDAY als birthday
-            if label == 'BDAY':
-                mostRecentDate = value
-            # if BDAY and  set create Person-data
-            if mostRecentName and mostRecentDate:
-                # if there already is a birthday add it to the list
-                ab.add(mostRecentName, mostRecentDate)
-                mostRecentName = ''
-                mostRecentDate = ''
+            # if BDAY is in vcard, use this as birthday
+            if line.startswith('BDAY'):
+                label, value = line.split(':', 1)
+                ab.add(full_name, value)
 
 
 class Lightning(DataBase):
