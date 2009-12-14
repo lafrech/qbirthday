@@ -20,6 +20,7 @@ clean:
 
 install:
 	intltool-merge -d ./po ./gbirthday.desktop.in ./gbirthday.desktop
+	sed -i "s|@VER@|$(version)|g" src/gbirthday/__init__.py
 	$(mkdir) $(DESTDIR)$(pixmaps)
 	$(install) -m 644 pics/gbirthday.png $(DESTDIR)$(pixmaps)
 	$(mkdir) $(DESTDIR)$(sitelib)
