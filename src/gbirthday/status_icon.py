@@ -68,7 +68,6 @@ class StatusIcon():
 
     def check_new_day(self):
         '''check for new birthday (check every 60 seconds)'''
-        global current_day
         new_day = time.strftime("%d", time.localtime(time.time()))
         if current_day != new_day:
             list = AddressBook.manageBdays(self.ab, self.conf)
@@ -351,9 +350,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 
     def preferences_window(self, textcw=None):
         '''show settings window'''
-        global imageslocation
         global preferences
-        global conf
         preferences = self.gtk_get_top_window(_('Preferences'))
 
         box = gtk.VBox(False, 0)
@@ -377,12 +374,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 
         def get_new_preferences(uno, option, spin):
             '''set value for settings by spinner'''
-            global conf
             spin.update()
             if option == "firstday":
-                conf.firstday = spin.get_value_as_int()
+                self.conf.firstday = spin.get_value_as_int()
             elif option == "lastday":
-                conf.lastday = spin.get_value_as_int()
+                self.conf.lastday = spin.get_value_as_int()
             else:
                 showErrorMsg(_('Internal Error: Option %s not valid.')
                                 % option)
@@ -413,7 +409,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
                     db.deactivate()
 
         def preferences_db(widget, db):
-          #  global imageslocation
             global preferences
             pref_db = self.gtk_get_top_window(_('Database Configuration'))
 
@@ -628,7 +623,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
     ### gtk helper functions ###
     @staticmethod
     def gtk_get_top_window(title, decorated=True, center=True):
-        global imageslocation
         window = gtk.Window(gtk.WINDOW_TOPLEVEL)
         window.set_decorated(decorated)
         if center:
