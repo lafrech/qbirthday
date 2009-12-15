@@ -2,7 +2,7 @@
 
 Name:           gbirthday
 Version:        0.5.5
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Birthday reminder for Evolution and some others
 Group:          User Interface/Desktops
 License:        GPLv2+
@@ -60,6 +60,9 @@ rm -rf %{buildroot}
 %config(noreplace) %{_sysconfdir}/xdg/autostart/%{name}.desktop
 
 %changelog
+* Wed Dec 16 2009 Thomas Spura <tomspur@fedoraproject.org> 0.5.5-2
+- upstream tarball was corected, still same version
+
 * Mon Dec 14 2009 Thomas Spura <tomspur@fedoraproject.org> 0.5.5-1
 - new version
 
