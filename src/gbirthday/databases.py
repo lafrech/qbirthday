@@ -236,6 +236,8 @@ class Evolution(DataBase):
 
         for title, book in evolution.ebook.list_addressbooks():
             ebook = evolution.ebook.open_addressbook(book)
+            if not ebook:
+                continue
             for contact in ebook.get_all_contacts():
                 # contact.props.birth_date{.year, .month, .day} non-existing
                 # -> using vcard
