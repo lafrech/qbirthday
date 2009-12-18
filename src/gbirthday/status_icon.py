@@ -19,7 +19,7 @@ import os
 
 # own imports
 from addressbook import *
-from __init__ import databases, current_day, VERSION
+from __init__ import databases, VERSION
 from __init__ import month_at_place, day_at_place
 
 imageslocation = os.sep.join(__file__.split(os.sep)[:-1]) + "/pics/"
@@ -68,6 +68,8 @@ class StatusIcon():
 
     def check_new_day(self):
         '''check for new birthday (check every 60 seconds)'''
+        from __init__ import current_day
+
         new_day = time.strftime("%d", time.localtime(time.time()))
         if current_day != new_day:
             list = AddressBook.manageBdays(self.ab, self.conf)
