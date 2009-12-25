@@ -50,24 +50,24 @@ class AddressBook:
         birthday_list = []
         temporal = []
 
-        for d in range(int(conf.firstday), int(conf.lastday) + 1):
-            sDate = now + datetime.timedelta(d)
+        for day_num in range(int(conf.firstday), int(conf.lastday) + 1):
+            day_date = now + datetime.timedelta(day_num)
 
             for k in range(len(self.bdays)):
-                sDateDay = str(sDate.day)
+                day_date_day = str(day_date.day)
+                if len(day_date_day) == 1:
+                    day_date_day = '0' + day_date_day
 
                 for name in self.bdays[bday_keys[k]]:
-                    if len(sDateDay) != 2:
-                        sDateDay = '0' + sDateDay
-                    sDateMonth = str(sDate.month)
-                    if len(sDateMonth) != 2:
-                        sDateMonth = '0' + sDateMonth
+                    day_date_month = str(day_date.month)
+                    if len(day_date_month) == 1:
+                        day_date_month = '0' + day_date_month
 
-                    if bday_keys[k].find('-' + sDateMonth
-                                        + '-' + sDateDay) != -1:
-                        if d == 0:
+                    if bday_keys[k].find('-' + day_date_month
+                                        + '-' + day_date_day) != -1:
+                        if day_num == 0:
                             pic = 'birthdaytoday.png'
-                        elif d < 0:
+                        elif day_num < 0:
                             pic = 'birthdaylost.png'
                         else:
                             pic = 'birthdaynext.png'
@@ -75,32 +75,33 @@ class AddressBook:
                         bday = bday_keys[k]
 
                         year = bday[:4]
-                        year = sDate.year - int(year)
+                        year = day_date.year - int(year)
 
-                        temporal = [pic, bday, name, str(d), d,
-                            sDate.month, sDate.day, year]
+                        temporal = [pic, bday, name, str(day_num), day_num,
+                            day_date.month, day_date.day, year]
                         birthday_list.append(temporal)
         return birthday_list
 
     def checktoday(self):
+        '''Check, if today is a bithday.'''
 
         now = date.today()
         bday_keys = self.bdays.keys()
         birthday_today = False
 
-        for d in range(0, 1):
-            sDate = now + datetime.timedelta(d)
+        for day_num in range(0, 1):
+            day_date = now + datetime.timedelta(day_num)
 
             for k in range(len(self.bdays)):
-                sDateDay = str(sDate.day)
-                if len(sDateDay) != 2:
-                    sDateDay = '0' + sDateDay
-                sDateMonth = str(sDate.month)
-                if len(sDateMonth) != 2:
-                    sDateMonth = '0' + sDateMonth
+                day_date_day = str(day_date.day)
+                if len(day_date_day) != 2:
+                    day_date_day = '0' + day_date_day
+                day_date_month = str(day_date.month)
+                if len(day_date_month) != 2:
+                    day_date_month = '0' + day_date_month
 
-                if bday_keys[k].find('-' + sDateMonth + '-'
-                                    + sDateDay) != -1:
-                    if d == 0:
+                if bday_keys[k].find('-' + day_date_month + '-'
+                                    + day_date_day) != -1:
+                    if day_num == 0:
                         birthday_today = True
         return birthday_today
