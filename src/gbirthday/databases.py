@@ -27,7 +27,7 @@ import os
 import re
 import gtk
 
-from gtk_funcs import showErrorMsg
+from gtk_funcs import show_error_msg
 
 class DataBase:
     '''
@@ -116,7 +116,7 @@ class CSV(DataBase):
                             ab.add(name, date)
                             break
             else:
-                showErrorMsg(_('Could not save, CVS-file not set.')
+                show_error_msg(_('Could not save, CVS-file not set.')
                                 + ':' + filename)
 
     def add(self, name, birthday):
@@ -124,7 +124,7 @@ class CSV(DataBase):
         birthday = str(birthday)
         # TODO: show menu to select file?
         if len(self.conf.csv_files) == 0:
-            showErrorMsg(_('CSV-file does not exist'))
+            show_error_msg(_('CSV-file does not exist'))
             return
         filename = self.conf.csv_files[0]
         if (os.path.exists(filename)):
@@ -231,7 +231,7 @@ class Evolution(DataBase):
         try:
             import evolution
         except ImportError:
-            showErrorMsg(_("For correctly usage, you need to install gnome-python2-evolution."))
+            show_error_msg(_("For correctly usage, you need to install gnome-python2-evolution."))
             return
 
         for title, book in evolution.ebook.list_addressbooks():
@@ -288,7 +288,7 @@ class Lightning(DataBase):
                 if os.path.isfile(location):
                     self.parse_birthday(location)
         else:
-            showErrorMsg(_('Error reading profile file: %s' % configfile))
+            show_error_msg(_('Error reading profile file: %s' % configfile))
 
     def parse(self, ab, conf):
         '''open thunderbird sqlite-database'''
@@ -301,12 +301,12 @@ class Lightning(DataBase):
         try:
             import sqlite3
         except:
-            showErrorMsg(_("Package %s is not installed." % "SQLite3"))
+            show_error_msg(_("Package %s is not installed." % "SQLite3"))
         try:
             self.conn = sqlite3.connect(filename)
             self.cursor = self.conn.cursor()
         except Exception, msg:
-            showErrorMsg(_('sqlite3 could not connect: %s' % str(msg)))
+            show_error_msg(_('sqlite3 could not connect: %s' % str(msg)))
 
     def parse_birthday(self, filename):
         import datetime
@@ -371,7 +371,7 @@ class Lightning(DataBase):
             self.cursor.execute(qry)
             self.conn.commit()
         except Exception, msg:
-            showErrorMsg(_('Could not execute SQLite-query')
+            show_error_msg(_('Could not execute SQLite-query')
                             + ': %s\n %s' % (qry, str(msg)))
         self.ab.add(name, str(birthday))
 
@@ -398,7 +398,7 @@ class MySQL(DataBase):
         try:
             import MySQLdb
         except:
-            showErrorMsg(_("Package %s is not installed." % "MySQLdb"))
+            show_error_msg(_("Package %s is not installed." % "MySQLdb"))
         try:
             self.conn = MySQLdb.connect(host=self.host,
                                     port=int(self.port),
@@ -407,7 +407,7 @@ class MySQL(DataBase):
                                     db=self.database)
             self.cursor = self.conn.cursor()
         except Exception, msg:
-            showErrorMsg(_('Could not connect to MySQL-Server')
+            show_error_msg(_('Could not connect to MySQL-Server')
                             + str(msg))
 
     def parse(self, ab, conf):
@@ -421,7 +421,7 @@ class MySQL(DataBase):
             for row in rows:
                 ab.add(row[0], str(row[1]))
         except Exception, msg:
-            showErrorMsg(_('Could not execute MySQL-query')
+            show_error_msg(_('Could not execute MySQL-query')
                             + ': %s\n %s' % (qry, str(msg)))
         self.conn.close()
 
@@ -434,7 +434,7 @@ class MySQL(DataBase):
                 (self.table, self.name_row, self.date_row, name, birthday))
             self.cursor.execute(qry)
         except Exception, msg:
-            showErrorMsg(_('Could not execute MySQL-query')
+            show_error_msg(_('Could not execute MySQL-query')
                             + ': %s\n %s' % (qry, str(msg)))
         self.conn.close()
         self.ab.add(name, birthday)
@@ -514,4 +514,4 @@ class Sunbird(Lightning):
         elif (os.path.exists(iceowl)):
             self.get_config_file(iceowl)
         else:
-            showErrorMsg(_('Neither iceowl nor sunbird is installed'))
+            show_error_msg(_('Neither iceowl nor sunbird is installed'))

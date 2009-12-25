@@ -382,7 +382,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
             elif option == "lastday":
                 self.conf.lastday = spin.get_value_as_int()
             else:
-                showErrorMsg(_('Internal Error: Option %s not valid.')
+                show_error_msg(_('Internal Error: Option %s not valid.')
                                 % option)
 
         past = gtk.Adjustment(int(self.conf.firstday), lower=-30,

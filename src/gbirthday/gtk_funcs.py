@@ -1,6 +1,7 @@
+'''Collection of gtk functions'''
 import gtk
 
-def showErrorMsg(message, title=None, parent=None):
+def show_error_msg(message, title=None, parent=None):
     '''show an error error message as MessageDialog'''
     if (not title):
         title = 'Error'
