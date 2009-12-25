@@ -266,6 +266,7 @@ class Lightning(DataBase):
         self.ab = None
 
     def get_config_file(self, configfile):
+        import ConfigParser
         profilefile = os.path.join(configfile, 'profiles.ini')
         if os.path.isfile(profilefile):
             cp = ConfigParser.ConfigParser()
