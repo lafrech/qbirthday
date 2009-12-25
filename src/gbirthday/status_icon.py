@@ -410,7 +410,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
                     db.deactivate()
 
         def preferences_db(widget, db):
-            global preferences
             pref_db = self.gtk_get_top_window(_('Database Configuration'))
 
             db.create_config(pref_db, self.conf)
@@ -516,7 +515,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
         table.attach(date, 1, 2, 1, 2)
         date.show()
 
-        liststore = gtk.ListStore(str)
         combobox = gtk.combo_box_new_text()
         for db in databases:
             if db.CAN_SAVE:
@@ -563,7 +561,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
         table.attach(label, 0, 1, 0, 1)
         label.show()
 
-        liststore = gtk.ListStore(str)
         db_combo = gtk.combo_box_new_text()
         for db in databases:
             db_combo.append_text(db.TITLE)
@@ -583,7 +580,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
         table.attach(label, 0, 1, 2, 3)
         label.show()
 
-        liststore = gtk.ListStore(str)
         combobox = gtk.combo_box_new_text()
         for db in databases:
             if db.CAN_SAVE:
