@@ -1,10 +1,182 @@
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: gbirthday\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-12-25 18:13+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit"
+"Content-Transfer-Encoding: 8bit\n"
 
-#: gbirthday.desktop.in:4
-msgid "Birthday reminder for Evolution contacts"
+#: ../gbirthday.desktop.in.h:1
+#, fuzzy
+msgid "Birthday reminder for E-Mail contacts"
 msgstr "Rappel d'anniversaire pour Paul contacts"
+
+#: ../src/gbirthday/databases.py:119
+msgid "Could not save, CVS-file not set."
+msgstr ""
+
+#: ../src/gbirthday/databases.py:127
+msgid "CSV-file does not exist"
+msgstr ""
+
+#: ../src/gbirthday/databases.py:234
+msgid "For correctly usage, you need to install gnome-python2-evolution."
+msgstr ""
+
+#: ../src/gbirthday/databases.py:290
+#, python-format
+msgid "Error reading profile file: %s"
+msgstr ""
+
+#: ../src/gbirthday/databases.py:303 ../src/gbirthday/databases.py:400
+#, python-format
+msgid "Package %s is not installed."
+msgstr ""
+
+#: ../src/gbirthday/databases.py:308
+#, python-format
+msgid "sqlite3 could not connect: %s"
+msgstr ""
+
+#: ../src/gbirthday/databases.py:373
+msgid "Could not execute SQLite-query"
+msgstr ""
+
+#: ../src/gbirthday/databases.py:409
+msgid "Could not connect to MySQL-Server"
+msgstr ""
+
+#: ../src/gbirthday/databases.py:423 ../src/gbirthday/databases.py:436
+msgid "Could not execute MySQL-query"
+msgstr ""
+
+#. Label for MySQL, just translate 'Database'
+#: ../src/gbirthday/databases.py:460
+msgid "MySQL-Database"
+msgstr ""
+
+#: ../src/gbirthday/databases.py:516
+msgid "Neither iceowl nor sunbird is installed"
+msgstr ""
+
+#: ../src/gbirthday/status_icon.py:89
+msgid "Reload"
+msgstr "Recharger"
+
+#: ../src/gbirthday/status_icon.py:98
+msgid "Stop blinking"
+msgstr "Cesser de clignoter"
+
+#: ../src/gbirthday/status_icon.py:107 ../src/gbirthday/status_icon.py:490
+#: ../src/gbirthday/status_icon.py:553
+msgid "Add"
+msgstr ""
+
+#: ../src/gbirthday/status_icon.py:115 ../src/gbirthday/status_icon.py:356
+msgid "Preferences"
+msgstr "Préférences"
+
+#: ../src/gbirthday/status_icon.py:125
+msgid "About"
+msgstr "À propos"
+
+#: ../src/gbirthday/status_icon.py:133
+msgid "Quit"
+msgstr "Quitter"
+
+#: ../src/gbirthday/status_icon.py:147
+msgid "Birthday reminder"
+msgstr ""
+
+#: ../src/gbirthday/status_icon.py:178
+msgid "translator-credit"
+msgstr ""
+
+#: ../src/gbirthday/status_icon.py:183
+msgid "There are no translations or the translator doesn't want to get credits for that."
+msgstr ""
+
+#: ../src/gbirthday/status_icon.py:238
+msgid "Birthdays"
+msgstr "Anniversaires"
+
+#: ../src/gbirthday/status_icon.py:241
+msgid "No birthdays in specified period"
+msgstr "Il n'ya pas d'anniversaire en période spécifiée"
+
+#: ../src/gbirthday/status_icon.py:308 ../src/gbirthday/status_icon.py:309
+msgid "Today"
+msgstr "Aujourd'hui"
+
+#: ../src/gbirthday/status_icon.py:311 ../src/gbirthday/status_icon.py:313
+msgid "Yesterday"
+msgstr "Hier"
+
+#: ../src/gbirthday/status_icon.py:315
+#, python-format
+msgid "%s Days ago"
+msgstr "Il ya %s jours"
+
+#: ../src/gbirthday/status_icon.py:319
+msgid "Tomorrow"
+msgstr "Demain"
+
+#: ../src/gbirthday/status_icon.py:321
+msgid "Days"
+msgstr "Jours"
+
+#: ../src/gbirthday/status_icon.py:328
+msgid "Years"
+msgstr "Années"
+
+#: ../src/gbirthday/status_icon.py:365
+msgid "Past birthdays"
+msgstr "Passé anniversaires"
+
+#: ../src/gbirthday/status_icon.py:369
+msgid "Next birthdays"
+msgstr "Prochains anniversaires"
+
+#: ../src/gbirthday/status_icon.py:373 ../src/gbirthday/status_icon.py:583
+msgid "Database"
+msgstr ""
+
+#: ../src/gbirthday/status_icon.py:385
+#, python-format
+msgid "Internal Error: Option %s not valid."
+msgstr ""
+
+#: ../src/gbirthday/status_icon.py:415
+msgid "Database Configuration"
+msgstr ""
+
+#: ../src/gbirthday/status_icon.py:432
+msgid "Configure"
+msgstr ""
+
+#: ../src/gbirthday/status_icon.py:448 ../src/gbirthday/status_icon.py:532
+#: ../src/gbirthday/status_icon.py:607
+msgid "Save & Close"
+msgstr "Enregistrer et Fermer"
+
+#: ../src/gbirthday/status_icon.py:499
+msgid "Name"
+msgstr ""
+
+#: ../src/gbirthday/status_icon.py:503
+msgid "Birthday"
+msgstr ""
+
+#: ../src/gbirthday/status_icon.py:507
+msgid "Save to file/database"
+msgstr ""
+
+#: ../src/gbirthday/status_icon.py:575
+msgid "Import Settings"
+msgstr ""
+
+#: ../src/gbirthday/status_icon.py:599
+msgid "Export Settings"
+msgstr ""
