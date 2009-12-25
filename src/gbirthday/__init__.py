@@ -107,7 +107,7 @@ class Conf:
             if self.settings.has_section("main"):
                 self.sync_to_mem()
             else:
-                settings.add_section("main")
+                self.settings.add_section("main")
                 self.default_values()
 
     def default_values(self):
@@ -164,13 +164,7 @@ showbdcheck = None
 
 
 def main():
-    global status_icon
-    global dlg
-    dlg = None
-    showbdcheck = 0
-
     # try to load settings
-    global conf
     conf = Conf()
 
     # load data and fill AddressBook
