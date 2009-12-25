@@ -20,7 +20,7 @@ import os
 # own imports
 from addressbook import *
 from __init__ import databases, VERSION
-from __init__ import month_at_place, day_at_place
+from __init__ import MONTH_AT_PLACE, DAY_AT_PLACE
 
 imageslocation = os.sep.join(__file__.split(os.sep)[:-1]) + "/pics/"
 
@@ -269,8 +269,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
             align = gtk.Alignment(0.0, 0.5, 0, 0)
             align.add(label)
             align.show()
-            table.attach(align, month_at_place,
-                            month_at_place + 1, fila, fila + 1)
+            table.attach(align, MONTH_AT_PLACE,
+                            MONTH_AT_PLACE + 1, fila, fila + 1)
             label.show()
 
             c = str(cumple[6])
@@ -285,8 +285,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
             align = gtk.Alignment(1.0, 0.5, 0, 0)
             align.add(label)
             align.show()
-            table.attach(align, day_at_place,
-                            day_at_place + 1, fila, fila + 1)
+            table.attach(align, DAY_AT_PLACE,
+                            DAY_AT_PLACE + 1, fila, fila + 1)
             label.show()
 
             if cumple[4] == 0:
