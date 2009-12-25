@@ -515,3 +515,6 @@ class Sunbird(Lightning):
             self.get_config_file(iceowl)
         else:
             show_error_msg(_('Neither iceowl nor sunbird is installed'))
+
+if __name__ == "__main__":
+    _ = lambda x: x

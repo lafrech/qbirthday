@@ -241,7 +241,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
         label.set_justify(gtk.JUSTIFY_RIGHT)
         event_box.add(label)
         label.show()
-        style = label.get_style()
         event_box.modify_bg(gtk.STATE_NORMAL,
                     event_box.rc_get_style().bg[gtk.STATE_SELECTED])
         fila = fila + 1
@@ -375,6 +374,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 
         def get_new_preferences(uno, option, spin):
             '''set value for settings by spinner'''
+            from gtk_funcs import show_error_msg
             spin.update()
             if option == "firstday":
                 self.conf.firstday = spin.get_value_as_int()
@@ -624,6 +624,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
     ### gtk helper functions ###
     @staticmethod
     def gtk_get_top_window(title, decorated=True, center=True):
+        '''Get gtk top window.'''
         window = gtk.Window(gtk.WINDOW_TOPLEVEL)
         window.set_decorated(decorated)
         if center:
@@ -633,3 +634,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
         window.set_title(title)
         window.set_icon_from_file(imageslocation + 'birthday.png')
         return window
+
+if __name__ == "__main__":
+    _ = lambda x: x
