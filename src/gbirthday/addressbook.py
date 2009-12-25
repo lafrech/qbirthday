@@ -19,11 +19,12 @@ from datetime import date
 
 class AddressBook:
     '''AdressBook that saves birthday and names'''
-    bdays = {} # list of all birthdays. Format:
-               # {birthday: [Name1, Name2]}
-               # for example
-               # {'1970-01-01': ['Bar, Foo', 'Time'],
-               #  '1967-12-12': ['Power, Max']}
+    def __init__(self):
+        self.bdays = {}  # list of all birthdays. Format:
+                    # {birthday: [Name1, Name2]}
+                    # for example
+                    # {'1970-01-01': ['Bar, Foo', 'Time'],
+                    #  '1967-12-12': ['Power, Max']}
 
     def add(self, name, birthday):
         '''add a new person'''
@@ -63,7 +64,6 @@ class AddressBook:
                     if bdayKeys[k].find('-' + sDateMonth
                                         + '-' + sDateDay) != -1:
                         if d == 0:
-                            birthday_today = True
                             pic = 'birthdaytoday.png'
                         elif d < 0:
                             pic = 'birthdaylost.png'
@@ -72,11 +72,11 @@ class AddressBook:
 
                         bday = bdayKeys[k]
 
-                        ano, mes, dia = bday.split('-', 2)
-                        ano = sDate.year - int(ano)
+                        year = bday[:4]
+                        year = sDate.year - int(year)
 
                         temporal = [pic, bday, name, str(d), d,
-                            sDate.month, sDate.day, ano]
+                            sDate.month, sDate.day, year]
                         birthday_list.append(temporal)
         return birthday_list
 
