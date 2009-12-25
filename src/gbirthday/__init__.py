@@ -47,7 +47,7 @@ day_at_place, month_at_place = 1, 2
 if time.strftime('%x', (2000, 3, 1, 1, 0, 0, 0, 1, 0)).startswith("03"):
     day_at_place, month_at_place = 2, 1
 
-# for FreeBSD users: if no i18n is whished, no gettext package won't be
+# for FreeBSD users: if no i18n is whished, no gettext package will be
 # available and standard messages are displayed insted a try to use
 # translated strings
 try:
