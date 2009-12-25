@@ -51,19 +51,13 @@ class StatusIcon():
 
         gtk.about_dialog_set_url_hook(on_url, None)
 
-    def reload_gbirthday(self, text):
+    def reload_gbirthday(self, dummy):
         '''reload gbirthday, reload data from databases'''
         self.ab.bdays = {}
         for db in databases:
             if (db.TYPE in self.conf.used_databases):
                 db.parse(ab=self.ab, conf=self.conf)
-
-        self.icon.set_blinking(AddressBook.checktoday(self.ab))
-        list = self.ab.manage_bdays(self.conf)
-        if len(list) > 0:
-            self.icon.set_from_file(imageslocation + 'birthday.png')
-        else:
-            self.icon.set_from_file(imageslocation + 'nobirthday.png')
+        self._reload_set_icon()
 
     def check_new_day(self):
         '''check for new birthday (check every 60 seconds)'''
@@ -71,14 +65,22 @@ class StatusIcon():
 
         new_day = time.strftime("%d", time.localtime(time.time()))
         if current_day != new_day:
-            list = AddressBook.manage_bdays(self.ab, self.conf)
-            if len(list) > 0:
-                self.icon.set_from_file(imageslocation + 'birthday.png')
-            else:
-                self.icon.set_from_file(imageslocation + 'nobirthday.png')
-            self.icon.set_blinking(AddressBook.checktoday(self.ab))
+            self._reload_set_icon()
             current_day = new_day
         return True
+
+    def _reload_set_icon(self):
+        list = self.ab.manage_bdays(self.conf)
+        # check if a birthday is in specified period
+        if len(list) > 0:
+            self.icon.set_from_file(imageslocation + 'birthday.png')
+        else:
+            self.icon.set_from_file(imageslocation + 'nobirthday.png')
+
+        # check if birthday today
+        if AddressBook.checktoday(self.ab):
+            self.icon.set_from_file(imageslocation + 'birthdayred.png')
+            self.icon.set_blinking(True)
 
     def make_menu(self, event_button, event_time, icon):
         '''create menu window'''
@@ -90,7 +92,7 @@ class StatusIcon():
         recarga_img.set_from_stock(gtk.STOCK_REFRESH, gtk.ICON_SIZE_MENU,)
         recargar.set_image(recarga_img)
         recargar.show()
-        recargar.connect_object('activate', self.reload_gbirthday, 'reload')
+        recargar.connect_object('activate', self.reload_gbirthday, None)
         menu.append(recargar)
 
         if self.icon.get_blinking():
