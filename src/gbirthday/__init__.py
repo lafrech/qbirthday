@@ -92,6 +92,7 @@ def start(ab, conf):
 class Conf:
 
     def __init__(self):
+        '''Try to read config file or initialize with default values.'''
         import ConfigParser
         self.firstday = self.lastday = None
         self.ab = None
@@ -111,12 +112,14 @@ class Conf:
                 self.default_values()
 
     def default_values(self):
+        '''Initialize with default values.'''
         self.firstday = -2
         self.lastday = 30
         self.used_databases = ['evolution']
         self.csv_files = None
 
     def sync_to_mem(self):
+        '''Get current settings from config parser into this object.'''
         self.firstday = self.settings.get("main", "firstday")
         self.lastday = self.settings.get("main", "lastday")
         self.csv_files = self.settings.get("main", "csv_files")
@@ -135,6 +138,7 @@ class Conf:
             pass
 
     def sync_to_settings(self):
+        '''Save current settings from this object to config parser.'''
         self.settings.set("main", "firstday", self.firstday)
         self.settings.set("main", "lastday", self.lastday)
         used_db = ""
@@ -157,6 +161,7 @@ class Conf:
             self.settings.set("mysql", "date_raw", self.MySQL.date_raw)
 
     def save(self):
+        '''Save current settings to disk.'''
         self.sync_to_settings()
         self.settings.write(file(os.environ['HOME'] + "/.gbirthdayrc", "w"))
 
@@ -164,6 +169,7 @@ showbdcheck = None
 
 
 def main():
+    '''Load settings, start status icon and get to work.'''
     # try to load settings
     conf = Conf()
 
