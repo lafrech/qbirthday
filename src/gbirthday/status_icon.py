@@ -35,12 +35,7 @@ class StatusIcon():
         self.conf = conf
         self.showbd = None
         self.dlg = None
-        list = ab.manage_bdays(conf)
-        if len(list) > 0:
-            self.icon.set_from_file(imageslocation + 'birthday.png')
-        else:
-            self.icon.set_from_file(imageslocation + 'nobirthday.png')
-        self.icon.set_blinking(AddressBook.checktoday(ab))
+        self._reload_set_icon()
         self.icon.connect('popup-menu', self.on_right_click)
         self.icon.connect('button_press_event', self.on_left_click, 20)
 
@@ -80,7 +75,7 @@ class StatusIcon():
         # check if birthday today
         if AddressBook.checktoday(self.ab):
             self.icon.set_from_file(imageslocation + 'birthdayred.png')
-            self.icon.set_blinking(True)
+            #self.icon.set_blinking(True)
 
     def make_menu(self, event_button, event_time, icon):
         '''create menu window'''
