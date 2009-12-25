@@ -46,9 +46,8 @@ class StatusIcon():
 
         def on_url(d, link, data):
             '''start default browser with gbirthday-website on click'''
-            import subprocess
-            subprocess.Popen(['sensible-browser',
-                        'http://gbirthday.sourceforge.net/'])
+            import webbrowser
+            webbrowser.open('http://gbirthday.sourceforge.net/')
 
         gtk.about_dialog_set_url_hook(on_url, None)
 
@@ -181,7 +180,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
         else:
             dlg.set_translator_credits(
                 _("There are no translations or the translator doesn't want to get credits for that."))
-        dlg.set_website('http://gbirthday.sf.net/')
+        dlg.set_website('http://gbirthday.sourceforge.net/')
 
         def close(w, res):
             if res == gtk.RESPONSE_CANCEL:

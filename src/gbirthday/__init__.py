@@ -56,13 +56,11 @@ try:
 except ImportError:
     _ = lambda x: x
 
-import ConfigParser
-
-notification = True
+NOTIFICATION = True
 try:
     import pynotify
 except ImportError:
-    notification = False
+    NOTIFICATION = False
 
 # own imports
 from databases import *
@@ -120,6 +118,8 @@ class Conf:
 
     def sync_to_mem(self):
         '''Get current settings from config parser into this object.'''
+        import ConfigParser
+
         self.firstday = self.settings.get("main", "firstday")
         self.lastday = self.settings.get("main", "lastday")
         self.csv_files = self.settings.get("main", "csv_files")
