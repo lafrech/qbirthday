@@ -123,14 +123,14 @@ class CSV(DataBase):
         '''add new person with birthday to end of csv-file'''
         birthday = str(birthday)
         # TODO: show menu to select file?
-        if len(conf.csv_files) == 0:
+        if len(self.conf.csv_files) == 0:
             showErrorMsg(_('CSV-file does not exist'))
             return
-        filename = conf.csv_files[0]
+        filename = self.conf.csv_files[0]
         if (os.path.exists(filename)):
-            f = file(conf.csv_files[0], 'a')
+            f = file(self.conf.csv_files[0], 'a')
         else:
-            f = file(conf.csv_files[0], 'w')
+            f = file(self.conf.csv_files[0], 'w')
         f.write(birthday + ', ' + name + '\n')
         f.close()
         self.ab.add(name, birthday)
@@ -372,7 +372,7 @@ class Lightning(DataBase):
         except Exception, msg:
             showErrorMsg(_('Could not execute SQLite-query')
                             + ': %s\n %s' % (qry, str(msg)))
-        ab.add(name, str(birthday))
+        self.ab.add(name, str(birthday))
 
 
 class MySQL(DataBase):
