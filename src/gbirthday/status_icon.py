@@ -35,7 +35,7 @@ class StatusIcon():
         self.conf = conf
         self.showbd = None
         self.dlg = None
-        list = ab.manageBdays(conf)
+        list = ab.manage_bdays(conf)
         if len(list) > 0:
             self.icon.set_from_file(imageslocation + 'birthday.png')
         else:
@@ -60,7 +60,7 @@ class StatusIcon():
                 db.parse(ab=self.ab, conf=self.conf)
 
         self.icon.set_blinking(AddressBook.checktoday(self.ab))
-        list = self.ab.manageBdays(self.conf)
+        list = self.ab.manage_bdays(self.conf)
         if len(list) > 0:
             self.icon.set_from_file(imageslocation + 'birthday.png')
         else:
@@ -72,7 +72,7 @@ class StatusIcon():
 
         new_day = time.strftime("%d", time.localtime(time.time()))
         if current_day != new_day:
-            list = AddressBook.manageBdays(self.ab, self.conf)
+            list = AddressBook.manage_bdays(self.ab, self.conf)
             if len(list) > 0:
                 self.icon.set_from_file(imageslocation + 'birthday.png')
             else:
@@ -218,7 +218,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
         '''open window that includes all birthdays'''
         self.showbd = self.gtk_get_top_window('', False, False)
 
-        list = self.ab.manageBdays(self.conf)
+        list = self.ab.manage_bdays(self.conf)
 
         box = gtk.HBox()
         box.set_border_width(5)

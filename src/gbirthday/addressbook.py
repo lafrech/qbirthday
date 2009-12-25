@@ -42,7 +42,8 @@ class AddressBook:
         else:
             self.bdays[birthday] = [name]
 
-    def manageBdays(self, conf):
+    def manage_bdays(self, conf):
+        '''Get current birthdays in specified period.'''
         now = date.today()
         bdayKeys = self.bdays.keys()
         birthday_list = []
