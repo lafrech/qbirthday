@@ -13,6 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, see <http://www.gnu.org/licenses/>.
 #}}}
+'''AddressBook module'''
 import datetime
 from datetime import date
 
@@ -45,7 +46,7 @@ class AddressBook:
     def manage_bdays(self, conf):
         '''Get current birthdays in specified period.'''
         now = date.today()
-        bdayKeys = self.bdays.keys()
+        bday_keys = self.bdays.keys()
         birthday_list = []
         temporal = []
 
@@ -55,14 +56,14 @@ class AddressBook:
             for k in range(len(self.bdays)):
                 sDateDay = str(sDate.day)
 
-                for name in self.bdays[bdayKeys[k]]:
+                for name in self.bdays[bday_keys[k]]:
                     if len(sDateDay) != 2:
                         sDateDay = '0' + sDateDay
                     sDateMonth = str(sDate.month)
                     if len(sDateMonth) != 2:
                         sDateMonth = '0' + sDateMonth
 
-                    if bdayKeys[k].find('-' + sDateMonth
+                    if bday_keys[k].find('-' + sDateMonth
                                         + '-' + sDateDay) != -1:
                         if d == 0:
                             pic = 'birthdaytoday.png'
@@ -71,7 +72,7 @@ class AddressBook:
                         else:
                             pic = 'birthdaynext.png'
 
-                        bday = bdayKeys[k]
+                        bday = bday_keys[k]
 
                         year = bday[:4]
                         year = sDate.year - int(year)
@@ -84,7 +85,7 @@ class AddressBook:
     def checktoday(self):
 
         now = date.today()
-        bdayKeys = self.bdays.keys()
+        bday_keys = self.bdays.keys()
         birthday_today = False
 
         for d in range(0, 1):
@@ -98,7 +99,7 @@ class AddressBook:
                 if len(sDateMonth) != 2:
                     sDateMonth = '0' + sDateMonth
 
-                if bdayKeys[k].find('-' + sDateMonth + '-'
+                if bday_keys[k].find('-' + sDateMonth + '-'
                                     + sDateDay) != -1:
                     if d == 0:
                         birthday_today = True
