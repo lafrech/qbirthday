@@ -77,38 +77,23 @@ class StatusIcon():
             self.icon.set_from_file(imageslocation + 'birthdayred.png')
             #self.icon.set_blinking(True)
 
-            # show notification of birthdays today
-            try:
-                import pynotify
-                if pynotify.init("gbirthday"):
-                    # get names of birthdays today
-                    bday_names = []
-                    for item in list:
-                        if item[0] != 'birthdaytoday.png':
-                            break
-                        bday_names.append(item[2])
-                    bday_names = _(' and ').join(bday_names)
-                    notify = pynotify.Notification(_("Birthday today:"),
-                            bday_names)
-                    notify.show()
-            except ImportError:
-                pass
-
         # show notification of birthdays in the future
         try:
             import pynotify
             if pynotify.init("gbirthday"):
-                # get names of birthdays today
-                bday_names = []
                 for item in list:
                     day = int(item[3])
-                    if day < 10 and day > 0:
+                    noty_string = None
+                    if day < 10 and day > 0: # TODO: doesn't work without
+                                             #       day > 0 check
+                        noty_string = _("Birthday in %s Days:" % day)
+                    elif day == 0:
+                        noty_string = _("Birthday today:")
+                    if day < 10:
                         notify = pynotify.Notification(
-                                _("Birthday in %s Days:" % day),
+                                noty_string,
                                 item[2])
                         notify.show()
-                    bday_names.append(item[2])
-                bday_names = _(' and ').join(bday_names)
         except ImportError:
             pass
 
