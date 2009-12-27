@@ -107,6 +107,7 @@ class Conf:
         '''Initialize with default values.'''
         self.firstday = -2
         self.lastday = 30
+        self.notify_future_bdays = 10
         self.used_databases = ['evolution']
         self.csv_files = None
 
@@ -119,6 +120,11 @@ class Conf:
         self.csv_files = self.settings.get("main", "csv_files")
         used_db = self.settings.get("main", "databases")
         self.used_databases = used_db.split("|")
+        try:
+            self.notify_future_bdays = self.settings.get("main",
+                        "notify_future_bdays")
+        except ConfigParser.NoOptionError:
+            self.notify_future_bdays = 10
         try:
             MySQL.host = self.settings.get("mysql", "host")
             MySQL.port = self.settings.get("mysql", "port")
@@ -135,6 +141,8 @@ class Conf:
         '''Save current settings from this object to config parser.'''
         self.settings.set("main", "firstday", self.firstday)
         self.settings.set("main", "lastday", self.lastday)
+        self.settings.set("main", "notify_future_bdays",
+                self.notify_future_bdays)
         used_db = ""
         for db in self.used_databases:
             used_db += db
