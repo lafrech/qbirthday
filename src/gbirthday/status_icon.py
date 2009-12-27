@@ -88,11 +88,29 @@ class StatusIcon():
                             break
                         bday_names.append(item[2])
                     bday_names = _(' and ').join(bday_names)
-                    notify = pynotify.Notification(_("Birthday today"),
+                    notify = pynotify.Notification(_("Birthday today:"),
                             bday_names)
                     notify.show()
             except ImportError:
                 pass
+
+        # show notification of birthdays in the future
+        try:
+            import pynotify
+            if pynotify.init("gbirthday"):
+                # get names of birthdays today
+                bday_names = []
+                for item in list:
+                    day = int(item[3])
+                    if day < 10 and day > 0:
+                        notify = pynotify.Notification(
+                                _("Birthday in %s Days:" % day),
+                                item[2])
+                        notify.show()
+                    bday_names.append(item[2])
+                bday_names = _(' and ').join(bday_names)
+        except ImportError:
+            pass
 
     def make_menu(self, event_button, event_time, icon):
         '''create menu window'''
