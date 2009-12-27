@@ -77,6 +77,23 @@ class StatusIcon():
             self.icon.set_from_file(imageslocation + 'birthdayred.png')
             #self.icon.set_blinking(True)
 
+            # show notification of birthdays today
+            try:
+                import pynotify
+                if pynotify.init("gbirthday"):
+                    # get names of birthdays today
+                    bday_names = []
+                    for item in list:
+                        if item[0] != 'birthdaytoday.png':
+                            break
+                        bday_names.append(item[2])
+                    bday_names = _(' and ').join(bday_names)
+                    notify = pynotify.Notification(_("Birthday today"),
+                            bday_names)
+                    notify.show()
+            except ImportError:
+                pass
+
     def make_menu(self, event_button, event_time, icon):
         '''create menu window'''
         menu = gtk.Menu()

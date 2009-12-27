@@ -56,12 +56,6 @@ try:
 except ImportError:
     _ = lambda x: x
 
-NOTIFICATION = True
-try:
-    import pynotify
-except ImportError:
-    NOTIFICATION = False
-
 # own imports
 from databases import *
 from status_icon import *
