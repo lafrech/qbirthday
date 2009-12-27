@@ -107,7 +107,7 @@ class Conf:
         '''Initialize with default values.'''
         self.firstday = -2
         self.lastday = 30
-        self.notify_future_bdays = 10
+        self.notify_future_bdays = 0
         self.used_databases = ['evolution']
         self.csv_files = None
 
@@ -124,7 +124,7 @@ class Conf:
             self.notify_future_bdays = self.settings.get("main",
                         "notify_future_bdays")
         except ConfigParser.NoOptionError:
-            self.notify_future_bdays = 10
+            self.notify_future_bdays = 0
         try:
             MySQL.host = self.settings.get("mysql", "host")
             MySQL.port = self.settings.get("mysql", "port")

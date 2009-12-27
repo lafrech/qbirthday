@@ -84,12 +84,13 @@ class StatusIcon():
                 for item in list:
                     day = int(item[3])
                     noty_string = None
-                    if day < 10 and day > 0: # TODO: doesn't work without
-                                             #       day > 0 check
+                    if day < self.conf.notify_future_bdays and day > 0:
+                        # TODO: doesn't work without
+                        #       day > 0 check
                         noty_string = _("Birthday in %s Days:" % day)
                     elif day == 0:
                         noty_string = _("Birthday today:")
-                    if day < 10:
+                    if day < 10 and noty_string:
                         notify = pynotify.Notification(
                                 noty_string,
                                 item[2])
@@ -385,8 +386,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
         table.attach(label, 0, 1, 1, 2)
         label.show()
 
-        label = gtk.Label(_('Database'))
+        label = gtk.Label(_('Notification: Future birthdays'))
         table.attach(label, 0, 1, 2, 3)
+        label.show()
+
+        label = gtk.Label(_('Database'))
+        table.attach(label, 0, 1, 3, 4)
         label.show()
 
         def get_new_preferences(uno, option, spin):
@@ -397,6 +402,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
                 self.conf.firstday = spin.get_value_as_int()
             elif option == "lastday":
                 self.conf.lastday = spin.get_value_as_int()
+            elif option == "notify_future":
+                self.conf.notify_future_bdays = spin.get_value_as_int()
             else:
                 show_error_msg(_('Internal Error: Option %s not valid.')
                                 % option)
@@ -413,6 +420,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
         spin = gtk.SpinButton(next, climb_rate=0.0, digits=0)
         spin.connect("value-changed", get_new_preferences, "lastday", spin)
         table.attach(spin, 1, 2, 1, 2)
+        spin.show()
+
+        future = gtk.Adjustment(int(self.conf.notify_future_bdays),
+                    lower=1, upper=90,
+                    step_incr=1, page_incr=0, page_size=0)
+        spin = gtk.SpinButton(future, climb_rate=0.0, digits=0)
+        spin.connect("value-changed", get_new_preferences, "notify_future",
+                    spin)
+        table.attach(spin, 1, 2, 2, 3)
         spin.show()
 
         def db_select(widget, db):
@@ -450,7 +466,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
                 hbox.pack_start(button, False, False, 1)
             hbox.show()
             chkDB.show()
-        table.attach(vbox, 1, 2, 2, 3)
+        table.attach(vbox, 1, 2, 3, 4)
         vbox.show()
 
         box.pack_start(table, True, True, 8)
