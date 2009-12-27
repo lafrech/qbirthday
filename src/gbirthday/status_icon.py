@@ -84,13 +84,13 @@ class StatusIcon():
                 for item in list:
                     day = int(item[3])
                     noty_string = None
-                    if day < self.conf.notify_future_bdays and day > 0:
+                    if day <= self.conf.notify_future_bdays and day > 0:
                         # TODO: doesn't work without
                         #       day > 0 check
                         noty_string = _("Birthday in %s Days:" % day)
                     elif day == 0:
                         noty_string = _("Birthday today:")
-                    if day < 10 and noty_string:
+                    if noty_string:
                         notify = pynotify.Notification(
                                 noty_string,
                                 item[2])
@@ -423,7 +423,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
         spin.show()
 
         future = gtk.Adjustment(int(self.conf.notify_future_bdays),
-                    lower=1, upper=90,
+                    lower=0, upper=int(self.conf.lastday),
                     step_incr=1, page_incr=0, page_size=0)
         spin = gtk.SpinButton(future, climb_rate=0.0, digits=0)
         spin.connect("value-changed", get_new_preferences, "notify_future",

@@ -123,6 +123,7 @@ class Conf:
         try:
             self.notify_future_bdays = self.settings.get("main",
                         "notify_future_bdays")
+            self.notify_future_bdays = int(self.notify_future_bdays)
         except ConfigParser.NoOptionError:
             self.notify_future_bdays = 0
         try:
