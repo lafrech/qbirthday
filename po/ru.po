@@ -113,7 +113,7 @@ msgstr "Alexander Logvinov <ports@logvinov.com>"
 
 #: ../src/gbirthday/status_icon.py:200
 msgid "There are no translations or the translator doesn't want to get credits for that."
-msgstr ""
+msgstr "Перевод не доступен или переводчик решил не сообщать  свое имя."
 
 #: ../src/gbirthday/status_icon.py:255
 msgid "Birthdays"
