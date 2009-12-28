@@ -158,7 +158,7 @@ msgstr "Следующие Дни рождения"
 
 #: ../src/gbirthday/status_icon.py:389
 msgid "Notification: Future birthdays"
-msgstr ""
+msgstr "Уведомления: будущие Дни рождения"
 
 #: ../src/gbirthday/status_icon.py:393 ../src/gbirthday/status_icon.py:612
 msgid "Database"
