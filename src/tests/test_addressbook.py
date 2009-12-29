@@ -17,13 +17,14 @@
 Testing the addressbook module
 '''
 from nose import with_setup
+import gbirthday
 
 AB = None
 
 def setup():
     '''Setup addressbook.'''
     global AB
-    AB = 5
+    AB = gbirthday.AddressBook()
 
 def teardown():
     '''Clean addressbook.'''
@@ -33,11 +34,9 @@ def teardown():
 @with_setup(setup, teardown)
 def test1():
     '''dummy1'''
-    assert AB == 5
-    global AB
-    AB = 4
+    assert AB
 
 @with_setup(setup, teardown)
 def test2():
     '''dummy2'''
-    assert AB == 5
+    assert AB

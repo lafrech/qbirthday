@@ -17,4 +17,3 @@
 Test module of gbirthday
 (nosetests)
 '''
-import gbirthday
