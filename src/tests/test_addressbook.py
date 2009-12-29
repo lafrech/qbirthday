@@ -14,7 +14,30 @@
 # along with this program; if not, see <http://www.gnu.org/licenses/>.
 #}}}
 '''
-Test module of gbirthday
-(nosetests)
+Testing the addressbook module
 '''
-import gbirthday
+from nose import with_setup
+
+AB = None
+
+def setup():
+    '''Setup addressbook.'''
+    global AB
+    AB = 5
+
+def teardown():
+    '''Clean addressbook.'''
+    global AB
+    AB = None
+
+@with_setup(setup, teardown)
+def test1():
+    '''dummy1'''
+    assert AB == 5
+    global AB
+    AB = 4
+
+@with_setup(setup, teardown)
+def test2():
+    '''dummy2'''
+    assert AB == 5
