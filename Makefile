@@ -7,6 +7,7 @@ version = 0.5.6
 install = install -p
 mkdir = mkdir -p
 cp = cp -a
+tar = tar --exclude=.git --exclude=*.pyc
 
 default:
 	echo Nothing to do.
@@ -40,11 +41,10 @@ uninstall:
 	rm -rvf $(DESTDIR)$(sitelib)/gbirthday
 
 tar.gz:	clean
-	tar --exclude=.git \
-		-zcf gbirthday-$(version).tar.gz *
+	$(tar) -zcf gbirthday-$(version).tar.gz *
 
 tar.xz: clean
-	tar --use-compress-program=xz --exclude=.git \
+	$(tar) --use-compress-program=xz \
 		-cf gbirthday-$(version).tar.xz *
 
 pot:
