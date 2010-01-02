@@ -4,6 +4,7 @@
 	Don't blink anymore, instead show red icon
 	Show notification of todays' birthdays
 	Show notification of next birthdays (configurable)
+	Fixed fedora bugs: #551795
 
 0.5.6
 	Without evolution addressbook, don't crash (fedora bug #548007)
