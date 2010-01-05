@@ -51,7 +51,7 @@ class DataBase:
         # the widget for additional config
         self.widget = widget
 
-    def parse(self, ab, conf):
+    def parse(self, addressbook, conf):
         '''load file / open database connection'''
         pass
 
@@ -102,9 +102,9 @@ class CSV(DataBase):
         self.ab = None
         self.conf = None
 
-    def parse(self, ab, conf):
+    def parse(self, addressbook, conf):
         '''open and parse file'''
-        self.ab = ab
+        self.ab = addressbook
         self.conf = conf
         for filename in conf.csv_files:
             if (os.path.exists(filename)):
@@ -114,7 +114,7 @@ class CSV(DataBase):
                         if len(line.split(sep)) > 1:
                             date = line.split(sep, 1)[0]
                             name = line.split(sep, 1)[1][:-1]
-                            ab.add(name, date)
+                            addressbook.add(name, date)
                             break
             else:
                 show_error_msg(_('Could not save, CVS-file not set.')
@@ -129,11 +129,11 @@ class CSV(DataBase):
             return
         filename = self.conf.csv_files[0]
         if (os.path.exists(filename)):
-            f = file(self.conf.csv_files[0], 'a')
+            output_file = file(self.conf.csv_files[0], 'a')
         else:
-            f = file(self.conf.csv_files[0], 'w')
-        f.write(birthday + ', ' + name + '\n')
-        f.close()
+            output_file = file(self.conf.csv_files[0], 'w')
+        output_file.write(birthday + ', ' + name + '\n')
+        output_file.close()
         self.ab.add(name, birthday)
 
     def remove_file(self, widget, combobox, conf):
@@ -227,7 +227,7 @@ class Evolution(DataBase):
                         '.evolution/addressbook/local/')
         self._splitRE = re.compile(r'\r?\n')
 
-    def parse(self, book=None, ab=None, conf=None):
+    def parse(self, book=None, addressbook=None, conf=None):
         '''load and parse parse Evolution data files'''
         try:
             import evolution
@@ -243,9 +243,9 @@ class Evolution(DataBase):
                 # contact.props.birth_date{.year, .month, .day} non-existing
                 # -> using vcard
                 vcard = contact.get_vcard_string()
-                self.parse_birthday((contact.props.full_name, vcard), ab)
+                self.parse_birthday((contact.props.full_name, vcard), addressbook)
 
-    def parse_birthday(self, data, ab):
+    def parse_birthday(self, data, addressbook):
         '''parse evolution addressbook. the file is in VCard format.'''
         full_name, vcard = data
         lines = self._splitRE.split(vcard)
@@ -253,7 +253,7 @@ class Evolution(DataBase):
             # if BDAY is in vcard, use this as birthday
             if line.startswith('BDAY'):
                 label, value = line.split(':', 1)
-                ab.add(full_name, value)
+                addressbook.add(full_name, value)
 
 
 class Lightning(DataBase):
@@ -291,11 +291,11 @@ class Lightning(DataBase):
         else:
             show_error_msg(_('Error reading profile file: %s' % configfile))
 
-    def parse(self, ab, conf):
+    def parse(self, addressbook, conf):
         '''open thunderbird sqlite-database'''
         if (os.path.exists(self.THUNDERBIRD_LOCATION)):
             self.get_config_file(self.THUNDERBIRD_LOCATION)
-        self.ab = ab
+        self.ab = addressbook
 
     def connect(self, filename):
         '''"connect" to sqlite3-database'''
@@ -411,7 +411,7 @@ class MySQL(DataBase):
             show_error_msg(_('Could not connect to MySQL-Server')
                             + str(msg))
 
-    def parse(self, ab, conf):
+    def parse(self, addressbook, conf):
         '''connect to mysql-database and get data'''
         self.connect()
         try:
@@ -420,7 +420,7 @@ class MySQL(DataBase):
             self.cursor.execute(qry)
             rows = self.cursor.fetchall()
             for row in rows:
-                ab.add(row[0], str(row[1]))
+                addressbook.add(row[0], str(row[1]))
         except Exception, msg:
             show_error_msg(_('Could not execute MySQL-query')
                             + ': %s\n %s' % (qry, str(msg)))
@@ -501,13 +501,13 @@ class Sunbird(Lightning):
     def __init__(self):
         Lightning.__init__(self, title='Sunbird/Iceowl', type='sunbird',
                             has_config=False)
-        self.MOZILLA_LOCATION = os.path.join(os.environ['HOME'],
+        self.mozilla_location = os.path.join(os.environ['HOME'],
                 '.mozilla')
 
     # load file / open database connection
-    def parse(self, ab, conf):
-        sunbird = os.path.join(self.MOZILLA_LOCATION, 'sunbird')
-        iceowl = os.path.join(self.MOZILLA_LOCATION, 'iceowl')
+    def parse(self, addressbook, conf):
+        sunbird = os.path.join(self.mozilla_location, 'sunbird')
+        iceowl = os.path.join(self.mozilla_location, 'iceowl')
 
         if (os.path.exists(sunbird)):
             # extract path from profiles.ini

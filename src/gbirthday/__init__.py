@@ -165,7 +165,7 @@ def main():
     addressbook.bdays = {}
     for db in databases:
         if (db.TYPE in conf.used_databases):
-            db.parse(ab=addressbook, conf=conf)
+            db.parse(addressbook, conf)
 
     # show status icon
     status_icon = StatusIcon(addressbook, conf)
