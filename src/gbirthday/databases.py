@@ -100,6 +100,7 @@ class CSV(DataBase):
                             type='csv')
         self._seperators = ['; ', ', ', ': ']   # possible seperators
         self.ab = None
+        self.conf = None
 
     def parse(self, ab, conf):
         '''open and parse file'''

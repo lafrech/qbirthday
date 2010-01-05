@@ -38,9 +38,8 @@ import datetime
 from datetime import date
 import time
 
-""" parse locales from python module
-Do you say "1. January" or "January 1."?
-"""
+# parse locales from python module
+# Do you say "1. January" or "January 1."?
 import locale
 locale.setlocale(locale.LC_ALL, '')
 DAY_AT_PLACE, MONTH_AT_PLACE = 1, 2
@@ -65,28 +64,15 @@ databases = [Evolution(), Lightning(), Sunbird(), CSV(), MySQL()]
 CURRENT_DAY = time.strftime("%d", time.localtime(time.time()))
 
 
-# not needed atm, will be possibly deleted
-
-
-def save_list(l):
-    '''create a string that can be saved in a file'''
-    return str(l)[2:-2].replace("', '", ',')
-
-
-def start(ab, conf):
-    '''(re)create AdressBook and parse data'''
-    ab.bdays = {}
-    for db in databases:
-        if (db.TYPE in conf.used_databases):
-            db.parse(ab=ab, conf=conf)
-
-
 class Conf:
+    '''Class for handle all configurations.'''
 
     def __init__(self):
         '''Try to read config file or initialize with default values.'''
         import ConfigParser
         self.firstday = self.lastday = None
+        self.notify_future_bdays = None
+        self.used_databases = None
         self.ab = None
         self.csv_files = None
         self.MySQL = None
@@ -168,8 +154,6 @@ class Conf:
         self.sync_to_settings()
         self.settings.write(file(os.environ['HOME'] + "/.gbirthdayrc", "w"))
 
-showbdcheck = None
-
 
 def main():
     '''Load settings, start status icon and get to work.'''
@@ -177,11 +161,14 @@ def main():
     conf = Conf()
 
     # load data and fill AddressBook
-    ab = AddressBook()
-    start(ab, conf)
+    addressbook = AddressBook()
+    addressbook.bdays = {}
+    for db in databases:
+        if (db.TYPE in conf.used_databases):
+            db.parse(ab=addressbook, conf=conf)
 
     # show status icon
-    status_icon = StatusIcon(ab, conf)
+    status_icon = StatusIcon(addressbook, conf)
 
     # check every 60 seconds for new day
     # TODO: update until end of day according to current clock settings?
