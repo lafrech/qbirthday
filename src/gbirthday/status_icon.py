@@ -116,7 +116,7 @@ class StatusIcon():
             new_menu = gtk.ImageMenuItem(_('Stop blinking'))
             new_img = gtk.Image()
             new_img.set_from_stock(gtk.STOCK_STOP, gtk.ICON_SIZE_MENU,)
-            new_menu.set_image(blink_img)
+            new_menu.set_image(new_img)
             new_menu.show()
             new_menu.connect_object('activate', self.stop_blinking,
                             'stop blinking')
