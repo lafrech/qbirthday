@@ -62,7 +62,7 @@ from status_icon import *
 
 # list of all availabe databases
 databases = [Evolution(), Lightning(), Sunbird(), CSV(), MySQL()]
-current_day = time.strftime("%d", time.localtime(time.time()))
+CURRENT_DAY = time.strftime("%d", time.localtime(time.time()))
 
 
 # not needed atm, will be possibly deleted

@@ -13,6 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, see <http://www.gnu.org/licenses/>.
 #}}}
+'''StatusIcon module'''
 import gtk
 import time
 import os
@@ -21,6 +22,7 @@ import os
 from addressbook import *
 from __init__ import databases, VERSION
 from __init__ import MONTH_AT_PLACE, DAY_AT_PLACE
+from __init__ import CURRENT_DAY
 
 imageslocation = os.sep.join(__file__.split(os.sep)[:-1]) + "/pics/"
 
@@ -56,12 +58,11 @@ class StatusIcon():
 
     def check_new_day(self):
         '''check for new birthday (check every 60 seconds)'''
-        from __init__ import current_day
-
+        global CURRENT_DAY # TODO: import from __init__ here, fails whyever
         new_day = time.strftime("%d", time.localtime(time.time()))
-        if current_day != new_day:
+        if CURRENT_DAY != new_day:
+            CURRENT_DAY = new_day
             self._reload_set_icon()
-            current_day = new_day
         return True
 
     def _reload_set_icon(self):
