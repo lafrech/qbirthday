@@ -24,16 +24,16 @@ from __init__ import databases, VERSION
 from __init__ import MONTH_AT_PLACE, DAY_AT_PLACE
 from __init__ import CURRENT_DAY
 
-imageslocation = os.sep.join(__file__.split(os.sep)[:-1]) + "/pics/"
+IMAGESLOCATION = os.sep.join(__file__.split(os.sep)[:-1]) + "/pics/"
 
 
 class StatusIcon():
 
-    def __init__(self, ab, conf):
+    def __init__(self, addressbook, conf):
         '''create status icon'''
-        self.icon = gtk.status_icon_new_from_file(imageslocation +
+        self.icon = gtk.status_icon_new_from_file(IMAGESLOCATION +
                             'birthday.png')
-        self.ab = ab
+        self.addressbook = addressbook
         self.conf = conf
         self.showbd = None
         self.dlg = None
@@ -41,7 +41,7 @@ class StatusIcon():
         self.icon.connect('popup-menu', self.on_right_click)
         self.icon.connect('button_press_event', self.on_left_click, 20)
 
-        def on_url(d, link, data):
+        def on_url(dialog, link, data):
             '''start default browser with gbirthday-website on click'''
             import webbrowser
             webbrowser.open('http://gbirthday.sourceforge.net/')
@@ -50,10 +50,10 @@ class StatusIcon():
 
     def reload_gbirthday(self, dummy):
         '''reload gbirthday, reload data from databases'''
-        self.ab.bdays = {}
+        self.addressbook.bdays = {}
         for db in databases:
             if (db.TYPE in self.conf.used_databases):
-                db.parse(ab=self.ab, conf=self.conf)
+                db.parse(ab=self.addressbook, conf=self.conf)
         self._reload_set_icon()
 
     def check_new_day(self):
@@ -66,16 +66,16 @@ class StatusIcon():
         return True
 
     def _reload_set_icon(self):
-        list = self.ab.manage_bdays(self.conf)
+        list = self.addressbook.manage_bdays(self.conf)
         # check if a birthday is in specified period
         if len(list) > 0:
-            self.icon.set_from_file(imageslocation + 'birthday.png')
+            self.icon.set_from_file(IMAGESLOCATION + 'birthday.png')
         else:
-            self.icon.set_from_file(imageslocation + 'nobirthday.png')
+            self.icon.set_from_file(IMAGESLOCATION + 'nobirthday.png')
 
         # check if birthday today
-        if AddressBook.checktoday(self.ab):
-            self.icon.set_from_file(imageslocation + 'birthdayred.png')
+        if AddressBook.checktoday(self.addressbook):
+            self.icon.set_from_file(IMAGESLOCATION + 'birthdayred.png')
             #self.icon.set_blinking(True)
 
         # show notification of birthdays in the future
@@ -164,9 +164,9 @@ class StatusIcon():
         dlg.set_version(VERSION)
         dlg.set_comments(_('Birthday reminder'))
         dlg.set_name("GBirthday")
-        image = gtk.gdk.pixbuf_new_from_file(imageslocation + 'gbirthday.png')
+        image = gtk.gdk.pixbuf_new_from_file(IMAGESLOCATION + 'gbirthday.png')
         dlg.set_logo(image)
-        dlg.set_icon_from_file(imageslocation + 'birthday.png')
+        dlg.set_icon_from_file(IMAGESLOCATION + 'birthday.png')
         dlg.set_copyright(u'Copyright \u00A9 2007 Alex Mallo, 2009 Andreas Bresser, 2009 Thomas Spura')
         dlg.set_license(
 '''Licensed under the GNU General Public License Version 2
@@ -236,7 +236,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
         '''open window that includes all birthdays'''
         self.showbd = self.gtk_get_top_window('', False, False)
 
-        list = self.ab.manage_bdays(self.conf)
+        list = self.addressbook.manage_bdays(self.conf)
 
         box = gtk.HBox()
         box.set_border_width(5)
@@ -265,7 +265,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
         fila = fila + 1
         for cumple in list:
             image = gtk.Image()
-            image.set_from_file(imageslocation + cumple[0])
+            image.set_from_file(IMAGESLOCATION + cumple[0])
             table.attach(image, 0, 1, fila, fila + 1)
             image.show()
 
@@ -662,7 +662,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
         else:
             window.set_position(gtk.WIN_POS_MOUSE)
         window.set_title(title)
-        window.set_icon_from_file(imageslocation + 'birthday.png')
+        window.set_icon_from_file(IMAGESLOCATION + 'birthday.png')
         return window
 
 if __name__ == "__main__":
