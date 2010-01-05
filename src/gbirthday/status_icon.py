@@ -102,8 +102,6 @@ class StatusIcon():
     def make_menu(self, event_button, event_time, icon):
         '''create menu window'''
         menu = gtk.Menu()
-        cerrar = gtk.Image()
-        cerrar.set_from_stock(gtk.STOCK_CLOSE, gtk.ICON_SIZE_MENU,)
         recargar = gtk.ImageMenuItem(_('Reload'))
         recarga_img = gtk.Image()
         recarga_img.set_from_stock(gtk.STOCK_REFRESH, gtk.ICON_SIZE_MENU,)
@@ -149,10 +147,12 @@ class StatusIcon():
         menu.append(about_menu)
 
         salir = gtk.ImageMenuItem(_('Quit'))
-        salir.set_image(cerrar)
-        salir.show()
-        salir.connect_object("activate", self.finish_gbirthday, "file.quit")
-        menu.append(salir)
+        close_img = gtk.Image()
+        close_img.set_from_stock(gtk.STOCK_CLOSE, gtk.ICON_SIZE_MENU,)
+        close_menu.set_image(close_img)
+        close_menu.show()
+        close_menu.connect_object("activate", self.finish_gbirthday, "file.quit")
+        menu.append(close_menu)
         menu.popup(None, None,
             gtk.status_icon_position_menu, event_button,
             event_time, icon)
