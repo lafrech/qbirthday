@@ -68,9 +68,9 @@ class StatusIcon():
 
     def _reload_set_icon(self):
         '''Check, if there is a birthday and set icon and notify accordingly.'''
-        list = self.addressbook.manage_bdays(self.conf)
+        birthday_list = self.addressbook.manage_bdays(self.conf)
         # check if a birthday is in specified period
-        if len(list) > 0:
+        if len(birthday_list) > 0:
             self.icon.set_from_file(IMAGESLOCATION + 'birthday.png')
         else:
             self.icon.set_from_file(IMAGESLOCATION + 'nobirthday.png')
@@ -84,7 +84,7 @@ class StatusIcon():
         try:
             import pynotify
             if pynotify.init("gbirthday"):
-                for item in list:
+                for item in birthday_list:
                     day = int(item[3])
                     noty_string = None
                     if day <= self.conf.notify_future_bdays and day > 0:
@@ -238,7 +238,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
         '''open window that includes all birthdays'''
         self.showbd = self.gtk_get_top_window('', False, False)
 
-        list = self.addressbook.manage_bdays(self.conf)
+        bday_list = self.addressbook.manage_bdays(self.conf)
 
         box = gtk.HBox()
         box.set_border_width(5)
@@ -254,7 +254,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
         table.attach(event_box, 0, 6, 0, 1)
         event_box.show()
         label = gtk.Label("GBirthday")
-        if len(list) > 0:
+        if len(bday_list) > 0:
             label.set_markup('<b>%s</b>' % _('Birthdays'))
         else:
             label.set_markup('<b>\n    %s    \n</b>'
@@ -265,7 +265,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
         event_box.modify_bg(gtk.STATE_NORMAL,
                     event_box.rc_get_style().bg[gtk.STATE_SELECTED])
         fila = fila + 1
-        for cumple in list:
+        for cumple in bday_list:
             image = gtk.Image()
             image.set_from_file(IMAGESLOCATION + cumple[0])
             table.attach(image, 0, 1, fila, fila + 1)
@@ -411,24 +411,24 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
                 show_error_msg(_('Internal Error: Option %s not valid.')
                                 % option)
 
-        past = gtk.Adjustment(int(self.conf.firstday), lower=-30,
+        adjustment = gtk.Adjustment(int(self.conf.firstday), lower=-30,
                     upper=0, step_incr=-1, page_incr=0, page_size=0)
-        spin = gtk.SpinButton(past, climb_rate=0.0, digits=0)
+        spin = gtk.SpinButton(adjustment, climb_rate=0.0, digits=0)
         spin.connect("value-changed", get_new_preferences, "firstday", spin)
         table.attach(spin, 1, 2, 0, 1)
         spin.show()
 
-        next = gtk.Adjustment(int(self.conf.lastday), lower=0, upper=90,
+        adjustment = gtk.Adjustment(int(self.conf.lastday), lower=0, upper=90,
                     step_incr=1, page_incr=0, page_size=0)
-        spin = gtk.SpinButton(next, climb_rate=0.0, digits=0)
+        spin = gtk.SpinButton(adjustment, climb_rate=0.0, digits=0)
         spin.connect("value-changed", get_new_preferences, "lastday", spin)
         table.attach(spin, 1, 2, 1, 2)
         spin.show()
 
-        future = gtk.Adjustment(int(self.conf.notify_future_bdays),
+        adjustment = gtk.Adjustment(int(self.conf.notify_future_bdays),
                     lower=0, upper=int(self.conf.lastday),
                     step_incr=1, page_incr=0, page_size=0)
-        spin = gtk.SpinButton(future, climb_rate=0.0, digits=0)
+        spin = gtk.SpinButton(adjustment, climb_rate=0.0, digits=0)
         spin.connect("value-changed", get_new_preferences, "notify_future",
                     spin)
         table.attach(spin, 1, 2, 2, 3)
@@ -548,9 +548,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
         table.attach(name, 1, 2, 0, 1)
         name.show()
 
-        date = gtk.Calendar()
-        table.attach(date, 1, 2, 1, 2)
-        date.show()
+        calendar = gtk.Calendar()
+        table.attach(calendar, 1, 2, 1, 2)
+        calendar.show()
 
         combobox = gtk.combo_box_new_text()
         for db in databases:
@@ -563,24 +563,24 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
         box.pack_start(table, True, True, 8)
         table.show()
 
+        def finish_add(uno, combo, name, calend, window):
+            '''save new added person'''
+            for db in databases:
+                if db.TITLE == combo.get_active_text():
+                    calend = list(calend.get_date())
+                    calend[1] += 1
+                    db.add(name.get_text(), datetime.date(*calend))
+            window.destroy()
+
         button = gtk.Button(_('Save & Close'))
         box.pack_start(button, False, False, 2)
-        button.connect("clicked", self.finish_add, combobox, name, date,
+        button.connect("clicked", finish_add, combobox, name, date,
                         add_window)
         button.show()
 
         box.show()
         add_window.set_border_width(5)
         add_window.show()
-
-    def finish_add(self, uno, combo, name, calend, window):
-        '''save new added person'''
-        for db in databases:
-            if db.TITLE == combo.get_active_text():
-                calend = list(calend.get_date())
-                calend[1] += 1
-                db.add(name.get_text(), datetime.date(*calend))
-        window.destroy()
 
     def add_from_file(self, widget, window):
         window.destroy()
@@ -636,9 +636,17 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
         table.attach(label, 1, 2, 3, 4)
         label.show()
 
+        def finish_add(uno, combo, name, calend, window):
+            '''save new added person'''
+            for db in databases:
+                if db.TITLE == combo.get_active_text():
+                    calend = list(calend.get_date())
+                    calend[1] += 1
+                    db.add(name.get_text(), datetime.date(*calend))
+            window.destroy()
         button = gtk.Button(_('Save & Close'))
         box.pack_start(button, False, False, 2)
-        button.connect("clicked", self.finish_add, combobox, db_combo, '',
+        button.connect("clicked", finish_add, combobox, db_combo, '',
                         add_window)
         button.show()
 
