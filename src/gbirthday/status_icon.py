@@ -28,6 +28,7 @@ IMAGESLOCATION = os.sep.join(__file__.split(os.sep)[:-1]) + "/pics/"
 
 
 class StatusIcon():
+    '''Class to show status icon'''
 
     def __init__(self, addressbook, conf):
         '''create status icon'''
@@ -66,6 +67,7 @@ class StatusIcon():
         return True
 
     def _reload_set_icon(self):
+        '''Check, if there is a birthday and set icon and notify accordingly.'''
         list = self.addressbook.manage_bdays(self.conf)
         # check if a birthday is in specified period
         if len(list) > 0:
@@ -102,57 +104,57 @@ class StatusIcon():
     def make_menu(self, event_button, event_time, icon):
         '''create menu window'''
         menu = gtk.Menu()
-        recargar = gtk.ImageMenuItem(_('Reload'))
-        recarga_img = gtk.Image()
-        recarga_img.set_from_stock(gtk.STOCK_REFRESH, gtk.ICON_SIZE_MENU,)
-        recargar.set_image(recarga_img)
-        recargar.show()
-        recargar.connect_object('activate', self.reload_gbirthday, None)
-        menu.append(recargar)
+        new_menu = gtk.ImageMenuItem(_('Reload'))
+        new_img = gtk.Image()
+        new_img.set_from_stock(gtk.STOCK_REFRESH, gtk.ICON_SIZE_MENU,)
+        new_menu.set_image(new_img)
+        new_menu.show()
+        new_menu.connect_object('activate', self.reload_gbirthday, None)
+        menu.append(new_menu)
 
         if self.icon.get_blinking():
-            blink_menu = gtk.ImageMenuItem(_('Stop blinking'))
-            blink_img = gtk.Image()
-            blink_img.set_from_stock(gtk.STOCK_STOP, gtk.ICON_SIZE_MENU,)
-            blink_menu.set_image(blink_img)
-            blink_menu.show()
-            blink_menu.connect_object('activate', self.stop_blinking,
+            new_menu = gtk.ImageMenuItem(_('Stop blinking'))
+            new_img = gtk.Image()
+            new_img.set_from_stock(gtk.STOCK_STOP, gtk.ICON_SIZE_MENU,)
+            new_menu.set_image(blink_img)
+            new_menu.show()
+            new_menu.connect_object('activate', self.stop_blinking,
                             'stop blinking')
-            menu.append(blink_menu)
+            menu.append(new_menu)
 
-        add_menu = gtk.ImageMenuItem(_('Add'))
-        add_img = gtk.Image()
-        add_img.set_from_stock(gtk.STOCK_ADD, gtk.ICON_SIZE_MENU,)
-        add_menu.set_image(add_img)
-        add_menu.show()
-        add_menu.connect_object("activate", self.add, "add birthday")
-        menu.append(add_menu)
+        new_menu = gtk.ImageMenuItem(_('Add'))
+        new_img = gtk.Image()
+        new_img.set_from_stock(gtk.STOCK_ADD, gtk.ICON_SIZE_MENU,)
+        new_menu.set_image(new_img)
+        new_menu.show()
+        new_menu.connect_object("activate", self.add, "add birthday")
+        menu.append(new_menu)
 
-        preferences_menu = gtk.ImageMenuItem(_('Preferences'))
-        preferences_img = gtk.Image()
-        preferences_img.set_from_stock(gtk.STOCK_PREFERENCES,
+        new_menu = gtk.ImageMenuItem(_('Preferences'))
+        new_img = gtk.Image()
+        new_img.set_from_stock(gtk.STOCK_PREFERENCES,
                                 gtk.ICON_SIZE_MENU,)
-        preferences_menu.set_image(preferences_img)
-        preferences_menu.show()
-        preferences_menu.connect_object("activate", self.preferences_window,
+        new_menu.set_image(new_img)
+        new_menu.show()
+        new_menu.connect_object("activate", self.preferences_window,
                                 "about")
-        menu.append(preferences_menu)
+        menu.append(new_menu)
 
-        about_menu = gtk.ImageMenuItem(_('About'))
-        about_img = gtk.Image()
-        about_img.set_from_stock(gtk.STOCK_ABOUT, gtk.ICON_SIZE_MENU,)
-        about_menu.set_image(about_img)
-        about_menu.show()
-        about_menu.connect_object("activate", self.create_dialog, None)
-        menu.append(about_menu)
+        new_menu = gtk.ImageMenuItem(_('About'))
+        new_img = gtk.Image()
+        new_img.set_from_stock(gtk.STOCK_ABOUT, gtk.ICON_SIZE_MENU,)
+        new_menu.set_image(new_img)
+        new_menu.show()
+        new_menu.connect_object("activate", self.create_dialog, None)
+        menu.append(new_menu)
 
-        close_menu = gtk.ImageMenuItem(_('Quit'))
-        close_img = gtk.Image()
-        close_img.set_from_stock(gtk.STOCK_CLOSE, gtk.ICON_SIZE_MENU,)
-        close_menu.set_image(close_img)
-        close_menu.show()
-        close_menu.connect_object("activate", self.finish_gbirthday, "file.quit")
-        menu.append(close_menu)
+        new_menu = gtk.ImageMenuItem(_('Quit'))
+        new_img = gtk.Image()
+        new_img.set_from_stock(gtk.STOCK_CLOSE, gtk.ICON_SIZE_MENU,)
+        new_menu.set_image(new_img)
+        new_menu.show()
+        new_menu.connect_object("activate", self.finish_gbirthday, "file.quit")
+        menu.append(new_menu)
         menu.popup(None, None,
             gtk.status_icon_position_menu, event_button,
             event_time, icon)
@@ -517,6 +519,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
         '''
 
     def add_single_manual(self, widget, window):
+        '''Add birthday dialog.'''
         if window is not None:
             window.destroy()
         add_window = self.gtk_get_top_window(_('Add'))
