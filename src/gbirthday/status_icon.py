@@ -146,7 +146,7 @@ class StatusIcon():
         about_menu.connect_object("activate", self.create_dialog, None)
         menu.append(about_menu)
 
-        salir = gtk.ImageMenuItem(_('Quit'))
+        close_menu = gtk.ImageMenuItem(_('Quit'))
         close_img = gtk.Image()
         close_img.set_from_stock(gtk.STOCK_CLOSE, gtk.ICON_SIZE_MENU,)
         close_menu.set_image(close_img)
