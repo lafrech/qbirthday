@@ -54,7 +54,7 @@ class StatusIcon():
         self.addressbook.bdays = {}
         for db in databases:
             if (db.TYPE in self.conf.used_databases):
-                db.parse(self.addressbook, self.conf)
+                db.parse(addressbook=self.addressbook, conf=self.conf)
         self._reload_set_icon()
 
     def check_new_day(self):
