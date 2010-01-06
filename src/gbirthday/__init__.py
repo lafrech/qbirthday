@@ -113,14 +113,14 @@ class Conf:
         except ConfigParser.NoOptionError:
             self.notify_future_bdays = 0
         try:
-            MySQL.host = self.settings.get("mysql", "host")
-            MySQL.port = self.settings.get("mysql", "port")
-            MySQL.username = self.settings.get("mysql", "username")
-            MySQL.passwort = self.settings.get("mysql", "password")
-            MySQL.database = self.settings.get("mysql", "database")
-            MySQL.table = self.settings.get("mysql", "table")
-            MySQL.name_row = self.settings.get("mysql", "name_row")
-            MySQL.date_row = self.settings.get("mysql", "date_row")
+            self.MySQL.host = self.settings.get("mysql", "host")
+            self.MySQL.port = self.settings.get("mysql", "port")
+            self.MySQL.username = self.settings.get("mysql", "username")
+            self.MySQL.passwort = self.settings.get("mysql", "password")
+            self.MySQL.database = self.settings.get("mysql", "database")
+            self.MySQL.table = self.settings.get("mysql", "table")
+            self.MySQL.name_row = self.settings.get("mysql", "name_row")
+            self.MySQL.date_row = self.settings.get("mysql", "date_row")
         except ConfigParser.NoSectionError:
             pass
 
