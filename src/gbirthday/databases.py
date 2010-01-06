@@ -265,6 +265,8 @@ class Lightning(DataBase):
         self.THUNDERBIRD_LOCATION = os.path.join(os.environ['HOME'],
             '.mozilla.thunderbird')
         self.ab = None
+        self.cursor = None
+        self.conn = None
 
     def get_config_file(self, configfile):
         import ConfigParser
@@ -391,6 +393,8 @@ class MySQL(DataBase):
         self.name_row = 'name'
         self.date_row = 'date'
         self.ab = None
+        self.cursor = None
+        self.conn = None
 
         self.entries = []
 
@@ -504,8 +508,8 @@ class Sunbird(Lightning):
         self.mozilla_location = os.path.join(os.environ['HOME'],
                 '.mozilla')
 
-    # load file / open database connection
     def parse(self, addressbook, conf):
+        '''load file / open database connection'''
         sunbird = os.path.join(self.mozilla_location, 'sunbird')
         iceowl = os.path.join(self.mozilla_location, 'iceowl')
 
