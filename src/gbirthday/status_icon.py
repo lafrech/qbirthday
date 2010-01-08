@@ -371,7 +371,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 
     def preferences_window(self, textcw=None):
         '''show settings window'''
-        global preferences
         preferences = self.gtk_get_top_window(_('Preferences'))
 
         box = gtk.VBox(False, 0)
