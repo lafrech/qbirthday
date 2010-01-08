@@ -103,7 +103,7 @@ class Conf:
 
         self.firstday = self.settings.get("main", "firstday")
         self.lastday = self.settings.get("main", "lastday")
-        self.csv_files = self.settings.get("main", "csv_files")
+        self.csv_files = eval(self.settings.get("main", "csv_files"))
         used_db = self.settings.get("main", "databases")
         self.used_databases = used_db.split("|")
         try:

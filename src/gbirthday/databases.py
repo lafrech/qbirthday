@@ -106,6 +106,8 @@ class CSV(DataBase):
         '''open and parse file'''
         self.ab = addressbook
         self.conf = conf
+        if not conf.csv_files:
+            return
         for filename in conf.csv_files:
             if (os.path.exists(filename)):
                 for line in file(filename):
