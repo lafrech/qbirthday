@@ -146,8 +146,8 @@ class Conf:
             self.settings.set("mysql", "password", self.MySQL.password)
             self.settings.set("mysql", "database", self.MySQL.database)
             self.settings.set("mysql", "table", self.MySQL.table)
-            self.settings.set("mysql", "name_raw", self.MySQL.name_row)
-            self.settings.set("mysql", "date_raw", self.MySQL.date_raw)
+            self.settings.set("mysql", "name_row", self.MySQL.name_row)
+            self.settings.set("mysql", "date_row", self.MySQL.date_row)
 
     def save(self):
         '''Save current settings to disk.'''
