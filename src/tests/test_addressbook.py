@@ -32,11 +32,24 @@ def teardown():
     AB = None
 
 @with_setup(setup, teardown)
-def test1():
-    '''dummy1'''
-    assert AB
+def test_init_no_bday():
+    '''init_no_bday'''
+    assert AB.checktoday() == False
 
 @with_setup(setup, teardown)
-def test2():
-    '''dummy2'''
-    assert AB
+def test_add_YYYYMMDD_bday():
+    '''add_YYYYMMDD_bday'''
+    import time
+    today = time.strftime("%Y%m%d", time.localtime(time.time()))
+    AB.add('dummy', today)
+    assert AB.checktoday()
+
+@with_setup(setup, teardown)
+def test_add_YYYYMMDD_bday2():
+    '''add_YYYY-MM-DD_bday'''
+    import time
+    today = time.strftime("%Y-%m-%d", time.localtime(time.time()))
+    AB.add('dummy', today)
+    assert AB.checktoday()
+
+#TODO manage_bdays(self, conf) not yet tested
