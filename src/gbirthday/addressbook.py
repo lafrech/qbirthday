@@ -64,7 +64,7 @@ class AddressBook:
                 return True
         return False
 
-    def check_day(self, day_num):
+    def check_day(self, day_num=0):
         '''check if on day 'day_num' is a birthday
            'day_num' should be in range(specified period)'''
         if self.needs_update:
