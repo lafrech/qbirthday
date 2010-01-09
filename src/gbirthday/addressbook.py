@@ -21,6 +21,12 @@ class AddressBook:
     '''AdressBook that saves birthday and names'''
     def __init__(self, conf=None):
         self.conf = conf
+        if self.conf:
+            self.firstday = conf.firstday
+            self.lastday = conf.lastday
+        else:
+            self.firstday = -2
+            self.lastday = 30
         self.bdays = {}  # list of all birthdays. Format:
                     # {birthday: [Name1, Name2]}
                     # for example
@@ -113,6 +119,12 @@ class AddressBook:
                         birthday_today = True
         return birthday_today
 
+    def bdays_in_period(self):
+        for day in range(self.firstday, self.lastday + 1):
+            if day in self.bdays_dict:
+                return True
+        return False
+
     def check_day(self, day_num):
         '''check if on day 'day_num' is a birthday
            'day_num' should be in range(specified perion)'''
@@ -134,17 +146,10 @@ class AddressBook:
         '''update bdays_dict to contain all bdays in specified period'''
         now = datetime.date.today()
 
-        firstday = -2
-        lastday = 30
-        # if no conf there, default to -2, 30
-        if self.conf:
-            firstday = self.conf.firstday
-            lastday = self.conf.lastday
-
         # delete bdays_dict
         self.bdays_dict = {}
         # iterate over specified period
-        for day in range(firstday, lastday + 1):
+        for day in range(self.firstday, self.lastday + 1):
             new_day = now + datetime.timedelta(day)
             searchfor = str(new_day)[4:]
 

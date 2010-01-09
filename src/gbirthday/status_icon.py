@@ -68,15 +68,14 @@ class StatusIcon():
 
     def _reload_set_icon(self):
         '''Check, if there is a birthday and set icon and notify accordingly.'''
-        birthday_list = self.addressbook.manage_bdays(self.conf)
         # check if a birthday is in specified period
-        if len(birthday_list) > 0:
+        if self.addressbook.bdays_in_period():
             self.icon.set_from_file(IMAGESLOCATION + 'birthday.png')
         else:
             self.icon.set_from_file(IMAGESLOCATION + 'nobirthday.png')
 
         # check if birthday today
-        if AddressBook.checktoday(self.addressbook):
+        if self.addressbook.check_day(0):
             self.icon.set_from_file(IMAGESLOCATION + 'birthdayred.png')
             #self.icon.set_blinking(True)
 
@@ -84,19 +83,17 @@ class StatusIcon():
         try:
             import pynotify
             if pynotify.init("gbirthday"):
-                for item in birthday_list:
-                    day = int(item[3])
+                for day in range(self.conf.lastday+1):
                     noty_string = None
-                    if day <= self.conf.notify_future_bdays and day > 0:
-                        # TODO: doesn't work without
-                        #       day > 0 check
-                        noty_string = _("Birthday in %s Days:" % day)
-                    elif day == 0:
+                    if day == 0:
                         noty_string = _("Birthday today:")
-                    if noty_string:
+                    elif day <= self.conf.notify_future_bdays:
+                        noty_string = _("Birthday in %s Days:" % day)
+                    else:
+                        continue
+                    for name in self.addressbook.check_day(day):
                         notify = pynotify.Notification(
-                                noty_string,
-                                item[2])
+                                        noty_string, name)
                         notify.show()
         except ImportError:
             pass
@@ -254,7 +251,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
         table.attach(event_box, 0, 6, 0, 1)
         event_box.show()
         label = gtk.Label("GBirthday")
-        if len(bday_list) > 0:
+        if self.addressbook.bdays_in_period():
             label.set_markup('<b>%s</b>' % _('Birthdays'))
         else:
             label.set_markup('<b>\n    %s    \n</b>'
@@ -266,6 +263,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
                     event_box.rc_get_style().bg[gtk.STATE_SELECTED])
         fila = fila + 1
         for cumple in bday_list:
+            print cumple
             image = gtk.Image()
             image.set_from_file(IMAGESLOCATION + cumple[0])
             table.attach(image, 0, 1, fila, fila + 1)
