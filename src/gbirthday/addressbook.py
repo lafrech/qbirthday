@@ -31,8 +31,11 @@ class AddressBook:
                     # Format: {3: [Name1, Name2],
                     #          4: [Name3, Name4]}
 
+        self.needs_update = False # new bday was added -> dict needs update
+
     def add(self, name, birthday):
         '''add a new person'''
+        self.needs_update = True
         birthday = str(birthday)
 
         # if birthday is in format JJJJMMDD modify it to JJJJ-MM-DD
@@ -109,6 +112,18 @@ class AddressBook:
                     if day_num == 0:
                         birthday_today = True
         return birthday_today
+
+    def check_day(self, day_num):
+        '''check if on day 'day_num' is a birthday
+           'day_num' should be in range(specified perion)'''
+        if self.needs_update:
+            self.needs_update = False
+            self.update()
+
+        try:
+            return self.bdays_dict[day_num]
+        except KeyError:
+            return []
 
     def reload(self):
         '''reload all bdays from all databases and update bdays'''
