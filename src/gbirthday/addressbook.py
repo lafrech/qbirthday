@@ -27,6 +27,10 @@ class AddressBook:
                     # {'1970-01-01': ['Bar, Foo', 'Time'],
                     #  '1967-12-12': ['Power, Max']}
 
+        self.bdays_dict = {} # list of all birthdays in specified period
+                    # Format: {3: [Name1, Name2],
+                    #          4: [Name3, Name4]}
+
     def add(self, name, birthday):
         '''add a new person'''
         birthday = str(birthday)
@@ -105,3 +109,12 @@ class AddressBook:
                     if day_num == 0:
                         birthday_today = True
         return birthday_today
+
+    def reload(self):
+        '''reload all bdays from all databases and update bdays'''
+        # TODO reload from all databases
+        self.update()
+
+    def update(self):
+        '''update bdays_dict to contain all bdays in specified period'''
+        pass
