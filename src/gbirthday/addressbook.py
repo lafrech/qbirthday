@@ -15,12 +15,12 @@
 #}}}
 '''AddressBook module'''
 import datetime
-from datetime import date
 
 
 class AddressBook:
     '''AdressBook that saves birthday and names'''
-    def __init__(self):
+    def __init__(self, conf=None):
+        self.conf = conf
         self.bdays = {}  # list of all birthdays. Format:
                     # {birthday: [Name1, Name2]}
                     # for example
@@ -52,7 +52,7 @@ class AddressBook:
 
     def manage_bdays(self, conf):
         '''Get current birthdays in specified period.'''
-        now = date.today()
+        now = datetime.date.today()
         bday_keys = self.bdays.keys()
         birthday_list = []
         temporal = []
@@ -92,7 +92,7 @@ class AddressBook:
     def checktoday(self):
         '''Check, if today is a bithday.'''
 
-        now = date.today()
+        now = datetime.date.today()
         bday_keys = self.bdays.keys()
         birthday_today = False
 
@@ -132,4 +132,31 @@ class AddressBook:
 
     def update(self):
         '''update bdays_dict to contain all bdays in specified period'''
-        pass
+        now = datetime.date.today()
+
+        firstday = -2
+        lastday = 30
+        # if no conf there, default to -2, 30
+        if self.conf:
+            firstday = self.conf.firstday
+            lastday = self.conf.lastday
+
+        # delete bdays_dict
+        self.bdays_dict = {}
+        # iterate over specified period
+        for day in range(firstday, lastday + 1):
+            new_day = now + datetime.timedelta(day)
+            new_day_day = str(new_day.day)
+            if len(new_day_day) == 1:
+                new_day_day = '0' + new_day_day
+
+            new_day_month = str(new_day.month)
+            if len(new_day_month) == 1:
+                new_day_month = '0' + new_day_month
+
+            searchfor = '-' + new_day_month + '-' + new_day_day
+
+            # is date in bdays.keys -> add to dict
+            for date, birthdays in self.bdays.iteritems():
+                if date.find(searchfor) != -1:
+                    self.bdays_dict[day] = birthdays

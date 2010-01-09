@@ -161,7 +161,7 @@ def main():
     conf = Conf()
 
     # load data and fill AddressBook
-    addressbook = AddressBook()
+    addressbook = AddressBook(conf)
     addressbook.bdays = {}
     for db in databases:
         if (db.TYPE in conf.used_databases):
