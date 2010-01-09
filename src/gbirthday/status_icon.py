@@ -263,7 +263,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
                     event_box.rc_get_style().bg[gtk.STATE_SELECTED])
         fila = fila + 1
 
-        def add_to_list(name, image, fila):
+        def add_to_list(delta_day, name, image, fila):
             # search for birthdate
             for date, names in self.addressbook.bdays.iteritems():
                 if name in names:
@@ -364,7 +364,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
             image = gtk.Image()
 
             for name in self.addressbook.check_day(delta_day):
-                add_to_list(name, image, fila)
+                add_to_list(delta_day, name, image, fila)
                 fila = fila + 1
 
         table.show()
