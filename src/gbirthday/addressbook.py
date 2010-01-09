@@ -56,69 +56,6 @@ class AddressBook:
         else:
             self.bdays[birthday] = [name]
 
-    def manage_bdays(self, conf):
-        '''Get current birthdays in specified period.'''
-        now = datetime.date.today()
-        bday_keys = self.bdays.keys()
-        birthday_list = []
-        temporal = []
-
-        for day_num in range(int(conf.firstday), int(conf.lastday) + 1):
-            day_date = now + datetime.timedelta(day_num)
-
-            for k in range(len(self.bdays)):
-                day_date_day = str(day_date.day)
-                if len(day_date_day) == 1:
-                    day_date_day = '0' + day_date_day
-
-                for name in self.bdays[bday_keys[k]]:
-                    day_date_month = str(day_date.month)
-                    if len(day_date_month) == 1:
-                        day_date_month = '0' + day_date_month
-
-                    if bday_keys[k].find('-' + day_date_month
-                                        + '-' + day_date_day) != -1:
-                        if day_num == 0:
-                            pic = 'birthdaytoday.png'
-                        elif day_num < 0:
-                            pic = 'birthdaylost.png'
-                        else:
-                            pic = 'birthdaynext.png'
-
-                        bday = bday_keys[k]
-
-                        year = bday[:4]
-                        year = day_date.year - int(year)
-
-                        temporal = [pic, bday, name, str(day_num), day_num,
-                            day_date.month, day_date.day, year]
-                        birthday_list.append(temporal)
-        return birthday_list
-
-    def checktoday(self):
-        '''Check, if today is a bithday.'''
-
-        now = datetime.date.today()
-        bday_keys = self.bdays.keys()
-        birthday_today = False
-
-        for day_num in range(0, 1):
-            day_date = now + datetime.timedelta(day_num)
-
-            for k in range(len(self.bdays)):
-                day_date_day = str(day_date.day)
-                if len(day_date_day) != 2:
-                    day_date_day = '0' + day_date_day
-                day_date_month = str(day_date.month)
-                if len(day_date_month) != 2:
-                    day_date_month = '0' + day_date_month
-
-                if bday_keys[k].find('-' + day_date_month + '-'
-                                    + day_date_day) != -1:
-                    if day_num == 0:
-                        birthday_today = True
-        return birthday_today
-
     def bdays_in_period(self):
         for day in range(self.firstday, self.lastday + 1):
             if day in self.bdays_dict:
