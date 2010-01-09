@@ -34,7 +34,7 @@ def teardown():
 @with_setup(setup, teardown)
 def test_init_no_bday():
     '''init_no_bday'''
-    assert AB.checktoday() == False
+    assert not AB.check_day(0)
 
 @with_setup(setup, teardown)
 def test_add_YYYYMMDD_bday():
@@ -51,6 +51,28 @@ def test_add_YYYYMMDD_bday2():
     today = time.strftime("%Y-%m-%d", time.localtime(time.time()))
     AB.add('dummy', today)
     assert AB.check_day(0)
+
+@with_setup(setup, teardown)
+def test_add_YYYYMMDD_bday_yesterday():
+    '''add_YYYYMMDD_bday_yesterday'''
+    import datetime
+    now = datetime.date.today() + datetime.timedelta(-1)
+    today = str(now)
+    AB.add('dummy', today)
+    assert AB.check_day(-1)
+    assert not AB.check_day(0)
+    assert not AB.check_day(1)
+
+@with_setup(setup, teardown)
+def test_add_YYYYMMDD_bday_tomorrow():
+    '''add_YYYY-MM-DD_bday_tomorrow'''
+    import datetime
+    now = datetime.date.today() + datetime.timedelta(1)
+    today = str(now)
+    AB.add('dummy', today)
+    assert not AB.check_day(-1)
+    assert not AB.check_day(0)
+    assert AB.check_day(1)
 
 @with_setup(setup, teardown)
 def test_add_YYYYMMDD_nobday():

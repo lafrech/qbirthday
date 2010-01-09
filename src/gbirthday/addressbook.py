@@ -146,15 +146,7 @@ class AddressBook:
         # iterate over specified period
         for day in range(firstday, lastday + 1):
             new_day = now + datetime.timedelta(day)
-            new_day_day = str(new_day.day)
-            if len(new_day_day) == 1:
-                new_day_day = '0' + new_day_day
-
-            new_day_month = str(new_day.month)
-            if len(new_day_month) == 1:
-                new_day_month = '0' + new_day_month
-
-            searchfor = '-' + new_day_month + '-' + new_day_day
+            searchfor = str(new_day)[4:]
 
             # is date in bdays.keys -> add to dict
             for date, birthdays in self.bdays.iteritems():
