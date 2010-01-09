@@ -52,4 +52,20 @@ def test_add_YYYYMMDD_bday2():
     AB.add('dummy', today)
     assert AB.checktoday()
 
+@with_setup(setup, teardown)
+def test_add_YYYYMMDD_nobday():
+    '''add_YYYYMMDD_nobday'''
+    import time
+    today = '20001010'
+    AB.add('dummy', today)
+    assert not AB.checktoday()
+
+@with_setup(setup, teardown)
+def test_add_YYYYMMDD_nobday2():
+    '''add_YYYY-MM-DD_nobday'''
+    import time
+    today = '2000-10-10'
+    AB.add('dummy', today)
+    assert not AB.checktoday()
+
 #TODO manage_bdays(self, conf) not yet tested
