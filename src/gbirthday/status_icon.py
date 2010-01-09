@@ -51,10 +51,7 @@ class StatusIcon():
 
     def reload_gbirthday(self, dummy):
         '''reload gbirthday, reload data from databases'''
-        self.addressbook.bdays = {}
-        for db in databases:
-            if (db.TYPE in self.conf.used_databases):
-                db.parse(addressbook=self.addressbook, conf=self.conf)
+        self.addressbook.reload()
         self._reload_set_icon()
 
     def check_new_day(self):

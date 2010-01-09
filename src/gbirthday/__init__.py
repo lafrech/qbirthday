@@ -162,10 +162,7 @@ def main():
 
     # load data and fill AddressBook
     addressbook = AddressBook(conf)
-    addressbook.bdays = {}
-    for db in databases:
-        if (db.TYPE in conf.used_databases):
-            db.parse(addressbook=addressbook, conf=conf)
+    addressbook.reload()
 
     # show status icon
     status_icon = StatusIcon(addressbook, conf)
