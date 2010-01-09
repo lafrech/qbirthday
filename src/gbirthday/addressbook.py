@@ -78,7 +78,6 @@ class AddressBook:
 
     def reload(self):
         '''reload all bdays from all databases and update bdays'''
-        # TODO reload from all databases
         for database in databases:
             if (database.TYPE in self.conf.used_databases):
                 database.parse(addressbook=self, conf=self.conf)
