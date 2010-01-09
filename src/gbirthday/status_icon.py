@@ -19,7 +19,7 @@ import time
 import os
 
 # own imports
-from addressbook import *
+from addressbook import AddressBook
 from __init__ import databases, VERSION
 from __init__ import MONTH_AT_PLACE, DAY_AT_PLACE
 from __init__ import CURRENT_DAY
@@ -517,6 +517,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 
     def add_single_manual(self, widget, window):
         '''Add birthday dialog.'''
+        import datetime
         if window is not None:
             window.destroy()
         add_window = self.gtk_get_top_window(_('Add'))
@@ -571,7 +572,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 
         button = gtk.Button(_('Save & Close'))
         box.pack_start(button, False, False, 2)
-        button.connect("clicked", finish_add, combobox, name, date,
+        button.connect("clicked", finish_add, combobox, name, datetime.date,
                         add_window)
         button.show()
 
@@ -635,6 +636,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 
         def finish_add(uno, combo, name, calend, window):
             '''save new added person'''
+            import datetime
             for db in databases:
                 if db.TITLE == combo.get_active_text():
                     calend = list(calend.get_date())
