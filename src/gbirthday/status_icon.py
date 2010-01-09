@@ -233,9 +233,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 
     def openwindow(self):
         '''open window that includes all birthdays'''
+        import datetime
         self.showbd = self.gtk_get_top_window('', False, False)
-
-        bday_list = self.addressbook.manage_bdays(self.conf)
 
         box = gtk.HBox()
         box.set_border_width(5)
@@ -256,107 +255,117 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
         else:
             label.set_markup('<b>\n    %s    \n</b>'
                         % _('No birthdays in specified period'))
+            return
         label.set_justify(gtk.JUSTIFY_RIGHT)
         event_box.add(label)
         label.show()
         event_box.modify_bg(gtk.STATE_NORMAL,
                     event_box.rc_get_style().bg[gtk.STATE_SELECTED])
         fila = fila + 1
-        for cumple in bday_list:
-            print cumple
-            image = gtk.Image()
-            image.set_from_file(IMAGESLOCATION + cumple[0])
-            table.attach(image, 0, 1, fila, fila + 1)
-            image.show()
+
+        def add_to_list(name, image, fila):
+            # search for birthdate
+            for date, names in self.addressbook.bdays.iteritems():
+                if name in names:
+                    birthdate = date
+            birthdate = datetime.date(int(birthdate[:4]),
+                                        int(birthdate[5:7]),
+                                        int(birthdate[8:10]))
 
             try:
                 lang_month = unicode(time.strftime('%B',
-                        (2000, int(cumple[5]), 1, 1, 0, 0, 0, 1, 0)))
+                        (2000, birthdate.month, 1, 1, 0, 0, 0, 1, 0)))
             except:
-                lang_month = str(cumple[5])
-            if cumple[4] == 0:
-                label = gtk.Label('<b>%s</b>' % lang_month)
-                label.set_markup('<b>%s</b>' % lang_month)
-            elif cumple[4] < 0:
-                label = gtk.Label(lang_month)
-                label.set_markup('<span foreground="grey">%s</span>'
+                lang_month = birthdate.month
+            day = birthdate.day
+            years = _('%s Years' % (datetime.date.today().year -
+                                        birthdate.year))
+            # birthday today
+            if delta_day == 0:
+                image.set_from_file(IMAGESLOCATION + 'birthdaytoday.png')
+                label_month = gtk.Label('<b>%s</b>' % lang_month)
+                label_month.set_markup('<b>%s</b>' % lang_month)
+                label_day = gtk.Label("<b>%s</b>" % day)
+                label_day.set_markup("<b>%s</b>" % day)
+                label_name = gtk.Label("<b>%s</b>" % name)
+                label_name.set_markup("<b>%s</b>" % name)
+                label_when = gtk.Label(_('Today'))
+                label_when.set_markup('<b>%s</b>' % _('Today'))
+                label_years = gtk.Label('<b>%s</b>' % years)
+                label_years.set_markup('<b>%s</b>' % years)
+            elif delta_day < 0:
+                image.set_from_file(IMAGESLOCATION + 'birthdaylost.png')
+                label_month = gtk.Label(lang_month)
+                label_month.set_markup('<span foreground="grey">%s</span>'
                                     % lang_month)
-            else:
-                label = gtk.Label(lang_month)
-            align = gtk.Alignment(0.0, 0.5, 0, 0)
-            align.add(label)
-            align.show()
-            table.attach(align, MONTH_AT_PLACE,
-                            MONTH_AT_PLACE + 1, fila, fila + 1)
-            label.show()
-
-            c = str(cumple[6])
-            if cumple[4] == 0:
-                label = gtk.Label("<b>%s</b>" % c)
-                label.set_markup("<b>%s</b>" % c)
-            elif cumple[4] < 0:
-                label = gtk.Label(str(cumple[6]))
-                label.set_markup('<span foreground="grey">%s</span>' % c)
-            else:
-                label = gtk.Label(str(cumple[6]))
-            align = gtk.Alignment(1.0, 0.5, 0, 0)
-            align.add(label)
-            align.show()
-            table.attach(align, DAY_AT_PLACE,
-                            DAY_AT_PLACE + 1, fila, fila + 1)
-            label.show()
-
-            if cumple[4] == 0:
-                label = gtk.Label("<b>" + cumple[2] + "</b>")
-                label.set_markup("<b>" + cumple[2] + "</b>")
-            elif cumple[4] < 0:
-                label = gtk.Label(cumple[2])
-                label.set_markup("<span foreground='grey'>" + cumple[2]
-                                    + "</span>")
-            else:
-                label = gtk.Label(cumple[2])
-            align = gtk.Alignment(0.0, 0.5, 0, 0)
-            align.add(label)
-            table.attach(align, 3, 4, fila, fila + 1)
-            align.show()
-            label.show()
-
-            if cumple[4] == 0:
-                label = gtk.Label(_('Today'))
-                label.set_markup('<b>%s</b>' % _('Today'))
-            elif cumple[4] == -1:
-                label = gtk.Label(_('Yesterday'))
-                label.set_markup('<span foreground="grey">%s</span>' %
+                label_day = gtk.Label(day)
+                label_day.set_markup('<span foreground="grey">%s</span>'
+                                    % day)
+                label_name = gtk.Label(name)
+                label_name.set_markup("<span foreground='grey'>%s</span>"
+                                    % name)
+                label_years = gtk.Label(years)
+                label_years.set_markup('<span foreground="grey">%s</span>' % years)
+                if delta_day == -1:
+                    label_when = gtk.Label(_('Yesterday'))
+                    label_when.set_markup(
+                        '<span foreground="grey">%s</span>' %
                                 _('Yesterday'))
-            elif cumple[4] < -1:
-                ago = (_('%s Days ago') % str(cumple[4] * -1))
-                label = gtk.Label(ago)
-                label.set_markup('<span foreground="grey">%s</span>' % ago)
-            elif cumple[4] == 1:
-                label = gtk.Label(_('Tomorrow'))
+                else:
+                    ago = (_('%s Days ago') % str(delta_day * -1))
+                    label_when = gtk.Label(ago)
+                    label_when.set_markup(
+                            '<span foreground="grey">%s</span>' % ago)
             else:
-                label = gtk.Label(cumple[3] + " " + _('Days'))
-            align = gtk.Alignment(0.0, 0.5, 0, 0)
-            align.add(label)
-            align.show()
-            table.attach(align, 4, 5, fila, fila + 1)
-            label.show()
+                image.set_from_file(IMAGESLOCATION + 'birthdaynext.png')
+                label_month = gtk.Label(lang_month)
+                label_day = gtk.Label(day)
+                label_name = gtk.Label(name)
+                label_years = gtk.Label(years)
+                if delta_day == 1:
+                    label_when = gtk.Label(_('Tomorrow'))
+                else:
+                    label_when = gtk.Label(_('%s Days' % delta_day))
 
-            years = '%s %s' % (str(cumple[7]), _('Years'))
-            if cumple[4] == 0:
-                label = gtk.Label('<b>%s</b>' % years)
-                label.set_markup('<b>%s</b>' % years)
-            elif cumple[4] < 0:
-                label = gtk.Label(years)
-                label.set_markup('<span foreground="grey">%s</span>' % years)
-            else:
-                label = gtk.Label(years)
-            align = gtk.Alignment(1.0, 0.5, 0, 0)
-            align.add(label)
-            align.show()
-            table.attach(align, 5, 6, fila, fila + 1)
-            label.show()
-            fila = fila + 1
+            table.attach(image, 0, 1, fila, fila + 1)
+            image.show()
+
+            label_month.show()
+            label_day.show()
+            label_name.show()
+            label_when.show()
+            label_years.show()
+
+            align_month = gtk.Alignment(0.0, 0.5, 0, 0)
+            align_month.add(label_month)
+            align_month.show()
+            align_day = gtk.Alignment(1.0, 0.5, 0, 0)
+            align_day.add(label_day)
+            align_day.show()
+            align_name = gtk.Alignment(0.0, 0.5, 0, 0)
+            align_name.add(label_name)
+            align_name.show()
+            align_when = gtk.Alignment(0.0, 0.5, 0, 0)
+            align_when.add(label_when)
+            align_when.show()
+            align_years = gtk.Alignment(1.0, 0.5, 0, 0)
+            align_years.add(label_years)
+            align_years.show()
+
+            table.attach(align_day, DAY_AT_PLACE,
+                            DAY_AT_PLACE + 1, fila, fila + 1)
+            table.attach(align_month, MONTH_AT_PLACE,
+                            MONTH_AT_PLACE + 1, fila, fila + 1)
+            table.attach(align_name, 3, 4, fila, fila + 1)
+            table.attach(align_when, 4, 5, fila, fila + 1)
+            table.attach(align_years, 5, 6, fila, fila + 1)
+
+        for delta_day in range(self.conf.firstday, self.conf.lastday + 1):
+            image = gtk.Image()
+
+            for name in self.addressbook.check_day(delta_day):
+                add_to_list(name, image, fila)
+                fila = fila + 1
 
         table.show()
         frame.show()

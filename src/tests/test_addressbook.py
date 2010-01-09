@@ -120,5 +120,3 @@ def test_add_YYYYMMDD_nobday2():
     today = '2000-10-10'
     AB.add('dummy', today)
     assert not AB.check_day(0)
-
-#TODO manage_bdays(self, conf) not yet tested
