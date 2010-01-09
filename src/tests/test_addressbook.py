@@ -120,3 +120,17 @@ def test_add_YYYYMMDD_nobday2():
     today = '2000-10-10'
     AB.add('dummy', today)
     assert not AB.check_day(0)
+
+@with_setup(setup, teardown)
+def test_update():
+    '''test, if update works with adding correctly'''
+    import datetime
+    now = datetime.date.today()
+    now = str(now)
+    assert not AB.check_day(0)
+    AB.add('dummy', now)
+    # add does not fill bdays_dict
+    assert not AB.bdays_dict
+    # but check does
+    assert AB.check_day(0)
+    assert AB.bdays_dict
