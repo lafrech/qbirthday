@@ -42,7 +42,7 @@ def test_add_YYYYMMDD_bday():
     import time
     today = time.strftime("%Y%m%d", time.localtime(time.time()))
     AB.add('dummy', today)
-    assert AB.check_day(0)
+    assert AB.check_day(0) == ['dummy']
 
 @with_setup(setup, teardown)
 def test_add_YYYYMMDD_bday2():
@@ -50,7 +50,7 @@ def test_add_YYYYMMDD_bday2():
     import time
     today = time.strftime("%Y-%m-%d", time.localtime(time.time()))
     AB.add('dummy', today)
-    assert AB.check_day(0)
+    assert AB.check_day(0) == ['dummy']
 
 @with_setup(setup, teardown)
 def test_add_YYYYMMDD_bday_yesterday():
@@ -59,7 +59,7 @@ def test_add_YYYYMMDD_bday_yesterday():
     now = datetime.date.today() + datetime.timedelta(-1)
     today = str(now)
     AB.add('dummy', today)
-    assert AB.check_day(-1)
+    assert AB.check_day(-1) == ['dummy']
     assert not AB.check_day(0)
     assert not AB.check_day(1)
 
@@ -72,7 +72,7 @@ def test_add_YYYYMMDD_bday_tomorrow():
     AB.add('dummy', today)
     assert not AB.check_day(-1)
     assert not AB.check_day(0)
-    assert AB.check_day(1)
+    assert AB.check_day(1) == ['dummy']
 
 @with_setup(setup, teardown)
 def test_add_YYYYMMDD_nobday():
