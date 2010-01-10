@@ -56,7 +56,7 @@ except ImportError:
     _ = lambda x: x
 
 # own imports
-from databases import *
+from databases import Evolution, Lightning, Sunbird, CSV, MySQL
 from status_icon import *
 
 # list of all availabe databases
