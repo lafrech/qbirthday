@@ -74,7 +74,7 @@ class Conf:
         self.notify_future_bdays = None
         self.used_databases = None
         self.csv_files = None
-        self.MySQL = None
+        self.mysql = None
         self.settings = ConfigParser.ConfigParser()
         try:
             self.settings.readfp(file(os.environ['HOME'] + "/.gbirthdayrc"))
@@ -99,7 +99,7 @@ class Conf:
             if old in self.used_databases:
                 for item in self.used_databases:
                     if old == item:
-                        new_used_db.append(old)
+                        new_used_db.append(new)
                         changed = True
                     else:
                         new_used_db.append(item)
@@ -137,14 +137,14 @@ class Conf:
         except ConfigParser.NoOptionError:
             self.notify_future_bdays = 0
         try:
-            self.MySQL.host = self.settings.get("mysql", "host")
-            self.MySQL.port = self.settings.get("mysql", "port")
-            self.MySQL.username = self.settings.get("mysql", "username")
-            self.MySQL.passwort = self.settings.get("mysql", "password")
-            self.MySQL.database = self.settings.get("mysql", "database")
-            self.MySQL.table = self.settings.get("mysql", "table")
-            self.MySQL.name_row = self.settings.get("mysql", "name_row")
-            self.MySQL.date_row = self.settings.get("mysql", "date_row")
+            self.mysql.host = self.settings.get("mysql", "host")
+            self.mysql.port = self.settings.get("mysql", "port")
+            self.mysql.username = self.settings.get("mysql", "username")
+            self.mysql.passwort = self.settings.get("mysql", "password")
+            self.mysql.database = self.settings.get("mysql", "database")
+            self.mysql.table = self.settings.get("mysql", "table")
+            self.mysql.name_row = self.settings.get("mysql", "name_row")
+            self.mysql.date_row = self.settings.get("mysql", "date_row")
         except ConfigParser.NoSectionError:
             pass
 
@@ -161,17 +161,17 @@ class Conf:
         # db[:-1] because of removing the latest "|"
         self.settings.set("main", "databases", used_db[:-1])
         self.settings.set("main", "csv_files", self.csv_files)
-        if self.MySQL:
+        if self.mysql:
             if not self.settings.has_section("mysql"):
                 self.settings.add_section("mysql")
-            self.settings.set("mysql", "host", self.MySQL.host)
-            self.settings.set("mysql", "port", self.MySQL.port)
-            self.settings.set("mysql", "username", self.MySQL.username)
-            self.settings.set("mysql", "password", self.MySQL.password)
-            self.settings.set("mysql", "database", self.MySQL.database)
-            self.settings.set("mysql", "table", self.MySQL.table)
-            self.settings.set("mysql", "name_row", self.MySQL.name_row)
-            self.settings.set("mysql", "date_row", self.MySQL.date_row)
+            self.settings.set("mysql", "host", self.mysql.host)
+            self.settings.set("mysql", "port", self.mysql.port)
+            self.settings.set("mysql", "username", self.mysql.username)
+            self.settings.set("mysql", "password", self.mysql.password)
+            self.settings.set("mysql", "database", self.mysql.database)
+            self.settings.set("mysql", "table", self.mysql.table)
+            self.settings.set("mysql", "name_row", self.mysql.name_row)
+            self.settings.set("mysql", "date_row", self.mysql.date_row)
 
     def save(self):
         '''Save current settings to disk.'''
