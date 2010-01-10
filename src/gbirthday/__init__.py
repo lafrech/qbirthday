@@ -89,12 +89,37 @@ class Conf:
                 self.settings.add_section("main")
                 self.default_values()
 
+        self.correct_settings()
+
+    # TODO introduced after 0.6, remove if time has come
+    def correct_settings(self):
+        '''correct new settings, e.g. Evolution and not evolution anymore'''
+        def replace(old, new, changed):
+            '''replace old with new'''
+            new_used_db = []
+            if old in self.used_databases:
+                for item in self.used_database:
+                    if old == item:
+                        new_used_db.append(old)
+                        changed = True
+                    else:
+                        new_used_db.append(item)
+
+        changed = False
+        replace('evolution', 'Evolution', changed)
+        replace('mysql', 'MySQL', changed)
+        replace('csv', 'CSV', changed)
+        replace('lightning', 'Lightning', changed)
+        replace('sunbird', 'Sunbird', changed)
+        if changed:
+            self.save()
+
     def default_values(self):
         '''Initialize with default values.'''
         self.firstday = -2
         self.lastday = 30
         self.notify_future_bdays = 0
-        self.used_databases = ['evolution']
+        self.used_databases = ['Evolution']
         self.csv_files = None
 
     def sync_to_mem(self):

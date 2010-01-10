@@ -439,12 +439,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
         def db_select(widget, db):
             '''callback for checkboxes and update used_databases'''
             if (widget.get_active()):
-                if not db.TYPE in self.conf.used_databases:
-                    self.conf.used_databases.append(db.TYPE)
+                if not db.__class__.__name__ in self.conf.used_databases:
+                    self.conf.used_databases.append(db.__class__.__name__)
                     db.activate()
             else:
-                if db.TYPE in self.conf.used_databases:
-                    self.conf.used_databases.remove(db.TYPE)
+                if db.__class__.__name__ in self.conf.used_databases:
+                    self.conf.used_databases.remove(db.__class__.__name__)
                     db.deactivate()
 
         def preferences_db(widget, db):
@@ -460,7 +460,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
             vbox.pack_start(hbox, False, False, 3)
 
             chkDB = gtk.CheckButton(db.TITLE)
-            if db.TYPE in self.conf.used_databases:
+            if db.__class__.__name__ in self.conf.used_databases:
                 chkDB.set_active(True)
             chkDB.connect("toggled", db_select, db)
             hbox.pack_start(chkDB, False, False, 0)

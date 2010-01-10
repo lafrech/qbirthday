@@ -38,12 +38,10 @@ class DataBase:
      you have to add your Database to the databases-list
     '''
 
-    def __init__(self, title='Unknown', type='none', can_save=True,
+    def __init__(self, title='Unknown', can_save=True,
             has_config=True, widget=None):
         # Title that will be displayed to the user
         self.TITLE = title
-        # type that is used as identifier (e.g. for config file)
-        self.TYPE = type
         # new entries can be saved
         self.CAN_SAVE = can_save
         # additional config options for database connection or fukebane(s)
@@ -96,8 +94,7 @@ class CSV(DataBase):
     '''import from CSV-file'''
 
     def __init__(self):
-        DataBase.__init__(self, title='CSV-file (comma seperated value)',
-                            type='csv')
+        DataBase.__init__(self, title='CSV-file (comma seperated value)')
         self._seperators = ['; ', ', ', ': ']   # possible seperators
         self.ab = None
         self.conf = None
@@ -223,7 +220,7 @@ class Evolution(DataBase):
     '''data import from the Evolution address book'''
 
     def __init__(self):
-        DataBase.__init__(self, title='Evolution', type='evolution',
+        DataBase.__init__(self, title='Evolution',
                         can_save=False, has_config=False)
         self.ADDRESS_BOOK_LOCATION = os.path.join(os.environ['HOME'],
                         '.evolution/addressbook/local/')
@@ -261,9 +258,9 @@ class Evolution(DataBase):
 class Lightning(DataBase):
     '''Thunderbird/Lightning implementation'''
 
-    def __init__(self, title='Thunderbird/Icedove Lightning', type='lightning',
+    def __init__(self, title='Thunderbird/Icedove Lightning',
                 has_config=False):
-        DataBase.__init__(self, title=title, type=type, has_config=has_config)
+        DataBase.__init__(self, title=title, has_config=has_config)
         self.THUNDERBIRD_LOCATION = os.path.join(os.environ['HOME'],
             '.mozilla.thunderbird')
         self.ab = None
@@ -385,7 +382,7 @@ class MySQL(DataBase):
     '''MySQL database import'''
 
     def __init__(self):
-        DataBase.__init__(self, title='MySQL', type='mysql')
+        DataBase.__init__(self, title='MySQL')
         self.host = 'localhost'
         self.port = '3306'
         self.username = ''
@@ -505,7 +502,7 @@ class Sunbird(Lightning):
     '''Sunbird/Iceowl implementation (based on lightning)'''
 
     def __init__(self):
-        Lightning.__init__(self, title='Sunbird/Iceowl', type='sunbird',
+        Lightning.__init__(self, title='Sunbird/Iceowl',
                             has_config=False)
         self.mozilla_location = os.path.join(os.environ['HOME'],
                 '.mozilla')

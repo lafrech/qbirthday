@@ -80,7 +80,6 @@ class AddressBook:
         '''reload all bdays from all databases and update bdays'''
         for database in databases:
             if (database.__class__.__name__ in self.conf.used_databases):
-                print (database), self.conf.used_databases
                 database.parse(addressbook=self, conf=self.conf)
         self.update()
 
