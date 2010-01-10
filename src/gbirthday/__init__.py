@@ -73,7 +73,6 @@ class Conf:
         self.firstday = self.lastday = None
         self.notify_future_bdays = None
         self.used_databases = None
-        self.ab = None
         self.csv_files = None
         self.MySQL = None
         self.settings = ConfigParser.ConfigParser()
@@ -156,8 +155,8 @@ class Conf:
         self.settings.set("main", "notify_future_bdays",
                 self.notify_future_bdays)
         used_db = ""
-        for db in self.used_databases:
-            used_db += db
+        for database in self.used_databases:
+            used_db += database
             used_db += "|"
         # db[:-1] because of removing the latest "|"
         self.settings.set("main", "databases", used_db[:-1])
