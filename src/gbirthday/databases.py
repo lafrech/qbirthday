@@ -96,12 +96,12 @@ class CSV(DataBase):
     def __init__(self):
         DataBase.__init__(self, title='CSV-file (comma seperated value)')
         self._seperators = ['; ', ', ', ': ']   # possible seperators
-        self.ab = None
+        self.addressbook = None
         self.conf = None
 
     def parse(self, addressbook, conf):
         '''open and parse file'''
-        self.ab = addressbook
+        self.addressbook = addressbook
         self.conf = conf
         if not conf.csv_files:
             return
@@ -133,7 +133,7 @@ class CSV(DataBase):
             output_file = file(self.conf.csv_files[0], 'w')
         output_file.write(birthday + ', ' + name + '\n')
         output_file.close()
-        self.ab.add(name, birthday)
+        self.addressbook.add(name, birthday)
 
     def remove_file(self, widget, combobox, conf):
         index = combobox.get_active()
@@ -222,11 +222,9 @@ class Evolution(DataBase):
     def __init__(self):
         DataBase.__init__(self, title='Evolution',
                         can_save=False, has_config=False)
-        self.ADDRESS_BOOK_LOCATION = os.path.join(os.environ['HOME'],
-                        '.evolution/addressbook/local/')
-        self._splitRE = re.compile(r'\r?\n')
+        self._split_re = re.compile(r'\r?\n')
 
-    def parse(self, book=None, addressbook=None, conf=None):
+    def parse(self, addressbook=None, conf=None):
         '''load and parse parse Evolution data files'''
         try:
             import evolution
@@ -246,8 +244,9 @@ class Evolution(DataBase):
 
     def parse_birthday(self, data, addressbook):
         '''parse evolution addressbook. the file is in VCard format.'''
+        # TODO change to contact.props.birth_date, no vcard would be needed
         full_name, vcard = data
-        lines = self._splitRE.split(vcard)
+        lines = self._split_re.split(vcard)
         for line in lines:
             # if BDAY is in vcard, use this as birthday
             if line.startswith('BDAY'):
