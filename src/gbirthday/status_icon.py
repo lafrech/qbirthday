@@ -252,7 +252,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
         else:
             label.set_markup('<b>\n    %s    \n</b>'
                         % _('No birthdays in specified period'))
-            return
         label.set_justify(gtk.JUSTIFY_RIGHT)
         event_box.add(label)
         label.show()
