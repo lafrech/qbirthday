@@ -98,7 +98,7 @@ class Conf:
             '''replace old with new'''
             new_used_db = []
             if old in self.used_databases:
-                for item in self.used_database:
+                for item in self.used_databases:
                     if old == item:
                         new_used_db.append(old)
                         changed = True
