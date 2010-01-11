@@ -232,8 +232,8 @@ class Evolution(DataBase):
             show_error_msg(_("For correctly usage, you need to install gnome-python2-evolution."))
             return
 
-        for title, book in evolution.ebook.list_addressbooks():
-            ebook = evolution.ebook.open_addressbook(book)
+        for book in evolution.ebook.list_addressbooks():
+            ebook = evolution.ebook.open_addressbook(book[1])
             if not ebook:
                 continue
             for contact in ebook.get_all_contacts():
@@ -250,8 +250,7 @@ class Evolution(DataBase):
         for line in lines:
             # if BDAY is in vcard, use this as birthday
             if line.startswith('BDAY'):
-                label, value = line.split(':', 1)
-                addressbook.add(full_name, value)
+                addressbook.add(full_name, line.split(':', 1)[1])
 
 
 class Lightning(DataBase):
