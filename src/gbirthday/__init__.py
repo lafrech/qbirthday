@@ -96,20 +96,18 @@ class Conf:
         def replace(old, new, changed):
             '''replace old with new'''
             new_used_db = []
-            if old in self.used_databases:
-                for item in self.used_databases:
-                    if old == item:
-                        new_used_db.append(new)
-                        changed = True
-                    else:
-                        new_used_db.append(item)
+            for num, item in enumerate(self.used_databases):
+                if self.used_databases[num] == old:
+                    changed = True
+                    self.used_databases[num] = new
+            return changed
 
         changed = False
-        replace('evolution', 'Evolution', changed)
-        replace('mysql', 'MySQL', changed)
-        replace('csv', 'CSV', changed)
-        replace('lightning', 'Lightning', changed)
-        replace('sunbird', 'Sunbird', changed)
+        changed = replace('evolution', 'Evolution', changed)
+        changed = replace('mysql', 'MySQL', changed)
+        changed = replace('csv', 'CSV', changed)
+        changed = replace('lightning', 'Lightning', changed)
+        changed = replace('sunbird', 'Sunbird', changed)
         if changed:
             self.save()
 
@@ -125,8 +123,8 @@ class Conf:
         '''Get current settings from config parser into this object.'''
         import ConfigParser
 
-        self.firstday = self.settings.get("main", "firstday")
-        self.lastday = self.settings.get("main", "lastday")
+        self.firstday = int(self.settings.get("main", "firstday"))
+        self.lastday = int(self.settings.get("main", "lastday"))
         self.csv_files = eval(self.settings.get("main", "csv_files"))
         used_db = self.settings.get("main", "databases")
         self.used_databases = used_db.split("|")
