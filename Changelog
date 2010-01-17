@@ -1,3 +1,6 @@
+0.6.1
+	MySQL was wrong initialized (fedora #556210)
+
 0.6
 	Partly implement some new languages
 	Bugfixing

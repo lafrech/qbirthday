@@ -74,7 +74,7 @@ class Conf:
         self.notify_future_bdays = None
         self.used_databases = None
         self.csv_files = None
-        self.mysql = None
+        self.mysql = MySQL()
         self.settings = ConfigParser.ConfigParser()
         try:
             self.settings.readfp(file(os.environ['HOME'] + "/.gbirthdayrc"))
