@@ -566,18 +566,18 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
         box.pack_start(table, True, True, 8)
         table.show()
 
-        def finish_add(uno, combo, name, calend, window):
+        def finish_add(uno, combo, name, calendar, window):
             '''save new added person'''
             for db in DATABASES:
                 if db.TITLE == combo.get_active_text():
-                    calend = list(calend.get_date())
+                    calend = list(calendar.get_date())
                     calend[1] += 1
                     db.add(name.get_text(), datetime.date(*calend))
             window.destroy()
 
         button = gtk.Button(_('Save & Close'))
         box.pack_start(button, False, False, 2)
-        button.connect("clicked", finish_add, combobox, name, datetime.date,
+        button.connect("clicked", finish_add, combobox, name, calendar,
                         add_window)
         button.show()
 
