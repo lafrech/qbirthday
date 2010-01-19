@@ -2,7 +2,7 @@ bindir = /usr/bin
 datadir = /usr/share
 sitelib = /usr/lib/python2.6/site-packages
 pixmaps = $(datadir)/pixmaps
-version = 0.6
+version = 0.6.1
 
 install = install -p
 mkdir = mkdir -p
