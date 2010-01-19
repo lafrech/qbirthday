@@ -274,8 +274,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
             except:
                 lang_month = birthdate.month
             day = birthdate.day
-            years = _('%s Years' % (datetime.date.today().year -
-                                        birthdate.year))
+            years = _('%s Years') % (datetime.date.today().year -
+                                        birthdate.year)
             # birthday today
             if delta_day == 0:
                 image.set_from_file(IMAGESLOCATION + 'birthdaytoday.png')
@@ -321,7 +321,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
                 if delta_day == 1:
                     label_when = gtk.Label(_('Tomorrow'))
                 else:
-                    label_when = gtk.Label(_('%s Days' % delta_day))
+                    label_when = gtk.Label(_('%s Days') % delta_day)
 
             table.attach(image, 0, 1, fila, fila + 1)
             image.show()
