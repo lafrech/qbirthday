@@ -47,6 +47,9 @@ tar.xz: clean
 	$(tar) --use-compress-program=xz \
 		-cf gbirthday-$(version).tar.xz *
 
+test:
+	nosetests -v --with-coverage --cover-package=gbirthday
+
 pot:
 	cd po && intltool-update --pot
 
