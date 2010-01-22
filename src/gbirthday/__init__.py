@@ -57,7 +57,6 @@ except ImportError:
 
 # own imports
 from .databases import Evolution, Lightning, Sunbird, CSV, MySQL
-from .status_icon import *
 
 # list of all availabe databases
 DATABASES = [Evolution(), Lightning(), Sunbird(), CSV(), MySQL()]
@@ -178,6 +177,8 @@ class Conf:
 
 def main():
     '''Load settings, start status icon and get to work.'''
+    from .addressbook import AddressBook
+    from .status_icon import StatusIcon
     # try to load settings
     conf = Conf()
 

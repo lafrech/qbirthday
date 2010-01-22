@@ -19,7 +19,6 @@ import time
 import os
 
 # own imports
-from .addressbook import AddressBook
 from .__init__ import DATABASES, VERSION
 from .__init__ import MONTH_AT_PLACE, DAY_AT_PLACE
 from .__init__ import CURRENT_DAY
