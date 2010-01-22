@@ -15,7 +15,7 @@
 #}}}
 '''AddressBook module'''
 import datetime
-from __init__ import DATABASES
+from .__init__ import DATABASES
 
 
 class AddressBook:
@@ -97,6 +97,6 @@ class AddressBook:
             searchfor = str(new_day)[4:]
 
             # is date in bdays.keys -> add to dict
-            for date, birthdays in self.bdays.iteritems():
+            for date, birthdays in self.bdays.items():
                 if date.find(searchfor) != -1:
                     self.bdays_dict[day] = birthdays

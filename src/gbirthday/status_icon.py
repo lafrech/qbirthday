@@ -19,10 +19,10 @@ import time
 import os
 
 # own imports
-from addressbook import AddressBook
-from __init__ import DATABASES, VERSION
-from __init__ import MONTH_AT_PLACE, DAY_AT_PLACE
-from __init__ import CURRENT_DAY
+from .addressbook import AddressBook
+from .__init__ import DATABASES, VERSION
+from .__init__ import MONTH_AT_PLACE, DAY_AT_PLACE
+from .__init__ import CURRENT_DAY
 
 IMAGESLOCATION = os.sep.join(__file__.split(os.sep)[:-1]) + "/pics/"
 
@@ -261,7 +261,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 
         def add_to_list(delta_day, name, image, fila):
             # search for birthdate
-            for date, names in self.addressbook.bdays.iteritems():
+            for date, names in self.addressbook.bdays.items():
                 if name in names:
                     birthdate = date
             birthdate = datetime.date(int(birthdate[:4]),
@@ -269,7 +269,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
                                         int(birthdate[8:10]))
 
             try:
-                lang_month = unicode(time.strftime('%B',
+                lang_month = str(time.strftime('%B',
                         (2000, birthdate.month, 1, 1, 0, 0, 0, 1, 0)))
             except:
                 lang_month = birthdate.month
@@ -401,7 +401,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 
         def get_new_preferences(uno, option, spin):
             '''set value for settings by spinner'''
-            from gtk_funcs import show_error_msg
+            from .gtk_funcs import show_error_msg
             spin.update()
             if option == "firstday":
                 self.conf.firstday = spin.get_value_as_int()

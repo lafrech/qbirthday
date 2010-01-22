@@ -27,7 +27,7 @@ import os
 import re
 import gtk
 
-from gtk_funcs import show_error_msg
+from .gtk_funcs import show_error_msg
 
 class DataBase:
     '''
@@ -305,7 +305,7 @@ class Lightning(DataBase):
         try:
             self.conn = sqlite3.connect(filename)
             self.cursor = self.conn.cursor()
-        except Exception, msg:
+        except Exception as msg:
             show_error_msg(_('sqlite3 could not connect: %s' % str(msg)))
 
     def parse_birthday(self, filename):
@@ -370,7 +370,7 @@ class Lightning(DataBase):
                      ('%s', 1, 'YEARLY', 0, -1, 1);''' % uid
             self.cursor.execute(qry)
             self.conn.commit()
-        except Exception, msg:
+        except Exception as msg:
             show_error_msg(_('Could not execute SQLite-query')
                             + ': %s\n %s' % (qry, str(msg)))
         self.ab.add(name, str(birthday))
@@ -408,7 +408,7 @@ class MySQL(DataBase):
                                     passwd=self.password,
                                     db=self.database)
             self.cursor = self.conn.cursor()
-        except Exception, msg:
+        except Exception as msg:
             show_error_msg(_('Could not connect to MySQL-Server')
                             + str(msg))
 
@@ -422,7 +422,7 @@ class MySQL(DataBase):
             rows = self.cursor.fetchall()
             for row in rows:
                 addressbook.add(row[0], str(row[1]))
-        except Exception, msg:
+        except Exception as msg:
             show_error_msg(_('Could not execute MySQL-query')
                             + ': %s\n %s' % (qry, str(msg)))
         self.conn.close()
@@ -435,7 +435,7 @@ class MySQL(DataBase):
             qry = ("INSERT INTO %s (%s, %s) VALUES ('%s', '%s')" %
                 (self.table, self.name_row, self.date_row, name, birthday))
             self.cursor.execute(qry)
-        except Exception, msg:
+        except Exception as msg:
             show_error_msg(_('Could not execute MySQL-query')
                             + ': %s\n %s' % (qry, str(msg)))
         self.conn.close()
