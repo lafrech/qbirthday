@@ -1,3 +1,7 @@
+0.6.3
+	Apply most suggestions from 2to3 script
+	    (all python2.6 can understand)
+
 0.6.2
 	Fix annoying translation bug
 	(worth an own new version)
