@@ -95,7 +95,6 @@ class Conf:
         '''correct new settings, e.g. Evolution and not evolution anymore'''
         def replace(old, new, changed):
             '''replace old with new'''
-            new_used_db = []
             for num, item in enumerate(self.used_databases):
                 if self.used_databases[num] == old:
                     changed = True
