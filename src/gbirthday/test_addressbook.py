@@ -17,14 +17,14 @@
 Testing the addressbook module
 '''
 from nose import with_setup
-import gbirthday
+from .addressbook import AddressBook
 
 AB = None
 
 def setup():
     '''Setup addressbook.'''
     global AB
-    AB = gbirthday.AddressBook()
+    AB = AddressBook()
 
 def teardown():
     '''Clean addressbook.'''

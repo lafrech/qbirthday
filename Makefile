@@ -26,6 +26,7 @@ install:
 	$(install) -m 644 pics/gbirthday.png $(DESTDIR)$(pixmaps)
 	$(mkdir) $(DESTDIR)$(sitelib)
 	$(cp) src/gbirthday/ $(DESTDIR)$(sitelib)
+	rm -rf $(DESTDIR)$(sitelib)/gbirthday/test*.py
 	$(mkdir) $(DESTDIR)$(datadir)/applications/
 	$(install) -m 644 gbirthday.desktop \
 		$(DESTDIR)$(datadir)/applications/
