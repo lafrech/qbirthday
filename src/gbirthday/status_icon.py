@@ -84,7 +84,10 @@ class StatusIcon():
                     if day == 0:
                         noty_string = _("Birthday today:")
                     elif day <= self.conf.notify_future_bdays:
-                        noty_string = _("Birthday in %s Days:" % day)
+                        if day == 1:
+                            noty_string = _("Birthday tomorrow:")
+                        else:
+                            noty_string = _("Birthday in %s Days:") % day
                     else:
                         continue
                     for name in self.addressbook.check_day(day):
