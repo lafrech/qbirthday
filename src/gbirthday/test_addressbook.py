@@ -43,6 +43,8 @@ def test_add_YYYYMMDD_bday():
     today = time.strftime("%Y%m%d", time.localtime(time.time()))
     AB.add('dummy', today)
     assert AB.check_day(0) == ['dummy']
+    # today birthday -> needs to be in specific period
+    assert AB.bdays_in_period()
 
 @with_setup(setup, teardown)
 def test_add_YYYYMMDD_bday2():
@@ -51,6 +53,8 @@ def test_add_YYYYMMDD_bday2():
     today = time.strftime("%Y-%m-%d", time.localtime(time.time()))
     AB.add('dummy', today)
     assert AB.check_day(0) == ['dummy']
+    # today birthday -> needs to be in specific period
+    assert AB.bdays_in_period()
 
 @with_setup(setup, teardown)
 def test_add_YYYYMMDD_bday_yesterday():
@@ -82,6 +86,8 @@ def test_add_YYYYMMDD_bday_twice():
     AB.add('dummy', today)
     AB.add('dummy2', today)
     assert AB.check_day(0) == ['dummy', 'dummy2']
+    # today birthday -> needs to be in specific period
+    assert AB.bdays_in_period()
 
 @with_setup(setup, teardown)
 def test_add_YYYYMMDD_bday_yesterday_twice():
@@ -113,6 +119,8 @@ def test_add_YYYYMMDD_nobday():
     today = '20001010'
     AB.add('dummy', today)
     assert not AB.check_day(0)
+    # birthday far away -> nothing in specific period
+    assert not AB.bdays_in_period()
 
 @with_setup(setup, teardown)
 def test_add_YYYYMMDD_nobday2():
@@ -120,6 +128,8 @@ def test_add_YYYYMMDD_nobday2():
     today = '2000-10-10'
     AB.add('dummy', today)
     assert not AB.check_day(0)
+    # birthday far away -> nothing in specific period
+    assert not AB.bdays_in_period()
 
 @with_setup(setup, teardown)
 def test_update():
