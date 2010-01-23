@@ -39,3 +39,5 @@ def test_init_no_bday():
     assert database
     database.add('name', 'birthday')
     assert database
+    database.update('conf')
+    assert database
