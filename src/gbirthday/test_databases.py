@@ -17,7 +17,7 @@
 Testing the databases module
 '''
 from nose import with_setup
-from .databases import *
+from .databases import DataBase
 
 database = None
 

@@ -37,7 +37,7 @@ def test_init_no_bday():
     assert not AB.check_day(0)
 
 @with_setup(setup, teardown)
-def test_add_YYYYMMDD_bday():
+def test_add_yyyymmdd_bday():
     '''add_YYYYMMDD_bday'''
     import time
     today = time.strftime("%Y%m%d", time.localtime(time.time()))
@@ -47,7 +47,7 @@ def test_add_YYYYMMDD_bday():
     assert AB.bdays_in_period()
 
 @with_setup(setup, teardown)
-def test_add_YYYYMMDD_bday2():
+def test_add_yyyymmdd_bday2():
     '''add_YYYY-MM-DD_bday'''
     import time
     today = time.strftime("%Y-%m-%d", time.localtime(time.time()))
@@ -57,7 +57,7 @@ def test_add_YYYYMMDD_bday2():
     assert AB.bdays_in_period()
 
 @with_setup(setup, teardown)
-def test_add_YYYYMMDD_bday_yesterday():
+def test_add_bday_yesterday():
     '''add_YYYYMMDD_bday_yesterday'''
     import datetime
     now = datetime.date.today() + datetime.timedelta(-1)
@@ -68,7 +68,7 @@ def test_add_YYYYMMDD_bday_yesterday():
     assert not AB.check_day(1)
 
 @with_setup(setup, teardown)
-def test_add_YYYYMMDD_bday_tomorrow():
+def test_add_bday_tomorrow():
     '''add_YYYY-MM-DD_bday_tomorrow'''
     import datetime
     now = datetime.date.today() + datetime.timedelta(1)
@@ -79,7 +79,7 @@ def test_add_YYYYMMDD_bday_tomorrow():
     assert AB.check_day(1) == ['dummy']
 
 @with_setup(setup, teardown)
-def test_add_YYYYMMDD_bday_twice():
+def test_add_bday_twice():
     '''add_YYYY-MM-DD_bday_twice'''
     import time
     today = time.strftime("%Y-%m-%d", time.localtime(time.time()))
@@ -90,7 +90,7 @@ def test_add_YYYYMMDD_bday_twice():
     assert AB.bdays_in_period()
 
 @with_setup(setup, teardown)
-def test_add_YYYYMMDD_bday_yesterday_twice():
+def test_add_bday_yesterday_twice():
     '''add_YYYYMMDD_bday_yesterday_twice'''
     import datetime
     now = datetime.date.today() + datetime.timedelta(-1)
@@ -102,7 +102,7 @@ def test_add_YYYYMMDD_bday_yesterday_twice():
     assert not AB.check_day(1)
 
 @with_setup(setup, teardown)
-def test_add_YYYYMMDD_bday_tomorrow_twice():
+def test_add_bday_tomorrow_twice():
     '''add_YYYY-MM-DD_bday_tomorrow_twice'''
     import datetime
     now = datetime.date.today() + datetime.timedelta(1)
@@ -114,7 +114,7 @@ def test_add_YYYYMMDD_bday_tomorrow_twice():
     assert AB.check_day(1) == ['dummy', 'dummy2']
 
 @with_setup(setup, teardown)
-def test_add_YYYYMMDD_nobday():
+def test_add_nobday():
     '''add_YYYYMMDD_nobday'''
     today = '20001010'
     AB.add('dummy', today)
@@ -123,7 +123,7 @@ def test_add_YYYYMMDD_nobday():
     assert not AB.bdays_in_period()
 
 @with_setup(setup, teardown)
-def test_add_YYYYMMDD_nobday2():
+def test_add_nobday2():
     '''add_YYYY-MM-DD_nobday'''
     today = '2000-10-10'
     AB.add('dummy', today)
