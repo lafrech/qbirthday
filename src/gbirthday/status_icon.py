@@ -207,11 +207,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
     def on_left_click(self, icon, event_button, event_time):
         '''close/open window with list of birthdays'''
         # button == 1 -> left click
-        if event_button.button == 1 and not self.showbd:
-            self.openwindow()
-        else:
-            self.showbd.destroy()
-            self.showbd = None
+        if event_button.button == 1:
+            if not self.showbd:
+                self.openwindow()
+            else:
+                self.showbd.destroy()
+                self.showbd = None
 
     def openwindow(self):
         '''open window that includes all birthdays'''
