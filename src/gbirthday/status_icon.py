@@ -41,12 +41,12 @@ class StatusIcon():
         self.icon.connect('popup-menu', self.on_right_click)
         self.icon.connect('button_press_event', self.on_left_click, 20)
 
-        def on_url(dialog, link, data):
+        def on_url(dialog, link):
             '''start default browser with gbirthday-website on click'''
             import webbrowser
-            webbrowser.open('http://gbirthday.sourceforge.net/')
+            webbrowser.open(link)
 
-        gtk.about_dialog_set_url_hook(on_url, None)
+        gtk.about_dialog_set_url_hook(on_url)
 
     def reload_gbirthday(self, dummy):
         '''reload gbirthday, reload data from databases'''
