@@ -210,7 +210,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
         if event_button.button == 1 and not self.showbd:
             self.openwindow()
         else:
-            self.closebdwindow('focus_out_event', self.closebdwindow, "")
+            self.showbd.destroy()
+            self.showbd = None
 
     def openwindow(self):
         '''open window that includes all birthdays'''
@@ -350,7 +351,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
         table.show()
         frame.show()
         self.showbd.show()
-        self.showbd.connect('focus_out_event', self.closebdwindow, "text")
+        self.showbd.connect('focus_out_event', self.closebdwindow, None)
 
     def preferences_window(self, textcw=None):
         '''show settings window'''
