@@ -7,17 +7,18 @@ version = 0.6.2
 install = install -p
 mkdir = mkdir -p
 cp = cp -a
+rm = rm -f
 tar = tar --exclude=.git --exclude=*.pyc
 
 default:
 	echo Nothing to do.
 
 clean:
-	rm -f po/untitled.pot
-	rm -f *.tar.*
-	rm -f gbirthday.desktop
-	rm -rf gbirthday-$(version) BUILDROOT noarch
-	rm -f gbirthday*.src.rpm
+	$(rm) po/untitled.pot
+	$(rm) *.tar.*
+	$(rm) gbirthday.desktop
+	$(rm) -r gbirthday-$(version) BUILDROOT noarch
+	$(rm) gbirthday*.src.rpm
 
 install:
 	intltool-merge -d ./po ./gbirthday.desktop.in ./gbirthday.desktop
@@ -26,7 +27,7 @@ install:
 	$(install) -m 644 pics/gbirthday.png $(DESTDIR)$(pixmaps)
 	$(mkdir) $(DESTDIR)$(sitelib)
 	$(cp) src/gbirthday/ $(DESTDIR)$(sitelib)
-	rm -rf $(DESTDIR)$(sitelib)/gbirthday/test*.py
+	$(rm) $(DESTDIR)$(sitelib)/gbirthday/test*.py
 	$(mkdir) $(DESTDIR)$(datadir)/applications/
 	$(install) -m 644 gbirthday.desktop \
 		$(DESTDIR)$(datadir)/applications/
@@ -35,11 +36,11 @@ install:
 	cd po && python install_po.py $(DESTDIR)
 
 uninstall:
-	rm -rvf $(DESTDIR)$(bindir)/gbirthday
-	rm -rvf $(DESTDIR)$(datadir)/applications/gbirthday.desktop
-	rm -rvf $(DESTDIR)$(datadir)/locale/*/LC_MESSAGES/gbirthday.mo
-	rm -rvf $(DESTDIR)$(pixmaps)/gbirthday.png
-	rm -rvf $(DESTDIR)$(sitelib)/gbirthday
+	$(rm) $(DESTDIR)$(bindir)/gbirthday
+	$(rm) $(DESTDIR)$(datadir)/applications/gbirthday.desktop
+	$(rm) $(DESTDIR)$(datadir)/locale/*/LC_MESSAGES/gbirthday.mo
+	$(rm) $(DESTDIR)$(pixmaps)/gbirthday.png
+	$(rm) -r $(DESTDIR)$(sitelib)/gbirthday
 
 tar.gz:	clean
 	$(tar) -zcf gbirthday-$(version).tar.gz *
