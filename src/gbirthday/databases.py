@@ -73,9 +73,6 @@ class DataBase:
         '''
         if (self.widget):
             self.widget.set_sensitive(True)
-            #self.text.set_sensitive(True)
-            #self.widget.show()
-            #self.text.show()
 
     def deactivate(self):
         '''
@@ -85,9 +82,6 @@ class DataBase:
         '''
         if (self.widget):
             self.widget.set_sensitive(False)
-            #self.text.set_sensitive(False)
-            #self.widget.hide()
-            #self.text.hide()
 
 
 class CSV(DataBase):
