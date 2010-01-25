@@ -73,7 +73,6 @@ class StatusIcon():
         # check if birthday today
         if self.addressbook.check_day(0):
             self.icon.set_from_file(IMAGESLOCATION + 'birthdayred.png')
-            #self.icon.set_blinking(True)
 
         # show notification of birthdays in the future
         try:
@@ -107,16 +106,6 @@ class StatusIcon():
         new_menu.show()
         new_menu.connect_object('activate', self.reload_gbirthday, None)
         menu.append(new_menu)
-
-        if self.icon.get_blinking():
-            new_menu = gtk.ImageMenuItem(_('Stop blinking'))
-            new_img = gtk.Image()
-            new_img.set_from_stock(gtk.STOCK_STOP, gtk.ICON_SIZE_MENU,)
-            new_menu.set_image(new_img)
-            new_menu.show()
-            new_menu.connect_object('activate', self.stop_blinking,
-                            'stop blinking')
-            menu.append(new_menu)
 
         new_menu = gtk.ImageMenuItem(_('Add'))
         new_img = gtk.Image()
@@ -223,8 +212,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
                     self.openwindow()
                 else:
                     self.closebdwindow('focus_out_event', self.closebdwindow, "")
-            else:
-                self.icon.set_blinking(False)
         else: # right-click
             # this is currently handled in on_right_click on its own
             pass
@@ -369,10 +356,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
         frame.show()
         self.showbd.show()
         self.showbd.connect('focus_out_event', self.closebdwindow, "text")
-
-    def stop_blinking(self, text):
-        '''stop blinking (only if icon blinks)'''
-        self.icon.set_blinking(False)
 
     def preferences_window(self, textcw=None):
         '''show settings window'''
