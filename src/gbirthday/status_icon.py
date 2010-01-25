@@ -244,7 +244,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
                     event_box.rc_get_style().bg[gtk.STATE_SELECTED])
         fila = fila + 1
 
-        def add_to_list(delta_day, name, image, fila):
+        def add_to_list(delta_day, name, fila):
             # search for birthdate
             for date, names in self.addressbook.bdays.items():
                 if name in names:
@@ -258,6 +258,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
                         (2000, birthdate.month, 1, 1, 0, 0, 0, 1, 0)))
             except:
                 lang_month = birthdate.month
+            image = gtk.Image()
             day = birthdate.day
             years = _('%s Years') % (datetime.date.today().year -
                                         birthdate.year)
@@ -342,10 +343,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
             table.attach(align_years, 5, 6, fila, fila + 1)
 
         for delta_day in range(self.conf.firstday, self.conf.lastday + 1):
-            image = gtk.Image()
-
             for name in self.addressbook.check_day(delta_day):
-                add_to_list(delta_day, name, image, fila)
+                add_to_list(delta_day, name, fila)
                 fila = fila + 1
 
         table.show()
