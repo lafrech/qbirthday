@@ -381,7 +381,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 
         def get_new_preferences(uno, option, spin):
             '''set value for settings by spinner'''
-            from .gtk_funcs import show_error_msg
             spin.update()
             if option == "firstday":
                 self.conf.firstday = spin.get_value_as_int()
@@ -390,8 +389,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
             elif option == "notify_future":
                 self.conf.notify_future_bdays = spin.get_value_as_int()
             else:
-                show_error_msg(_('Internal Error: Option %s not valid.')
-                                % option)
+                pass
 
         adjustment = gtk.Adjustment(int(self.conf.firstday), lower=-30,
                     upper=0, step_incr=-1, page_incr=0, page_size=0)
