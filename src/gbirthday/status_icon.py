@@ -39,7 +39,7 @@ class StatusIcon():
         self.dlg = None
         self._reload_set_icon()
         self.icon.connect('popup-menu', self.on_right_click)
-        self.icon.connect('button_press_event', self.on_left_click, 20)
+        self.icon.connect('button_press_event', self.on_left_click)
 
         def on_url(dialog, link):
             '''start default browser with gbirthday-website on click'''
@@ -204,7 +204,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
         '''open menu window on right click'''
         self.make_menu(event_button, event_time, icon)
 
-    def on_left_click(self, icon, event_button, event_time):
+    def on_left_click(self, icon, event_button):
         '''close/open window with list of birthdays'''
         # button == 1 -> left click
         if event_button.button == 1:
@@ -351,7 +351,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
         table.show()
         frame.show()
         self.showbd.show()
-        self.showbd.connect('focus_out_event', self.closebdwindow, None)
+        self.showbd.connect('focus_out_event', self.closebdwindow)
 
     def preferences_window(self, textcw=None):
         '''show settings window'''
@@ -639,7 +639,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
         add_window.set_border_width(5)
         add_window.show()
 
-    def closebdwindow(self, uno, dos, textcw):
+    def closebdwindow(self, uno, dos):
         '''close about window'''
         if self.showbd:
             self.showbd.destroy()
