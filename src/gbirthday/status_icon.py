@@ -64,6 +64,8 @@ class StatusIcon():
 
     def _reload_set_icon(self):
         '''Check, if there is a birthday and set icon and notify accordingly.'''
+        # reload addressbook
+        self.addressbook.reload()
         # check if a birthday is in specified period
         if self.addressbook.bdays_in_period():
             self.icon.set_from_file(IMAGESLOCATION + 'birthday.png')
