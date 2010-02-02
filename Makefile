@@ -10,6 +10,8 @@ cp = cp -a
 rm = rm -f
 tar = tar --exclude=.git --exclude=*.pyc
 
+python = python
+
 default:
 	echo Nothing to do.
 
@@ -33,7 +35,7 @@ install:
 		$(DESTDIR)$(datadir)/applications/
 	$(mkdir) $(DESTDIR)$(bindir)
 	$(install) -m 755 src/gb $(DESTDIR)$(bindir)/gbirthday
-	cd po && python install_po.py $(DESTDIR)
+	cd po && $(python) install_po.py $(DESTDIR)
 
 uninstall:
 	$(rm) $(DESTDIR)$(bindir)/gbirthday
