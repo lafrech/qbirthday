@@ -10,7 +10,7 @@ cp = cp -a
 rm = rm -f
 tar = tar --exclude=.git --exclude=*.pyc
 
-python = python
+python = /usr/bin/python
 
 default:
 	echo Nothing to do.
@@ -25,6 +25,7 @@ clean:
 install:
 	intltool-merge -d ./po ./gbirthday.desktop.in ./gbirthday.desktop
 	sed -i "s|@VER@|$(version)|g" src/gbirthday/__init__.py
+	sed -i "s|/usr/bin/python|$(python)|g" src/gb
 	$(mkdir) $(DESTDIR)$(pixmaps)
 	$(install) -m 644 pics/gbirthday.png $(DESTDIR)$(pixmaps)
 	$(mkdir) $(DESTDIR)$(sitelib)
