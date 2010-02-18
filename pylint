@@ -1,0 +1,36 @@
+#!/bin/bash
+# bash script for running pylint within $1 or .
+# (c) Thomas Spura, 2010
+
+# Explanations:
+
+# C0103: Invalid name
+# C0111: Missing docstring
+# C0301: Line too long
+# C0302: Too many lines in module
+
+# R0904: Too many public methods
+# R0912: Too many branches
+# R0915: Too many statements
+
+# W0614: Unused import
+
+if [ $# = 1 ]
+then
+    command=$(find $1 -name "*.py")
+else
+    command=$(find . -name "*.py")
+fi
+
+pylint --include-ids=y \
+    --disable-msg=C0103 \
+    --disable-msg=C0111 \
+    --disable-msg=C0301 \
+    --disable-msg=C0302 \
+    --disable-msg=R0904 \
+    --disable-msg=R0912 \
+    --disable-msg=R0915 \
+    --disable-msg=W0614 \
+    $command
+
+# --errors-only
