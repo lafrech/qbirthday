@@ -1,3 +1,7 @@
+0.6.4
+	Bugfixing:
+	- Fedora bugs: #563405
+
 0.6.3
 	Internal code clean up
 	Apply most suggestions from 2to3 script
