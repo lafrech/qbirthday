@@ -53,8 +53,8 @@ def test_activate():
         def __init__(self):
             self.sensitive = False
 
-        def set_sensitive(self, bool):
-            self.sensitive = bool
+        def set_sensitive(self, set_to):
+            self.sensitive = set_to
 
     database.widget = wid()
 

@@ -77,9 +77,18 @@ class AddressBook:
             return []
 
     def reload(self):
-        '''reload all bdays from all databases and update bdays'''
+        '''
+        reload all bdays from all databases and update bdays,
+        all birthdays added with addressbook.add() are deleted after
+        this
+        '''
         # delete bdays dict and reload again
         self.bdays = {}
+        if not self.conf:
+            # when no config class exists do a simple reload and exit
+            self.update()
+            return
+
         for database in DATABASES:
             if (database.__class__.__name__ in self.conf.used_databases):
                 database.parse(addressbook=self, conf=self.conf)

@@ -144,3 +144,10 @@ def test_update():
     # but check does
     assert AB.check_day(0)
     assert AB.bdays_dict
+
+@with_setup(setup, teardown)
+def test_run_reload():
+    '''simply run reload() once'''
+    assert not AB.check_day(0)
+    AB.reload()
+    assert not AB.check_day(0)
