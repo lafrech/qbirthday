@@ -222,6 +222,10 @@ class Evolution(DataBase):
         '''load and parse parse Evolution data files'''
         try:
             import evolution
+            # When there is no evolution addressbook, silently abort
+            # parsing.
+            if not evolution.ebook:
+                return
         except ImportError:
             show_error_msg(_("For correctly usage, you need to install gnome-python2-evolution."))
             return

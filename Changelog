@@ -1,6 +1,7 @@
 0.6.4
+	When there is no evolution addressbook, silently abort parsing.
 	Bugfixing:
-	- Fedora bugs: #563405, #568190
+	- Fedora bugs: #563405, #568190, #570196
 
 0.6.3
 	Internal code clean up
