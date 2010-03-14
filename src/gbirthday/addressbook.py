@@ -57,9 +57,13 @@ class AddressBook:
         else:
             self.bdays[birthday] = [name]
 
-    def bdays_in_period(self):
+    def bdays_in_period(self, firstDay=None, lastDay=None):
         '''returns True, if there is a birthday in specified period'''
-        for day in range(self.firstday, self.lastday + 1):
+        if not firstDay:
+            firstDay = self.firstday
+        if not lastDay:
+            lastDay = self.lastday
+        for day in range(firstDay, lastDay + 1):
             if day in self.bdays_dict:
                 return True
         return False

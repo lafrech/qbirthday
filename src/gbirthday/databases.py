@@ -258,7 +258,7 @@ class Lightning(DataBase):
                 has_config=False):
         DataBase.__init__(self, title=title, has_config=has_config)
         self.THUNDERBIRD_LOCATION = os.path.join(os.environ['HOME'],
-            '.mozilla.thunderbird')
+            '.mozilla-thunderbird')
         self.ab = None
         self.cursor = None
         self.conn = None
@@ -288,11 +288,11 @@ class Lightning(DataBase):
         else:
             show_error_msg(_('Error reading profile file: %s' % configfile))
 
-    def parse(self, addressbook, conf):
+    def parse(self, addressbook, conf=None):
         '''open thunderbird sqlite-database'''
+        self.ab = addressbook
         if (os.path.exists(self.THUNDERBIRD_LOCATION)):
             self.get_config_file(self.THUNDERBIRD_LOCATION)
-        self.ab = addressbook
 
     def connect(self, filename):
         '''"connect" to sqlite3-database'''
