@@ -285,16 +285,24 @@ class Lightning(DataBase):
             # get all data from profiles.ini
             for profile in profiles:
                 if profiles[profile]['isrelative']:
-                    location = os.path.join(configfile,
+                    profile_location = os.path.join(configfile,
                                         profiles[profile]['path'])
                 else:
-                    location = profiles[profile]['path']
-                location = os.path.join(location, 'storage.sdb')
+                    profile_location = profiles[profile]['path']
+                #look for calendar-data/local.sqlite first 
+                #(new in sunbird/lightning 1.0)
+                location = os.path.join(profile_location, 'calendar-data/local.sqlite')
                 print location
-                if os.path.isfile(location):
+                if os.path.exists(location):
                     self.parse_birthday(location)
-        else:
-            show_error_msg(_('Error reading profile file: %s' % configfile))
+                    return
+                # ... and now the old one
+                location = os.path.join(profile_location, 'storage.sdb')
+                print location
+                if os.path.exists(location):
+                    self.parse_birthday(location)
+                    return
+        show_error_msg(_('Error reading profile file: %s' % configfile))
 
     def parse(self, addressbook, conf=None):
         '''open thunderbird sqlite-database'''
