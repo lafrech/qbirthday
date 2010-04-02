@@ -1,0 +1,14 @@
+TODO for gbirthday
+
+[BUGFIX] close about-dialog with X
+[BUGFIX] icons in rightclick-Menu
+[TESTS] extended tests for databases
+[XXX] set AdressBook for each database in constructor (?)
+[FEATURE] save dialog/export birthdays
+[FEATURE] backup-functions
+[FEATURE] configuration window for lightning
+[FEATURE] configuration window for sunbird
+[FEATURE] input multiple birthdays
+[FEATURE] deployment/install scripts
+
+[NICE-TO-HAVE] get birthdays from pidgin
