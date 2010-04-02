@@ -51,6 +51,8 @@ class DataBase:
 
     def parse(self, addressbook, conf):
         '''load file / open database connection'''
+        # XXX: set addressbook in __init__?
+        self.ab = addressbook
         pass
 
     def add(self, name, birthday):
@@ -95,6 +97,8 @@ class CSV(DataBase):
 
     def parse(self, addressbook, conf):
         '''open and parse file'''
+        # XXX: set addressbook in __init__?
+        self.ab = addressbook
         self.addressbook = addressbook
         self.conf = conf
         if not conf.csv_files:
@@ -220,6 +224,8 @@ class Evolution(DataBase):
 
     def parse(self, addressbook=None, conf=None):
         '''load and parse parse Evolution data files'''
+        # XXX: set addressbook in __init__?
+        self.ab = addressbook
         try:
             import evolution
             # When there is no evolution addressbook, silently abort
@@ -270,12 +276,13 @@ class Lightning(DataBase):
             cp = ConfigParser.ConfigParser()
             cp.read(profilefile)
             profiles = {} # dict of founded profiles
+            # get profiles from profiles.ini in thunderbird directory
             for sec in cp.sections():
                 if sec.lower().startswith("profile"):
                     profiles[sec] = {}
                     for opt in cp.options(sec):
                         profiles[sec][opt.lower()] = cp.get(sec, opt)
-            # get all data from profiles
+            # get all data from profiles.ini
             for profile in profiles:
                 if profiles[profile]['isrelative']:
                     location = os.path.join(configfile,
@@ -283,6 +290,7 @@ class Lightning(DataBase):
                 else:
                     location = profiles[profile]['path']
                 location = os.path.join(location, 'storage.sdb')
+                print location
                 if os.path.isfile(location):
                     self.parse_birthday(location)
         else:
@@ -290,6 +298,7 @@ class Lightning(DataBase):
 
     def parse(self, addressbook, conf=None):
         '''open thunderbird sqlite-database'''
+        # XXX: set addressbook in __init__?
         self.ab = addressbook
         if (os.path.exists(self.THUNDERBIRD_LOCATION)):
             self.get_config_file(self.THUNDERBIRD_LOCATION)
@@ -412,6 +421,8 @@ class MySQL(DataBase):
 
     def parse(self, addressbook, conf):
         '''connect to mysql-database and get data'''
+        # XXX: set addressbook in __init__?
+        self.ab = addressbook
         self.connect()
         try:
             qry = ("SELECT %s, %s FROM %s"
@@ -504,6 +515,8 @@ class Sunbird(Lightning):
                 '.mozilla')
 
     def parse(self, addressbook, conf):
+        # XXX: set addressbook in __init__?
+        self.ab = addressbook
         '''load file / open database connection'''
         sunbird = os.path.join(self.mozilla_location, 'sunbird')
         iceowl = os.path.join(self.mozilla_location, 'iceowl')
