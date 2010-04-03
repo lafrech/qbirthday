@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gbirthday\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-01-09 17:58+0000\n"
+"POT-Creation-Date: 2010-04-03 07:53+0000\n"
 "PO-Revision-Date: 2009-10-03 13:17+1000\n"
 "Last-Translator: Alexander Logvinov <ports@logvinov.com>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -19,57 +19,61 @@ msgstr ""
 msgid "Birthday reminder for E-Mail contacts"
 msgstr "Напоминание о Днях рождения для контактов электронной почты"
 
-#: ../src/gbirthday/databases.py:122
+#: ../src/gbirthday/databases.py:117
 msgid "Could not save, CVS-file not set."
 msgstr "Не могу сохранить данные, не указан CVS файл"
 
-#: ../src/gbirthday/databases.py:130
+#: ../src/gbirthday/databases.py:125
 msgid "CSV-file does not exist"
 msgstr "CSV файл не существует"
 
-#: ../src/gbirthday/databases.py:237
+#: ../src/gbirthday/databases.py:236
 msgid "For correctly usage, you need to install gnome-python2-evolution."
 msgstr "Для корректной работы Вам необходимо установить gnome-python2-evolution."
 
-#: ../src/gbirthday/databases.py:296
+#: ../src/gbirthday/databases.py:305
 #, python-format
 msgid "Error reading profile file: %s"
 msgstr "Произошла ошибка во время чтения файла профиля: %s "
 
-#: ../src/gbirthday/databases.py:309 ../src/gbirthday/databases.py:408
+#: ../src/gbirthday/databases.py:319 ../src/gbirthday/databases.py:418
 #, python-format
 msgid "Package %s is not installed."
 msgstr "Пакет %s не установлен."
 
-#: ../src/gbirthday/databases.py:314
+#: ../src/gbirthday/databases.py:324
 #, python-format
 msgid "sqlite3 could not connect: %s"
 msgstr "Произошла·ошибка·во·время·соединения·с·sqlite3: %s"
 
-#: ../src/gbirthday/databases.py:379
+#: ../src/gbirthday/databases.py:389
 msgid "Could not execute SQLite-query"
 msgstr "Произошла ошибка во время выполнения SQLite запроса"
 
-#: ../src/gbirthday/databases.py:417
+#: ../src/gbirthday/databases.py:427
 msgid "Could not connect to MySQL-Server"
 msgstr "Произошла·ошибка·во·время·соединения·с·MySQL·сервером:"
 
-#: ../src/gbirthday/databases.py:431 ../src/gbirthday/databases.py:444
+#: ../src/gbirthday/databases.py:443 ../src/gbirthday/databases.py:456
 msgid "Could not execute MySQL-query"
 msgstr "Произошла ошибка во время выполнения MySQL запроса"
 
 #. Label for MySQL, just translate 'Database'
-#: ../src/gbirthday/databases.py:468
+#: ../src/gbirthday/databases.py:480
 msgid "MySQL-Database"
 msgstr "База данных MySQL"
 
-#: ../src/gbirthday/databases.py:524
+#: ../src/gbirthday/databases.py:538
 msgid "Neither iceowl nor sunbird is installed"
 msgstr "Sunbird или Iceowl не установлен"
 
-#: ../src/gbirthday/status_icon.py:89
+#: ../src/gbirthday/status_icon.py:86
 msgid "Birthday today:"
 msgstr "Дни рождения сегодня:"
+
+#: ../src/gbirthday/status_icon.py:89
+msgid "Birthday tomorrow:"
+msgstr "Дни рождения завтра:"
 
 #: ../src/gbirthday/status_icon.py:91
 #, python-format
@@ -80,127 +84,124 @@ msgstr "Дни рождения в ближайшие %s дней:"
 msgid "Reload"
 msgstr "Загрузить данные"
 
-#: ../src/gbirthday/status_icon.py:113
-msgid "Stop blinking"
-msgstr "Остановить индикацию"
-
-#: ../src/gbirthday/status_icon.py:122 ../src/gbirthday/status_icon.py:532
-#: ../src/gbirthday/status_icon.py:594
+#: ../src/gbirthday/status_icon.py:112 ../src/gbirthday/status_icon.py:509
+#: ../src/gbirthday/status_icon.py:574
 msgid "Add"
 msgstr "Добавить"
 
-#: ../src/gbirthday/status_icon.py:130 ../src/gbirthday/status_icon.py:381
+#: ../src/gbirthday/status_icon.py:120 ../src/gbirthday/status_icon.py:360
 msgid "Preferences"
 msgstr "Настройки"
 
-#: ../src/gbirthday/status_icon.py:140
+#: ../src/gbirthday/status_icon.py:130
 msgid "About"
 msgstr "О программе"
 
-#: ../src/gbirthday/status_icon.py:148
+#: ../src/gbirthday/status_icon.py:138
 msgid "Quit"
 msgstr "Выход"
 
-#: ../src/gbirthday/status_icon.py:164
+#: ../src/gbirthday/status_icon.py:154
 msgid "Birthday reminder"
 msgstr "Напоминание о Днях рождения"
 
-#: ../src/gbirthday/status_icon.py:195
+#: ../src/gbirthday/status_icon.py:185
 msgid "translator-credit"
 msgstr "Alexander Logvinov <ports@logvinov.com>"
 
-#: ../src/gbirthday/status_icon.py:200
+#: ../src/gbirthday/status_icon.py:190
 msgid "There are no translations or the translator doesn't want to get credits for that."
 msgstr "Перевод не доступен или переводчик решил не сообщать  свое имя."
 
-#: ../src/gbirthday/status_icon.py:254
+#: ../src/gbirthday/status_icon.py:239
 msgid "Birthdays"
 msgstr "Дни рождения"
 
-#: ../src/gbirthday/status_icon.py:257
+#: ../src/gbirthday/status_icon.py:242
 msgid "No birthdays in specified period"
 msgstr "В указанном периоде Дней рождений нет"
 
-#: ../src/gbirthday/status_icon.py:281
+#: ../src/gbirthday/status_icon.py:266
 #, python-format
 msgid "%s Years"
 msgstr "%s лет"
 
-#: ../src/gbirthday/status_icon.py:292 ../src/gbirthday/status_icon.py:293
+#: ../src/gbirthday/status_icon.py:277 ../src/gbirthday/status_icon.py:278
 msgid "Today"
 msgstr "Сегодня"
 
-#: ../src/gbirthday/status_icon.py:310 ../src/gbirthday/status_icon.py:313
+#: ../src/gbirthday/status_icon.py:295 ../src/gbirthday/status_icon.py:298
 msgid "Yesterday"
 msgstr "Вчера"
 
-#: ../src/gbirthday/status_icon.py:315
+#: ../src/gbirthday/status_icon.py:300
 #, python-format
 msgid "%s Days ago"
 msgstr "%s дня(ей) назад"
 
-#: ../src/gbirthday/status_icon.py:326
+#: ../src/gbirthday/status_icon.py:311
 msgid "Tomorrow"
 msgstr "Завтра"
 
-#: ../src/gbirthday/status_icon.py:328
+#: ../src/gbirthday/status_icon.py:313
 #, python-format
 msgid "%s Days"
 msgstr "%s дняей"
 
-#: ../src/gbirthday/status_icon.py:390
+#: ../src/gbirthday/status_icon.py:369
 msgid "Past birthdays"
 msgstr "Предыдущие Дни рождения"
 
-#: ../src/gbirthday/status_icon.py:394
+#: ../src/gbirthday/status_icon.py:373
 msgid "Next birthdays"
 msgstr "Следующие Дни рождения"
 
-#: ../src/gbirthday/status_icon.py:398
+#: ../src/gbirthday/status_icon.py:377
 msgid "Notification: Future birthdays"
 msgstr "Уведомления: будущие Дни рождения"
 
-#: ../src/gbirthday/status_icon.py:402 ../src/gbirthday/status_icon.py:623
+#: ../src/gbirthday/status_icon.py:381 ../src/gbirthday/status_icon.py:603
 msgid "Database"
 msgstr "Базы данных"
 
-#: ../src/gbirthday/status_icon.py:417
-#, python-format
-msgid "Internal Error: Option %s not valid."
-msgstr "Произошла внутреняя ошибка. Опция %s неверна."
-
-#: ../src/gbirthday/status_icon.py:455
+#: ../src/gbirthday/status_icon.py:432
 msgid "Database Configuration"
 msgstr "Конфигурация базы данных"
 
-#: ../src/gbirthday/status_icon.py:472
+#: ../src/gbirthday/status_icon.py:449
 msgid "Configure"
 msgstr "Настройка"
 
-#: ../src/gbirthday/status_icon.py:488 ../src/gbirthday/status_icon.py:582
-#: ../src/gbirthday/status_icon.py:655
+#: ../src/gbirthday/status_icon.py:465 ../src/gbirthday/status_icon.py:562
+#: ../src/gbirthday/status_icon.py:635
 msgid "Save & Close"
 msgstr "Сохранить и выйти"
 
-#: ../src/gbirthday/status_icon.py:541
+#: ../src/gbirthday/status_icon.py:518
 msgid "Name"
 msgstr "Имя"
 
-#: ../src/gbirthday/status_icon.py:545
+#: ../src/gbirthday/status_icon.py:522
 msgid "Birthday"
 msgstr "День рождения"
 
-#: ../src/gbirthday/status_icon.py:549
+#: ../src/gbirthday/status_icon.py:526
 msgid "Save to file/database"
 msgstr "Сохранить в файл или базу данных"
 
-#: ../src/gbirthday/status_icon.py:615
+#: ../src/gbirthday/status_icon.py:595
 msgid "Import Settings"
 msgstr "Импорт настроек"
 
-#: ../src/gbirthday/status_icon.py:638
+#: ../src/gbirthday/status_icon.py:618
 msgid "Export Settings"
 msgstr "Экспорт настроек"
+
+#~ msgid "Stop blinking"
+#~ msgstr "Остановить индикацию"
+
+#~ msgid "Internal Error: Option %s not valid."
+#~ msgstr "Произошла внутреняя ошибка. Опция %s неверна."
 
 #~ msgid "Days"
 #~ msgstr "дня(ей)"
