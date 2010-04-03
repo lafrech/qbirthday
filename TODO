@@ -12,3 +12,5 @@ TODO for gbirthday
 [FEATURE] deployment/install scripts
 
 [NICE-TO-HAVE] get birthdays from pidgin
+
+[OTHER_UPSTREAM_WORK] improve python2-evolution to emit contact.props.birth_date and use that instead of the vcard

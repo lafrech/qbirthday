@@ -1,7 +1,10 @@
 0.6.4
-	When there is no evolution addressbook, silently abort parsing.
 	Bugfixing:
-	- Fedora bugs: #563405, #568190, #570196
+	- Fedora bugs:
+	  #563405 Fix lightning crash
+	  #568190 Make csv_files variable optional in config
+	  #570196 When there is no evolution addressbook, silently abort parsing.
+	  #579097 sunbird 1.0 moved the database
 
 0.6.3
 	Internal code clean up
