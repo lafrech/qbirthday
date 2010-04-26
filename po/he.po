@@ -107,11 +107,11 @@ msgstr "יציאה"
 
 #: ../src/gbirthday/status_icon.py:154
 msgid "Birthday reminder"
-msgstr ""
+msgstr "תזכורת לימי ההולדת"
 
 #: ../src/gbirthday/status_icon.py:185
 msgid "translator-credit"
-msgstr ""
+msgstr "Yaron Shahrabani <sh.yaron@gmail.com>"
 
 #: ../src/gbirthday/status_icon.py:190
 msgid "There are no translations or the translator doesn't want to get credits for that."
