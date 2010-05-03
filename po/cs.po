@@ -1,0 +1,219 @@
+# Czech translations for PACKAGE package.
+# Copyright (C) 2010 THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Zdeněk Jurka <blondak@neser.cz>, 2010.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: gbirthday\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-05-03 07:48+0000\n"
+"PO-Revision-Date: 2010-05-03 14:42+0200\n"
+"Last-Translator: Blonďák <blondak@neser.cz>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language-Team: Czech\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+
+#: ../gbirthday.desktop.in.h:1
+msgid "Birthday reminder for E-Mail contacts"
+msgstr "Upozornění na narozeniny kontaktů programu Evolution"
+
+#: ../src/gbirthday/databases.py:117
+msgid "Could not save, CVS-file not set."
+msgstr "Nemohu uložit, CVS soubor není nastaven."
+
+#: ../src/gbirthday/databases.py:125
+msgid "CSV-file does not exist"
+msgstr "CVS soubor neexistuje"
+
+#: ../src/gbirthday/databases.py:236
+msgid "For correctly usage, you need to install gnome-python2-evolution."
+msgstr ""
+"Pro správnou funkci musí být nainstalován balíček gnome-python2-evolution."
+
+#: ../src/gbirthday/databases.py:305
+#, python-format
+msgid "Error reading profile file: %s"
+msgstr "Chyba čtení souboru profilu: %s"
+
+#: ../src/gbirthday/databases.py:319 ../src/gbirthday/databases.py:418
+#, python-format
+msgid "Package %s is not installed."
+msgstr "Balíček %s není nainstalován,"
+
+#: ../src/gbirthday/databases.py:324
+#, python-format
+msgid "sqlite3 could not connect: %s"
+msgstr "Nemohu se připojit na sqlite3: %s"
+
+#: ../src/gbirthday/databases.py:389
+msgid "Could not execute SQLite-query"
+msgstr "Nemohu spusti SQLite dotaz"
+
+#: ../src/gbirthday/databases.py:427
+msgid "Could not connect to MySQL-Server"
+msgstr "Nemohu se připojit na MySQL server"
+
+#: ../src/gbirthday/databases.py:443 ../src/gbirthday/databases.py:456
+msgid "Could not execute MySQL-query"
+msgstr "Nemohu spusti MySQL dotaz"
+
+#. Label for MySQL, just translate 'Database'
+#: ../src/gbirthday/databases.py:480
+msgid "MySQL-Database"
+msgstr "Databáze MySQL"
+
+#: ../src/gbirthday/databases.py:538
+msgid "Neither iceowl nor sunbird is installed"
+msgstr "Iceowl ani Sunbird není nainstalován"
+
+#: ../src/gbirthday/status_icon.py:86
+msgid "Birthday today:"
+msgstr "Dnešní narozeniny:"
+
+#: ../src/gbirthday/status_icon.py:89
+msgid "Birthday tomorrow:"
+msgstr "Zítřejší narozeniny:"
+
+#: ../src/gbirthday/status_icon.py:91
+#, python-format
+msgid "Birthday in %s Days:"
+msgstr "Narozeniny během %s dní:"
+#msgid_plural "Birthday in %s Days:"
+#msgstr[0] "Narozeniny během %s dne:"
+#msgstr[1] "Narozeniny během %s dnů:"
+#msgstr[2] "Narozeniny během %s dní:"
+
+#: ../src/gbirthday/status_icon.py:104
+msgid "Reload"
+msgstr "Znovu načíst"
+
+#: ../src/gbirthday/status_icon.py:112 ../src/gbirthday/status_icon.py:509
+#: ../src/gbirthday/status_icon.py:574
+msgid "Add"
+msgstr "Přidat"
+
+#: ../src/gbirthday/status_icon.py:120 ../src/gbirthday/status_icon.py:360
+msgid "Preferences"
+msgstr "Předvolby"
+
+#: ../src/gbirthday/status_icon.py:130
+msgid "About"
+msgstr "O aplikaci"
+
+#: ../src/gbirthday/status_icon.py:138
+msgid "Quit"
+msgstr "Ukončit"
+
+#: ../src/gbirthday/status_icon.py:154
+msgid "Birthday reminder"
+msgstr "Připomenutí narozenin"
+
+#: ../src/gbirthday/status_icon.py:185
+msgid "translator-credit"
+msgstr "překlad Blonďák <blondak@neser.cz>"
+
+#: ../src/gbirthday/status_icon.py:190
+msgid ""
+"There are no translations or the translator doesn't want to get credits for "
+"that."
+msgstr "Nejsou zde zádné překlady, nebo zde nejsou žádné poznámky k překladu."
+
+#: ../src/gbirthday/status_icon.py:239
+msgid "Birthdays"
+msgstr "Narozeniny"
+
+#: ../src/gbirthday/status_icon.py:242
+msgid "No birthdays in specified period"
+msgstr "Ve zvoleném období nejsou žádné narozeniny"
+
+#: ../src/gbirthday/status_icon.py:266
+#, python-format
+msgid "%s Years"
+msgstr "%s let"
+#msgid_plural "%s Years"
+#msgstr[0] "%s rok"
+#msgstr[1] "%s roky"
+#msgstr[2] "%s let"
+
+#: ../src/gbirthday/status_icon.py:277 ../src/gbirthday/status_icon.py:278
+msgid "Today"
+msgstr "dnes"
+
+#: ../src/gbirthday/status_icon.py:295 ../src/gbirthday/status_icon.py:298
+msgid "Yesterday"
+msgstr "včera"
+
+#: ../src/gbirthday/status_icon.py:300
+#, python-format
+msgid "%s Days ago"
+msgstr "před %s dny"
+#msgid_plural "%s Days ago"
+#msgstr[0] "před %s dnem"
+#msgstr[1] "před %s dny"
+#msgstr[2] "před %s dny"
+
+
+#: ../src/gbirthday/status_icon.py:311
+msgid "Tomorrow"
+msgstr "zítra"
+
+#: ../src/gbirthday/status_icon.py:313
+#, python-format
+msgid "%s Days"
+msgstr "%s dní"
+#msgid_plural "%s Days"
+#msgstr[0] "%s den"
+#msgstr[1] "%s dny"
+#msgstr[2] "%s dní"
+
+#: ../src/gbirthday/status_icon.py:369
+msgid "Past birthdays"
+msgstr "Uplynulé narozeniny"
+
+#: ../src/gbirthday/status_icon.py:373
+msgid "Next birthdays"
+msgstr "Příští narozeniny"
+
+#: ../src/gbirthday/status_icon.py:377
+msgid "Notification: Future birthdays"
+msgstr "Oznámení blížících se narozenin"
+
+#: ../src/gbirthday/status_icon.py:381 ../src/gbirthday/status_icon.py:603
+msgid "Database"
+msgstr "Databáze"
+
+#: ../src/gbirthday/status_icon.py:432
+msgid "Database Configuration"
+msgstr "Nastavení databáze"
+
+#: ../src/gbirthday/status_icon.py:449
+msgid "Configure"
+msgstr "Konfigurovat"
+
+#: ../src/gbirthday/status_icon.py:465 ../src/gbirthday/status_icon.py:562
+#: ../src/gbirthday/status_icon.py:635
+msgid "Save & Close"
+msgstr "Uložit a zavřít"
+
+#: ../src/gbirthday/status_icon.py:518
+msgid "Name"
+msgstr "Jméno"
+
+#: ../src/gbirthday/status_icon.py:522
+msgid "Birthday"
+msgstr "Narozeniny"
+
+#: ../src/gbirthday/status_icon.py:526
+msgid "Save to file/database"
+msgstr "Uložit do souboru/databáze"
+
+#: ../src/gbirthday/status_icon.py:595
+msgid "Import Settings"
+msgstr "Importovat nastavení"
+
+#: ../src/gbirthday/status_icon.py:618
+msgid "Export Settings"
+msgstr "Exportovat nastavení"
