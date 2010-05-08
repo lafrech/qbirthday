@@ -49,8 +49,7 @@ tar.gz:	clean
 	$(tar) -zcf gbirthday-$(version).tar.gz *
 
 tar.xz: clean
-	$(tar) --use-compress-program=xz \
-		-cf gbirthday-$(version).tar.xz *
+	$(tar) -Jcf gbirthday-$(version).tar.xz *
 
 test:
 	nosetests -v --with-coverage --cover-package=gbirthday
