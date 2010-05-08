@@ -55,11 +55,12 @@ try:
 except ImportError:
     _ = lambda x: x
 
-# own imports
-from .databases import Evolution, Lightning, Sunbird, CSV, MySQL
-
 # list of all availabe databases
-DATABASES = [Evolution(), Lightning(), Sunbird(), CSV(), MySQL()]
+DATABASES = []
+import databases
+for database in databases.SUPPORTED_DATABASES:
+    DATABASES.append(eval('databases.%s()' % database))
+
 CURRENT_DAY = time.strftime("%d", time.localtime(time.time()))
 
 
@@ -69,6 +70,7 @@ class Conf:
     def __init__(self):
         '''Try to read config file or initialize with default values.'''
         import ConfigParser
+        from .databases import MySQL
         self.firstday = self.lastday = None
         self.notify_future_bdays = None
         self.used_databases = None
@@ -179,6 +181,7 @@ class Conf:
 def main():
     '''Load settings, start status icon and get to work.'''
     from .addressbook import AddressBook
+    import databases
     from .status_icon import StatusIcon
     # try to load settings
     conf = Conf()

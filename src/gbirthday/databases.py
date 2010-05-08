@@ -29,6 +29,9 @@ import gtk
 
 from .gtk_funcs import show_error_msg
 
+SUPPORTED_DATABASES = ['DataBase', 'CSV', 'Evolution', 'Lightning',
+                        'MySQL', 'Sunbird']
+
 class DataBase:
     '''
      inheritance class for all databases
