@@ -472,8 +472,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 
     def save_config(self):
         '''save config in file'''
-        for db in self.addressbook.supported_databases:
-            db.update(self.conf)
+        for database in self.addressbook.supported_databases:
+            database.update()
         self.conf.save()
 
     def add(self, text):

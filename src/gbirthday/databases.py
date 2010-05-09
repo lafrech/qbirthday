@@ -69,7 +69,7 @@ class DataBase:
         '''create additional pygtk config in config menu'''
         pass
 
-    def update(self, conf):
+    def update(self):
         '''update and save values in file'''
         pass
 
@@ -453,7 +453,7 @@ class MySQL(DataBase):
         self.conn.close()
         self.ab.add(name, birthday)
 
-    def update(self, conf):
+    def update(self):
         '''update and save values'''
         if self.entries and self.entries != []:
             self.host = self.entries[0].get_text()
@@ -465,7 +465,7 @@ class MySQL(DataBase):
             self.name_row = self.entries[6].get_text()
             self.date_row = self.entries[7].get_text()
 
-            conf.MySQL = self
+            self.addressbook.conf.MySQL = self
 
     def create_config(self, pref):
         '''create additional mysql config in config menu'''
