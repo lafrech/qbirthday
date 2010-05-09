@@ -55,11 +55,6 @@ try:
 except ImportError:
     _ = lambda x: x
 
-# list of all availabe databases
-DATABASES = []
-import databases
-for database in databases.SUPPORTED_DATABASES:
-    DATABASES.append(eval('databases.%s()' % database))
 
 CURRENT_DAY = time.strftime("%d", time.localtime(time.time()))
 

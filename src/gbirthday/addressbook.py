@@ -15,12 +15,19 @@
 #}}}
 '''AddressBook module'''
 import datetime
-from .__init__ import DATABASES
-
 
 class AddressBook:
     '''AdressBook that saves birthday and names'''
     def __init__(self, conf=None):
+        import databases
+        self.supported_databases = []
+        for database in databases.SUPPORTED_DATABASES:
+            new_db = eval('databases.%s()' % database)
+            # parent DataBase is not considered as supported
+            if new_db.TITLE == 'Unknown':
+                continue
+            self.supported_databases.append(new_db)
+
         self.conf = conf
         if self.conf:
             self.firstday = conf.firstday
@@ -93,7 +100,7 @@ class AddressBook:
             self.update()
             return
 
-        for database in DATABASES:
+        for database in self.supported_databases:
             if (database.__class__.__name__ in self.conf.used_databases):
                 database.parse(addressbook=self, conf=self.conf)
         self.update()

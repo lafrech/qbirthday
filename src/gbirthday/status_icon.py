@@ -19,7 +19,7 @@ import time
 import os
 
 # own imports
-from .__init__ import DATABASES, VERSION
+from .__init__ import VERSION
 from .__init__ import MONTH_AT_PLACE, DAY_AT_PLACE
 from .__init__ import CURRENT_DAY
 
@@ -436,7 +436,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
             pref_db.show()
 
         vbox = gtk.VBox(False, 10)
-        for db in DATABASES:
+        for db in self.addressbook.supported_databases:
             hbox = gtk.HBox(False, 2)
             vbox.pack_start(hbox, False, False, 3)
 
@@ -472,7 +472,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 
     def save_config(self):
         '''save config in file'''
-        for db in DATABASES:
+        for db in self.addressbook.supported_databases:
             db.update(self.conf)
         self.conf.save()
 
@@ -537,7 +537,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
         calendar.show()
 
         combobox = gtk.combo_box_new_text()
-        for db in DATABASES:
+        for db in self.addressbook.supported_databases:
             if db.CAN_SAVE:
                 combobox.append_text(db.TITLE)
         combobox.set_active(0)
@@ -549,7 +549,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 
         def finish_add(uno, combo, name, calendar, window):
             '''save new added person'''
-            for db in DATABASES:
+            for db in self.addressbook.supported_databases:
                 if db.TITLE == combo.get_active_text():
                     calend = list(calendar.get_date())
                     calend[1] += 1
@@ -586,7 +586,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
         label.show()
 
         db_combo = gtk.combo_box_new_text()
-        for db in DATABASES:
+        for db in self.addressbook.supported_databases:
             db_combo.append_text(db.TITLE)
         db_combo.set_active(0)
         db_combo.show()
@@ -605,7 +605,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
         label.show()
 
         combobox = gtk.combo_box_new_text()
-        for db in DATABASES:
+        for db in self.addressbook.supported_databases:
             if db.CAN_SAVE:
                 combobox.append_text(db.TITLE)
         combobox.set_active(0)
@@ -626,7 +626,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
         def finish_add(uno, combo, name, calend, window):
             '''save new added person'''
             import datetime
-            for db in DATABASES:
+            for db in self.addressbook.supported_databases:
                 if db.TITLE == combo.get_active_text():
                     calend = list(calend.get_date())
                     calend[1] += 1
