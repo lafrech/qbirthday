@@ -28,6 +28,10 @@ class AddressBook:
                 continue
             self.supported_databases.append(new_db)
 
+        # all databases need to know of this addressbook
+        for database in self.supported_databases:
+            database.set_addressbook(self)
+
         self.conf = conf
         if self.conf:
             self.firstday = conf.firstday
@@ -102,7 +106,7 @@ class AddressBook:
 
         for database in self.supported_databases:
             if (database.__class__.__name__ in self.conf.used_databases):
-                database.parse(addressbook=self, conf=self.conf)
+                database.parse()
         self.update()
 
     def update(self):

@@ -51,11 +51,14 @@ class DataBase:
         self.HAS_CONFIG = can_save
         # the widget for additional config
         self.widget = widget
+        # the main addressbook
+        self.addressbook = None
 
-    def parse(self, addressbook, conf):
+    def set_addressbook(self, addressbook):
+        self.addressbook = addressbook
+
+    def parse(self):
         '''load file / open database connection'''
-        # XXX: set addressbook in __init__?
-        self.ab = addressbook
         pass
 
     def add(self, name, birthday):
@@ -95,18 +98,12 @@ class CSV(DataBase):
     def __init__(self):
         DataBase.__init__(self, title='CSV-file (comma seperated value)')
         self._seperators = ['; ', ', ', ': ']   # possible seperators
-        self.addressbook = None
-        self.conf = None
 
-    def parse(self, addressbook, conf):
+    def parse(self):
         '''open and parse file'''
-        # XXX: set addressbook in __init__?
-        self.ab = addressbook
-        self.addressbook = addressbook
-        self.conf = conf
-        if not conf.csv_files:
+        if not self.addressbook.conf.csv_files:
             return
-        for filename in conf.csv_files:
+        for filename in self.addressbook.conf.csv_files:
             if (os.path.exists(filename)):
                 for line in file(filename):
                     # check, if any of the seperators are in the text
@@ -114,7 +111,7 @@ class CSV(DataBase):
                         if len(line.split(sep)) > 1:
                             date = line.split(sep, 1)[0]
                             name = line.split(sep, 1)[1][:-1]
-                            addressbook.add(name, date)
+                            self.addressbook.add(name, date)
                             break
             else:
                 show_error_msg(_('Could not save, CVS-file not set.')
@@ -124,14 +121,14 @@ class CSV(DataBase):
         '''add new person with birthday to end of csv-file'''
         birthday = str(birthday)
         # TODO: show menu to select file?
-        if len(self.conf.csv_files) == 0:
+        if len(self.addressbook.conf.csv_files) == 0:
             show_error_msg(_('CSV-file does not exist'))
             return
-        filename = self.conf.csv_files[0]
+        filename = self.addressbook.conf.csv_files[0]
         if (os.path.exists(filename)):
-            output_file = file(self.conf.csv_files[0], 'a')
+            output_file = file(self.addressbook.conf.csv_files[0], 'a')
         else:
-            output_file = file(self.conf.csv_files[0], 'w')
+            output_file = file(self.addressbook.conf.csv_files[0], 'w')
         output_file.write(birthday + ', ' + name + '\n')
         output_file.close()
         self.addressbook.add(name, birthday)
@@ -140,7 +137,8 @@ class CSV(DataBase):
         index = combobox.get_active()
         if index >= 0:
             combobox.remove_text(index)
-            conf.csv_files.remove(conf.csv_files[index])
+            self.addressbook.conf.csv_files.remove(
+                self.addressbook.conf.csv_files[index])
         return
 
     def add_file(self, widget, combobox, entry, conf):
@@ -225,10 +223,8 @@ class Evolution(DataBase):
                         can_save=False, has_config=False)
         self._split_re = re.compile(r'\r?\n')
 
-    def parse(self, addressbook=None, conf=None):
+    def parse(self):
         '''load and parse parse Evolution data files'''
-        # XXX: set addressbook in __init__?
-        self.ab = addressbook
         try:
             import evolution
             # When there is no evolution addressbook, silently abort
@@ -247,9 +243,9 @@ class Evolution(DataBase):
                 # contact.props.birth_date{.year, .month, .day} non-existing
                 # -> using vcard
                 vcard = contact.get_vcard_string()
-                self.parse_birthday((contact.props.full_name, vcard), addressbook)
+                self.parse_birthday((contact.props.full_name, vcard))
 
-    def parse_birthday(self, data, addressbook):
+    def parse_birthday(self, data):
         '''parse evolution addressbook. the file is in VCard format.'''
         # TODO change to contact.props.birth_date, no vcard would be needed
         full_name, vcard = data
@@ -257,7 +253,7 @@ class Evolution(DataBase):
         for line in lines:
             # if BDAY is in vcard, use this as birthday
             if line.startswith('BDAY'):
-                addressbook.add(full_name, line.split(':', 1)[1])
+                self.addressbook.add(full_name, line.split(':', 1)[1])
 
 
 class Lightning(DataBase):
@@ -307,10 +303,8 @@ class Lightning(DataBase):
                     return
         show_error_msg(_('Error reading profile file: %s' % configfile))
 
-    def parse(self, addressbook, conf=None):
+    def parse(self):
         '''open thunderbird sqlite-database'''
-        # XXX: set addressbook in __init__?
-        self.ab = addressbook
         if (os.path.exists(self.THUNDERBIRD_LOCATION)):
             self.get_config_file(self.THUNDERBIRD_LOCATION)
 
@@ -430,10 +424,8 @@ class MySQL(DataBase):
             show_error_msg(_('Could not connect to MySQL-Server')
                             + str(msg))
 
-    def parse(self, addressbook, conf):
+    def parse(self):
         '''connect to mysql-database and get data'''
-        # XXX: set addressbook in __init__?
-        self.ab = addressbook
         self.connect()
         try:
             qry = ("SELECT %s, %s FROM %s"
@@ -441,7 +433,7 @@ class MySQL(DataBase):
             self.cursor.execute(qry)
             rows = self.cursor.fetchall()
             for row in rows:
-                addressbook.add(row[0], str(row[1]))
+                self.addressbook.add(row[0], str(row[1]))
         except Exception as msg:
             show_error_msg(_('Could not execute MySQL-query')
                             + ': %s\n %s' % (qry, str(msg)))
@@ -525,9 +517,7 @@ class Sunbird(Lightning):
         self.mozilla_location = os.path.join(os.environ['HOME'],
                 '.mozilla')
 
-    def parse(self, addressbook, conf):
-        # XXX: set addressbook in __init__?
-        self.ab = addressbook
+    def parse(self):
         '''load file / open database connection'''
         sunbird = os.path.join(self.mozilla_location, 'sunbird')
         iceowl = os.path.join(self.mozilla_location, 'iceowl')

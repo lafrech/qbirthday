@@ -4,6 +4,8 @@ TODO for gbirthday
 [BUGFIX] icons in rightclick-Menu
 [TESTS] extended tests for databases
 [XXX] set AdressBook for each database in constructor (?)
+    - done, def parse also modified to match new construction
+    - still todo: modify all other functions, e.g. update
 [FEATURE] save dialog/export birthdays
 [FEATURE] backup-functions
 [FEATURE] configuration window for lightning

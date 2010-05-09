@@ -35,7 +35,7 @@ def teardown():
 def test_init_no_bday():
     '''init_database'''
     assert database
-    database.parse('addressbook', 'conf')
+    database.parse()
     assert database
     database.add('name', 'birthday')
     assert database
