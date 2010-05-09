@@ -65,7 +65,7 @@ class DataBase:
         '''save new birthday to file/database (only if CAN_SAVE == true)'''
         pass
 
-    def create_config(self, table, conf):
+    def create_config(self, table):
         '''create additional pygtk config in config menu'''
         pass
 
@@ -133,44 +133,44 @@ class CSV(DataBase):
         output_file.close()
         self.addressbook.add(name, birthday)
 
-    def remove_file(self, widget, combobox, conf):
+    def remove_file(self, widget, combobox):
         index = combobox.get_active()
         if index >= 0:
             combobox.remove_text(index)
             self.addressbook.conf.csv_files.remove(
                 self.addressbook.conf.csv_files[index])
-        return
 
-    def add_file(self, widget, combobox, entry, conf):
+    def add_file(self, widget, combobox, entry):
         filename = entry.get_text()
         combobox.append_text(filename)
-        if conf.csv_files:
-            conf.csv_files.append(filename)
+        if self.addressbook.conf.csv_files:
+            self.addressbook.conf.csv_files.append(filename)
         else:
-            conf.csv_files = [filename]
+            self.addressbook.conf.csv_files = [filename]
 
-    def create_config(self, pref, conf):
+    def create_config(self, pref):
         '''create aditional options menu'''
         vbox = gtk.VBox()
         hbox = gtk.HBox()
         hbox2 = gtk.HBox()
         vbox.pack_start(hbox)
         combobox = gtk.combo_box_new_text()
-        if conf.csv_files:
-            for csv_file in conf.csv_files:
+        if self.addressbook.conf.csv_files:
+            for csv_file in self.addressbook.conf.csv_files:
                 combobox.append_text(csv_file)
         combobox.set_active(0)
         combobox.show()
         hbox.pack_start(combobox)
         remove_button = gtk.Button('remove')
-        remove_button.connect("clicked", self.remove_file, combobox, conf)
+        remove_button.connect("clicked", self.remove_file, combobox)
         remove_button.show()
         hbox.pack_start(remove_button, 0)
         hbox.show()
 
         entry = gtk.Entry()
-        if conf.csv_files and len(conf.csv_files) > 0:
-            entry.set_text(conf.csv_files[0])
+        if (self.addressbook.conf.csv_files and
+                len(self.addressbook.conf.csv_files) > 0):
+            entry.set_text(self.addressbook.conf.csv_files[0])
         hbox2.pack_start(entry)
         entry.show()
 
@@ -205,7 +205,7 @@ class CSV(DataBase):
         hbox2.pack_start(search_button)
 
         add_button = gtk.Button('add')
-        add_button.connect("clicked", self.add_file, combobox, entry, conf)
+        add_button.connect("clicked", self.add_file, combobox, entry)
         add_button.show()
         hbox2.pack_start(add_button)
 
@@ -467,7 +467,7 @@ class MySQL(DataBase):
 
             conf.MySQL = self
 
-    def create_config(self, pref, conf):
+    def create_config(self, pref):
         '''create additional mysql config in config menu'''
         table = gtk.Table(1, 2)
 

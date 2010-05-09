@@ -431,7 +431,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
         def preferences_db(widget, db):
             pref_db = self.gtk_get_top_window(_('Database Configuration'))
 
-            db.create_config(pref_db, self.conf)
+            db.create_config(pref_db)
             pref_db.set_modal(True)
             pref_db.show()
 
