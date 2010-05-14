@@ -91,7 +91,7 @@ class Conf:
         '''correct new settings, e.g. Evolution and not evolution anymore'''
         def replace(old, new, changed):
             '''replace old with new'''
-            for num, item in enumerate(self.used_databases):
+            for num in range(len(self.used_databases)):
                 if self.used_databases[num] == old:
                     changed = True
                     self.used_databases[num] = new
@@ -176,7 +176,6 @@ class Conf:
 def main():
     '''Load settings, start status icon and get to work.'''
     from .addressbook import AddressBook
-    import databases
     from .status_icon import StatusIcon
     # try to load settings
     conf = Conf()
