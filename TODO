@@ -1,6 +1,5 @@
 TODO for gbirthday
 
-[BUGFIX] close about-dialog with X
 [BUGFIX] icons in rightclick-Menu
 [TESTS] extended tests for databases
 [FEATURE] save dialog/export birthdays
@@ -20,3 +19,4 @@ TODO for gbirthday
 
 DONE:
 [XXX] set AdressBook for each database in constructor (?)
+[BUGFIX] close about-dialog with X

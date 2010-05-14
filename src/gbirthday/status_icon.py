@@ -191,8 +191,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
         dlg.set_website('http://gbirthday.sourceforge.net/')
 
         def close(w, res):
-            if res == gtk.RESPONSE_CANCEL:
-                w.hide()
+            w.hide()
         dlg.connect('response', close)
         dlg.run()
 
