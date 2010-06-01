@@ -552,9 +552,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
                 if db.TITLE == combo.get_active_text():
                     calend = list(calendar.get_date())
                     calend[1] += 1
-                    # FIXME: ugly fix for #563405 adding to Lightning
-                    if db.TITLE == 'Thunderbird/Icedove Lightning':
-                        db.ab = self.addressbook
                     db.add(name.get_text(), datetime.date(*calend))
             window.destroy()
 
