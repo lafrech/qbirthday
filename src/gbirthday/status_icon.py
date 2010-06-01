@@ -474,6 +474,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
         for database in self.addressbook.supported_databases:
             database.update()
         self.conf.save()
+        self.addressbook.reload()
+        self._reload_set_icon()
 
     def add(self, text):
         '''Show Dialog to add new Person - not yet implemented!'''

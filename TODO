@@ -8,6 +8,7 @@ TODO for gbirthday
 [FEATURE] configuration window for sunbird
 [FEATURE] input multiple birthdays
 [FEATURE] deployment/install scripts
+[XXX] Better (more consist) way to reload (see the rest of this commit for a reason)
 
 [NICE-TO-HAVE] get birthdays from pidgin
     tomspur: Why? There is a pidgin and evolution integration.
