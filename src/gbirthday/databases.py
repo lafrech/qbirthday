@@ -48,7 +48,7 @@ class DataBase:
         # new entries can be saved
         self.CAN_SAVE = can_save
         # additional config options for database connection or fukebane(s)
-        self.HAS_CONFIG = can_save
+        self.HAS_CONFIG = has_config
         # the widget for additional config
         self.widget = widget
         # the main addressbook
