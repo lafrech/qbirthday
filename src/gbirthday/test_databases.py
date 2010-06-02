@@ -66,3 +66,11 @@ def test_activate():
     assert not database.widget.sensitive
     database.activate()
     assert database.widget.sensitive
+
+def test_evolution():
+    '''evolution is working with local evolution setup?'''
+    from .databases import Evolution
+    e = Evolution()
+    e.parse()
+    assert (e.TITLE == 'Evolution')
+    assert (not e.addressbook)
