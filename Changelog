@@ -1,3 +1,11 @@
+0.6.5
+	- Reload addressbook, when clickint on 'Save & Close'
+	- Properly close about-dialog on 'X'
+	- Internal code clean up
+	- Translation update: Czech, Danish, Hebrew
+	- Fedora bugs:
+	  #598240 Fix crash, when adding person to cvs file
+
 0.6.4
 	Bugfixing:
 	- Fedora bugs:
