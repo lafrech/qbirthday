@@ -1,4 +1,4 @@
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: gbirthday\n"
@@ -63,7 +63,6 @@ msgid "Neither iceowl nor sunbird is installed"
 msgstr "Né iceowl né sunbird sono installati"
 
 #: ../src/gbirthday/status_icon.py:86
-#, fuzzy
 msgid "Birthday today:"
 msgstr "Compleanni oggi:"
 
@@ -106,11 +105,8 @@ msgid "translator-credit"
 msgstr "translator-credit"
 
 #: ../src/gbirthday/status_icon.py:190
-msgid ""
-"There are no translations or the translator doesn't want to get credits for "
-"that."
-msgstr ""
-"Non ci sono traduzioni o il traduttore non ha voluto riconoscimenti per esse."
+msgid "There are no translations or the translator doesn't want to get credits for that."
+msgstr "Non ci sono traduzioni o il traduttore non ha voluto riconoscimenti per esse."
 
 #: ../src/gbirthday/status_icon.py:238
 msgid "Birthdays"
@@ -121,7 +117,7 @@ msgid "No birthdays in specified period"
 msgstr "Non ci sono compleanni nel periodo di tempo determinato"
 
 #: ../src/gbirthday/status_icon.py:265
-#, fuzzy, python-format
+#, python-format
 msgid "%s Years"
 msgstr "%s Anni"
 
