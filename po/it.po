@@ -60,7 +60,7 @@ msgstr "MySQL-Database"
 
 #: ../src/gbirthday/databases.py:529
 msgid "Neither iceowl nor sunbird is installed"
-msgstr "Né iceowl né sunbird non sono installati"
+msgstr "Né iceowl né sunbird sono installati"
 
 #: ../src/gbirthday/status_icon.py:86
 #, fuzzy
