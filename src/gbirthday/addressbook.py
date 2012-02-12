@@ -15,23 +15,11 @@
 #}}}
 '''AddressBook module'''
 import datetime
+from __init__ import DATABASES
 
 class AddressBook:
     '''AdressBook that saves birthday and names'''
     def __init__(self, conf=None):
-        import databases
-        self.supported_databases = []
-        for database in databases.SUPPORTED_DATABASES:
-            new_db = eval('databases.%s()' % database)
-            # parent DataBase is not considered as supported
-            if new_db.TITLE == 'Unknown':
-                continue
-            self.supported_databases.append(new_db)
-
-        # all databases need to know of this addressbook
-        for database in self.supported_databases:
-            database.set_addressbook(self)
-
         self.conf = conf
         if self.conf:
             self.firstday = conf.firstday
@@ -68,13 +56,13 @@ class AddressBook:
         else:
             self.bdays[birthday] = [name]
 
-    def bdays_in_period(self, firstday=None, lastday=None):
+    def bdays_in_period(self, firstDay=None, lastDay=None):
         '''returns True, if there is a birthday in specified period'''
-        if not firstday:
-            firstday = self.firstday
-        if not lastday:
-            lastday = self.lastday
-        for day in range(firstday, lastday + 1):
+        if not firstDay:
+            firstDay = self.firstday
+        if not lastDay:
+            lastDay = self.lastday
+        for day in range(firstDay, lastDay + 1):
             if day in self.bdays_dict:
                 return True
         return False
@@ -104,9 +92,9 @@ class AddressBook:
             self.update()
             return
 
-        for database in self.supported_databases:
+        for database in DATABASES:
             if (database.__class__.__name__ in self.conf.used_databases):
-                database.parse()
+                database.parse(addressbook=self, conf=self.conf)
         self.update()
 
     def update(self):

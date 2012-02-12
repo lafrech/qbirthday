@@ -38,6 +38,10 @@ import datetime
 from datetime import date
 import time
 
+# TODO check for needed modules
+from databases import DATABASES
+import databases
+
 # parse locales from python module
 # Do you say "1. January" or "January 1."?
 import locale
@@ -55,9 +59,7 @@ try:
 except ImportError:
     _ = lambda x: x
 
-
 CURRENT_DAY = time.strftime("%d", time.localtime(time.time()))
-
 
 class Conf:
     '''Class for handle all configurations.'''
@@ -65,12 +67,11 @@ class Conf:
     def __init__(self):
         '''Try to read config file or initialize with default values.'''
         import ConfigParser
-        from .databases import MySQL
         self.firstday = self.lastday = None
         self.notify_future_bdays = None
         self.used_databases = None
         self.csv_files = None
-        self.mysql = MySQL()
+        self.mysql = databases.mysql_db
         self.settings = ConfigParser.ConfigParser()
         try:
             self.settings.readfp(file(os.environ['HOME'] + "/.gbirthdayrc"))
@@ -91,7 +92,7 @@ class Conf:
         '''correct new settings, e.g. Evolution and not evolution anymore'''
         def replace(old, new, changed):
             '''replace old with new'''
-            for num in range(len(self.used_databases)):
+            for num, item in enumerate(self.used_databases):
                 if self.used_databases[num] == old:
                     changed = True
                     self.used_databases[num] = new
@@ -175,8 +176,8 @@ class Conf:
 
 def main():
     '''Load settings, start status icon and get to work.'''
-    from .addressbook import AddressBook
-    from .status_icon import StatusIcon
+    from addressbook import AddressBook
+    from status_icon import StatusIcon
     # try to load settings
     conf = Conf()
 
