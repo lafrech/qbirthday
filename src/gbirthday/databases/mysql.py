@@ -52,12 +52,15 @@ class MySQL(DataBase):
         except Exception as msg:
             show_error_msg(_('Could not connect to MySQL-Server')
                             + str(msg))
+            return False
+        return True
 
     def parse(self, addressbook, conf):
         '''connect to mysql-database and get data'''
         # XXX: set addressbook in __init__?
         self.ab = addressbook
-        self.connect()
+        if not self.connect():
+            return
         try:
             qry = ("SELECT %s, %s FROM %s"
                         % (self.name_row, self.date_row, self.table))
