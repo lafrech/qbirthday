@@ -136,7 +136,6 @@ def test_update():
     '''test, if update works with adding correctly'''
     import datetime
     now = datetime.date.today()
-    now = str(now)
     assert not AB.check_day(0)
     AB.add('dummy', now)
     # add does not fill bdays_dict
@@ -144,6 +143,17 @@ def test_update():
     # but check does
     assert AB.check_day(0)
     assert AB.bdays_dict
+
+@with_setup(setup, teardown)
+def test_two_people_at_same_day():
+    '''test, if we can find 2 people who have birthday at the same day'''
+    import datetime
+    now = datetime.date.today()
+    assert not AB.check_day(0)
+    AB.add('guybrush', now)
+    AB.add('harvey', now)
+    assert AB.check_day(0)
+    assert len(AB.bdays_dict[0]) == 2
 
 @with_setup(setup, teardown)
 def test_run_reload():
