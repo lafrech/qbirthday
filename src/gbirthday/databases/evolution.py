@@ -24,7 +24,7 @@ class Evolution(DataBase):
     '''data import from the Evolution address book'''
     def __init__(self):
         super(Evolution, self).__init__(title='Evolution', can_save=False, 
-                                           has_config=False)
+                                        has_config=False)
         self._split_re = re.compile(r'\r?\n')
         
     def parse(self, addressbook=None, conf=None):
@@ -38,7 +38,7 @@ class Evolution(DataBase):
             if not evolution.ebook:
                 return
         except ImportError:
-            show_error_msg(_("For correctly usage, you need to install gnome-python2-evolution."))
+            show_error_msg(_("You need to install python-evolution to use the evolution module"))
             return
 
         for book in evolution.ebook.list_addressbooks():
