@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=GBirthday
 _Comment=Birthday reminder for E-Mail contacts
 Exec=gbirthday

@@ -1,16 +1,23 @@
 TODO for gbirthday
 
-[BUGFIX] close about-dialog with X
 [BUGFIX] icons in rightclick-Menu
 [TESTS] extended tests for databases
-[XXX] set AdressBook for each database in constructor (?)
 [FEATURE] save dialog/export birthdays
 [FEATURE] backup-functions
 [FEATURE] configuration window for lightning
 [FEATURE] configuration window for sunbird
 [FEATURE] input multiple birthdays
 [FEATURE] deployment/install scripts
+[XXX] Better (more consist) way to reload (see the rest of this commit for a reason)
 
 [NICE-TO-HAVE] get birthdays from pidgin
+    tomspur: Why? There is a pidgin and evolution integration.
+        Then you'll have your pidin contacts in evolution and can get it
+        from there.
 
 [OTHER_UPSTREAM_WORK] improve python2-evolution to emit contact.props.birth_date and use that instead of the vcard
+
+
+DONE:
+[XXX] set AdressBook for each database in constructor (?)
+[BUGFIX] close about-dialog with X

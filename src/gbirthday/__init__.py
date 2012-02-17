@@ -40,6 +40,7 @@ import time
 
 # TODO check for needed modules
 from databases import DATABASES
+import databases
 
 # parse locales from python module
 # Do you say "1. January" or "January 1."?
@@ -70,7 +71,7 @@ class Conf:
         self.notify_future_bdays = None
         self.used_databases = None
         self.csv_files = None
-        self.mysql = MySQL()
+        self.mysql = databases.mysql_db
         self.settings = ConfigParser.ConfigParser()
         try:
             self.settings.readfp(file(os.environ['HOME'] + "/.gbirthdayrc"))

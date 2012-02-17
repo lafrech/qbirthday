@@ -30,8 +30,8 @@ class AddressBook:
         self.bdays = {}  # list of all birthdays. Format:
                     # {birthday: [Name1, Name2]}
                     # for example
-                    # {'1970-01-01': ['Bar, Foo', 'Time'],
-                    #  '1967-12-12': ['Power, Max']}
+                    # { datetime.date(1970, 1, 1): ['Bar, Foo', 'Time'],
+                    #   datetime.date(1967, 12, 12)': ['Power, Max']}
 
         self.bdays_dict = {} # list of all birthdays in specified period
                     # Format: {3: [Name1, Name2],
@@ -42,12 +42,17 @@ class AddressBook:
     def add(self, name, birthday):
         '''add a new person'''
         self.needs_update = True
-        birthday = str(birthday)
-
-        # if birthday is in format JJJJMMDD modify it to JJJJ-MM-DD
-        if birthday.find("-") is -1:
-            birthday = birthday[:4] + "-" + birthday[4:6] + "-" + birthday[-2:]
-
+        if isinstance(birthday, str):
+            if birthday.find("-") > -1:
+                # birthday is in format YYYY-MM-DD
+                birthday = datetime.date(*[int(b) for b in birthday.split('-')])
+            else:
+                # if birthday is in format YYYYMMDD
+                birthday = datetime.date(int(birthday[:4]), 
+                                         int(birthday[4:6]), 
+                                         int(birthday[-2:]))
+                
+        
         if birthday in self.bdays:
             # check for double entry - we assume that people with the same name
             # and the same birthday exists only once in our universe
@@ -104,11 +109,10 @@ class AddressBook:
         # delete bdays_dict
         self.bdays_dict = {}
         # iterate over specified period
-        for day in range(self.firstday, self.lastday + 1):
-            new_day = now + datetime.timedelta(day)
-            searchfor = str(new_day)[4:]
+        for day_num in xrange(self.firstday, self.lastday + 1):
+            day = now + datetime.timedelta(day_num)
 
             # is date in bdays.keys -> add to dict
             for date, birthdays in self.bdays.items():
-                if date.find(searchfor) != -1:
-                    self.bdays_dict[day] = birthdays
+                if day.day == date.day and day.month == date.month:
+                    self.bdays_dict[day_num] = birthdays

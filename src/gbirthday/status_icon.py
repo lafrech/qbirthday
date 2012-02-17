@@ -253,10 +253,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
             for date, names in self.addressbook.bdays.items():
                 if name in names:
                     birthdate = date
-            birthdate = datetime.date(int(birthdate[:4]),
-                                        int(birthdate[5:7]),
-                                        int(birthdate[8:10]))
-
             try:
                 lang_month = str(time.strftime('%B',
                         (2000, birthdate.month, 1, 1, 0, 0, 0, 1, 0)))
