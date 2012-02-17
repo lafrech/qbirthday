@@ -38,6 +38,9 @@ import datetime
 from datetime import date
 import time
 
+# TODO check for needed modules
+from databases import DATABASES
+
 # parse locales from python module
 # Do you say "1. January" or "January 1."?
 import locale
@@ -55,13 +58,7 @@ try:
 except ImportError:
     _ = lambda x: x
 
-# own imports
-from .databases import Evolution, Lightning, Sunbird, CSV, MySQL
-
-# list of all availabe databases
-DATABASES = [Evolution(), Lightning(), Sunbird(), CSV(), MySQL()]
 CURRENT_DAY = time.strftime("%d", time.localtime(time.time()))
-
 
 class Conf:
     '''Class for handle all configurations.'''
@@ -178,8 +175,8 @@ class Conf:
 
 def main():
     '''Load settings, start status icon and get to work.'''
-    from .addressbook import AddressBook
-    from .status_icon import StatusIcon
+    from addressbook import AddressBook
+    from status_icon import StatusIcon
     # try to load settings
     conf = Conf()
 

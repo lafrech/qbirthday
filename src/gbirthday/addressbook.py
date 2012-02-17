@@ -15,8 +15,7 @@
 #}}}
 '''AddressBook module'''
 import datetime
-from .__init__ import DATABASES
-
+from __init__ import DATABASES
 
 class AddressBook:
     '''AdressBook that saves birthday and names'''

@@ -19,7 +19,8 @@ import time
 import os
 
 # own imports
-from .__init__ import DATABASES, VERSION
+from .__init__ import VERSION
+from .__init__ import DATABASES
 from .__init__ import MONTH_AT_PLACE, DAY_AT_PLACE
 from .__init__ import CURRENT_DAY
 
@@ -219,7 +220,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
     def openwindow(self):
         '''open window that includes all birthdays'''
         import datetime
-        self.showbd = self.gtk_get_top_window('', False, False)
+        self.showbd = self.gtk_get_top_window('', False, False, True)
 
         box = gtk.HBox()
         box.set_border_width(5)
@@ -652,7 +653,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 
     ### gtk helper functions ###
     @staticmethod
-    def gtk_get_top_window(title, decorated=True, center=True):
+    def gtk_get_top_window(title, decorated=True, center=True, 
+                           hide_in_taskbar=False):
         '''Get gtk top window.'''
         window = gtk.Window(gtk.WINDOW_TOPLEVEL)
         window.set_decorated(decorated)
@@ -662,6 +664,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
             window.set_position(gtk.WIN_POS_MOUSE)
         window.set_title(title)
         window.set_icon_from_file(IMAGESLOCATION + 'birthday.png')
+        window.set_skip_taskbar_hint(hide_in_taskbar)
         return window
 
 if __name__ == "__main__":
