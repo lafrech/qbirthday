@@ -33,7 +33,7 @@ VERSION = "@VER@"
 
 import gtk
 
-import os
+import os, shutil
 import datetime
 from datetime import date
 import time
@@ -73,8 +73,32 @@ class Conf:
         self.csv_files = None
         self.mysql = databases.mysql_db
         self.settings = ConfigParser.ConfigParser()
+
+        # If XDG_CONFIG_HOME is defined, use it to store config file
+        if 'XDG_CONFIG_HOME' in os.environ:
+            self.base_path = os.environ['XDG_CONFIG_HOME'] + "/gbirthday"
+            # If no config file here, check for config files in ~/.config
+            if not os.path.isdir(self.base_path):
+                if os.path.isdir(os.environ['HOME'] + "/.config/gbirthday"):
+                    shutil.copytree(os.environ['HOME'] + "/.config/gbirthday",
+                                    self.base_path)
+                else:
+                    os.makedirs(self.base_path)
+        # else, use ~/.config
+        else:
+            self.base_path = os.environ['HOME'] + "/.config/gbirthday"
+            if not os.path.isdir(self.base_path):
+                os.makedirs(self.base_path)
+
+        # If no config in base path, check old path ~/.gbirthdayrc
+        # This is here for backward compatibility, remove it when time has come
+        if not os.path.exists(self.base_path + '/gbirthdayrc'):
+            if os.path.exists(os.environ['HOME'] + '/.gbirthdayrc'):
+                shutil.copy2(os.environ['HOME'] + '/.gbirthdayrc',
+                             self.base_path + '/gbirthdayrc')
+
         try:
-            self.settings.readfp(file(os.environ['HOME'] + "/.gbirthdayrc"))
+            self.settings.readfp(file(self.base_path + '/gbirthdayrc'))
         except IOError:
             self.settings.add_section("main")
             self.default_values()
@@ -171,8 +195,7 @@ class Conf:
     def save(self):
         '''Save current settings to disk.'''
         self.sync_to_settings()
-        self.settings.write(file(os.environ['HOME'] + "/.gbirthdayrc", "w"))
-
+        self.settings.write(file(self.base_path + '/gbirthdayrc', "w"))
 
 def main():
     '''Load settings, start status icon and get to work.'''
