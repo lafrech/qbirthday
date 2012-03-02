@@ -137,6 +137,5 @@ class MySQL(DataBase):
             i += 1
         sqltable.show()
         table.attach(sqltable, 1, 2, 0, 1)
-        self.widget = sqltable
         table.show()
         pref.add(table)

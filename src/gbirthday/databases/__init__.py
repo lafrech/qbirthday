@@ -33,16 +33,13 @@ class DataBase(object):
      you have to add your Database to the databases-list
     '''
 
-    def __init__(self, title='Unknown', can_save=True,
-            has_config=True, widget=None):
+    def __init__(self, title='Unknown', can_save=True, has_config=True):
         # Title that will be displayed to the user
         self.TITLE = title
         # new entries can be saved
         self.CAN_SAVE = can_save
         # additional config options for database connection or fukebane(s)
         self.HAS_CONFIG = can_save
-        # the widget for additional config
-        self.widget = widget
 
     def parse(self, addressbook, conf):
         '''load file / open database connection'''
@@ -61,24 +58,6 @@ class DataBase(object):
     def update(self, conf):
         '''update and save values in file'''
         pass
-
-    def activate(self):
-        '''
-        someone clicked on the checkbox for this DataBase, so show optional
-        settings
-        (just set the created pygtk elements to visible)
-        '''
-        if (self.widget):
-            self.widget.set_sensitive(True)
-
-    def deactivate(self):
-        '''
-        someone clicked on the checkbox for this DataBase, so hide optional
-        settings
-        (just hide the visible elements)
-        '''
-        if (self.widget):
-            self.widget.set_sensitive(False)
 
 from csv import CSV
 from evolution import Evolution

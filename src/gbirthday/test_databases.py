@@ -46,23 +46,3 @@ def test_init_no_bday():
     database.update('conf')
     assert database
 
-@with_setup(setup, teardown)
-def test_activate():
-    '''test (de)activate'''
-    class wid():
-        def __init__(self):
-            self.sensitive = False
-
-        def set_sensitive(self, set_to):
-            self.sensitive = set_to
-
-    database.widget = wid()
-
-    database.activate()
-    assert database.widget.sensitive
-    database.deactivate()
-    assert not database.widget.sensitive
-    database.deactivate()
-    assert not database.widget.sensitive
-    database.activate()
-    assert database.widget.sensitive

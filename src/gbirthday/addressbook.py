@@ -16,6 +16,7 @@
 '''AddressBook module'''
 import datetime
 from __init__ import DATABASES
+from textwrap import dedent
 
 class AddressBook:
     '''AdressBook that saves birthday and names'''
@@ -102,6 +103,9 @@ class AddressBook:
                 database.parse(addressbook=self, conf=self.conf)
         self.update()
 
+        if self.conf.ics_export:
+            self.export()
+
     def update(self):
         '''update bdays_dict to contain all bdays in specified period'''
         now = datetime.date.today()
@@ -116,3 +120,51 @@ class AddressBook:
             for date, birthdays in self.bdays.items():
                 if day.day == date.day and day.month == date.month:
                     self.bdays_dict[day_num] = birthdays
+
+    def export(self):
+        '''Export birthday list as iCalendar file'''
+        
+        with open(self.conf.ics_filepath,'w') as f:
+            f.write(dedent("""\
+                BEGIN:VCALENDAR
+                VERSION:2.0
+                PRODID:-//gbirthday//EN
+                """))
+
+            now = datetime.datetime.now()
+            now = str(now)[0:4] + str(now)[5:7] + str(now)[8:10] + 'T' \
+                + str(now)[11:13] + str(now)[14:16] + str(now)[17:19] + 'Z'
+
+            for bd in self.bdays:
+                bdate = str(bd)[0:4] + str(bd)[5:7] + str(bd)[8:10]
+
+                f.write('BEGIN:VEVENT\n')
+                f.write('UID:gbirthday-' + now + '\n')
+                f.write('CREATED:' + now + '\n')
+                f.write('LAST-MODIFIED:' + now + '\n')
+                f.write('DTSTAMP:' + now + '\n')
+                f.write('DTSTART:' + bdate + '\n')
+                f.write('DURATION:PT0S\n')
+                f.write('CATEGORIES:' + _("Birthday") + '\n')
+                f.write('SUMMARY:' + _("Birthday: ") + self.bdays[bd][0] + '\n')
+                f.write(dedent("""\
+                    CLASS:PRIVATE
+                    TRANSP:TRANSPARENT
+                    RRULE:FREQ=YEARLY
+                    """))
+                if self.conf.ics_alarm:
+                    f.write('BEGIN:VALARM\n')
+                    f.write('ACTION:DISPLAY\n')
+                    f.write('TRIGGER;VALUE=DURATION:-P' \
+                        + self.conf.ics_alarm_days + 'D\n')
+                    f.write('DESCRIPTION:' + _("Birthday: ") \
+                        + self.bdays[bd][0] + '\n')
+                    if self.conf.ics_alarm_custom_properties != '':
+                        f.write(self.conf.ics_alarm_custom_properties + '\n')
+                    f.write("END:VALARM\n")
+                if self.conf.ics_custom_properties != '':
+                    f.write(self.conf.ics_custom_properties + '\n')
+                f.write("END:VEVENT\n")
+
+            f.write("END:VCALENDAR")
+
