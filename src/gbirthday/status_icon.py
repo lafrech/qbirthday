@@ -754,7 +754,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 
         combobox = gtk.combo_box_new_text()
         for db in DATABASES:
-            if db.CAN_SAVE:
+            if db.CAN_SAVE and \
+               db.__class__.__name__ in self.addressbook.conf.used_databases:
                 combobox.append_text(db.TITLE)
         combobox.set_active(0)
         combobox.show()
