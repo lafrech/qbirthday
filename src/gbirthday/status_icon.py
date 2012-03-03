@@ -412,7 +412,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
         hsep = gtk.HSeparator()
         table.attach(hsep, 0, 2, 4, 5)
         hsep.show()
-  
+
         # Databases
         def db_select(widget, db):
             '''Enable / disable DB setting widgets'''
@@ -561,24 +561,18 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
                 chk.get_active())
             self.ics_alarm_custom_properties_scroll.set_sensitive( \
                 chk.get_active())
-            
-        hbox = gtk.HBox()
-        chk = gtk.CheckButton()
+
+        chk = gtk.CheckButton(_('Set alarms'))
         chk.set_active(self.conf.ics_alarm)
         chk.connect("clicked", ics_alarm_chk_cb)
-        label = gtk.Label(_('Set alarms'))
-        hbox.pack_start(chk, False, False, 0)
-        hbox.pack_start(label, False, False, 0)
         chk.show()
-        label.show()
-        hbox.show()
-        vbox.pack_start(hbox, False, False, 0)
+        vbox.pack_start(chk, False, False, 0)
         
         # ICS nb of days btween alarm and birthday
         hbox = gtk.HBox()
         adjustment = gtk.Adjustment(int(self.conf.ics_alarm_days), lower=0,
                     upper=60, step_incr=1, page_incr=0, page_size=0)
-        self.ics_alarm_days_spin = gtk.SpinButton(adjustment, climb_rate=0.0, 
+        self.ics_alarm_days_spin = gtk.SpinButton(adjustment, climb_rate=0.0,
                                                   digits=0)
         self.ics_alarm_days_label = gtk.Label(_('days before each birthday'))
         self.ics_alarm_days_spin.set_sensitive(self.conf.ics_alarm)
@@ -607,7 +601,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
         textview.set_editable(True)
         self.ics_custom_properties_scroll = gtk.ScrolledWindow()
         self.ics_custom_properties_scroll.add_with_viewport(textview)
-        self.ics_custom_properties_scroll.set_policy(gtk.POLICY_AUTOMATIC, 
+        self.ics_custom_properties_scroll.set_policy(gtk.POLICY_AUTOMATIC,
                                                      gtk.POLICY_AUTOMATIC)
         vbox.pack_start(self.ics_custom_properties_scroll, False, False, 0)
         self.ics_custom_properties_scroll.show()
@@ -619,7 +613,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
         self.ics_alarm_custom_properties_label.set_alignment(0, 0)
         self.ics_alarm_custom_properties_label.set_sensitive( \
             self.conf.ics_alarm)
-        vbox.pack_start(self.ics_alarm_custom_properties_label, 
+        vbox.pack_start(self.ics_alarm_custom_properties_label,
                         False, False, 0)
         self.ics_alarm_custom_properties_label.show()
         textbuffer_alarm = gtk.TextBuffer()
@@ -632,7 +626,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
                                                            gtk.POLICY_AUTOMATIC)
         self.ics_alarm_custom_properties_scroll.set_sensitive( \
             self.conf.ics_alarm)
-        vbox.pack_start(self.ics_alarm_custom_properties_scroll, 
+        vbox.pack_start(self.ics_alarm_custom_properties_scroll,
                         False, False, 0)
         self.ics_alarm_custom_properties_scroll.show()
         textview.show()
@@ -649,10 +643,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
             self.conf.ics_alarm_days = \
                 str(self.ics_alarm_days_spin.get_value_as_int())
             self.conf.ics_custom_properties = textbuffer_event.get_text( \
-                textbuffer_event.get_start_iter(), 
+                textbuffer_event.get_start_iter(),
                 textbuffer_event.get_end_iter())
             self.conf.ics_alarm_custom_properties = textbuffer_alarm.get_text( \
-                textbuffer_alarm.get_start_iter(), 
+                textbuffer_alarm.get_start_iter(),
                 textbuffer_alarm.get_end_iter())
             
             self.addressbook.export()
@@ -790,34 +784,34 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 #     def add_from_file(self, widget, window):
 #         window.destroy()
 #         add_window = self.gtk_get_top_window(_('Add'))
-# 
+#
 #         box = gtk.VBox(False, 0)
 #         add_window.add(box)
-# 
+#
 #         table = gtk.Table(3, 2, False)
 #         table.set_col_spacings(10)
 #         table.set_row_spacings(10)
-# 
-# 
+#
+#
 #         label = gtk.Label('select file/database')
 #         table.attach(label, 0, 1, 0, 1)
 #         label.show()
-# 
+#
 #         db_combo = gtk.combo_box_new_text()
 #         for db in DATABASES:
 #             db_combo.append_text(db.TITLE)
 #         db_combo.set_active(0)
 #         db_combo.show()
 #         table.attach(db_combo, 1, 2, 0, 1)
-# 
+#
 #         label = gtk.Label(_('Import Settings'))
 #         table.attach(label, 0, 1, 1, 2)
 #         label.show()
-# 
+#
 #         label = gtk.Label('not needed')
 #         table.attach(label, 1, 2, 1, 2)
 #         label.show()
-# 
+#
 #         label = gtk.Label(_('Database'))
 #         table.attach(label, 0, 1, 2, 3)
 #         label.show()
@@ -829,18 +823,18 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 #         combobox.set_active(0)
 #         combobox.show()
 #         table.attach(combobox, 1, 2, 2, 3)
-# 
+#
 #         box.pack_start(table, True, True, 8)
 #         table.show()
-# 
+#
 #         label = gtk.Label(_('Export Settings'))
 #         table.attach(label, 0, 1, 3, 4)
 #         label.show()
-# 
+#
 #         label = gtk.Label('not needed')
 #         table.attach(label, 1, 2, 3, 4)
 #         label.show()
-# 
+#
 #         def finish_add(uno, combo, name, calend, window):
 #             '''save new added person'''
 #             import datetime
@@ -855,9 +849,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 #         button.connect("clicked", finish_add, combobox, db_combo, '',
 #                         add_window)
 #         button.show()
-# 
+#
 #         box.show()
-# 
+#
 #         box.show()
 #         add_window.set_border_width(5)
 #         add_window.show()

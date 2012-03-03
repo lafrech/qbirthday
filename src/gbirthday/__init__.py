@@ -104,7 +104,6 @@ class Conf:
         # else, use ~/.local/share
         else:
             self.base_data_path = os.environ['HOME'] + "/.local/share/gbirthday"
-        
 
         try:
             self.settings.readfp(file(self.base_config_path + '/gbirthdayrc'))
@@ -153,22 +152,22 @@ class Conf:
             self.used_databases = used_db.split("|")
         else:
             self.used_databases = []
-        self.notify_future_bdays = int(get_setting_value("main", 
+        self.notify_future_bdays = int(get_setting_value("main",
                                        "notify_future_bdays", 0))
         
         self.csv_files = eval(get_setting_value("main", "csv_files", 'None'))
         
-        self.ics_export = eval(get_setting_value("ics_export", "export", 
+        self.ics_export = eval(get_setting_value("ics_export", "export",
                                                  'False'))
-        self.ics_filepath = get_setting_value("ics_export", "filepath", 
+        self.ics_filepath = get_setting_value("ics_export", "filepath",
                                         self.base_data_path + '/gbirthday.ics')
-        self.ics_custom_properties = get_setting_value("ics_export", 
+        self.ics_custom_properties = get_setting_value("ics_export",
                                                 "custom_properties", '')
         self.ics_alarm = eval(get_setting_value("ics_export", "alarm", 'False'))
         self.ics_alarm_days = get_setting_value("ics_export", "alarm_days", '5')
-        self.ics_alarm_custom_properties = get_setting_value("ics_export", 
+        self.ics_alarm_custom_properties = get_setting_value("ics_export",
                                                 "alarm_custom_properties", '')
-                
+
         try:
             self.mysql.host = self.settings.get("mysql", "host")
             self.mysql.port = self.settings.get("mysql", "port")
@@ -185,7 +184,7 @@ class Conf:
         '''Save current settings from this object to config parser.'''
         # main
         if not self.settings.has_section("main"):
-            self.settings.add_section("main")   
+            self.settings.add_section("main")
         self.settings.set("main", "firstday", self.firstday)
         self.settings.set("main", "lastday", self.lastday)
         self.settings.set("main", "notify_future_bdays",
@@ -213,10 +212,10 @@ class Conf:
 
         # ics_export
         if not self.settings.has_section("ics_export"):
-            self.settings.add_section("ics_export")   
+            self.settings.add_section("ics_export")
         self.settings.set("ics_export", "export", self.ics_export)
         self.settings.set("ics_export", "filepath", self.ics_filepath)
-        self.settings.set("ics_export", "custom_properties", 
+        self.settings.set("ics_export", "custom_properties",
                             self.ics_custom_properties)
         self.settings.set("ics_export", "alarm", self.ics_alarm)
         self.settings.set("ics_export", "alarm_days", self.ics_alarm_days)
