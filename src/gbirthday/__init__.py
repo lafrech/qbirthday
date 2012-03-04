@@ -135,7 +135,7 @@ class Conf:
             self.mysql.host = self.settings.get("mysql", "host")
             self.mysql.port = self.settings.get("mysql", "port")
             self.mysql.username = self.settings.get("mysql", "username")
-            self.mysql.passwort = self.settings.get("mysql", "password")
+            self.mysql.password = self.settings.get("mysql", "password")
             self.mysql.database = self.settings.get("mysql", "database")
             self.mysql.table = self.settings.get("mysql", "table")
             self.mysql.name_row = self.settings.get("mysql", "name_row")
