@@ -34,8 +34,6 @@ class MySQL(DataBase):
         self.cursor = None
         self.conn = None
 
-        self.entries = []
-
     def connect(self):
         '''establish connection'''
         try:
@@ -87,30 +85,22 @@ class MySQL(DataBase):
         self.conn.close()
         self.ab.add(name, birthday)
 
-    def update(self, conf):
-        '''update and save values'''
-        if self.entries and self.entries != []:
-            self.host = self.entries[0].get_text()
-            self.port = self.entries[1].get_text()
-            self.username = self.entries[2].get_text()
-            self.password = self.entries[3].get_text()
-            self.database = self.entries[4].get_text()
-            self.table = self.entries[5].get_text()
-            self.name_row = self.entries[6].get_text()
-            self.date_row = self.entries[7].get_text()
+    def save_config(self, conf):
+        '''Save modifications'''
+        self.host = self.entries[0].get_text()
+        self.port = self.entries[1].get_text()
+        self.username = self.entries[2].get_text()
+        self.password = self.entries[3].get_text()
+        self.database = self.entries[4].get_text()
+        self.table = self.entries[5].get_text()
+        self.name_row = self.entries[6].get_text()
+        self.date_row = self.entries[7].get_text()
+        conf.MySQL = self
 
-            conf.MySQL = self
 
-    def create_config(self, pref, conf):
+    def create_config(self, vbox, conf):
         '''create additional mysql config in config menu'''
-        table = gtk.Table(1, 2)
-
-        # Label for MySQL, just translate 'Database'
-        label = gtk.Label(_('MySQL-Database'))
-        self.text = label
-        table.attach(label, 0, 1, 0, 1)
-        label.show()
-
+        
         values = [
                   ['Host', self.host],
                   ['Port', self.port],
@@ -122,10 +112,12 @@ class MySQL(DataBase):
                   ['Date row', self.date_row]
                  ]
         self.entries = []
+
         sqltable = gtk.Table(len(values), 2, False)
-        i = 0
-        for value in values:
+        sqltable.set_col_spacings(5)
+        for i, value in enumerate(values):
             label = gtk.Label(value[0])
+            label.set_alignment(1, 0.5)
             label.show()
             sqltable.attach(label, 0, 1, i, i + 1)
 
@@ -134,8 +126,7 @@ class MySQL(DataBase):
             entry.show()
             self.entries.append(entry)
             sqltable.attach(entry, 1, 2, i, i + 1)
-            i += 1
+        
         sqltable.show()
-        table.attach(sqltable, 1, 2, 0, 1)
-        table.show()
-        pref.add(table)
+        vbox.pack_start(sqltable, False, False, 0)
+

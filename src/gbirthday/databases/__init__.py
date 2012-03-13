@@ -51,12 +51,12 @@ class DataBase(object):
         '''save new birthday to file/database (only if CAN_SAVE == true)'''
         pass
 
-    def create_config(self, table, conf):
-        '''create additional pygtk config in config menu'''
+    def save_config(self, conf):
+        '''record current entries in config menu into configuration'''
         pass
-
-    def update(self, conf):
-        '''update and save values in file'''
+    
+    def create_config(self, vbox, conf):
+        '''create additional pygtk config in config menu'''
         pass
 
 from csv import CSV

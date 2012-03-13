@@ -420,9 +420,49 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 
         def preferences_db(widget, db):
             '''Create and display DB config window'''
-            pref_db = self.gtk_get_top_window(_('Database Configuration'))
+            pref_db = self.gtk_get_top_window(db.__class__.__name__ + \
+                                              _(' Database Configuration'))
 
-            db.create_config(pref_db, self.conf)
+            vbox = gtk.VBox(False, 5)
+            
+            db.create_config(vbox, self.conf)
+
+            # Cancel / apply / ok
+            def preferences_cancel_cb(*args):
+                '''Destroy windows (discard modifications)'''
+                pref_db.destroy()
+            
+            def preferences_apply_cb(*args):
+                '''Save modifications'''
+                db.save_config(self.conf)
+                self.conf.save()
+    
+            def preferences_ok_cb(*args):
+                '''Save modifications and destroy window'''
+                preferences_apply_cb()
+                pref_db.destroy()
+    
+            hbox = gtk.HButtonBox()
+            hbox.set_spacing(5)
+            hbox.set_layout(gtk.BUTTONBOX_END)
+            button = gtk.Button(stock=gtk.STOCK_APPLY)
+            hbox.add(button)
+            button.connect("clicked", preferences_apply_cb)
+            button.show()
+            button = gtk.Button(stock=gtk.STOCK_CANCEL)
+            hbox.add(button)
+            button.connect("clicked", preferences_cancel_cb)
+            button.show()
+            button = gtk.Button(stock=gtk.STOCK_OK)
+            hbox.add(button)
+            button.connect("clicked", preferences_ok_cb)
+            button.show()
+            vbox.pack_start(hbox, False, False, 0)
+            hbox.show()
+
+            vbox.show()
+            pref_db.add(vbox)
+
             pref_db.set_modal(True)
             pref_db.show()
 
@@ -472,7 +512,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
                 else:
                     if db.__class__.__name__ in self.conf.used_databases:
                         self.conf.used_databases.remove(db.__class__.__name__)
-            self.save_config()
+            self.conf.save()
 
         def preferences_ok_cb(*args):
             '''Save modifications and destroy window'''
@@ -532,7 +572,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 
         label = gtk.Label(_("Export birthday list in iCalendar file:"))
         label.show()
-        label.set_alignment(0, 0)
+        label.set_alignment(0, 0.5)
         vbox.pack_start(label, False, False, 0)
 
 
@@ -568,7 +608,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
         chk.show()
         vbox.pack_start(chk, False, False, 0)
         
-        # ICS nb of days btween alarm and birthday
+        # ICS nb of days between alarm and birthday
         hbox = gtk.HBox()
         adjustment = gtk.Adjustment(int(self.conf.ics_alarm_days), lower=0,
                     upper=60, step_incr=1, page_incr=0, page_size=0)
@@ -680,12 +720,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
         window.set_modal(True)
         window.show()
 
-    def save_config(self):
-        '''save config in file'''
-        for db in DATABASES:
-            db.update(self.conf)
-        self.conf.save()
-
     def add(self, text):
         '''Show Dialog to add new Person - not yet implemented!'''
         self.add_single_manual(None, None)
@@ -718,22 +752,25 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
             window.destroy()
         add_window = self.gtk_get_top_window(_('Add'))
 
-        box = gtk.VBox(False, 0)
-        add_window.add(box)
+        vbox = gtk.VBox(False, 0)
+        add_window.add(vbox)
 
         table = gtk.Table(3, 2, False)
         table.set_col_spacings(10)
         table.set_row_spacings(10)
 
         label = gtk.Label(_('Name'))
+        label.set_alignment(1, 0.5)
         table.attach(label, 0, 1, 0, 1)
         label.show()
 
         label = gtk.Label(_('Birthday'))
+        label.set_alignment(1, 0.5)
         table.attach(label, 0, 1, 1, 2)
         label.show()
 
         label = gtk.Label(_('Save to file/database'))
+        label.set_alignment(1, 0.5)
         table.attach(label, 0, 1, 2, 3)
         label.show()
 
@@ -755,29 +792,65 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
         combobox.show()
         table.attach(combobox, 1, 2, 2, 3)
 
-        box.pack_start(table, True, True, 8)
+        vbox.pack_start(table, True, True, 8)
         table.show()
 
-        def finish_add(uno, combo, name, calendar, window):
-            '''save new added person'''
+        # Cancel / apply / ok
+        def add_single_manual_cancel_cb(*args):
+            '''Destroy windows (discard modifications)'''
+            add_window.destroy()
+        
+        def add_single_manual_apply_cb(*args):
+            '''Save new added person'''
             for db in DATABASES:
-                if db.TITLE == combo.get_active_text():
+                if db.TITLE == combobox.get_active_text():
                     calend = list(calendar.get_date())
                     calend[1] += 1
                     # FIXME: ugly fix for #563405 adding to Lightning
                     if db.TITLE == 'Thunderbird/Icedove Lightning':
                         db.ab = self.addressbook
                     db.add(name.get_text(), datetime.date(*calend))
+            name.set_text("")
             self.reload_gbirthday()
-            window.destroy()
 
-        button = gtk.Button(_('Save & Close'))
-        box.pack_start(button, False, False, 2)
-        button.connect("clicked", finish_add, combobox, name, calendar,
-                        add_window)
+        def add_single_manual_ok_cb(*args):
+            '''Save modifications and destroy window'''
+            add_single_manual_apply_cb()
+            add_window.destroy()
+
+        hbox = gtk.HButtonBox()
+        hbox.set_spacing(5)
+        hbox.set_layout(gtk.BUTTONBOX_END)
+        apply_button = gtk.Button(stock=gtk.STOCK_APPLY)
+        apply_button.set_sensitive(False)
+        hbox.add(apply_button)
+        apply_button.connect("clicked", add_single_manual_apply_cb)
+        apply_button.show()
+        button = gtk.Button(stock=gtk.STOCK_CANCEL)
+        hbox.add(button)
+        button.connect("clicked", add_single_manual_cancel_cb)
         button.show()
+        ok_button = gtk.Button(stock=gtk.STOCK_OK)
+        ok_button.set_sensitive(False)
+        hbox.add(ok_button)
+        ok_button.connect("clicked", add_single_manual_ok_cb)
+        ok_button.show()
+        vbox.pack_start(hbox, False, False, 0)
+        hbox.show()
 
-        box.show()
+        vbox.show()
+
+        # Apply and OK only allowed in name not empty 
+        def entry_modification_cb(*args):
+            if name.get_text() != '':
+                apply_button.set_sensitive(True)
+                ok_button.set_sensitive(True)
+            else:
+                apply_button.set_sensitive(False)
+                ok_button.set_sensitive(False)
+        
+        name.connect("changed", entry_modification_cb)
+
         add_window.set_border_width(5)
         add_window.show()
 
@@ -876,6 +949,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
         window.set_title(title)
         window.set_icon_from_file(IMAGESLOCATION + 'birthday.png')
         window.set_skip_taskbar_hint(hide_in_taskbar)
+        window.set_border_width(10)
+        
+        # Close window if Escape key is pressed
+        def keypress(widget, event) :
+	    if event.keyval == gtk.keysyms.Escape :
+		window.destroy()
+        window.connect("key-press-event", keypress)
+
         return window
 
 if __name__ == "__main__":

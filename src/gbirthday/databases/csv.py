@@ -65,47 +65,48 @@ class CSV(DataBase):
         output_file.close()
         self.addressbook.add(name, birthday)
 
-    def remove_file(self, widget, combobox, conf):
-        index = combobox.get_active()
-        if index >= 0:
-            combobox.remove_text(index)
-            conf.csv_files.remove(conf.csv_files[index])
+    def remove_file(self, widget, tree, store, files):
+        select = tree.get_selection()
+        model, treeiter = select.get_selected()
+        if treeiter is not None:
+            files.remove(model.get_value(treeiter, 0))
+            store.remove(treeiter)
         return
 
-    def add_file(self, widget, combobox, entry, conf):
-        filename = entry.get_text()
-        combobox.append_text(filename)
-        if conf.csv_files:
-            conf.csv_files.append(filename)
-        else:
-            conf.csv_files = [filename]
-
-    def create_config(self, pref, conf):
+    def save_config(self, conf):
+        conf.csv_files = self.tmp_csv_files
+        
+    def create_config(self, vbox, conf):
         '''create aditional options menu'''
-        vbox = gtk.VBox()
-        hbox = gtk.HBox()
-        hbox2 = gtk.HBox()
-        vbox.pack_start(hbox)
-        combobox = gtk.combo_box_new_text()
-        if conf.csv_files:
-            for csv_file in conf.csv_files:
-                combobox.append_text(csv_file)
-        combobox.set_active(0)
-        combobox.show()
-        hbox.pack_start(combobox)
-        remove_button = gtk.Button('remove')
-        remove_button.connect("clicked", self.remove_file, combobox, conf)
-        remove_button.show()
-        hbox.pack_start(remove_button, 0)
-        hbox.show()
+        
+        self.tmp_csv_files = conf.csv_files
 
-        entry = gtk.Entry()
-        if conf.csv_files and len(conf.csv_files) > 0:
-            entry.set_text(conf.csv_files[0])
-        hbox2.pack_start(entry)
-        entry.show()
+        hbox = gtk.HBox(False, 5)
 
-        def choose_file(widget, entry):
+        # File list
+        store = (gtk.ListStore(str))
+        if self.tmp_csv_files:
+            for csv_file in self.tmp_csv_files:
+                store.append([str(csv_file)])
+        tree = gtk.TreeView(store)
+        tree.set_headers_visible(False)
+        renderer = gtk.CellRendererText()
+        column = gtk.TreeViewColumn(_("File"), renderer, text=0)
+        tree.append_column(column)
+        scroll = gtk.ScrolledWindow()
+        scroll.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
+        scroll.set_shadow_type(gtk.SHADOW_IN)
+        scroll.add(tree)
+        scroll.set_size_request(400, -1)
+        tree.show()
+        scroll.show()
+        hbox.pack_start(scroll, True, True, 0)
+
+        # Add / remove buttons
+        vbox_buttons = gtk.VBox(False, 5)
+
+        def choose_file(widget):
+
             chooser = gtk.FileChooserDialog(title=None,
                                 action=gtk.FILE_CHOOSER_ACTION_OPEN,
                                 buttons=(gtk.STOCK_CANCEL,
@@ -126,21 +127,27 @@ class CSV(DataBase):
             response = chooser.run()
             if response == gtk.RESPONSE_OK:
                 filename = chooser.get_filename()
-                entry.set_text(filename)
+                store.append([filename])
+                if self.tmp_csv_files:
+                    self.tmp_csv_files.append(filename)
+                else:
+                    self.tmp_csv_files = [filename]
 
             chooser.destroy()
 
-        search_button = gtk.Button('select')
-        search_button.connect("clicked", choose_file, entry)
-        search_button.show()
-        hbox2.pack_start(search_button)
-
-        add_button = gtk.Button('add')
-        add_button.connect("clicked", self.add_file, combobox, entry, conf)
+        add_button = gtk.Button(stock=gtk.STOCK_ADD)
+        add_button.connect("clicked", choose_file)
         add_button.show()
-        hbox2.pack_start(add_button)
+        vbox_buttons.pack_start(add_button, False, False, 0)
 
-        vbox.pack_start(hbox2)
-        hbox2.show()
-        pref.add(vbox)
-        vbox.show()
+        remove_button = gtk.Button(stock=gtk.STOCK_REMOVE)
+        remove_button.connect("clicked", self.remove_file, tree, store, 
+                              self.tmp_csv_files)
+        remove_button.show()
+        vbox_buttons.pack_start(remove_button, False, False, 0)
+        
+        vbox_buttons.show()
+        hbox.pack_start(vbox_buttons, False, False, 0)
+        hbox.show()
+        vbox.pack_start(hbox, False, False, 0)
+

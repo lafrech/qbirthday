@@ -39,10 +39,10 @@ def test_init_no_bday():
     assert database
     database.add('name', 'birthday')
     assert database
-    database.update('conf')
+    database.save_config('conf')
     assert database
     database.create_config('table', 'conf')
     assert database
-    database.update('conf')
+    database.save_config('conf')
     assert database
 
