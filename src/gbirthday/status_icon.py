@@ -1,3 +1,4 @@
+# -*- coding: UTF-8 -*-
 # vim: foldmethod=marker
 #{{{ License header: GPLv2+
 # This program is free software; you can redistribute it and/or modify
@@ -49,7 +50,7 @@ class StatusIcon():
 
         gtk.about_dialog_set_url_hook(on_url)
 
-    def reload_gbirthday(self, dummy):
+    def reload_gbirthday(self, *args):
         '''reload gbirthday, reload data from databases'''
         self.addressbook.reload()
         self._reload_set_icon()
@@ -102,47 +103,32 @@ class StatusIcon():
     def make_menu(self, event_button, event_time, icon):
         '''create menu window'''
         menu = gtk.Menu()
-        new_menu = gtk.ImageMenuItem(_('Reload'))
-        new_img = gtk.Image()
-        new_img.set_from_stock(gtk.STOCK_REFRESH, gtk.ICON_SIZE_MENU,)
-        new_menu.set_image(new_img)
+        new_menu = gtk.ImageMenuItem(gtk.STOCK_REFRESH)
         new_menu.show()
         new_menu.connect_object('activate', self.reload_gbirthday, None)
         menu.append(new_menu)
 
-        new_menu = gtk.ImageMenuItem(_('Add'))
-        new_img = gtk.Image()
-        new_img.set_from_stock(gtk.STOCK_ADD, gtk.ICON_SIZE_MENU,)
-        new_menu.set_image(new_img)
+        new_menu = gtk.ImageMenuItem(gtk.STOCK_ADD)
         new_menu.show()
         new_menu.connect_object("activate", self.add, "add birthday")
         menu.append(new_menu)
 
-        new_menu = gtk.ImageMenuItem(_('Preferences'))
-        new_img = gtk.Image()
-        new_img.set_from_stock(gtk.STOCK_PREFERENCES,
-                                gtk.ICON_SIZE_MENU,)
-        new_menu.set_image(new_img)
+        new_menu = gtk.ImageMenuItem(gtk.STOCK_PREFERENCES)
         new_menu.show()
         new_menu.connect_object("activate", self.preferences_window,
                                 "about")
         menu.append(new_menu)
 
-        new_menu = gtk.ImageMenuItem(_('About'))
-        new_img = gtk.Image()
-        new_img.set_from_stock(gtk.STOCK_ABOUT, gtk.ICON_SIZE_MENU,)
-        new_menu.set_image(new_img)
+        new_menu = gtk.ImageMenuItem(gtk.STOCK_ABOUT)
         new_menu.show()
         new_menu.connect_object("activate", self.create_dialog, None)
         menu.append(new_menu)
 
-        new_menu = gtk.ImageMenuItem(_('Quit'))
-        new_img = gtk.Image()
-        new_img.set_from_stock(gtk.STOCK_CLOSE, gtk.ICON_SIZE_MENU,)
-        new_menu.set_image(new_img)
+        new_menu = gtk.ImageMenuItem(gtk.STOCK_QUIT)
         new_menu.show()
         new_menu.connect_object("activate", self.finish_gbirthday, "file.quit")
         menu.append(new_menu)
+        
         menu.popup(None, None,
             gtk.status_icon_position_menu, event_button,
             event_time, icon)
@@ -180,7 +166,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
                 'Stefan Jurco <stefan.jurco@gmail.com>',
                 'Alex Mallo <dernalis@gmail.com>',
                 'Thomas Spura <tomspur@fedoraproject.org>',
-                'Robert Wildburger <r.wildburger@gmx.at>'
+                'Robert Wildburger <r.wildburger@gmx.at>',
+                'Jérôme Lafréchoux <jerome@jolimont.fr>'
                         ])
         dlg.set_artists(['Alex Mallo <dernalis@gmail.com>'])
         cred = _('translator-credit')
@@ -359,7 +346,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
         box = gtk.VBox(False, 0)
         preferences.add(box)
 
-        table = gtk.Table(3, 2, False)
+        table = gtk.Table(5, 2, False)
         table.set_col_spacings(10)
         table.set_row_spacings(10)
 
@@ -375,103 +362,363 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
         table.attach(label, 0, 1, 2, 3)
         label.show()
 
-        label = gtk.Label(_('Database'))
+        label = gtk.Label(_('ICS Calendar export'))
         table.attach(label, 0, 1, 3, 4)
         label.show()
 
-        def get_new_preferences(uno, option, spin):
-            '''set value for settings by spinner'''
-            spin.update()
-            if option == "firstday":
-                self.conf.firstday = spin.get_value_as_int()
-            elif option == "lastday":
-                self.conf.lastday = spin.get_value_as_int()
-            elif option == "notify_future":
-                self.conf.notify_future_bdays = spin.get_value_as_int()
-            else:
-                pass
+        label = gtk.Label(_('Database'))
+        table.attach(label, 0, 1, 5, 6)
+        label.show()
 
         adjustment = gtk.Adjustment(int(self.conf.firstday), lower=-30,
                     upper=0, step_incr=-1, page_incr=0, page_size=0)
-        spin = gtk.SpinButton(adjustment, climb_rate=0.0, digits=0)
-        spin.connect("value-changed", get_new_preferences, "firstday", spin)
-        table.attach(spin, 1, 2, 0, 1)
-        spin.show()
+        spin_firstday = gtk.SpinButton(adjustment, climb_rate=0.0, digits=0)
+        table.attach(spin_firstday, 1, 2, 0, 1)
+        spin_firstday.show()
 
         adjustment = gtk.Adjustment(int(self.conf.lastday), lower=0, upper=90,
                     step_incr=1, page_incr=0, page_size=0)
-        spin = gtk.SpinButton(adjustment, climb_rate=0.0, digits=0)
-        spin.connect("value-changed", get_new_preferences, "lastday", spin)
-        table.attach(spin, 1, 2, 1, 2)
-        spin.show()
+        spin_lastday = gtk.SpinButton(adjustment, climb_rate=0.0, digits=0)
+        table.attach(spin_lastday, 1, 2, 1, 2)
+        spin_lastday.show()
 
         adjustment = gtk.Adjustment(int(self.conf.notify_future_bdays),
                     lower=0, upper=int(self.conf.lastday),
                     step_incr=1, page_incr=0, page_size=0)
-        spin = gtk.SpinButton(adjustment, climb_rate=0.0, digits=0)
-        spin.connect("value-changed", get_new_preferences, "notify_future",
-                    spin)
-        table.attach(spin, 1, 2, 2, 3)
-        spin.show()
+        spin_notify_future_bdays = gtk.SpinButton(adjustment, climb_rate=0.0, 
+                                                  digits=0)
+        table.attach(spin_notify_future_bdays, 1, 2, 2, 3)
+        spin_notify_future_bdays.show()
 
+        # ICS export checkbox
+        def ics_export_chk_cb(chk, button):
+            '''Enable / disable ICS export setting widgets'''
+            button.set_sensitive(chk.get_active())
+        chk_export = gtk.CheckButton()
+        chk_export.set_active(self.conf.ics_export)
+        button = gtk.Button(stock=gtk.STOCK_PREFERENCES)
+        button.set_sensitive(self.conf.ics_export)
+        chk_export.connect("clicked", ics_export_chk_cb, button)
+        button.connect("clicked", self.ics_export_config)
+        hbox = gtk.HBox(False, 2)
+        hbox.pack_start(chk_export, False, False, 0)
+        hbox.pack_start(button, False, False, 1)
+        table.attach(hbox, 1, 2, 3, 4)
+        button.show()
+        chk_export.show()
+        hbox.show()
+
+        # Separator
+        hsep = gtk.HSeparator()
+        table.attach(hsep, 0, 2, 4, 5)
+        hsep.show()
+
+        # Databases
         def db_select(widget, db):
-            '''callback for checkboxes and update used_databases'''
-            if (widget.get_active()):
-                if not db.__class__.__name__ in self.conf.used_databases:
-                    self.conf.used_databases.append(db.__class__.__name__)
-                    db.activate()
-            else:
-                if db.__class__.__name__ in self.conf.used_databases:
-                    self.conf.used_databases.remove(db.__class__.__name__)
-                    db.deactivate()
+            '''Enable / disable DB setting widgets'''
+            self.db_buttons[db].set_sensitive(widget.get_active())
 
         def preferences_db(widget, db):
-            pref_db = self.gtk_get_top_window(_('Database Configuration'))
+            '''Create and display DB config window'''
+            pref_db = self.gtk_get_top_window(db.__class__.__name__ + \
+                                              _(' Database Configuration'))
 
-            db.create_config(pref_db, self.conf)
+            vbox = gtk.VBox(False, 5)
+            
+            db.create_config(vbox, self.conf)
+
+            # Cancel / apply / ok
+            def preferences_cancel_cb(*args):
+                '''Destroy windows (discard modifications)'''
+                pref_db.destroy()
+            
+            def preferences_apply_cb(*args):
+                '''Save modifications'''
+                db.save_config(self.conf)
+                self.conf.save()
+    
+            def preferences_ok_cb(*args):
+                '''Save modifications and destroy window'''
+                preferences_apply_cb()
+                pref_db.destroy()
+    
+            hbox = gtk.HButtonBox()
+            hbox.set_spacing(5)
+            hbox.set_layout(gtk.BUTTONBOX_END)
+            button = gtk.Button(stock=gtk.STOCK_APPLY)
+            hbox.add(button)
+            button.connect("clicked", preferences_apply_cb)
+            button.show()
+            button = gtk.Button(stock=gtk.STOCK_CANCEL)
+            hbox.add(button)
+            button.connect("clicked", preferences_cancel_cb)
+            button.show()
+            button = gtk.Button(stock=gtk.STOCK_OK)
+            hbox.add(button)
+            button.connect("clicked", preferences_ok_cb)
+            button.show()
+            vbox.pack_start(hbox, False, False, 0)
+            hbox.show()
+
+            vbox.show()
+            pref_db.add(vbox)
+
             pref_db.set_modal(True)
             pref_db.show()
 
         vbox = gtk.VBox(False, 10)
+
+        self.db_chk = {}
+        self.db_buttons = {}
         for db in DATABASES:
             hbox = gtk.HBox(False, 2)
-            vbox.pack_start(hbox, False, False, 3)
+            vbox.pack_start(hbox, False, False, 0)
 
-            chkDB = gtk.CheckButton(db.TITLE)
-            if db.__class__.__name__ in self.conf.used_databases:
-                chkDB.set_active(True)
-            chkDB.connect("toggled", db_select, db)
-            hbox.pack_start(chkDB, False, False, 0)
+            self.db_chk[db] = gtk.CheckButton(db.TITLE)
+            hbox.pack_start(self.db_chk[db], False, False, 0)
             if db.HAS_CONFIG:
-                button = gtk.Button(_('Configure'))
-                button.connect("clicked", preferences_db, db)
-                button.show()
-                hbox.pack_start(button, False, False, 1)
+                self.db_buttons[db] = gtk.Button(stock=gtk.STOCK_PREFERENCES)
+                self.db_buttons[db].connect("clicked", preferences_db, db)
+                self.db_buttons[db].show()
+                hbox.pack_start(self.db_buttons[db], False, False, 1)
+                self.db_buttons[db].set_sensitive(self.db_chk[db].get_active())
+                self.db_chk[db].connect("toggled", db_select, db)
+            if db.__class__.__name__ in self.conf.used_databases:
+                self.db_chk[db].set_active(True)
             hbox.show()
-            chkDB.show()
-        table.attach(vbox, 1, 2, 3, 4)
+            self.db_chk[db].show()
+        table.attach(vbox, 1, 2, 5, 6)
         vbox.show()
 
         box.pack_start(table, True, True, 8)
         table.show()
 
-        def finish_preferences(uno, texto):
-            '''save settings after user clicked save and exit'''
-            self.save_config()
+        # Cancel / apply / ok
+        def preferences_cancel_cb(*args):
+            '''Destroy windows (discard modifications)'''
             preferences.destroy()
-        button = gtk.Button(_('Save & Close'))
-        box.pack_start(button, False, False, 2)
-        button.connect("clicked", finish_preferences, None)
+        
+        def preferences_apply_cb(*args):
+            '''Save modifications'''
+            self.conf.firstday = spin_firstday.get_value_as_int()
+            self.conf.lastday = spin_lastday.get_value_as_int()
+            self.conf.notify_future_bdays = \
+                spin_notify_future_bdays.get_value_as_int()
+            self.conf.ics_export = chk_export.get_active()
+            for db in DATABASES:
+                if self.db_chk[db].get_active():
+                    if not db.__class__.__name__ in self.conf.used_databases:
+                        self.conf.used_databases.append(db.__class__.__name__)
+                else:
+                    if db.__class__.__name__ in self.conf.used_databases:
+                        self.conf.used_databases.remove(db.__class__.__name__)
+            self.conf.save()
+
+        def preferences_ok_cb(*args):
+            '''Save modifications and destroy window'''
+            preferences_apply_cb()
+            preferences.destroy()
+
+        hbox = gtk.HButtonBox()
+        hbox.set_spacing(5)
+        hbox.set_layout(gtk.BUTTONBOX_END)
+        button = gtk.Button(stock=gtk.STOCK_APPLY)
+        hbox.add(button)
+        button.connect("clicked", preferences_apply_cb)
         button.show()
+        button = gtk.Button(stock=gtk.STOCK_CANCEL)
+        hbox.add(button)
+        button.connect("clicked", preferences_cancel_cb)
+        button.show()
+        button = gtk.Button(stock=gtk.STOCK_OK)
+        hbox.add(button)
+        button.connect("clicked", preferences_ok_cb)
+        button.show()
+        vbox.pack_start(hbox, False, False, 0)
+        hbox.show()
+
         box.show()
         preferences.set_border_width(5)
         preferences.show()
 
-    def save_config(self):
-        '''save config in file'''
-        for db in DATABASES:
-            db.update(self.conf)
-        self.conf.save()
+    def ics_export_config(self, widget):
+        '''Display ICS export settings window'''
+        window = self.gtk_get_top_window(_('ICS Export configuration'))
+        window.set_border_width(10)
+
+        vbox = gtk.VBox(False, 10)
+
+        # File path
+        def set_filepath(widget, entry):
+            '''File selection dialog'''
+            chooser = gtk.FileChooserDialog(title='ICS Export file',
+                                            action=gtk.FILE_CHOOSER_ACTION_SAVE,
+                                            buttons=(gtk.STOCK_CANCEL,
+                                                     gtk.RESPONSE_CANCEL,
+                                                     gtk.STOCK_OPEN,
+                                                     gtk.RESPONSE_OK))
+            
+            # Default to current file
+            (folder, file_name) = os.path.split(self.conf.ics_filepath)
+            chooser.set_current_folder(folder)
+            chooser.set_current_name(file_name)
+
+            response = chooser.run()
+            if response == gtk.RESPONSE_OK:
+                entry.set_text(chooser.get_filename())
+            chooser.destroy()
+
+        hbox = gtk.HBox()
+
+        label = gtk.Label(_("Export birthday list in iCalendar file:"))
+        label.show()
+        label.set_alignment(0, 0.5)
+        vbox.pack_start(label, False, False, 0)
+
+
+        filename = gtk.Entry()
+        filename.set_text(self.conf.ics_filepath)
+        filename.show()
+        hbox.pack_start(filename, True, True, 0)
+        button = gtk.Button(_("Browse"))
+        new_img = gtk.Image()
+        new_img.set_from_stock(gtk.STOCK_DIRECTORY, gtk.ICON_SIZE_BUTTON,)
+        button.set_image(new_img)
+        button.show()
+        hbox.pack_start(button, False, False, 5)
+        button.connect("clicked", set_filepath, filename)
+
+        hbox.show()
+
+        vbox.pack_start(hbox, False, False, 0)
+
+        # ICS alarm
+        def ics_alarm_chk_cb(chk):
+            '''Enable / disable ICS alarm setting widgets'''
+            self.ics_alarm_days_spin.set_sensitive(chk.get_active())
+            self.ics_alarm_days_label.set_sensitive(chk.get_active())
+            self.ics_alarm_custom_properties_label.set_sensitive( \
+                chk.get_active())
+            self.ics_alarm_custom_properties_scroll.set_sensitive( \
+                chk.get_active())
+
+        chk = gtk.CheckButton(_('Set alarms'))
+        chk.set_active(self.conf.ics_alarm)
+        chk.connect("clicked", ics_alarm_chk_cb)
+        chk.show()
+        vbox.pack_start(chk, False, False, 0)
+        
+        # ICS nb of days between alarm and birthday
+        hbox = gtk.HBox()
+        adjustment = gtk.Adjustment(int(self.conf.ics_alarm_days), lower=0,
+                    upper=60, step_incr=1, page_incr=0, page_size=0)
+        self.ics_alarm_days_spin = gtk.SpinButton(adjustment, climb_rate=0.0,
+                                                  digits=0)
+        self.ics_alarm_days_label = gtk.Label(_('days before each birthday'))
+        self.ics_alarm_days_spin.set_sensitive(self.conf.ics_alarm)
+        self.ics_alarm_days_label.set_sensitive(self.conf.ics_alarm)
+        hbox.pack_start(self.ics_alarm_days_spin, False, False, 0)
+        hbox.pack_start(self.ics_alarm_days_label, False, False, 0)
+        self.ics_alarm_days_spin.show()
+        self.ics_alarm_days_label.show()
+        hbox.show()
+        vbox.pack_start(hbox, False, False, 0)
+        
+        # Separator
+        hsep = gtk.HSeparator()
+        vbox.pack_start(hsep, False, False, 0)
+        hsep.show()
+        
+        # ICS VEVENT custom properties
+        self.ics_custom_properties_label = \
+            gtk.Label(_('Custom ICS properties for VEVENT'))
+        self.ics_custom_properties_label.set_alignment(0, 0)
+        vbox.pack_start(self.ics_custom_properties_label, False, False, 0)
+        self.ics_custom_properties_label.show()
+        textbuffer_event = gtk.TextBuffer()
+        textbuffer_event.set_text(self.conf.ics_custom_properties)
+        textview = gtk.TextView(buffer=textbuffer_event)
+        textview.set_editable(True)
+        self.ics_custom_properties_scroll = gtk.ScrolledWindow()
+        self.ics_custom_properties_scroll.add_with_viewport(textview)
+        self.ics_custom_properties_scroll.set_policy(gtk.POLICY_AUTOMATIC,
+                                                     gtk.POLICY_AUTOMATIC)
+        vbox.pack_start(self.ics_custom_properties_scroll, False, False, 0)
+        self.ics_custom_properties_scroll.show()
+        textview.show()
+
+        # ICS VALARM custom properties
+        self.ics_alarm_custom_properties_label = \
+            gtk.Label(_('Custom ICS properties for VALARM'))
+        self.ics_alarm_custom_properties_label.set_alignment(0, 0)
+        self.ics_alarm_custom_properties_label.set_sensitive( \
+            self.conf.ics_alarm)
+        vbox.pack_start(self.ics_alarm_custom_properties_label,
+                        False, False, 0)
+        self.ics_alarm_custom_properties_label.show()
+        textbuffer_alarm = gtk.TextBuffer()
+        textbuffer_alarm.set_text(self.conf.ics_alarm_custom_properties)
+        textview = gtk.TextView(buffer=textbuffer_alarm)
+        textview.set_editable(True)
+        self.ics_alarm_custom_properties_scroll = gtk.ScrolledWindow()
+        self.ics_alarm_custom_properties_scroll.add_with_viewport(textview)
+        self.ics_alarm_custom_properties_scroll.set_policy(gtk.POLICY_AUTOMATIC,
+                                                           gtk.POLICY_AUTOMATIC)
+        self.ics_alarm_custom_properties_scroll.set_sensitive( \
+            self.conf.ics_alarm)
+        vbox.pack_start(self.ics_alarm_custom_properties_scroll,
+                        False, False, 0)
+        self.ics_alarm_custom_properties_scroll.show()
+        textview.show()
+
+        # Cancel / apply / ok
+        def ics_export_config_cancel_cb(*args):
+            '''Destroy windows (discard modifications)'''
+            window.destroy()
+        
+        def ics_export_config_apply_cb(*args):
+            '''Save modifications'''
+            self.conf.ics_filepath = filename.get_text()
+            self.conf.ics_alarm = chk.get_active()
+            self.conf.ics_alarm_days = \
+                str(self.ics_alarm_days_spin.get_value_as_int())
+            self.conf.ics_custom_properties = textbuffer_event.get_text( \
+                textbuffer_event.get_start_iter(),
+                textbuffer_event.get_end_iter())
+            self.conf.ics_alarm_custom_properties = textbuffer_alarm.get_text( \
+                textbuffer_alarm.get_start_iter(),
+                textbuffer_alarm.get_end_iter())
+            
+            self.addressbook.export()
+
+        def ics_export_config_ok_cb(*args):
+            '''Save modifications and destroy window'''
+            ics_export_config_apply_cb()
+            window.destroy()
+
+        hbox = gtk.HButtonBox()
+        hbox.set_spacing(5)
+        hbox.set_layout(gtk.BUTTONBOX_END)
+        button = gtk.Button(stock=gtk.STOCK_APPLY)
+        hbox.add(button)
+        button.connect("clicked", ics_export_config_apply_cb)
+        button.show()
+        button = gtk.Button(stock=gtk.STOCK_CANCEL)
+        hbox.add(button)
+        button.connect("clicked", ics_export_config_cancel_cb)
+        button.show()
+        button = gtk.Button(stock=gtk.STOCK_OK)
+        hbox.add(button)
+        button.connect("clicked", ics_export_config_ok_cb)
+        button.show()
+        vbox.pack_start(hbox, False, False, 0)
+        hbox.show()
+
+        window.add(vbox)
+        vbox.show()
+        
+        window.set_modal(True)
+        window.show()
 
     def add(self, text):
         '''Show Dialog to add new Person - not yet implemented!'''
@@ -505,22 +752,25 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
             window.destroy()
         add_window = self.gtk_get_top_window(_('Add'))
 
-        box = gtk.VBox(False, 0)
-        add_window.add(box)
+        vbox = gtk.VBox(False, 0)
+        add_window.add(vbox)
 
         table = gtk.Table(3, 2, False)
         table.set_col_spacings(10)
         table.set_row_spacings(10)
 
         label = gtk.Label(_('Name'))
+        label.set_alignment(1, 0.5)
         table.attach(label, 0, 1, 0, 1)
         label.show()
 
         label = gtk.Label(_('Birthday'))
+        label.set_alignment(1, 0.5)
         table.attach(label, 0, 1, 1, 2)
         label.show()
 
         label = gtk.Label(_('Save to file/database'))
+        label.set_alignment(1, 0.5)
         table.attach(label, 0, 1, 2, 3)
         label.show()
 
@@ -535,111 +785,149 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 
         combobox = gtk.combo_box_new_text()
         for db in DATABASES:
-            if db.CAN_SAVE:
+            if db.CAN_SAVE and \
+               db.__class__.__name__ in self.addressbook.conf.used_databases:
                 combobox.append_text(db.TITLE)
         combobox.set_active(0)
         combobox.show()
         table.attach(combobox, 1, 2, 2, 3)
 
-        box.pack_start(table, True, True, 8)
+        vbox.pack_start(table, True, True, 8)
         table.show()
 
-        def finish_add(uno, combo, name, calendar, window):
-            '''save new added person'''
+        # Cancel / apply / ok
+        def add_single_manual_cancel_cb(*args):
+            '''Destroy windows (discard modifications)'''
+            add_window.destroy()
+        
+        def add_single_manual_apply_cb(*args):
+            '''Save new added person'''
             for db in DATABASES:
-                if db.TITLE == combo.get_active_text():
+                if db.TITLE == combobox.get_active_text():
                     calend = list(calendar.get_date())
                     calend[1] += 1
                     # FIXME: ugly fix for #563405 adding to Lightning
                     if db.TITLE == 'Thunderbird/Icedove Lightning':
                         db.ab = self.addressbook
                     db.add(name.get_text(), datetime.date(*calend))
-            window.destroy()
+            name.set_text("")
+            self.reload_gbirthday()
 
-        button = gtk.Button(_('Save & Close'))
-        box.pack_start(button, False, False, 2)
-        button.connect("clicked", finish_add, combobox, name, calendar,
-                        add_window)
+        def add_single_manual_ok_cb(*args):
+            '''Save modifications and destroy window'''
+            add_single_manual_apply_cb()
+            add_window.destroy()
+
+        hbox = gtk.HButtonBox()
+        hbox.set_spacing(5)
+        hbox.set_layout(gtk.BUTTONBOX_END)
+        apply_button = gtk.Button(stock=gtk.STOCK_APPLY)
+        apply_button.set_sensitive(False)
+        hbox.add(apply_button)
+        apply_button.connect("clicked", add_single_manual_apply_cb)
+        apply_button.show()
+        button = gtk.Button(stock=gtk.STOCK_CANCEL)
+        hbox.add(button)
+        button.connect("clicked", add_single_manual_cancel_cb)
         button.show()
+        ok_button = gtk.Button(stock=gtk.STOCK_OK)
+        ok_button.set_sensitive(False)
+        hbox.add(ok_button)
+        ok_button.connect("clicked", add_single_manual_ok_cb)
+        ok_button.show()
+        vbox.pack_start(hbox, False, False, 0)
+        hbox.show()
 
-        box.show()
+        vbox.show()
+
+        # Apply and OK only allowed in name not empty 
+        def entry_modification_cb(*args):
+            if name.get_text() != '':
+                apply_button.set_sensitive(True)
+                ok_button.set_sensitive(True)
+            else:
+                apply_button.set_sensitive(False)
+                ok_button.set_sensitive(False)
+        
+        name.connect("changed", entry_modification_cb)
+
         add_window.set_border_width(5)
         add_window.show()
 
-    def add_from_file(self, widget, window):
-        window.destroy()
-        add_window = self.gtk_get_top_window(_('Add'))
-
-        box = gtk.VBox(False, 0)
-        add_window.add(box)
-
-        table = gtk.Table(3, 2, False)
-        table.set_col_spacings(10)
-        table.set_row_spacings(10)
-
-
-        label = gtk.Label('select file/database')
-        table.attach(label, 0, 1, 0, 1)
-        label.show()
-
-        db_combo = gtk.combo_box_new_text()
-        for db in DATABASES:
-            db_combo.append_text(db.TITLE)
-        db_combo.set_active(0)
-        db_combo.show()
-        table.attach(db_combo, 1, 2, 0, 1)
-
-        label = gtk.Label(_('Import Settings'))
-        table.attach(label, 0, 1, 1, 2)
-        label.show()
-
-        label = gtk.Label('not needed')
-        table.attach(label, 1, 2, 1, 2)
-        label.show()
-
-        label = gtk.Label(_('Database'))
-        table.attach(label, 0, 1, 2, 3)
-        label.show()
-
-        combobox = gtk.combo_box_new_text()
-        for db in DATABASES:
-            if db.CAN_SAVE:
-                combobox.append_text(db.TITLE)
-        combobox.set_active(0)
-        combobox.show()
-        table.attach(combobox, 1, 2, 2, 3)
-
-        box.pack_start(table, True, True, 8)
-        table.show()
-
-        label = gtk.Label(_('Export Settings'))
-        table.attach(label, 0, 1, 3, 4)
-        label.show()
-
-        label = gtk.Label('not needed')
-        table.attach(label, 1, 2, 3, 4)
-        label.show()
-
-        def finish_add(uno, combo, name, calend, window):
-            '''save new added person'''
-            import datetime
-            for db in DATABASES:
-                if db.TITLE == combo.get_active_text():
-                    calend = list(calend.get_date())
-                    calend[1] += 1
-                    db.add(name.get_text(), datetime.date(*calend))
-            window.destroy()
-        button = gtk.Button(_('Save & Close'))
-        box.pack_start(button, False, False, 2)
-        button.connect("clicked", finish_add, combobox, db_combo, '',
-                        add_window)
-        button.show()
-
-        box.show()
-
-        box.show()
-        add_window.set_border_width(5)
-        add_window.show()
+#     def add_from_file(self, widget, window):
+#         window.destroy()
+#         add_window = self.gtk_get_top_window(_('Add'))
+#
+#         box = gtk.VBox(False, 0)
+#         add_window.add(box)
+#
+#         table = gtk.Table(3, 2, False)
+#         table.set_col_spacings(10)
+#         table.set_row_spacings(10)
+#
+#
+#         label = gtk.Label('select file/database')
+#         table.attach(label, 0, 1, 0, 1)
+#         label.show()
+#
+#         db_combo = gtk.combo_box_new_text()
+#         for db in DATABASES:
+#             db_combo.append_text(db.TITLE)
+#         db_combo.set_active(0)
+#         db_combo.show()
+#         table.attach(db_combo, 1, 2, 0, 1)
+#
+#         label = gtk.Label(_('Import Settings'))
+#         table.attach(label, 0, 1, 1, 2)
+#         label.show()
+#
+#         label = gtk.Label('not needed')
+#         table.attach(label, 1, 2, 1, 2)
+#         label.show()
+#
+#         label = gtk.Label(_('Database'))
+#         table.attach(label, 0, 1, 2, 3)
+#         label.show()
+# 
+#         combobox = gtk.combo_box_new_text()
+#         for db in DATABASES:
+#             if db.CAN_SAVE:
+#                 combobox.append_text(db.TITLE)
+#         combobox.set_active(0)
+#         combobox.show()
+#         table.attach(combobox, 1, 2, 2, 3)
+#
+#         box.pack_start(table, True, True, 8)
+#         table.show()
+#
+#         label = gtk.Label(_('Export Settings'))
+#         table.attach(label, 0, 1, 3, 4)
+#         label.show()
+#
+#         label = gtk.Label('not needed')
+#         table.attach(label, 1, 2, 3, 4)
+#         label.show()
+#
+#         def finish_add(uno, combo, name, calend, window):
+#             '''save new added person'''
+#             import datetime
+#             for db in DATABASES:
+#                 if db.TITLE == combo.get_active_text():
+#                     calend = list(calend.get_date())
+#                     calend[1] += 1
+#                     db.add(name.get_text(), datetime.date(*calend))
+#             window.destroy()
+#         button = gtk.Button(_('Save & Close'))
+#         box.pack_start(button, False, False, 2)
+#         button.connect("clicked", finish_add, combobox, db_combo, '',
+#                         add_window)
+#         button.show()
+#
+#         box.show()
+#
+#         box.show()
+#         add_window.set_border_width(5)
+#         add_window.show()
 
     def closebdwindow(self, uno, dos):
         '''close about window'''
@@ -661,6 +949,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
         window.set_title(title)
         window.set_icon_from_file(IMAGESLOCATION + 'birthday.png')
         window.set_skip_taskbar_hint(hide_in_taskbar)
+        window.set_border_width(10)
+        
+        # Close window if Escape key is pressed
+        def keypress(widget, event) :
+	    if event.keyval == gtk.keysyms.Escape :
+		window.destroy()
+        window.connect("key-press-event", keypress)
+
         return window
 
 if __name__ == "__main__":
