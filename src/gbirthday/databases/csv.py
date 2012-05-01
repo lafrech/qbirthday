@@ -46,8 +46,8 @@ class CSV(DataBase):
                             addressbook.add(name, date)
                             break
             else:
-                show_error_msg(_('Could not load, CSV-file not set.')
-                                + ':' + filename)
+                show_error_msg(_('Could not load CSV-file:')
+                                + filename)
 
     def add(self, name, birthday):
         '''add new person with birthday to end of csv-file'''
