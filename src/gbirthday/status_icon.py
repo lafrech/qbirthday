@@ -420,8 +420,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 
         def preferences_db(widget, db):
             '''Create and display DB config window'''
-            pref_db = self.gtk_get_top_window(db.__class__.__name__ + \
-                                              _(' Database Configuration'))
+            pref_db = self.gtk_get_top_window(db.__class__.__name__ + ' ' + \
+                                              _('Database Configuration'))
 
             vbox = gtk.VBox(False, 5)
             
