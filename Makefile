@@ -56,7 +56,7 @@ test:
 	nosetests -v --with-coverage --cover-package=gbirthday
 
 pot:
-	cd po && intltool-update --pot
+	cd po && intltool-update --pot -g gbirthday
 
 rpm:	tar.xz
 	cp gbirthday-*.tar.xz ~/rpmbuild/SOURCES
