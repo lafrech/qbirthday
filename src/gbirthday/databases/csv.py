@@ -46,7 +46,7 @@ class CSV(DataBase):
                             addressbook.add(name, date)
                             break
             else:
-                show_error_msg(_('Could not load, CVS-file not set.')
+                show_error_msg(_('Could not load, CSV-file not set.')
                                 + ':' + filename)
 
     def add(self, name, birthday):

@@ -16,7 +16,7 @@
 '''Database classes:
 
 'DataBase' from which everything inherits:
-- CVS
+- CSV
 - Evolution
 - Lightning
 - MySQL
