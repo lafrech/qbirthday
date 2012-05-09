@@ -629,9 +629,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
         vbox.pack_start(hsep, False, False, 0)
         hsep.show()
         
+        # Custom properties
+        custom_properties_tooltip_str = ( \
+            _("Use this if you know what you're doing. See RFC 2445."))
+
         # ICS VEVENT custom properties
         self.ics_custom_properties_label = \
             gtk.Label(_('Custom ICS properties for VEVENT'))
+        self.ics_custom_properties_label.set_tooltip_text( \
+            custom_properties_tooltip_str)
         self.ics_custom_properties_label.set_alignment(0, 0)
         vbox.pack_start(self.ics_custom_properties_label, False, False, 0)
         self.ics_custom_properties_label.show()
@@ -639,6 +645,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
         textbuffer_event.set_text(self.conf.ics_custom_properties)
         textview = gtk.TextView(buffer=textbuffer_event)
         textview.set_editable(True)
+        textview.set_tooltip_text( \
+            custom_properties_tooltip_str)
         self.ics_custom_properties_scroll = gtk.ScrolledWindow()
         self.ics_custom_properties_scroll.add_with_viewport(textview)
         self.ics_custom_properties_scroll.set_policy(gtk.POLICY_AUTOMATIC,
@@ -650,6 +658,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
         # ICS VALARM custom properties
         self.ics_alarm_custom_properties_label = \
             gtk.Label(_('Custom ICS properties for VALARM'))
+        self.ics_alarm_custom_properties_label.set_tooltip_text( \
+            custom_properties_tooltip_str)
         self.ics_alarm_custom_properties_label.set_alignment(0, 0)
         self.ics_alarm_custom_properties_label.set_sensitive( \
             self.conf.ics_alarm)
@@ -660,6 +670,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
         textbuffer_alarm.set_text(self.conf.ics_alarm_custom_properties)
         textview = gtk.TextView(buffer=textbuffer_alarm)
         textview.set_editable(True)
+        textview.set_tooltip_text( \
+            custom_properties_tooltip_str)
         self.ics_alarm_custom_properties_scroll = gtk.ScrolledWindow()
         self.ics_alarm_custom_properties_scroll.add_with_viewport(textview)
         self.ics_alarm_custom_properties_scroll.set_policy(gtk.POLICY_AUTOMATIC,
