@@ -1,26 +1,25 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# 
-# Translators:
-# Alexander Logvinov <ports@logvinov.com>, 2009.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: gbirthday\n"
+"Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-05-10 01:00+0200\n"
-"PO-Revision-Date: 2012-05-09 23:01+0000\n"
-"Last-Translator: Jerometransifex <jerome@jolimont.fr>\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: ru\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
 
 #: ../src/gbirthday/addressbook.py:148 ../src/gbirthday/status_icon.py:779
 msgid "Birthday"
-msgstr "День рождения"
+msgstr ""
 
 #: ../src/gbirthday/addressbook.py:149 ../src/gbirthday/addressbook.py:160
 msgid "Birthday: "
@@ -28,81 +27,81 @@ msgstr ""
 
 #: ../src/gbirthday/status_icon.py:88
 msgid "Birthday today:"
-msgstr "Дни рождения сегодня:"
+msgstr ""
 
 #: ../src/gbirthday/status_icon.py:91
 msgid "Birthday tomorrow:"
-msgstr "Дни рождения завтра:"
+msgstr ""
 
 #: ../src/gbirthday/status_icon.py:93
 #, python-format
 msgid "Birthday in %s Days:"
-msgstr "Дни рождения в ближайшие %s дней:"
+msgstr ""
 
 #: ../src/gbirthday/status_icon.py:141
 msgid "Birthday reminder"
-msgstr "Напоминание о Днях рождения"
+msgstr ""
 
 #: ../src/gbirthday/status_icon.py:173
 msgid "translator-credit"
-msgstr "Alexander Logvinov <ports@logvinov.com>"
+msgstr ""
 
 #: ../src/gbirthday/status_icon.py:178
 msgid ""
 "There are no translations or the translator doesn't want to get credits for "
 "that."
-msgstr "Перевод не доступен или переводчик решил не сообщать  свое имя."
+msgstr ""
 
 #: ../src/gbirthday/status_icon.py:227
 msgid "Birthdays"
-msgstr "Дни рождения"
+msgstr ""
 
 #: ../src/gbirthday/status_icon.py:230
 msgid "No birthdays in specified period"
-msgstr "В указанном периоде Дней рождений нет"
+msgstr ""
 
 #: ../src/gbirthday/status_icon.py:250
 #, python-format
 msgid "%s Years"
-msgstr "%s лет"
+msgstr ""
 
 #: ../src/gbirthday/status_icon.py:261 ../src/gbirthday/status_icon.py:262
 msgid "Today"
-msgstr "Сегодня"
+msgstr ""
 
 #: ../src/gbirthday/status_icon.py:279 ../src/gbirthday/status_icon.py:282
 msgid "Yesterday"
-msgstr "Вчера"
+msgstr ""
 
 #: ../src/gbirthday/status_icon.py:284
 #, python-format
 msgid "%s Days ago"
-msgstr "%s дня(ей) назад"
+msgstr ""
 
 #: ../src/gbirthday/status_icon.py:295
 msgid "Tomorrow"
-msgstr "Завтра"
+msgstr ""
 
 #: ../src/gbirthday/status_icon.py:297
 #, python-format
 msgid "%s Days"
-msgstr "%s дняей"
+msgstr ""
 
 #: ../src/gbirthday/status_icon.py:344
 msgid "Preferences"
-msgstr "Настройки"
+msgstr ""
 
 #: ../src/gbirthday/status_icon.py:353
 msgid "Past birthdays"
-msgstr "Предыдущие Дни рождения"
+msgstr ""
 
 #: ../src/gbirthday/status_icon.py:357
 msgid "Next birthdays"
-msgstr "Следующие Дни рождения"
+msgstr ""
 
 #: ../src/gbirthday/status_icon.py:361
 msgid "Notification: Future birthdays"
-msgstr "Уведомления: будущие Дни рождения"
+msgstr ""
 
 #: ../src/gbirthday/status_icon.py:365
 msgid "ICS Calendar export"
@@ -110,11 +109,11 @@ msgstr ""
 
 #: ../src/gbirthday/status_icon.py:369
 msgid "Database"
-msgstr "Базы данных"
+msgstr ""
 
 #: ../src/gbirthday/status_icon.py:424
 msgid "Database Configuration"
-msgstr "Конфигурация базы данных"
+msgstr ""
 
 #: ../src/gbirthday/status_icon.py:546
 msgid "ICS Export configuration"
@@ -153,19 +152,19 @@ msgstr ""
 
 #: ../src/gbirthday/status_icon.py:765
 msgid "Add"
-msgstr "Добавить"
+msgstr ""
 
 #: ../src/gbirthday/status_icon.py:774
 msgid "Name"
-msgstr "Имя"
+msgstr ""
 
 #: ../src/gbirthday/status_icon.py:784
 msgid "Save to file/database"
-msgstr "Сохранить в файл или базу данных"
+msgstr ""
 
 #: ../src/gbirthday/databases/sunbird.py:42
 msgid "Neither iceowl nor sunbird is installed"
-msgstr "Sunbird или Iceowl не установлен"
+msgstr ""
 
 #: ../src/gbirthday/databases/csv.py:49
 msgid "Could not load CSV-file:"
@@ -173,7 +172,7 @@ msgstr ""
 
 #: ../src/gbirthday/databases/csv.py:57
 msgid "CSV-file does not exist"
-msgstr "CSV файл не существует"
+msgstr ""
 
 #: ../src/gbirthday/databases/csv.py:94
 msgid "File"
@@ -183,30 +182,30 @@ msgstr ""
 #: ../src/gbirthday/databases/lightning.py:79
 #, python-format
 msgid "Package %s is not installed."
-msgstr "Пакет %s не установлен."
+msgstr ""
 
 #: ../src/gbirthday/databases/mysql.py:51
 msgid "Could not connect to MySQL-Server"
-msgstr "Произошла·ошибка·во·время·соединения·с·MySQL·сервером:"
+msgstr ""
 
 #: ../src/gbirthday/databases/mysql.py:70
 #: ../src/gbirthday/databases/mysql.py:83
 msgid "Could not execute MySQL-query"
-msgstr "Произошла ошибка во время выполнения MySQL запроса"
+msgstr ""
 
 #: ../src/gbirthday/databases/lightning.py:65
 #, python-format
 msgid "Error reading profile file: %s"
-msgstr "Произошла ошибка во время чтения файла профиля: %s "
+msgstr ""
 
 #: ../src/gbirthday/databases/lightning.py:84
 #, python-format
 msgid "sqlite3 could not connect: %s"
-msgstr "Произошла·ошибка·во·время·соединения·с·sqlite3: %s"
+msgstr ""
 
 #: ../src/gbirthday/databases/lightning.py:149
 msgid "Could not execute SQLite-query"
-msgstr "Произошла ошибка во время выполнения SQLite запроса"
+msgstr ""
 
 #: ../src/gbirthday/databases/evolution.py:41
 msgid "You need to install python-evolution to use the evolution module"

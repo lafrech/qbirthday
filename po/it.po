@@ -1,199 +1,213 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
 # 
+# Translators:
+#   <jerome@jolimont.fr>, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: gbirthday\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-06-30 15:32+0000\n"
+"POT-Creation-Date: 2012-05-10 01:00+0200\n"
+"PO-Revision-Date: 2012-05-15 11:38+0000\n"
+"Last-Translator: Jerometransifex <jerome@jolimont.fr>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: it\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
-#: ../gbirthday.desktop.in.h:1
-#, fuzzy
-msgid "Birthday reminder for E-Mail contacts"
-msgstr "Promemoria dei compleanni per i contatti di Evolution"
+#: ../src/gbirthday/addressbook.py:148 ../src/gbirthday/status_icon.py:779
+msgid "Birthday"
+msgstr "Compleanno"
 
-#: ../src/gbirthday/databases.py:117
-msgid "Could not save, CVS-file not set."
-msgstr "Non posso salvare, CSV-file non impostato."
+#: ../src/gbirthday/addressbook.py:149 ../src/gbirthday/addressbook.py:160
+msgid "Birthday: "
+msgstr "Compleanno:"
 
-#: ../src/gbirthday/databases.py:125
-msgid "CSV-file does not exist"
-msgstr "CSV-file non esiste"
-
-#: ../src/gbirthday/databases.py:235
-#, fuzzy
-msgid "For correctly usage, you need to install gnome-python2-evolution."
-msgstr "Per un funzionamento correto, deve essere installato gnome-python2-evolution."
-
-#: ../src/gbirthday/databases.py:303
-#, python-format
-msgid "Error reading profile file: %s"
-msgstr "Errore nel leggere il file del profilo: %s"
-
-#: ../src/gbirthday/databases.py:315 ../src/gbirthday/databases.py:413
-#, python-format
-msgid "Package %s is not installed."
-msgstr "Il pacchetto %s non è installato."
-
-#: ../src/gbirthday/databases.py:320
-#, python-format
-msgid "sqlite3 could not connect: %s"
-msgstr ""
-
-#: ../src/gbirthday/databases.py:385
-msgid "Could not execute SQLite-query"
-msgstr "Impossibile eseguire SQLite-query"
-
-#: ../src/gbirthday/databases.py:422
-msgid "Could not connect to MySQL-Server"
-msgstr "Impossibile connettersi a MySQL-Server"
-
-#: ../src/gbirthday/databases.py:436 ../src/gbirthday/databases.py:449
-msgid "Could not execute MySQL-query"
-msgstr "Impossibile eseguire MySQL-query"
-
-#. Label for MySQL, just translate 'Database'
-#: ../src/gbirthday/databases.py:473
-msgid "MySQL-Database"
-msgstr "MySQL-Database"
-
-#: ../src/gbirthday/databases.py:529
-msgid "Neither iceowl nor sunbird is installed"
-msgstr "Né iceowl né sunbird sono installati"
-
-#: ../src/gbirthday/status_icon.py:86
+#: ../src/gbirthday/status_icon.py:88
 msgid "Birthday today:"
-msgstr "Compleanni oggi:"
-
-#: ../src/gbirthday/status_icon.py:89
-msgid "Birthday tomorrow:"
-msgstr "Compleaani domani:"
+msgstr "Compleanno oggi:"
 
 #: ../src/gbirthday/status_icon.py:91
-#, fuzzy, python-format
+msgid "Birthday tomorrow:"
+msgstr "Compleaano domani:"
+
+#: ../src/gbirthday/status_icon.py:93
+#, python-format
 msgid "Birthday in %s Days:"
-msgstr "Compleanni"
+msgstr ""
 
-#: ../src/gbirthday/status_icon.py:104
-msgid "Reload"
-msgstr "Ricarica"
-
-#: ../src/gbirthday/status_icon.py:112 ../src/gbirthday/status_icon.py:510
-#: ../src/gbirthday/status_icon.py:572
-msgid "Add"
-msgstr "Aggiungi"
-
-#: ../src/gbirthday/status_icon.py:120 ../src/gbirthday/status_icon.py:359
-msgid "Preferences"
-msgstr "Preferenze"
-
-#: ../src/gbirthday/status_icon.py:130
-msgid "About"
-msgstr "Informazioni"
-
-#: ../src/gbirthday/status_icon.py:138
-msgid "Quit"
-msgstr "Esci"
-
-#: ../src/gbirthday/status_icon.py:154
+#: ../src/gbirthday/status_icon.py:141
 msgid "Birthday reminder"
 msgstr "Promemoria dei compleanni"
 
-#: ../src/gbirthday/status_icon.py:185
+#: ../src/gbirthday/status_icon.py:173
 msgid "translator-credit"
 msgstr "translator-credit"
 
-#: ../src/gbirthday/status_icon.py:190
-msgid "There are no translations or the translator doesn't want to get credits for that."
+#: ../src/gbirthday/status_icon.py:178
+msgid ""
+"There are no translations or the translator doesn't want to get credits for "
+"that."
 msgstr "Non ci sono traduzioni o il traduttore non ha voluto riconoscimenti per esse."
 
-#: ../src/gbirthday/status_icon.py:238
+#: ../src/gbirthday/status_icon.py:227
 msgid "Birthdays"
 msgstr "Compleanni"
 
-#: ../src/gbirthday/status_icon.py:241
+#: ../src/gbirthday/status_icon.py:230
 msgid "No birthdays in specified period"
 msgstr "Non ci sono compleanni nel periodo di tempo determinato"
 
-#: ../src/gbirthday/status_icon.py:265
+#: ../src/gbirthday/status_icon.py:250
 #, python-format
 msgid "%s Years"
 msgstr "%s Anni"
 
-#: ../src/gbirthday/status_icon.py:276 ../src/gbirthday/status_icon.py:277
+#: ../src/gbirthday/status_icon.py:261 ../src/gbirthday/status_icon.py:262
 msgid "Today"
 msgstr "Oggi"
 
-#: ../src/gbirthday/status_icon.py:294 ../src/gbirthday/status_icon.py:297
+#: ../src/gbirthday/status_icon.py:279 ../src/gbirthday/status_icon.py:282
 msgid "Yesterday"
 msgstr "Ieri"
 
-#: ../src/gbirthday/status_icon.py:299
+#: ../src/gbirthday/status_icon.py:284
 #, python-format
 msgid "%s Days ago"
 msgstr "%s Giorni fa"
 
-#: ../src/gbirthday/status_icon.py:310
+#: ../src/gbirthday/status_icon.py:295
 msgid "Tomorrow"
 msgstr "Domani"
 
-#: ../src/gbirthday/status_icon.py:312
-#, fuzzy, python-format
+#: ../src/gbirthday/status_icon.py:297
+#, python-format
 msgid "%s Days"
-msgstr "%s Giorni fa"
+msgstr "%s Giorni"
 
-#: ../src/gbirthday/status_icon.py:368
+#: ../src/gbirthday/status_icon.py:344
+msgid "Preferences"
+msgstr "Preferenze"
+
+#: ../src/gbirthday/status_icon.py:353
 msgid "Past birthdays"
 msgstr "Compleanni passati"
 
-#: ../src/gbirthday/status_icon.py:372
+#: ../src/gbirthday/status_icon.py:357
 msgid "Next birthdays"
 msgstr "Prossimi compleanni"
 
-#: ../src/gbirthday/status_icon.py:376
+#: ../src/gbirthday/status_icon.py:361
 msgid "Notification: Future birthdays"
 msgstr ""
 
-#: ../src/gbirthday/status_icon.py:380 ../src/gbirthday/status_icon.py:601
+#: ../src/gbirthday/status_icon.py:365
+msgid "ICS Calendar export"
+msgstr ""
+
+#: ../src/gbirthday/status_icon.py:369
 msgid "Database"
 msgstr "Database"
 
-#: ../src/gbirthday/status_icon.py:431
+#: ../src/gbirthday/status_icon.py:424
 msgid "Database Configuration"
 msgstr "Configurazione del Database"
 
-#: ../src/gbirthday/status_icon.py:448
-msgid "Configure"
-msgstr "Configura"
+#: ../src/gbirthday/status_icon.py:546
+msgid "ICS Export configuration"
+msgstr ""
 
-#: ../src/gbirthday/status_icon.py:464 ../src/gbirthday/status_icon.py:560
-#: ../src/gbirthday/status_icon.py:633
-msgid "Save & Close"
-msgstr "Salva & Esci"
+#: ../src/gbirthday/status_icon.py:573
+msgid "Export birthday list in iCalendar file:"
+msgstr ""
 
-#: ../src/gbirthday/status_icon.py:519
+#: ../src/gbirthday/status_icon.py:583
+msgid "Browse"
+msgstr ""
+
+#: ../src/gbirthday/status_icon.py:605
+msgid "Set alarms"
+msgstr ""
+
+#: ../src/gbirthday/status_icon.py:617
+msgid "days before each birthday"
+msgstr ""
+
+#. Custom properties
+#: ../src/gbirthday/status_icon.py:634
+msgid "Use this if you know what you're doing. See RFC 2445."
+msgstr ""
+
+#. ICS VEVENT custom properties
+#: ../src/gbirthday/status_icon.py:638
+msgid "Custom ICS properties for VEVENT"
+msgstr ""
+
+#. ICS VALARM custom properties
+#: ../src/gbirthday/status_icon.py:660
+msgid "Custom ICS properties for VALARM"
+msgstr ""
+
+#: ../src/gbirthday/status_icon.py:765
+msgid "Add"
+msgstr "Aggiungi"
+
+#: ../src/gbirthday/status_icon.py:774
 msgid "Name"
 msgstr "Nome"
 
-#: ../src/gbirthday/status_icon.py:523
-msgid "Birthday"
-msgstr "Compleanno"
-
-#: ../src/gbirthday/status_icon.py:527
+#: ../src/gbirthday/status_icon.py:784
 msgid "Save to file/database"
 msgstr "Salva su un file/database"
 
-#: ../src/gbirthday/status_icon.py:593
-msgid "Import Settings"
-msgstr "Importa impostazioni"
+#: ../src/gbirthday/databases/sunbird.py:42
+msgid "Neither iceowl nor sunbird is installed"
+msgstr "Né iceowl né sunbird sono installati"
 
-#: ../src/gbirthday/status_icon.py:616
-msgid "Export Settings"
-msgstr "Esporta impostazioni"
+#: ../src/gbirthday/databases/csv.py:49
+msgid "Could not load CSV-file:"
+msgstr ""
 
-#~ msgid "Stop blinking"
-#~ msgstr "Smetti di lampeggiare"
+#: ../src/gbirthday/databases/csv.py:57
+msgid "CSV-file does not exist"
+msgstr "CSV-file non esiste"
 
-#~ msgid "Days"
-#~ msgstr "Giorni"
+#: ../src/gbirthday/databases/csv.py:94
+msgid "File"
+msgstr ""
+
+#: ../src/gbirthday/databases/mysql.py:42
+#: ../src/gbirthday/databases/lightning.py:79
+#, python-format
+msgid "Package %s is not installed."
+msgstr "Il pacchetto %s non è installato."
+
+#: ../src/gbirthday/databases/mysql.py:51
+msgid "Could not connect to MySQL-Server"
+msgstr "Impossibile connettersi a MySQL-Server"
+
+#: ../src/gbirthday/databases/mysql.py:70
+#: ../src/gbirthday/databases/mysql.py:83
+msgid "Could not execute MySQL-query"
+msgstr "Impossibile eseguire MySQL-query"
+
+#: ../src/gbirthday/databases/lightning.py:65
+#, python-format
+msgid "Error reading profile file: %s"
+msgstr "Errore nel leggere il file del profilo: %s"
+
+#: ../src/gbirthday/databases/lightning.py:84
+#, python-format
+msgid "sqlite3 could not connect: %s"
+msgstr ""
+
+#: ../src/gbirthday/databases/lightning.py:149
+msgid "Could not execute SQLite-query"
+msgstr "Impossibile eseguire SQLite-query"
+
+#: ../src/gbirthday/databases/evolution.py:41
+msgid "You need to install python-evolution to use the evolution module"
+msgstr ""

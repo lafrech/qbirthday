@@ -1,202 +1,212 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
+# Translators:
 msgid ""
 msgstr ""
 "Project-Id-Version: gbirthday\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-04-25 07:50+0000\n"
-"PO-Revision-Date: 2010-04-26 10:50+0200\n"
-"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
-"Language-Team: Hebrew (Yaron Shahrabani) <sh.yaron@gmail.com>\n"
+"POT-Creation-Date: 2012-05-10 01:00+0200\n"
+"PO-Revision-Date: 2012-05-09 23:01+0000\n"
+"Last-Translator: Jerometransifex <jerome@jolimont.fr>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural= (n != 1);\n"
-"X-Poedit-Language: Hebrew\n"
-"X-Poedit-SourceCharset: utf-8\n"
-"X-Poedit-Country: ISRAEL\n"
+"Language: he\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
-#: ../gbirthday.desktop.in.h:1
-msgid "Birthday reminder for E-Mail contacts"
-msgstr "תזכורת לימי הולדת לאנשי הקשר בדוא\"ל"
+#: ../src/gbirthday/addressbook.py:148 ../src/gbirthday/status_icon.py:779
+msgid "Birthday"
+msgstr "יום הולדת"
 
-#: ../src/gbirthday/databases.py:117
-msgid "Could not save, CVS-file not set."
-msgstr "לא ניתן לשמור, לא הוגדר קובץ CSV"
+#: ../src/gbirthday/addressbook.py:149 ../src/gbirthday/addressbook.py:160
+msgid "Birthday: "
+msgstr ""
 
-#: ../src/gbirthday/databases.py:125
-msgid "CSV-file does not exist"
-msgstr "לא קיים קובץ CSV"
-
-#: ../src/gbirthday/databases.py:236
-msgid "For correctly usage, you need to install gnome-python2-evolution."
-msgstr "לשימוש נכון יהיה עליך להתקין את gnome-python2-evolution."
-
-#: ../src/gbirthday/databases.py:305
-#, python-format
-msgid "Error reading profile file: %s"
-msgstr "שגיאה בקריאת קובץ הפרופיל: %s"
-
-#: ../src/gbirthday/databases.py:319 ../src/gbirthday/databases.py:418
-#, python-format
-msgid "Package %s is not installed."
-msgstr "החבילה %s אינה מותקנת."
-
-#: ../src/gbirthday/databases.py:324
-#, python-format
-msgid "sqlite3 could not connect: %s"
-msgstr "לא ניתן להתחבר אל sqlite3: %s"
-
-#: ../src/gbirthday/databases.py:389
-msgid "Could not execute SQLite-query"
-msgstr "לא ניתן להפעיל את שאילתת ה־SQLite"
-
-#: ../src/gbirthday/databases.py:427
-msgid "Could not connect to MySQL-Server"
-msgstr "לא ניתן להתחבר אל שרת ה־MySQL"
-
-#: ../src/gbirthday/databases.py:443 ../src/gbirthday/databases.py:456
-msgid "Could not execute MySQL-query"
-msgstr "לא ניתן להפעיל את שאילתת ה־MySQL"
-
-#. Label for MySQL, just translate 'Database'
-#: ../src/gbirthday/databases.py:480
-msgid "MySQL-Database"
-msgstr "מסד הנתונים MySQL"
-
-#: ../src/gbirthday/databases.py:538
-msgid "Neither iceowl nor sunbird is installed"
-msgstr "Iceowl ו־Sunbird אינן מותקנות"
-
-#: ../src/gbirthday/status_icon.py:86
+#: ../src/gbirthday/status_icon.py:88
 msgid "Birthday today:"
 msgstr "יום הולדת היום:"
 
-#: ../src/gbirthday/status_icon.py:89
+#: ../src/gbirthday/status_icon.py:91
 msgid "Birthday tomorrow:"
 msgstr "יום הולדת מחר:"
 
-#: ../src/gbirthday/status_icon.py:91
+#: ../src/gbirthday/status_icon.py:93
 #, python-format
 msgid "Birthday in %s Days:"
 msgstr "יום הולדת בעוד %s ימים:"
 
-#: ../src/gbirthday/status_icon.py:104
-msgid "Reload"
-msgstr "טעינה מחדש"
-
-#: ../src/gbirthday/status_icon.py:112 ../src/gbirthday/status_icon.py:509
-#: ../src/gbirthday/status_icon.py:574
-msgid "Add"
-msgstr "הוספה"
-
-#: ../src/gbirthday/status_icon.py:120 ../src/gbirthday/status_icon.py:360
-msgid "Preferences"
-msgstr "העדפות"
-
-#: ../src/gbirthday/status_icon.py:130
-msgid "About"
-msgstr "אודות"
-
-#: ../src/gbirthday/status_icon.py:138
-msgid "Quit"
-msgstr "יציאה"
-
-#: ../src/gbirthday/status_icon.py:154
+#: ../src/gbirthday/status_icon.py:141
 msgid "Birthday reminder"
 msgstr "תזכורת לימי ההולדת"
 
-#: ../src/gbirthday/status_icon.py:185
+#: ../src/gbirthday/status_icon.py:173
 msgid "translator-credit"
 msgstr "Yaron Shahrabani <sh.yaron@gmail.com>"
 
-#: ../src/gbirthday/status_icon.py:190
-msgid "There are no translations or the translator doesn't want to get credits for that."
+#: ../src/gbirthday/status_icon.py:178
+msgid ""
+"There are no translations or the translator doesn't want to get credits for "
+"that."
 msgstr "אין מתרגמים או שהמתרגם אינו מעוניין בהוקרת תודה על עבודתו."
 
-#: ../src/gbirthday/status_icon.py:239
+#: ../src/gbirthday/status_icon.py:227
 msgid "Birthdays"
 msgstr "ימי הולדת"
 
-#: ../src/gbirthday/status_icon.py:242
+#: ../src/gbirthday/status_icon.py:230
 msgid "No birthdays in specified period"
 msgstr "אין ימי הולדת בתקופה שצוינה"
 
-#: ../src/gbirthday/status_icon.py:266
+#: ../src/gbirthday/status_icon.py:250
 #, python-format
 msgid "%s Years"
 msgstr "%s שנים"
 
-#: ../src/gbirthday/status_icon.py:277 ../src/gbirthday/status_icon.py:278
+#: ../src/gbirthday/status_icon.py:261 ../src/gbirthday/status_icon.py:262
 msgid "Today"
 msgstr "היום"
 
-#: ../src/gbirthday/status_icon.py:295 ../src/gbirthday/status_icon.py:298
+#: ../src/gbirthday/status_icon.py:279 ../src/gbirthday/status_icon.py:282
 msgid "Yesterday"
 msgstr "אתמול"
 
-#: ../src/gbirthday/status_icon.py:300
+#: ../src/gbirthday/status_icon.py:284
 #, python-format
 msgid "%s Days ago"
 msgstr "לפני %s ימים"
 
-#: ../src/gbirthday/status_icon.py:311
+#: ../src/gbirthday/status_icon.py:295
 msgid "Tomorrow"
 msgstr "מחר"
 
-#: ../src/gbirthday/status_icon.py:313
+#: ../src/gbirthday/status_icon.py:297
 #, python-format
 msgid "%s Days"
 msgstr "%s ימים"
 
-#: ../src/gbirthday/status_icon.py:369
+#: ../src/gbirthday/status_icon.py:344
+msgid "Preferences"
+msgstr "העדפות"
+
+#: ../src/gbirthday/status_icon.py:353
 msgid "Past birthdays"
 msgstr "ימי ההולדת שעברו"
 
-#: ../src/gbirthday/status_icon.py:373
+#: ../src/gbirthday/status_icon.py:357
 msgid "Next birthdays"
 msgstr "ימי ההולדת הבאים"
 
-#: ../src/gbirthday/status_icon.py:377
+#: ../src/gbirthday/status_icon.py:361
 msgid "Notification: Future birthdays"
 msgstr "התראה: ימי הולדת עתידיים"
 
-#: ../src/gbirthday/status_icon.py:381 ../src/gbirthday/status_icon.py:603
+#: ../src/gbirthday/status_icon.py:365
+msgid "ICS Calendar export"
+msgstr ""
+
+#: ../src/gbirthday/status_icon.py:369
 msgid "Database"
 msgstr "מסד נתונים"
 
-#: ../src/gbirthday/status_icon.py:432
+#: ../src/gbirthday/status_icon.py:424
 msgid "Database Configuration"
 msgstr "תצורת מסד הנתונים"
 
-#: ../src/gbirthday/status_icon.py:449
-msgid "Configure"
-msgstr "הגדרה"
+#: ../src/gbirthday/status_icon.py:546
+msgid "ICS Export configuration"
+msgstr ""
 
-#: ../src/gbirthday/status_icon.py:465 ../src/gbirthday/status_icon.py:562
-#: ../src/gbirthday/status_icon.py:635
-msgid "Save & Close"
-msgstr "שמירה וסגירה"
+#: ../src/gbirthday/status_icon.py:573
+msgid "Export birthday list in iCalendar file:"
+msgstr ""
 
-#: ../src/gbirthday/status_icon.py:518
+#: ../src/gbirthday/status_icon.py:583
+msgid "Browse"
+msgstr ""
+
+#: ../src/gbirthday/status_icon.py:605
+msgid "Set alarms"
+msgstr ""
+
+#: ../src/gbirthday/status_icon.py:617
+msgid "days before each birthday"
+msgstr ""
+
+#. Custom properties
+#: ../src/gbirthday/status_icon.py:634
+msgid "Use this if you know what you're doing. See RFC 2445."
+msgstr ""
+
+#. ICS VEVENT custom properties
+#: ../src/gbirthday/status_icon.py:638
+msgid "Custom ICS properties for VEVENT"
+msgstr ""
+
+#. ICS VALARM custom properties
+#: ../src/gbirthday/status_icon.py:660
+msgid "Custom ICS properties for VALARM"
+msgstr ""
+
+#: ../src/gbirthday/status_icon.py:765
+msgid "Add"
+msgstr "הוספה"
+
+#: ../src/gbirthday/status_icon.py:774
 msgid "Name"
 msgstr "שם"
 
-#: ../src/gbirthday/status_icon.py:522
-msgid "Birthday"
-msgstr "יום הולדת"
-
-#: ../src/gbirthday/status_icon.py:526
+#: ../src/gbirthday/status_icon.py:784
 msgid "Save to file/database"
 msgstr "שמירה לקובץ/מסד נתונים"
 
-#: ../src/gbirthday/status_icon.py:595
-msgid "Import Settings"
-msgstr "ייבוא הגדרות"
+#: ../src/gbirthday/databases/sunbird.py:42
+msgid "Neither iceowl nor sunbird is installed"
+msgstr "Iceowl ו־Sunbird אינן מותקנות"
 
-#: ../src/gbirthday/status_icon.py:618
-msgid "Export Settings"
-msgstr "ייצוא הגדרות"
+#: ../src/gbirthday/databases/csv.py:49
+msgid "Could not load CSV-file:"
+msgstr ""
+
+#: ../src/gbirthday/databases/csv.py:57
+msgid "CSV-file does not exist"
+msgstr "לא קיים קובץ CSV"
+
+#: ../src/gbirthday/databases/csv.py:94
+msgid "File"
+msgstr ""
+
+#: ../src/gbirthday/databases/mysql.py:42
+#: ../src/gbirthday/databases/lightning.py:79
+#, python-format
+msgid "Package %s is not installed."
+msgstr "החבילה %s אינה מותקנת."
+
+#: ../src/gbirthday/databases/mysql.py:51
+msgid "Could not connect to MySQL-Server"
+msgstr "לא ניתן להתחבר אל שרת ה־MySQL"
+
+#: ../src/gbirthday/databases/mysql.py:70
+#: ../src/gbirthday/databases/mysql.py:83
+msgid "Could not execute MySQL-query"
+msgstr "לא ניתן להפעיל את שאילתת ה־MySQL"
+
+#: ../src/gbirthday/databases/lightning.py:65
+#, python-format
+msgid "Error reading profile file: %s"
+msgstr "שגיאה בקריאת קובץ הפרופיל: %s"
+
+#: ../src/gbirthday/databases/lightning.py:84
+#, python-format
+msgid "sqlite3 could not connect: %s"
+msgstr "לא ניתן להתחבר אל sqlite3: %s"
+
+#: ../src/gbirthday/databases/lightning.py:149
+msgid "Could not execute SQLite-query"
+msgstr "לא ניתן להפעיל את שאילתת ה־SQLite"
+
+#: ../src/gbirthday/databases/evolution.py:41
+msgid "You need to install python-evolution to use the evolution module"
+msgstr ""
