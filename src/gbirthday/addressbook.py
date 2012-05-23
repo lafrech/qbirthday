@@ -53,7 +53,6 @@ class AddressBook:
                                          int(birthday[4:6]), 
                                          int(birthday[-2:]))
                 
-        
         if birthday in self.bdays:
             # check for double entry - we assume that people with the same name
             # and the same birthday exists only once in our universe
@@ -112,18 +111,27 @@ class AddressBook:
 
         # delete bdays_dict
         self.bdays_dict = {}
+
         # iterate over specified period
         for day_num in xrange(self.firstday, self.lastday + 1):
             day = now + datetime.timedelta(day_num)
 
-            # is date in bdays.keys -> add to dict
-            for date, birthdays in self.bdays.items():
+            # For each (D-M-Y -> Name list)
+            for date, birthday in self.bdays.items():
+                # If D-M match day
                 if day.day == date.day and day.month == date.month:
-                    self.bdays_dict[day_num] = birthdays
+                    # If D-M not yet in dict, add D-M -> Name list
+                    if day_num not in self.bdays_dict:
+                        self.bdays_dict[day_num] = birthday[:]
+                    # If D-M already in dict,
+                    # another (D-M-Y -> Name list) exists for the same D-M
+                    # but another Y, therefore, concatenate Name lists
+                    else:
+                        self.bdays_dict[day_num] += birthday[:]
 
     def export(self):
         '''Export birthday list as iCalendar file'''
-        
+
         with open(self.conf.ics_filepath,'w') as f:
             f.write(dedent("""\
                 BEGIN:VCALENDAR
