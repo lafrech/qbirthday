@@ -21,7 +21,7 @@ clean:
 	$(rm) gbirthday.desktop
 	$(rm) -r gbirthday-$(version) BUILDROOT noarch
 	$(rm) gbirthday*.src.rpm
-	$(rm) `find . | grep ".pyc"`
+	find . -name \*.pyc -delete
 
 install:
 	intltool-merge -d ./po ./gbirthday.desktop.in ./gbirthday.desktop
