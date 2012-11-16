@@ -3,20 +3,21 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
+#   <deamicis@bluewin.ch>, 2012.
 #   <jerome@jolimont.fr>, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: gbirthday\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-05-10 01:00+0200\n"
-"PO-Revision-Date: 2012-05-15 11:38+0000\n"
-"Last-Translator: Jerometransifex <jerome@jolimont.fr>\n"
+"PO-Revision-Date: 2012-09-19 07:53+0000\n"
+"Last-Translator: deamn <deamicis@bluewin.ch>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: it\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../src/gbirthday/addressbook.py:148 ../src/gbirthday/status_icon.py:779
 msgid "Birthday"
@@ -32,12 +33,12 @@ msgstr "Compleanno oggi:"
 
 #: ../src/gbirthday/status_icon.py:91
 msgid "Birthday tomorrow:"
-msgstr "Compleaano domani:"
+msgstr "Compleanno domani:"
 
 #: ../src/gbirthday/status_icon.py:93
 #, python-format
 msgid "Birthday in %s Days:"
-msgstr ""
+msgstr "Compleanno in %s giorni:"
 
 #: ../src/gbirthday/status_icon.py:141
 msgid "Birthday reminder"
@@ -106,7 +107,7 @@ msgstr ""
 
 #: ../src/gbirthday/status_icon.py:365
 msgid "ICS Calendar export"
-msgstr ""
+msgstr "Esportazione Calendario ICS"
 
 #: ../src/gbirthday/status_icon.py:369
 msgid "Database"
@@ -118,7 +119,7 @@ msgstr "Configurazione del Database"
 
 #: ../src/gbirthday/status_icon.py:546
 msgid "ICS Export configuration"
-msgstr ""
+msgstr "Configurazione dell'esportazione ICS"
 
 #: ../src/gbirthday/status_icon.py:573
 msgid "Export birthday list in iCalendar file:"
@@ -126,15 +127,15 @@ msgstr ""
 
 #: ../src/gbirthday/status_icon.py:583
 msgid "Browse"
-msgstr ""
+msgstr "Navigare"
 
 #: ../src/gbirthday/status_icon.py:605
 msgid "Set alarms"
-msgstr ""
+msgstr "Creare allarmi"
 
 #: ../src/gbirthday/status_icon.py:617
 msgid "days before each birthday"
-msgstr ""
+msgstr "giorni prima di ogni compleanno"
 
 #. Custom properties
 #: ../src/gbirthday/status_icon.py:634
@@ -177,7 +178,7 @@ msgstr "CSV-file non esiste"
 
 #: ../src/gbirthday/databases/csv.py:94
 msgid "File"
-msgstr ""
+msgstr "File"
 
 #: ../src/gbirthday/databases/mysql.py:42
 #: ../src/gbirthday/databases/lightning.py:79
@@ -202,7 +203,7 @@ msgstr "Errore nel leggere il file del profilo: %s"
 #: ../src/gbirthday/databases/lightning.py:84
 #, python-format
 msgid "sqlite3 could not connect: %s"
-msgstr ""
+msgstr "sqlite3 impossibile connettersi: %s"
 
 #: ../src/gbirthday/databases/lightning.py:149
 msgid "Could not execute SQLite-query"
