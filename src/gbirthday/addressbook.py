@@ -132,6 +132,9 @@ class AddressBook:
     def export(self):
         '''Export birthday list as iCalendar file'''
 
+        # This loop index is used to generate unique UIDs
+        index = 0
+
         with open(self.conf.ics_filepath,'w') as f:
             f.write(dedent("""\
                 BEGIN:VCALENDAR
@@ -147,7 +150,7 @@ class AddressBook:
                 bdate = str(bd)[0:4] + str(bd)[5:7] + str(bd)[8:10]
 
                 f.write('BEGIN:VEVENT\n')
-                f.write('UID:gbirthday-' + now + '\n')
+                f.write('UID:' + now + '-' + str(index) + '@gbirthday' + '\n')
                 f.write('CREATED:' + now + '\n')
                 f.write('LAST-MODIFIED:' + now + '\n')
                 f.write('DTSTAMP:' + now + '\n')
@@ -173,6 +176,8 @@ class AddressBook:
                 if self.conf.ics_custom_properties != '':
                     f.write(self.conf.ics_custom_properties + '\n')
                 f.write("END:VEVENT\n")
+
+                index+=1;
 
             f.write("END:VCALENDAR")
 
