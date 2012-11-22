@@ -9,14 +9,14 @@ msgstr ""
 "Project-Id-Version: gbirthday\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-05-10 01:00+0200\n"
-"PO-Revision-Date: 2012-05-09 23:07+0000\n"
+"PO-Revision-Date: 2012-11-16 18:19+0000\n"
 "Last-Translator: Jerometransifex <jerome@jolimont.fr>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: fr\n"
-"Plural-Forms: nplurals=2; plural=(n > 1)\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: ../src/gbirthday/addressbook.py:148 ../src/gbirthday/status_icon.py:779
 msgid "Birthday"
@@ -77,7 +77,7 @@ msgstr "Hier"
 #: ../src/gbirthday/status_icon.py:284
 #, python-format
 msgid "%s Days ago"
-msgstr "Il ya %s jours"
+msgstr "Il y a %s jours"
 
 #: ../src/gbirthday/status_icon.py:295
 msgid "Tomorrow"
