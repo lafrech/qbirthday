@@ -2,7 +2,8 @@ bindir = /usr/bin
 datadir = /usr/share
 sitelib = /usr/lib/python2.6/site-packages
 pixmaps = $(datadir)/pixmaps
-version = 0.6.6
+version = 0.6.7
+DIST_DIR = dist
 
 install = install -p
 mkdir = mkdir -p
@@ -46,11 +47,15 @@ uninstall:
 	$(rm) $(DESTDIR)$(pixmaps)/gbirthday.png
 	$(rm) -r $(DESTDIR)$(sitelib)/gbirthday
 
-tar.gz:	clean
-	$(tar) -zcf gbirthday-$(version).tar.gz *
+snapshot: clean
+	mkdir -p $(DIST_DIR)/gbirthday-$(version)
+	rsync -avz --exclude=.git --exclude=$(DIST_DIR) ./ $(DIST_DIR)/gbirthday-$(version)
 
-tar.xz: clean
-	$(tar) -Jcf gbirthday-$(version).tar.xz *
+tar.gz:	snapshot
+	cd $(DIST_DIR) && $(tar) -zcf gbirthday-$(version).tar.gz gbirthday-$(version)
+
+tar.xz: snapshot
+	cd $(DIST_DIR) && $(tar) -Jcf gbirthday-$(version).tar.xz gbirthday-$(version)
 
 test:
 	nosetests -v --with-coverage --cover-package=gbirthday

@@ -5,3 +5,4 @@ noarch
 gbirthday.spec
 .coverage
 *.swp
+dist
