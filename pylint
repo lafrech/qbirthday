@@ -22,15 +22,12 @@ else
     command=$(find . -name "*.py")
 fi
 
-pylint --include-ids=y \
-    --disable-msg=C0103 \
-    --disable-msg=C0111 \
-    --disable-msg=C0301 \
-    --disable-msg=C0302 \
-    --disable-msg=R0904 \
-    --disable-msg=R0912 \
-    --disable-msg=R0915 \
-    --disable-msg=W0614 \
+pylint --msg-template='{path}:{line}: [{msg_id}({symbol}), {obj}] {msg}' \
+    --disable=C0111 \
+    --disable=C0302 \
+    --disable=R0904 \
+    --disable=R0912 \
+    --disable=R0915 \
     $command
 
 # --errors-only
