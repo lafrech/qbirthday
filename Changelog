@@ -1,3 +1,18 @@
+0.6.7
+	- Fix bug if two birthdates same D-M different Y
+	- Fix bug in .ics export (UID must be unique)
+	- Translation updates: Cesky, Italian, French
+	- Tarball generation improvement in Makefile
+
+0.6.6
+	- GUI revamp
+	- Hide from taskbar
+	- Store config in XDG_CONFIG_HOME or ~/.config
+	- Export gbirthday list as iCalendar file
+	- Use datetime instead of strings
+	- Translation updates: Italian, Finnish
+
+
 0.6.5
 	- Reload addressbook, when clickint on 'Save & Close'
 	- Properly close about-dialog on 'X'
