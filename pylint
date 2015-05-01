@@ -19,7 +19,7 @@ if [ $# = 1 ]
 then
     command=$(find $1 -name "*.py")
 else
-    command=$(find . -name "*.py")
+    command=$(find . -name "*.py" -not -path "./dist/*")
 fi
 
 pylint --msg-template='{path}:{line}: [{msg_id}({symbol}), {obj}] {msg}' \
