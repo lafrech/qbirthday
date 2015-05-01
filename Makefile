@@ -22,6 +22,7 @@ clean:
 	$(rm) gbirthday.desktop
 	$(rm) -r gbirthday-$(version) BUILDROOT noarch
 	$(rm) gbirthday*.src.rpm
+	$(rm) -r $(DIST_DIR)
 	find . -name \*.pyc -delete
 
 install:
