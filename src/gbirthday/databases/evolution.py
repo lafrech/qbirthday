@@ -14,8 +14,6 @@
 # along with this program; if not, see <http://www.gnu.org/licenses/>.
 #}}}
 from __future__ import absolute_import
-import gtk
-import os
 import re
 from gbirthday.databases import DataBase
 from gbirthday.gtk_funcs import show_error_msg

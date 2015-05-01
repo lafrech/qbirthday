@@ -16,7 +16,6 @@
 '''
 Testing the conf class
 '''
-from nose import with_setup
 from .__init__ import Conf
 
 conf = None
