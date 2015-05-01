@@ -37,6 +37,7 @@ import os, shutil
 import datetime
 from datetime import date
 import time
+from string import join
 from textwrap import dedent
 import ConfigParser
 
@@ -189,12 +190,8 @@ class Conf:
         self.settings.set("main", "lastday", self.lastday)
         self.settings.set("main", "notify_future_bdays",
                 self.notify_future_bdays)
-        used_db = ""
-        for database in self.used_databases:
-            used_db += database
-            used_db += "|"
-        # db[:-1] because of removing the last "|"
-        self.settings.set("main", "databases", used_db[:-1])
+        used_db = join(self.used_databases, '|')
+        self.settings.set("main", "databases", used_db)
         self.settings.set("main", "csv_files", self.csv_files)
         
         # mysql
