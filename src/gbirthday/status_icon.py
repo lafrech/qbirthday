@@ -162,7 +162,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 02110-1301, USA.''')
         dlg.set_authors([
-                'Andreas Bresser <andreas@phidev.org>',
+                'Andreas Bresser <andreasbresser@gmail.com>',
                 'Stefan Jurco <stefan.jurco@gmail.com>',
                 'Alex Mallo <dernalis@gmail.com>',
                 'Thomas Spura <tomspur@fedoraproject.org>',
