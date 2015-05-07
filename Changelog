@@ -1,3 +1,6 @@
+0.6.8
+	- Remove Evolution as supported DB
+
 0.6.7
 	- Fix bug if two birthdates same D-M different Y
 	- Fix bug in .ics export (UID must be unique)
