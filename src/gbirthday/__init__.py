@@ -133,11 +133,6 @@ class Conf:
         changed = replace('lightning', 'Lightning', changed)
         changed = replace('sunbird', 'Sunbird', changed)
         
-        # Remove Evolution as possible DB
-        if 'Evolution' in self.used_databases:
-            self.used_databases.remove('Evolution')
-            changed = True
-
         if changed:
             self.save()
 
