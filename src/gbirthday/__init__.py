@@ -19,7 +19,6 @@ A KBirthday clone for Gnome environment, working with different
 data servers:
  - CSV-file (comma-seperated value)
  - MySQL
- - Evolution
  - Thunderbird/Icedove Lightning
  - Sunbrid / IceOwl
 
@@ -115,9 +114,10 @@ class Conf:
 
         self.correct_settings()
 
-    # TODO introduced after 0.6, remove if time has come
     def correct_settings(self):
-        '''correct new settings, e.g. Evolution and not evolution anymore'''
+        '''Update settings from older versions'''
+        
+        # Correct new settings, e.g. Evolution and not evolution anymore'''
         def replace(old, new, changed):
             '''replace old with new'''
             for num, item in enumerate(self.used_databases):
@@ -132,6 +132,12 @@ class Conf:
         changed = replace('csv', 'CSV', changed)
         changed = replace('lightning', 'Lightning', changed)
         changed = replace('sunbird', 'Sunbird', changed)
+        
+        # Remove Evolution as possible DB
+        if 'Evolution' in self.used_databases:
+            self.used_databases.remove('Evolution')
+            changed = True
+
         if changed:
             self.save()
 

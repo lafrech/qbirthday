@@ -17,7 +17,6 @@
 
 'DataBase' from which everything inherits:
 - CSV
-- Evolution
 - Lightning
 - MySQL
 - Sunbird
@@ -60,10 +59,9 @@ class DataBase(object):
         pass
 
 from csv import CSV
-from evolution import Evolution
 from lightning import Lightning
 from mysql import MySQL
 from sunbird import Sunbird
 
 mysql_db = MySQL()
-DATABASES = [CSV(), Evolution(), Lightning(), mysql_db, Sunbird()]
+DATABASES = [CSV(), Lightning(), mysql_db, Sunbird()]
