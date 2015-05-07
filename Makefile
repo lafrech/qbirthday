@@ -50,7 +50,7 @@ uninstall:
 
 snapshot: clean
 	mkdir -p $(DIST_DIR)/gbirthday-$(version)
-	rsync -avz --exclude=.git --exclude=$(DIST_DIR) ./ $(DIST_DIR)/gbirthday-$(version)
+	rsync -avz --exclude=.* --exclude=$(DIST_DIR) ./ $(DIST_DIR)/gbirthday-$(version)
 
 tar.gz:	snapshot
 	cd $(DIST_DIR) && $(tar) -zcf gbirthday-$(version).tar.gz gbirthday-$(version)
