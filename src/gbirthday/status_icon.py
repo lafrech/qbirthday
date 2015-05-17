@@ -143,7 +143,7 @@ class StatusIcon():
         image = gtk.gdk.pixbuf_new_from_file(IMAGESLOCATION + 'gbirthday.png')
         dlg.set_logo(image)
         dlg.set_icon_from_file(IMAGESLOCATION + 'birthday.png')
-        dlg.set_copyright(u'Copyright \u00A9 2007 Alex Mallo, 2009 Andreas Bresser, 2009 Thomas Spura')
+        dlg.set_copyright('Copyright \u00A9 2007 Alex Mallo, 2009 Andreas Bresser, 2009 Thomas Spura')
         dlg.set_license(
 '''Licensed under the GNU General Public License Version 2
 
@@ -237,7 +237,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 
         def add_to_list(delta_day, name, fila):
             # search for birthdate
-            for date, names in self.addressbook.bdays.items():
+            for date, names in list(self.addressbook.bdays.items()):
                 if name in names:
                     birthdate = date
             try:

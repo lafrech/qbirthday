@@ -15,7 +15,7 @@
 #}}}
 '''AddressBook module'''
 import datetime
-from __init__ import DATABASES
+from .__init__ import DATABASES
 from textwrap import dedent
 
 class AddressBook:
@@ -113,11 +113,11 @@ class AddressBook:
         self.bdays_dict = {}
 
         # iterate over specified period
-        for day_num in xrange(self.firstday, self.lastday + 1):
+        for day_num in range(self.firstday, self.lastday + 1):
             day = now + datetime.timedelta(day_num)
 
             # For each (D-M-Y -> Name list)
-            for date, birthday in self.bdays.items():
+            for date, birthday in list(self.bdays.items()):
                 # If D-M match day
                 if day.day == date.day and day.month == date.month:
                     # If D-M not yet in dict, add D-M -> Name list

@@ -58,10 +58,10 @@ class DataBase(object):
         '''create additional pygtk config in config menu'''
         pass
 
-from csv import CSV
-from lightning import Lightning
-from mysql import MySQL
-from sunbird import Sunbird
+from .csv import CSV
+from .lightning import Lightning
+from .mysql import MySQL
+from .sunbird import Sunbird
 
 mysql_db = MySQL()
 DATABASES = [CSV(), Lightning(), mysql_db, Sunbird()]

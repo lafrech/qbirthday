@@ -30,10 +30,10 @@ class Lightning(DataBase):
         self.conn = None
 
     def get_config_file(self, configfile):
-        import ConfigParser
+        import configparser
         profilefile = os.path.join(configfile, 'profiles.ini')
         if os.path.isfile(profilefile):
-            cp = ConfigParser.ConfigParser()
+            cp = configparser.ConfigParser()
             cp.read(profilefile)
             profiles = {} # dict of founded profiles
             # get profiles from profiles.ini in thunderbird directory
@@ -52,13 +52,13 @@ class Lightning(DataBase):
                 #look for calendar-data/local.sqlite first 
                 #(new in sunbird/lightning 1.0)
                 location = os.path.join(profile_location, 'calendar-data/local.sqlite')
-                print location
+                print(location)
                 if os.path.exists(location):
                     self.parse_birthday(location)
                     return
                 # ... and now the old one
                 location = os.path.join(profile_location, 'storage.sdb')
-                print location
+                print(location)
                 if os.path.exists(location):
                     self.parse_birthday(location)
                     return

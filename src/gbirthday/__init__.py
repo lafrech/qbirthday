@@ -38,11 +38,11 @@ from datetime import date
 import time
 from string import join
 from textwrap import dedent
-import ConfigParser
+import configparser
 
 # TODO check for needed modules
-from databases import DATABASES
-import databases
+from .databases import DATABASES
+from . import databases
 
 # parse locales from python module
 # Do you say "1. January" or "January 1."?
@@ -73,7 +73,7 @@ class Conf:
         self.used_databases = None
         self.csv_files = None
         self.mysql = databases.mysql_db
-        self.settings = ConfigParser.ConfigParser()
+        self.settings = configparser.ConfigParser()
 
         # If XDG_CONFIG_HOME is defined, use it to store config files
         if 'XDG_CONFIG_HOME' in os.environ:
@@ -143,8 +143,8 @@ class Conf:
             '''Get setting value. If not found, return default'''
             try:
                 return self.settings.get(section, value)
-            except (ConfigParser.NoOptionError, \
-                    ConfigParser.NoSectionError):
+            except (configparser.NoOptionError, \
+                    configparser.NoSectionError):
                 return default
 
         self.firstday = int(get_setting_value("main", "firstday", -2))
@@ -179,7 +179,7 @@ class Conf:
             self.mysql.table = self.settings.get("mysql", "table")
             self.mysql.name_row = self.settings.get("mysql", "name_row")
             self.mysql.date_row = self.settings.get("mysql", "date_row")
-        except ConfigParser.NoSectionError:
+        except configparser.NoSectionError:
             pass
 
     def sync_to_settings(self):
@@ -227,8 +227,8 @@ class Conf:
 
 def main():
     '''Load settings, start status icon and get to work.'''
-    from addressbook import AddressBook
-    from status_icon import StatusIcon
+    from .addressbook import AddressBook
+    from .status_icon import StatusIcon
     # try to load settings
     conf = Conf()
 
