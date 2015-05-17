@@ -117,7 +117,7 @@ class AddressBook:
             day = now + datetime.timedelta(day_num)
 
             # For each (D-M-Y -> Name list)
-            for date, birthday in list(self.bdays.items()):
+            for date, birthday in self.bdays.items():
                 # If D-M match day
                 if day.day == date.day and day.month == date.month:
                     # If D-M not yet in dict, add D-M -> Name list

@@ -237,7 +237,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
 
         def add_to_list(delta_day, name, fila):
             # search for birthdate
-            for date, names in list(self.addressbook.bdays.items()):
+            for date, names in self.addressbook.bdays.items():
                 if name in names:
                     birthdate = date
             try:
