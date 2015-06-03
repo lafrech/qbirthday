@@ -13,7 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, see <http://www.gnu.org/licenses/>.
 #}}}
-import gtk
+#import gtk
 import os
 from gbirthday.databases import DataBase
 from gbirthday.gtk_funcs import show_error_msg
@@ -37,14 +37,15 @@ class CSV(DataBase):
             return
         for filename in conf.csv_files:
             if (os.path.exists(filename)):
-                for line in file(filename):
-                    # check, if any of the seperators are in the text
-                    for sep in self._seperators:
-                        if len(line.split(sep)) > 1:
-                            date = line.split(sep, 1)[0]
-                            name = line.split(sep, 1)[1][:-1]
-                            addressbook.add(name, date)
-                            break
+                with open(filename) as f:
+                    for line in f:
+                        # check, if any of the seperators are in the text
+                        for sep in self._seperators:
+                            if len(line.split(sep)) > 1:
+                                date = line.split(sep, 1)[0]
+                                name = line.split(sep, 1)[1][:-1]
+                                addressbook.add(name, date)
+                                break
             else:
                 show_error_msg(_('Could not load CSV-file:')
                                 + filename)
@@ -58,9 +59,9 @@ class CSV(DataBase):
             return
         filename = self.conf.csv_files[0]
         if (os.path.exists(filename)):
-            output_file = file(self.conf.csv_files[0], 'a')
+            output_file = open(self.conf.csv_files[0], 'a')
         else:
-            output_file = file(self.conf.csv_files[0], 'w')
+            output_file = open(self.conf.csv_files[0], 'w')
         output_file.write(birthday + ', ' + name + '\n')
         output_file.close()
         self.addressbook.add(name, birthday)
@@ -78,76 +79,81 @@ class CSV(DataBase):
         
     def create_config(self, vbox, conf):
         '''create aditional options menu'''
+
+        # TODO
+        pass
+#         db.save_config(self.conf)
+#         self.conf.save()
         
-        self.tmp_csv_files = conf.csv_files
-
-        hbox = gtk.HBox(False, 5)
-
-        # File list
-        store = (gtk.ListStore(str))
-        if self.tmp_csv_files:
-            for csv_file in self.tmp_csv_files:
-                store.append([str(csv_file)])
-        tree = gtk.TreeView(store)
-        tree.set_headers_visible(False)
-        renderer = gtk.CellRendererText()
-        column = gtk.TreeViewColumn(_("File"), renderer, text=0)
-        tree.append_column(column)
-        scroll = gtk.ScrolledWindow()
-        scroll.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
-        scroll.set_shadow_type(gtk.SHADOW_IN)
-        scroll.add(tree)
-        scroll.set_size_request(400, -1)
-        tree.show()
-        scroll.show()
-        hbox.pack_start(scroll, True, True, 0)
-
-        # Add / remove buttons
-        vbox_buttons = gtk.VBox(False, 5)
-
-        def choose_file(widget):
-
-            chooser = gtk.FileChooserDialog(title=None,
-                                action=gtk.FILE_CHOOSER_ACTION_OPEN,
-                                buttons=(gtk.STOCK_CANCEL,
-                                        gtk.RESPONSE_CANCEL,
-                                        gtk.STOCK_OPEN,
-                                        gtk.RESPONSE_OK))
-            filter = gtk.FileFilter()
-            filter.set_name("All files")
-            filter.add_pattern("*")
-            chooser.add_filter(filter)
-
-            filter = gtk.FileFilter()
-            filter.set_name("CSV-Files")
-            filter.add_mime_type("text/csv")
-            filter.add_pattern("*.csv")
-            chooser.add_filter(filter)
-
-            response = chooser.run()
-            if response == gtk.RESPONSE_OK:
-                filename = chooser.get_filename()
-                store.append([filename])
-                if self.tmp_csv_files:
-                    self.tmp_csv_files.append(filename)
-                else:
-                    self.tmp_csv_files = [filename]
-
-            chooser.destroy()
-
-        add_button = gtk.Button(stock=gtk.STOCK_ADD)
-        add_button.connect("clicked", choose_file)
-        add_button.show()
-        vbox_buttons.pack_start(add_button, False, False, 0)
-
-        remove_button = gtk.Button(stock=gtk.STOCK_REMOVE)
-        remove_button.connect("clicked", self.remove_file, tree, store, 
-                              self.tmp_csv_files)
-        remove_button.show()
-        vbox_buttons.pack_start(remove_button, False, False, 0)
-        
-        vbox_buttons.show()
-        hbox.pack_start(vbox_buttons, False, False, 0)
-        hbox.show()
-        vbox.pack_start(hbox, False, False, 0)
-
+#         self.tmp_csv_files = conf.csv_files
+# 
+#         hbox = gtk.HBox(False, 5)
+# 
+#         # File list
+#         store = (gtk.ListStore(str))
+#         if self.tmp_csv_files:
+#             for csv_file in self.tmp_csv_files:
+#                 store.append([str(csv_file)])
+#         tree = gtk.TreeView(store)
+#         tree.set_headers_visible(False)
+#         renderer = gtk.CellRendererText()
+#         column = gtk.TreeViewColumn(_("File"), renderer, text=0)
+#         tree.append_column(column)
+#         scroll = gtk.ScrolledWindow()
+#         scroll.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
+#         scroll.set_shadow_type(gtk.SHADOW_IN)
+#         scroll.add(tree)
+#         scroll.set_size_request(400, -1)
+#         tree.show()
+#         scroll.show()
+#         hbox.pack_start(scroll, True, True, 0)
+# 
+#         # Add / remove buttons
+#         vbox_buttons = gtk.VBox(False, 5)
+# 
+#         def choose_file(widget):
+# 
+#             chooser = gtk.FileChooserDialog(title=None,
+#                                 action=gtk.FILE_CHOOSER_ACTION_OPEN,
+#                                 buttons=(gtk.STOCK_CANCEL,
+#                                         gtk.RESPONSE_CANCEL,
+#                                         gtk.STOCK_OPEN,
+#                                         gtk.RESPONSE_OK))
+#             filter = gtk.FileFilter()
+#             filter.set_name("All files")
+#             filter.add_pattern("*")
+#             chooser.add_filter(filter)
+# 
+#             filter = gtk.FileFilter()
+#             filter.set_name("CSV-Files")
+#             filter.add_mime_type("text/csv")
+#             filter.add_pattern("*.csv")
+#             chooser.add_filter(filter)
+# 
+#             response = chooser.run()
+#             if response == gtk.RESPONSE_OK:
+#                 filename = chooser.get_filename()
+#                 store.append([filename])
+#                 if self.tmp_csv_files:
+#                     self.tmp_csv_files.append(filename)
+#                 else:
+#                     self.tmp_csv_files = [filename]
+# 
+#             chooser.destroy()
+# 
+#         add_button = gtk.Button(stock=gtk.STOCK_ADD)
+#         add_button.connect("clicked", choose_file)
+#         add_button.show()
+#         vbox_buttons.pack_start(add_button, False, False, 0)
+# 
+#         remove_button = gtk.Button(stock=gtk.STOCK_REMOVE)
+#         remove_button.connect("clicked", self.remove_file, tree, store, 
+#                               self.tmp_csv_files)
+#         remove_button.show()
+#         vbox_buttons.pack_start(remove_button, False, False, 0)
+#         
+#         vbox_buttons.show()
+#         hbox.pack_start(vbox_buttons, False, False, 0)
+#         hbox.show()
+#         vbox.pack_start(hbox, False, False, 0)
+# 

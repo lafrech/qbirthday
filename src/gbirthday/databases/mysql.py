@@ -13,7 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, see <http://www.gnu.org/licenses/>.
 #}}}
-import gtk
+#import gtk
 from gbirthday.databases import DataBase
 from gbirthday.gtk_funcs import show_error_msg
 
@@ -100,33 +100,36 @@ class MySQL(DataBase):
 
     def create_config(self, vbox, conf):
         '''create additional mysql config in config menu'''
-        
-        values = [
-                  ['Host', self.host],
-                  ['Port', self.port],
-                  ['Username', self.username],
-                  ['Password', self.password],
-                  ['Database', self.database],
-                  ['Table', self.table],
-                  ['Name row', self.name_row],
-                  ['Date row', self.date_row]
-                 ]
-        self.entries = []
 
-        sqltable = gtk.Table(len(values), 2, False)
-        sqltable.set_col_spacings(5)
-        for i, value in enumerate(values):
-            label = gtk.Label(value[0])
-            label.set_alignment(1, 0.5)
-            label.show()
-            sqltable.attach(label, 0, 1, i, i + 1)
+        # TODO
+        pass
 
-            entry = gtk.Entry()
-            entry.set_text(value[1])
-            entry.show()
-            self.entries.append(entry)
-            sqltable.attach(entry, 1, 2, i, i + 1)
-        
-        sqltable.show()
-        vbox.pack_start(sqltable, False, False, 0)
-
+#         values = [
+#                   ['Host', self.host],
+#                   ['Port', self.port],
+#                   ['Username', self.username],
+#                   ['Password', self.password],
+#                   ['Database', self.database],
+#                   ['Table', self.table],
+#                   ['Name row', self.name_row],
+#                   ['Date row', self.date_row]
+#                  ]
+#         self.entries = []
+# 
+#         sqltable = gtk.Table(len(values), 2, False)
+#         sqltable.set_col_spacings(5)
+#         for i, value in enumerate(values):
+#             label = gtk.Label(value[0])
+#             label.set_alignment(1, 0.5)
+#             label.show()
+#             sqltable.attach(label, 0, 1, i, i + 1)
+# 
+#             entry = gtk.Entry()
+#             entry.set_text(value[1])
+#             entry.show()
+#             self.entries.append(entry)
+#             sqltable.attach(entry, 1, 2, i, i + 1)
+#         
+#         sqltable.show()
+#         vbox.pack_start(sqltable, False, False, 0)
+# 

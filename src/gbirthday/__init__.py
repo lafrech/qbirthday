@@ -30,9 +30,10 @@ and relatively easy to extend for other data servers.
 
 VERSION = "@VER@"
 
-import gtk
+from PyQt4 import QtGui
+#import gtk
 
-import os, shutil
+import os, sys, shutil
 import datetime
 from datetime import date
 import time
@@ -62,6 +63,7 @@ except ImportError:
 
 CURRENT_DAY = time.strftime("%d", time.localtime(time.time()))
 
+# TODO: Use QSettings?
 class Conf:
     '''Class for handle all configurations.'''
 
@@ -105,7 +107,8 @@ class Conf:
             self.base_data_path = os.environ['HOME'] + "/.local/share/gbirthday"
 
         try:
-            self.settings.readfp(file(self.base_config_path + '/gbirthdayrc'))
+            with open(self.base_config_path + '/gbirthdayrc') as f:
+                self.settings.read_file(f)
         except IOError:
             pass
         
@@ -227,7 +230,7 @@ class Conf:
 def main():
     '''Load settings, start status icon and get to work.'''
     from .addressbook import AddressBook
-    from .status_icon import StatusIcon
+    from .main_window import MainWindow
     # try to load settings
     conf = Conf()
 
@@ -235,15 +238,22 @@ def main():
     addressbook = AddressBook(conf)
     addressbook.reload()
 
-    # show status icon
-    status_icon = StatusIcon(addressbook, conf)
 
     # check every 60 seconds for new day
     # TODO: update until end of day according to current clock settings?
     #       (might not the best idea if user changes current time)
-    import gobject
-    gobject.timeout_add(60000, status_icon.check_new_day)
-    gtk.main()
+    # TODO: Use Qt something for this
+    #import gobject
+    #gobject.timeout_add(60000, status_icon.check_new_day)
+    
+    app = QtGui.QApplication([])
+    # TODO: is this the right way?
+    app.setQuitOnLastWindowClosed(False)
+    
+    # Main window
+    main_window = MainWindow(addressbook, conf)
+    
+    sys.exit(app.exec_())
 
 if __name__ == '__main__':
     main()
