@@ -152,4 +152,4 @@ class MainWindow(QtGui.QMainWindow):
         new_day = time.strftime("%d", time.localtime(time.time()))
         if CURRENT_DAY != new_day:
             CURRENT_DAY = new_day
-            self.status_icon.reload_set_icon()
+            self.reload()
