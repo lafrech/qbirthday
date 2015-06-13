@@ -21,9 +21,9 @@ import os
 
 # own imports
 from .__init__ import VERSION
-from .__init__ import DATABASES
 from .__init__ import MONTH_AT_PLACE, DAY_AT_PLACE
 from .__init__ import CURRENT_DAY
+from .databases import DATABASES
 
 from .preferences_dialog import PreferencesDialog
 
@@ -32,7 +32,7 @@ IMAGESLOCATION = os.sep.join(__file__.split(os.sep)[:-1]) + "/pics/"
 class StatusIcon(QtGui.QSystemTrayIcon):
     '''Class to show status icon'''
 
-    def __init__(self, main_window, addressbook, conf):
+    def __init__(self, main_window, addressbook, settings):
         '''create status icon'''
         
         # TODO: enlarge icon to best fit
@@ -41,14 +41,15 @@ class StatusIcon(QtGui.QSystemTrayIcon):
 
         self.main_window = main_window
         self.addressbook = addressbook
-        self.conf = conf
+        self.settings = settings
         
-        # TODO: add nice icons        
+        # TODO: add nice icons
+        # TODO: Add action enabled only if at least one DB selected
         menu = QtGui.QMenu()
         menu.addAction("Refresh", self.reload_gbirthday)
         menu.addAction("Add", self.add_single_manual)
         menu.addAction("Preferences", 
-            lambda: PreferencesDialog(self.conf, self.main_window).exec_())
+            lambda: PreferencesDialog(self.settings, self.main_window).exec_())
         #menu.addAction("About", self.create_dialog)
         menu.addAction("Quit", QtCore.QCoreApplication.instance().quit)
 
@@ -106,11 +107,14 @@ class StatusIcon(QtGui.QSystemTrayIcon):
             # TODO: import this on top of script?
             import pynotify
             if pynotify.init("gbirthday"):
-                for day in range(self.conf.lastday+1):
+                lastday = self.settings.value('lastday', type=int)
+                notify_future_bdays = self.settings.value(
+                    'notify_future_bdays ', type=int)
+                for day in range(lastday+1):
                     noty_string = None
                     if day == 0:
                         noty_string = _("Birthday today:")
-                    elif day <= self.conf.notify_future_bdays:
+                    elif day <= notify_future_bdays:
                         if day == 1:
                             noty_string = _("Birthday tomorrow:")
                         else:
@@ -189,8 +193,9 @@ class StatusIcon(QtGui.QSystemTrayIcon):
         # Fill database combobox
         # TODO: use index to allow DB name translation
         for db in DATABASES:
-            if db.CAN_SAVE and \
-               db.__class__.__name__ in self.addressbook.conf.used_databases:
+            if (db.CAN_SAVE and
+                self.settings.value(type(db).__name__ + '/enabled', 
+                                    type=bool)):
                 add_widget.saveComboBox.addItem(db.TITLE)
         
         # Apply and OK enabled only if name not empty 

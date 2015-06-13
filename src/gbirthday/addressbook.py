@@ -15,19 +15,19 @@
 #}}}
 '''AddressBook module'''
 import datetime
-from .__init__ import DATABASES
+from .databases import DATABASES
 from textwrap import dedent
 
 class AddressBook:
     '''AdressBook that saves birthday and names'''
-    def __init__(self, conf=None):
-        self.conf = conf
-        if self.conf:
-            self.firstday = conf.firstday
-            self.lastday = conf.lastday
-        else:
-            self.firstday = -2
-            self.lastday = 30
+    
+    def __init__(self, settings):
+        
+        self.settings = settings
+        
+        self.firstday = settings.value('firstday', type=int)
+        self.lastday = settings.value('lastday', type=int)
+
         self.bdays = {}  # list of all birthdays. Format:
                     # {birthday: [Name1, Name2]}
                     # for example
@@ -90,19 +90,17 @@ class AddressBook:
         all birthdays added with addressbook.add() are deleted after
         this
         '''
+        
         # delete bdays dict and reload again
         self.bdays = {}
-        if not self.conf:
-            # when no config class exists do a simple reload and exit
-            self.update()
-            return
-
-        for database in DATABASES:
-            if (database.__class__.__name__ in self.conf.used_databases):
-                database.parse(addressbook=self, conf=self.conf)
+        
+        for db in DATABASES:
+            db_name = type(db).__name__
+            if self.settings.value(db_name + '/enabled', type=bool):
+                database.parse(addressbook=self, settings=self.settings)
         self.update()
 
-        if self.conf.ics_export:
+        if self.settings.value('ics_export/enabled', type=bool):
             self.export()
 
     def update(self):

@@ -16,31 +16,35 @@
 #}}}
 from PyQt4 import QtCore, QtGui, uic
 
-from .__init__ import DATABASES
+from .databases import DATABASES
 
 class IcsExportPreferencesDialog(QtGui.QDialog):
     pass
 
 class PreferencesDialog(QtGui.QDialog):
 
-    def __init__(self, conf, parent=None):
+    def __init__(self, settings, main_window):
 
-        super().__init__(parent)
+        super().__init__(main_window)
         
         uic.loadUi('ui/preferences_dialog.ui', self)
 
-        self.conf = conf
+        self.settings = settings
+        self.main_window = main_window
 
-        self.pastSpinBox.setValue(int(self.conf.firstday))
-        self.nextSpinBox.setValue(int(self.conf.lastday))
-        self.notifyNextSpinBox.setValue(int(self.conf.notify_future_bdays))
-        self.icsExportCheckBox.setChecked(bool(self.conf.ics_export))
-        self.icsExportButton.setEnabled(bool(self.conf.ics_export))
+        self.pastSpinBox.setValue(self.settings.value('firstday', type=int))
+        self.nextSpinBox.setValue(self.settings.value('lastday', type=int))
+        self.notifyNextSpinBox.setValue(
+            self.settings.value('notify_future_bdays', type=int))
+        self.icsExportCheckBox.setChecked(
+            self.settings.value('ics_export', type=bool))
+        self.icsExportButton.setEnabled(
+            self.settings.value('ics_export', type=bool))
 
         self.icsExportCheckBox.stateChanged.connect(
             self.icsExportButton.setEnabled)
         self.icsExportButton.clicked.connect(
-            lambda: IcsExportPreferencesDialog(self.conf, self).exec_())
+            lambda: IcsExportPreferencesDialog(self.settings, self).exec_())
 
         self.db_chkbx = {}
         
@@ -50,7 +54,8 @@ class PreferencesDialog(QtGui.QDialog):
             self.databasesLayout.addLayout(hbox)
 
             self.db_chkbx[db] = QtGui.QCheckBox(db.TITLE)
-            db_used = bool(db.__class__.__name__ in self.conf.used_databases)
+            db_used = self.settings.value(type(db).__name__ + '/enabled',
+                                          type=bool)
             self.db_chkbx[db].setChecked(db_used)
             hbox.addWidget(self.db_chkbx[db])
             if db.HAS_CONFIG:
@@ -59,7 +64,7 @@ class PreferencesDialog(QtGui.QDialog):
                 self.db_chkbx[db].stateChanged.connect(button.setEnabled)
                 # TODO: write conf class
                 #button.clicked.connect(
-                #    lambda: db.preferences_dialog(self.conf, self).exec_())
+                #    lambda: db.preferences_dialog(self.settings, self).exec_())
                 hbox.addWidget(button)
 
         self.buttonBox.button(QtGui.QDialogButtonBox.Apply).clicked.connect(self.save)
@@ -67,19 +72,19 @@ class PreferencesDialog(QtGui.QDialog):
 
     def save(self):
 
-        print("save")
+        # Save settings
+        self.settings.setValue('firstday', self.pastSpinBox.value())
+        self.settings.setValue('lastday', self.nextSpinBox.value())
+        self.settings.setValue('notify_future_bdays',
+            self.notifyNextSpinBox.value())
+        self.settings.setValue('ics_export',
+            self.icsExportCheckBox.isChecked())
+        for db in DATABASES:
+            self.settings.setValue(type(db).__name__ + '/enabled',
+                self.db_chkbx[db].isChecked())
 
-        self.conf.firstday = str(self.pastSpinBox.value())
-        self.conf.lastday = str(self.nextSpinBox.value())
-        self.conf.notify_future_bdays = str(self.notifyNextSpinBox.value())
-        self.conf.ics_export = str(self.icsExportCheckBox.isChecked())
-        [db.__class__.__name__ for db in DATABASES 
-            if self.db_chkbx[db].isChecked()]
-        self.conf.used_databases = [db.__class__.__name__ for db in DATABASES 
-                                    if self.db_chkbx[db].isChecked()]
-        print(self.conf.csv_files)
-        self.conf.save()
-
+        # Refresh birthday list
+        self.main_window.refresh()
 
 #     def preferences_window(self, textcw=None):
 #         '''show settings window'''

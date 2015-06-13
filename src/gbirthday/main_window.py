@@ -78,7 +78,7 @@ class Birthday(QtCore.QObject):
 
 class MainWindow(QtGui.QMainWindow):
 
-    def __init__(self, addressbook, conf):
+    def __init__(self, addressbook, settings):
         
         super().__init__()
         
@@ -89,11 +89,11 @@ class MainWindow(QtGui.QMainWindow):
         uic.loadUi('ui/main_window.ui', self)
 
         self.addressbook = addressbook
-        self.conf = conf
+        self.settings = settings
 
         self.refresh()
 
-        self.status_icon = StatusIcon(self, addressbook, conf)
+        self.status_icon = StatusIcon(self, addressbook, settings)
         self.status_icon.show()
 
         # TODO: Catch mouse focus out and close window
@@ -121,7 +121,9 @@ class MainWindow(QtGui.QMainWindow):
             widget.setParent(None)
         
         # Add birthdays
-        for delta_day in range(self.conf.firstday, self.conf.lastday + 1):
+        firstday = self.settings.value('firstday', type=int)
+        lastday = self.settings.value('lastday', type=int)
+        for delta_day in range(firstday, lastday + 1):
             for name in self.addressbook.check_day(delta_day):
                 for date, names in self.addressbook.bdays.items():
                     if name in names:

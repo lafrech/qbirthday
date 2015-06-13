@@ -63,5 +63,4 @@ from .lightning import Lightning
 from .mysql import MySQL
 from .sunbird import Sunbird
 
-mysql_db = MySQL()
-DATABASES = [CSV(), Lightning(), mysql_db, Sunbird()]
+DATABASES = [CSV(), Lightning(), MySQL(), Sunbird()]
