@@ -21,7 +21,7 @@ import datetime
 
 from .settings import Settings
 from .addressbook import AddressBook
-from .status_icon import StatusIcon
+from .statusicon import StatusIcon
 
 # TODO: move to somewhere else (__init__.py ?)
 import os
@@ -88,7 +88,7 @@ class MainWindow(QtGui.QMainWindow):
                             QtCore.Qt.FramelessWindowHint |
                             QtCore.Qt.WindowStaysOnTopHint)  # ??
         
-        uic.loadUi('ui/main_window.ui', self)
+        uic.loadUi('ui/mainwindow.ui', self)
 
         # Load settings
         self.settings = Settings()

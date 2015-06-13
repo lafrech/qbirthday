@@ -56,7 +56,7 @@ CURRENT_DAY = time.strftime("%d", time.localtime(time.time()))
 
 def main():
     '''Load settings, start status icon and get to work.'''
-    from .main_window import MainWindow
+    from .mainwindow import MainWindow
 
     # TODO: Think twice about naming before releasing
     QtCore.QCoreApplication.setOrganizationName("GBirthday");

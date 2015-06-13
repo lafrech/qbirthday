@@ -25,7 +25,7 @@ from .__init__ import MONTH_AT_PLACE, DAY_AT_PLACE
 from .__init__ import CURRENT_DAY
 from .databases import DATABASES
 
-from .preferences_dialog import PreferencesDialog
+from .preferencesdialog import PreferencesDialog
 
 IMAGESLOCATION = os.sep.join(__file__.split(os.sep)[:-1]) + "/pics/"
 

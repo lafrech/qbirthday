@@ -27,7 +27,7 @@ class PreferencesDialog(QtGui.QDialog):
 
         super().__init__(main_window)
         
-        uic.loadUi('ui/preferences_dialog.ui', self)
+        uic.loadUi('ui/preferencesdialog.ui', self)
 
         self.settings = settings
         self.main_window = main_window
