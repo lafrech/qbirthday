@@ -90,7 +90,7 @@ class AddressBook:
         all birthdays added with addressbook.add() are deleted after
         this
         '''
-        
+
         # delete bdays dict and reload again
         self.bdays = {}
         

@@ -19,6 +19,8 @@ from PyQt4 import QtCore, QtGui, uic
 
 import datetime
 
+from .settings import Settings
+from .addressbook import AddressBook
 from .status_icon import StatusIcon
 
 # TODO: move to somewhere else (__init__.py ?)
@@ -78,7 +80,7 @@ class Birthday(QtCore.QObject):
 
 class MainWindow(QtGui.QMainWindow):
 
-    def __init__(self, addressbook, settings):
+    def __init__(self):
         
         super().__init__()
         
@@ -88,13 +90,17 @@ class MainWindow(QtGui.QMainWindow):
         
         uic.loadUi('ui/main_window.ui', self)
 
-        self.addressbook = addressbook
-        self.settings = settings
+        # Load settings
+        self.settings = Settings()
+        self.settings.load_defaults()
 
-        self.refresh()
+        # Address book
+        self.addressbook = AddressBook(self.settings)
 
-        self.status_icon = StatusIcon(self, addressbook, settings)
-        self.status_icon.show()
+        # Status icon
+        self.status_icon = StatusIcon(self, self.settings)
+
+        self.reload()
 
         # TODO: Catch mouse focus out and close window
 
@@ -104,6 +110,13 @@ class MainWindow(QtGui.QMainWindow):
         
         # Window shall appear under mouse cursor
         self.move(QtGui.QCursor.pos() - QtCore.QPoint(self.width() / 2, 0))
+
+    def reload(self):
+        '''Reload data from databases'''
+
+        self.addressbook.reload()
+        self.status_icon.reload_set_icon()
+        self.refresh()
 
     def refresh(self):
 
@@ -138,3 +151,10 @@ class MainWindow(QtGui.QMainWindow):
                 self.birthdaysLayout.addWidget(birthday.label_when, row, 4)
                 self.birthdaysLayout.addWidget(birthday.label_age, row, 5)
 
+    def check_new_day(self):
+        '''check for new birthday (check every 60 seconds)'''
+        global CURRENT_DAY # TODO: import from __init__ here, fails whyever
+        new_day = time.strftime("%d", time.localtime(time.time()))
+        if CURRENT_DAY != new_day:
+            CURRENT_DAY = new_day
+            self.status_icon.reload_set_icon()

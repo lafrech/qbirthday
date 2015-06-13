@@ -32,7 +32,7 @@ IMAGESLOCATION = os.sep.join(__file__.split(os.sep)[:-1]) + "/pics/"
 class StatusIcon(QtGui.QSystemTrayIcon):
     '''Class to show status icon'''
 
-    def __init__(self, main_window, addressbook, settings):
+    def __init__(self, main_window, settings):
         '''create status icon'''
         
         # TODO: enlarge icon to best fit
@@ -40,13 +40,12 @@ class StatusIcon(QtGui.QSystemTrayIcon):
                          main_window)
 
         self.main_window = main_window
-        self.addressbook = addressbook
         self.settings = settings
         
         # TODO: add nice icons
         # TODO: Add action enabled only if at least one DB selected
         menu = QtGui.QMenu()
-        menu.addAction("Refresh", self.reload_gbirthday)
+        menu.addAction("Refresh", self.main_window.reload)
         menu.addAction("Add", self.add_single_manual)
         menu.addAction("Preferences", 
             lambda: PreferencesDialog(self.settings, self.main_window).exec_())
@@ -62,37 +61,23 @@ class StatusIcon(QtGui.QSystemTrayIcon):
                 # Toggle birthday window visibility
                 self.main_window.setVisible(not self.main_window.isVisible())
         self.activated.connect(tray_icon_activated_cb)
-
-        self._reload_set_icon()
         
         def on_url(dialog, link):
             '''start default browser with gbirthday-website on click'''
             import webbrowser
             webbrowser.open(link)
 
-    def reload_gbirthday(self, *args):
-        '''reload gbirthday, reload data from databases'''
-        self.addressbook.reload()
-        self._reload_set_icon()
-        self.main_window.refresh()
+        self.show()
 
-    def check_new_day(self):
-        '''check for new birthday (check every 60 seconds)'''
-        global CURRENT_DAY # TODO: import from __init__ here, fails whyever
-        new_day = time.strftime("%d", time.localtime(time.time()))
-        if CURRENT_DAY != new_day:
-            CURRENT_DAY = new_day
-            self._reload_set_icon()
-        return True
-
-    def _reload_set_icon(self):
+    def reload_set_icon(self):
         '''Check, if there is a birthday and set icon and notify accordingly.'''
-        # reload addressbook
-        self.addressbook.reload()
+
+        addressbook = self.main_window.addressbook
+
         # check if a birthday is in specified period
-        if self.addressbook.bdays_in_period():
+        if addressbook.bdays_in_period():
             # check if birthday today
-            if self.addressbook.check_day(0):
+            if addressbook.check_day(0):
                 self.setIcon(QtGui.QIcon(
                     IMAGESLOCATION + 'birthdayred.png'))
             else:
@@ -121,7 +106,7 @@ class StatusIcon(QtGui.QSystemTrayIcon):
                             noty_string = _("Birthday in %s Days:") % day
                     else:
                         continue
-                    for name in self.addressbook.check_day(day):
+                    for name in addressbook.check_day(day):
                         notify = pynotify.Notification(
                                         noty_string, name)
                         notify.show()
@@ -219,10 +204,10 @@ class StatusIcon(QtGui.QSystemTrayIcon):
                     birthdate = add_widget.dateWidget.selectedDate().toPyDate()
                     # FIXME: ugly fix for #563405 adding to Lightning
                     if db.TITLE == 'Thunderbird/Icedove Lightning':
-                        db.ab = self.addressbook
+                        db.ab = self.main_window.addressbook
                     db.add(add_widget.nameEdit.text(), birthdate)
             add_widget.nameEdit.clear()
-            self.reload_gbirthday()
+            self.main_window.reload()
 
         # TODO: If apply, add birthdate
         add_widget.buttonBox.button(

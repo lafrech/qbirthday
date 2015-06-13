@@ -56,36 +56,26 @@ CURRENT_DAY = time.strftime("%d", time.localtime(time.time()))
 
 def main():
     '''Load settings, start status icon and get to work.'''
-    from .addressbook import AddressBook
     from .main_window import MainWindow
-    from .settings import Settings
 
     # TODO: Think twice about naming before releasing
     QtCore.QCoreApplication.setOrganizationName("GBirthday");
     QtCore.QCoreApplication.setApplicationName("gbirthday");
-
-    # Load settings
-    settings = Settings()
-    settings.load_defaults()
-
-    # load data and fill AddressBook
-    addressbook = AddressBook(settings)
-    addressbook.reload()
 
     # check every 60 seconds for new day
     # TODO: update until end of day according to current clock settings?
     #       (might not the best idea if user changes current time)
     # TODO: Use Qt something for this
     #import gobject
-    #gobject.timeout_add(60000, status_icon.check_new_day)
+    #gobject.timeout_add(60000, main_window.check_new_day)
     
     app = QtGui.QApplication([])
     # TODO: is this the right way?
     app.setQuitOnLastWindowClosed(False)
     
     # Main window
-    main_window = MainWindow(addressbook, settings)
-    
+    main_window = MainWindow()
+
     sys.exit(app.exec_())
 
 if __name__ == '__main__':
