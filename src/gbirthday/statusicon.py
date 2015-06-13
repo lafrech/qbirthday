@@ -16,18 +16,13 @@
 #}}}
 '''StatusIcon module'''
 from PyQt4 import QtCore, QtGui, uic
-import time
-import os
 
-# own imports
-from .__init__ import VERSION
-from .__init__ import MONTH_AT_PLACE, DAY_AT_PLACE
-from .__init__ import CURRENT_DAY
+from gbirthday import PICS_PATHS
+from gbirthday import VERSION
+from gbirthday import MONTH_AT_PLACE, DAY_AT_PLACE
+from gbirthday import CURRENT_DAY
 from .databases import DATABASES
-
 from .preferencesdialog import PreferencesDialog
-
-IMAGESLOCATION = os.sep.join(__file__.split(os.sep)[:-1]) + "/pics/"
 
 class StatusIcon(QtGui.QSystemTrayIcon):
     '''Class to show status icon'''
@@ -36,7 +31,7 @@ class StatusIcon(QtGui.QSystemTrayIcon):
         '''create status icon'''
         
         # TODO: enlarge icon to best fit
-        super().__init__(QtGui.QIcon(IMAGESLOCATION + 'birthday.png'), 
+        super().__init__(QtGui.QIcon(PICS_PATHS['birthday']),
                          main_window)
 
         self.main_window = main_window
@@ -78,14 +73,11 @@ class StatusIcon(QtGui.QSystemTrayIcon):
         if addressbook.bdays_in_period():
             # check if birthday today
             if addressbook.check_day(0):
-                self.setIcon(QtGui.QIcon(
-                    IMAGESLOCATION + 'birthdayred.png'))
+                self.setIcon(QtGui.QIcon(PICS_PATHS['birthdayred']))
             else:
-                self.setIcon(QtGui.QIcon(
-                    IMAGESLOCATION + 'birthday.png'))
+                self.setIcon(QtGui.QIcon(PICS_PATHS['birthday']))
         else:
-            self.setIcon(QtGui.QIcon(
-                IMAGESLOCATION + 'nobirthday.png'))
+            self.setIcon(QtGui.QIcon(PICS_PATHS['nobirthday']))
 
         # show notification of birthdays in the future
         try:

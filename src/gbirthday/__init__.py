@@ -31,6 +31,7 @@ VERSION = "@VER@"
 
 from PyQt4 import QtCore, QtGui
 
+import os
 import sys
 import time
 from textwrap import dedent
@@ -53,6 +54,18 @@ except ImportError:
     _ = lambda x: x
 
 CURRENT_DAY = time.strftime("%d", time.localtime(time.time()))
+
+IMAGES_LOCATION = os.path.join(os.path.dirname(__file__), 'pics')
+
+PICS_PATHS = {
+    'birthdaylost': os.path.join(IMAGES_LOCATION, 'birthdaylost.png'),
+    'birthdaynext': os.path.join(IMAGES_LOCATION, 'birthdaynext.png'),
+    'birthday': os.path.join(IMAGES_LOCATION, 'birthday.png'),
+    'birthdayred': os.path.join(IMAGES_LOCATION, 'birthdayred.png'),
+    'birthdaytoday': os.path.join(IMAGES_LOCATION, 'birthdaytoday.png'),
+    'gbirthday': os.path.join(IMAGES_LOCATION, 'gbirthday.png'),
+    'nobirthday': os.path.join(IMAGES_LOCATION, 'nobirthday.png'),
+}
 
 def main():
     '''Load settings, start status icon and get to work.'''

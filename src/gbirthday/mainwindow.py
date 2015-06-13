@@ -19,13 +19,10 @@ from PyQt4 import QtCore, QtGui, uic
 
 import datetime
 
+from gbirthday import PICS_PATHS
 from .settings import Settings
 from .addressbook import AddressBook
 from .statusicon import StatusIcon
-
-# TODO: move to somewhere else (__init__.py ?)
-import os
-IMAGESLOCATION = os.sep.join(__file__.split(os.sep)[:-1]) + "/pics/"
 
 class Birthday(QtCore.QObject):
 
@@ -46,16 +43,14 @@ class Birthday(QtCore.QObject):
         # Birthday today
         if delta_day == 0:
             
-            self.label_image.setPixmap(
-                QtGui.QPixmap(IMAGESLOCATION + 'birthdaytoday.png'))
+            self.label_image.setPixmap(PICS_PATHS['birthdaytoday'])
             
             self.label_when = QtGui.QLabel(_('Today'))
         
         # Birthday in the past
         elif delta_day < 0:
             
-            self.label_image.setPixmap(
-                QtGui.QPixmap(IMAGESLOCATION + 'birthdaylost.png'))
+            self.label_image.setPixmap(PICS_PATHS['birthdaylost'])
             
             if delta_day == -1:
                 self.label_when = QtGui.QLabel(_('Yesterday'))
@@ -71,7 +66,7 @@ class Birthday(QtCore.QObject):
         else:
 
             self.label_image.setPixmap(
-                QtGui.QPixmap(IMAGESLOCATION + 'birthdaynext.png'))
+                QtGui.QPixmap(PICS_PATHS['birthdaynext']))
 
             if delta_day == 1:
                 self.label_when = QtGui.QLabel(_('Tomorrow'))
