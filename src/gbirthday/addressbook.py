@@ -133,7 +133,16 @@ class AddressBook:
         # This loop index is used to generate unique UIDs
         index = 0
 
-        with open(self.conf.ics_filepath,'w') as f:
+        self.settings.beginGroup('ics_export')
+        conf_filepath = self.settings.value('filepath')
+        conf_alarm = self.settings.value('alarm')
+        conf_alarm_days = self.settings.value('alarm_days')
+        conf_custom_properties = self.settings.value('custom_properties')
+        conf_alarm_custom_properties = self.settings.value(
+            'alarm_custom_properties')
+        self.settings.endGroup()
+
+        with open(conf_filepath,'w') as f:
             f.write(dedent("""\
                 BEGIN:VCALENDAR
                 VERSION:2.0
@@ -161,18 +170,18 @@ class AddressBook:
                     TRANSP:TRANSPARENT
                     RRULE:FREQ=YEARLY
                     """))
-                if self.conf.ics_alarm:
+                if conf_alarm:
                     f.write('BEGIN:VALARM\n')
                     f.write('ACTION:DISPLAY\n')
                     f.write('TRIGGER;VALUE=DURATION:-P' \
-                        + self.conf.ics_alarm_days + 'D\n')
+                        + alarm_days + 'D\n')
                     f.write('DESCRIPTION:' + _("Birthday: ") \
                         + self.bdays[bd][0] + '\n')
-                    if self.conf.ics_alarm_custom_properties != '':
-                        f.write(self.conf.ics_alarm_custom_properties + '\n')
+                    if conf_alarm_custom_properties != '':
+                        f.write(conf_alarm_custom_properties + '\n')
                     f.write("END:VALARM\n")
-                if self.conf.ics_custom_properties != '':
-                    f.write(self.conf.ics_custom_properties + '\n')
+                if self.conf_custom_properties != '':
+                    f.write(conf_custom_properties + '\n')
                 f.write("END:VEVENT\n")
 
                 index+=1;
