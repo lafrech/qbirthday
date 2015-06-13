@@ -21,7 +21,6 @@ from gbirthday import PICS_PATHS
 from gbirthday import VERSION
 from gbirthday import MONTH_AT_PLACE, DAY_AT_PLACE
 from gbirthday import CURRENT_DAY
-from .databases import DATABASES
 from .preferencesdialog import PreferencesDialog
 
 class StatusIcon(QtGui.QSystemTrayIcon):
@@ -169,10 +168,8 @@ class StatusIcon(QtGui.QSystemTrayIcon):
 
         # Fill database combobox
         # TODO: use index to allow DB name translation
-        for db in DATABASES:
-            if (db.CAN_SAVE and
-                self.settings.value(type(db).__name__ + '/enabled', 
-                                    type=bool)):
+        for db in self.main_window.databases.values():
+            if db.CAN_SAVE:
                 add_widget.saveComboBox.addItem(db.TITLE)
         
         # Apply and OK enabled only if name not empty 
@@ -191,7 +188,7 @@ class StatusIcon(QtGui.QSystemTrayIcon):
 
         def add_single_manual_apply_cb():
             '''Save new added person'''
-            for db in DATABASES:
+            for db in self.main_window.databases.values():
                 if db.TITLE == add_widget.saveComboBox.currentText():
                     birthdate = add_widget.dateWidget.selectedDate().toPyDate()
                     # FIXME: ugly fix for #563405 adding to Lightning

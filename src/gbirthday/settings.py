@@ -36,9 +36,8 @@ class Settings(QtCore.QSettings):
         
         # Database settings
         for db in DATABASES:
-            db_name = type(db).__name__
-            self.setValue(db_name + '/enabled', 
-                self.value(db_name + 'enabled', False))
+            self.setValue(db.__name__ + '/enabled', 
+                self.value(db.__name__ + '/enabled', False))
 
         # ICS export
         self.setValue('ics_export/enabled', 

@@ -20,8 +20,14 @@ from gbirthday.gtk_funcs import show_error_msg
 class MySQL(DataBase):
     '''MySQL database import'''
 
-    def __init__(self):
-        super(MySQL, self).__init__(title='MySQL')
+    TITLE = 'MySQL'
+    CAN_SAVE = True
+    HAS_CONFIG = True
+
+    def __init__(self, addressbook, settings):
+
+        super().__init__(addressbook, settings)
+        
         self.host = 'localhost'
         self.port = '3306'
         self.username = ''
@@ -30,7 +36,6 @@ class MySQL(DataBase):
         self.table = 'person'
         self.name_row = 'name'
         self.date_row = 'date'
-        self.ab = None
         self.cursor = None
         self.conn = None
 
@@ -53,10 +58,8 @@ class MySQL(DataBase):
             return False
         return True
 
-    def parse(self, addressbook, conf):
+    def parse(self):
         '''connect to mysql-database and get data'''
-        # XXX: set addressbook in __init__?
-        self.ab = addressbook
         if not self.connect():
             return
         try:
@@ -83,7 +86,7 @@ class MySQL(DataBase):
             show_error_msg(_('Could not execute MySQL-query')
                             + ': %s\n %s' % (qry, str(msg)))
         self.conn.close()
-        self.ab.add(name, birthday)
+        self.addressbook.add(name, birthday)
 
     def save_config(self, conf):
         '''Save modifications'''

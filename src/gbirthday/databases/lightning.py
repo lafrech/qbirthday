@@ -20,12 +20,16 @@ from gbirthday.gtk_funcs import show_error_msg
 class Lightning(DataBase):
     '''Thunderbird/Lightning implementation'''
 
-    def __init__(self, title='Thunderbird/Icedove Lightning',
-                has_config=False):
-        super(Lightning, self).__init__(title=title, has_config=has_config)
+    TITLE = 'Thunderbird/Icedove Lightning'
+    CAN_SAVE = True
+    HAS_CONFIG = False
+
+    def __init__(self, addressbook, settings=None):
+
+        super().__init__(addressbook, settings)
+
         self.THUNDERBIRD_LOCATION = os.path.join(os.environ['HOME'],
             '.mozilla-thunderbird')
-        self.ab = None
         self.cursor = None
         self.conn = None
 
@@ -64,10 +68,8 @@ class Lightning(DataBase):
                     return
         show_error_msg(_('Error reading profile file: %s' % configfile))
 
-    def parse(self, addressbook, conf=None):
+    def parse(self):
         '''open thunderbird sqlite-database'''
-        # XXX: set addressbook in __init__?
-        self.ab = addressbook
         if (os.path.exists(self.THUNDERBIRD_LOCATION)):
             self.get_config_file(self.THUNDERBIRD_LOCATION)
 
@@ -95,7 +97,7 @@ class Lightning(DataBase):
         self.cursor.execute(qry)
         for row in self.cursor:
             bday = datetime.datetime.utcfromtimestamp(int(row[1]) / 1000000)
-            self.ab.add(row[0], str(bday).split(' ')[0])
+            self.addressbook.add(row[0], str(bday).split(' ')[0])
 
     def add(self, name, birthday):
         import time, uuid
@@ -148,4 +150,4 @@ class Lightning(DataBase):
         except Exception as msg:
             show_error_msg(_('Could not execute SQLite-query')
                             + ': %s\n %s' % (qry, str(msg)))
-        self.ab.add(name, str(birthday))
+        self.addressbook.add(name, str(birthday))

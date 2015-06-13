@@ -21,14 +21,18 @@ from gbirthday.gtk_funcs import show_error_msg
 class Sunbird(Lightning):
     '''Sunbird/Iceowl implementation (based on lightning)'''
 
-    def __init__(self):
-        super(Sunbird, self).__init__(title='Sunbird/Iceowl', has_config=False)
+    TITLE = 'Sunbird/Iceowl'
+    CAN_SAVE = True
+    HAS_CONFIG = False
+
+    def __init__(self, addressbook, settings=None):
+
+        super().__init__(addressbook, settings)
+
         self.mozilla_location = os.path.join(os.environ['HOME'],
                 '.mozilla')
 
-    def parse(self, addressbook, conf):
-        # XXX: set addressbook in __init__?
-        self.ab = addressbook
+    def parse(self):
         '''load file / open database connection'''
         sunbird = os.path.join(self.mozilla_location, 'sunbird')
         iceowl = os.path.join(self.mozilla_location, 'iceowl')

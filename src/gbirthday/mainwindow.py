@@ -20,6 +20,7 @@ from PyQt4 import QtCore, QtGui, uic
 import datetime
 
 from gbirthday import PICS_PATHS
+from .databases import DATABASES
 from .settings import Settings
 from .addressbook import AddressBook
 from .statusicon import StatusIcon
@@ -85,12 +86,14 @@ class MainWindow(QtGui.QMainWindow):
         
         uic.loadUi('ui/mainwindow.ui', self)
 
+        self.databases = {}
+        
         # Load settings
         self.settings = Settings()
         self.settings.load_defaults()
 
         # Address book
-        self.addressbook = AddressBook(self.settings)
+        self.addressbook = AddressBook(self, self.settings)
 
         # Status icon
         self.status_icon = StatusIcon(self, self.settings)
@@ -109,11 +112,18 @@ class MainWindow(QtGui.QMainWindow):
     def reload(self):
         '''Reload data from databases'''
 
-        self.addressbook.reload()
-        self.status_icon.reload_set_icon()
-        self.refresh()
+        # Instantiate database backends
+        self.databases = {}
+        for db in DATABASES:
+            if self.settings.value(db.__name__ + '/enabled', type=bool):
+                self.databases[db.__name__] = db(self.addressbook, 
+                                                 self.settings)
 
-    def refresh(self):
+        # Reload address book
+        self.addressbook.reload()
+        
+        # Reload status icon
+        self.status_icon.reload_set_icon()
 
         # Set title
         if self.addressbook.bdays_in_period():

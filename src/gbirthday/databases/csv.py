@@ -13,7 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, see <http://www.gnu.org/licenses/>.
 #}}}
-#import gtk
+
 import os
 from gbirthday.databases import DataBase
 from gbirthday.gtk_funcs import show_error_msg
@@ -21,18 +21,19 @@ from gbirthday.gtk_funcs import show_error_msg
 class CSV(DataBase):
     '''import from CSV-file'''
 
-    def __init__(self):
-        super(CSV, self).__init__(title='CSV-file (comma seperated value)')
-        self._seperators = ['; ', ', ', ': ']   # possible seperators
-        self.addressbook = None
-        self.conf = None
+    TITLE = 'CSV-file (comma seperated value)'
+    CAN_SAVE = True
+    HAS_CONFIG = True
 
-    def parse(self, addressbook, conf):
+    def __init__(self, addressbook, settings):
+
+        super().__init__(addressbook, settings)
+
+        self._seperators = ['; ', ', ', ': ']   # possible seperators
+
+    def parse(self):
         '''open and parse file'''
-        # XXX: set addressbook in __init__?
-        self.ab = addressbook
-        self.addressbook = addressbook
-        self.conf = conf
+        
         if not conf.csv_files:
             return
         for filename in conf.csv_files:
@@ -53,7 +54,6 @@ class CSV(DataBase):
     def add(self, name, birthday):
         '''add new person with birthday to end of csv-file'''
         birthday = str(birthday)
-        # TODO: show menu to select file?
         if len(self.conf.csv_files) == 0:
             show_error_msg(_('CSV-file does not exist'))
             return

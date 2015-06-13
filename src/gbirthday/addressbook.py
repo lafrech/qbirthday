@@ -15,14 +15,14 @@
 #}}}
 '''AddressBook module'''
 import datetime
-from .databases import DATABASES
 from textwrap import dedent
 
-class AddressBook:
+class AddressBook(object):
     '''AdressBook that saves birthday and names'''
     
-    def __init__(self, settings):
+    def __init__(self, main_window, settings):
         
+        self.main_window = main_window
         self.settings = settings
         
         self.firstday = settings.value('firstday', type=int)
@@ -94,10 +94,9 @@ class AddressBook:
         # delete bdays dict and reload again
         self.bdays = {}
         
-        for db in DATABASES:
-            db_name = type(db).__name__
-            if self.settings.value(db_name + '/enabled', type=bool):
-                database.parse(addressbook=self, settings=self.settings)
+        for name, db in self.main_window.databases.items():
+            db.parse()
+
         self.update()
 
         if self.settings.value('ics_export/enabled', type=bool):

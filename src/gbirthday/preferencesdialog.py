@@ -103,15 +103,15 @@ class PreferencesDialog(QtGui.QDialog):
             hbox = QtGui.QHBoxLayout()
             self.databasesLayout.addLayout(hbox)
 
-            self.db_chkbx[db] = QtGui.QCheckBox(db.TITLE)
-            db_used = self.settings.value(type(db).__name__ + '/enabled',
+            self.db_chkbx[db.__name__] = QtGui.QCheckBox(db.TITLE)
+            db_used = self.settings.value(db.__name__ + '/enabled',
                                           type=bool)
-            self.db_chkbx[db].setChecked(db_used)
-            hbox.addWidget(self.db_chkbx[db])
+            self.db_chkbx[db.__name__].setChecked(db_used)
+            hbox.addWidget(self.db_chkbx[db.__name__])
             if db.HAS_CONFIG:
                 button = QtGui.QPushButton(_('Preferences'))
                 button.setEnabled(db_used)
-                self.db_chkbx[db].stateChanged.connect(button.setEnabled)
+                self.db_chkbx[db.__name__].stateChanged.connect(button.setEnabled)
                 # TODO: write conf class
                 #button.clicked.connect(
                 #    lambda: db.preferences_dialog(self.settings, self).exec_())
@@ -129,9 +129,10 @@ class PreferencesDialog(QtGui.QDialog):
             self.notifyNextSpinBox.value())
         self.settings.setValue('ics_export/enabled',
             self.icsExportCheckBox.isChecked())
+
         for db in DATABASES:
-            self.settings.setValue(type(db).__name__ + '/enabled',
-                self.db_chkbx[db].isChecked())
+            self.settings.setValue(db.__name__ + '/enabled',
+                self.db_chkbx[db.__name__].isChecked())
 
         # Refresh birthday list
         self.main_window.refresh()
