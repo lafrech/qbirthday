@@ -14,8 +14,6 @@
 # along with this program; if not, see <http://www.gnu.org/licenses/>.
 #}}}
 
-import os
-
 from PyQt4 import QtCore, QtGui
 
 from gbirthday import load_ui
