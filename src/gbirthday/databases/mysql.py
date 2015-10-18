@@ -13,9 +13,33 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, see <http://www.gnu.org/licenses/>.
 #}}}
-#import gtk
+
+from PyQt4 import QtCore, QtGui, uic
+
 from gbirthday.databases import DataBase
 from gbirthday.gtk_funcs import show_error_msg
+
+class MySqlPreferencesDialog(QtGui.QDialog):
+    '''MySQL backend settings dialog'''
+
+    def __init__(self, settings, parent):
+
+        super().__init__(parent)
+
+        uic.loadUi('ui/mysqlpreferencesdialog.ui', self)
+
+        self.settings = settings
+
+        # TODO: add code here
+
+        self.buttonBox.button(QtGui.QDialogButtonBox.Apply).clicked.connect(self.save)
+        self.buttonBox.button(QtGui.QDialogButtonBox.Ok).clicked.connect(self.save)
+
+        # TODO: disable OK and Apply if no path provided
+
+    def save(self):
+        '''Save MySQL backend settings'''
+        pass
 
 class MySQL(DataBase):
     '''MySQL database import'''
@@ -23,6 +47,7 @@ class MySQL(DataBase):
     TITLE = 'MySQL'
     CAN_SAVE = True
     HAS_CONFIG = True
+    CONFIG_DLG = MySqlPreferencesDialog
 
     def __init__(self, addressbook, settings):
 

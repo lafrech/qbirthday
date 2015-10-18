@@ -33,6 +33,7 @@ class IcsExportPreferencesDialog(QtGui.QDialog):
         self.filePathEdit.setText(self.settings.value('filepath'))
         self.alarmsCheckBox.setChecked(
             self.settings.value('alarm', False, type=bool))
+        # TODO: add default values?
         self.alarmsDelaySpinBox.setValue(
             self.settings.value('alarm_days', type=int))
         self.customVeventTextEdit.setPlainText(
@@ -52,6 +53,7 @@ class IcsExportPreferencesDialog(QtGui.QDialog):
         '''Get export file path'''
 
         # TODO: Qt5 introduces QStandardPaths. Use it as default.
+        # TODO: use QFileDialog.getOpenFileName?
         dialog = QtGui.QFileDialog(self)
         dialog.setDirectory(self.filePathEdit.text() or QtCore.QDir.homePath())
         dialog.setFileMode(QtGui.QFileDialog.AnyFile)
@@ -112,9 +114,10 @@ class PreferencesDialog(QtGui.QDialog):
                 button = QtGui.QPushButton(_('Preferences'))
                 button.setEnabled(db_used)
                 self.db_chkbx[db.__name__].stateChanged.connect(button.setEnabled)
-                # TODO: write conf class
-                #button.clicked.connect(
-                #    lambda: db.preferences_dialog(self.settings, self).exec_())
+                button.clicked.connect(
+                    # http://stackoverflow.com/questions/2295290/
+                    # http://stackoverflow.com/questions/18836291/
+                    lambda ignore, dlg=db.CONFIG_DLG: dlg(self.settings, self).exec_())
                 hbox.addWidget(button)
 
         self.buttonBox.button(QtGui.QDialogButtonBox.Apply).clicked.connect(self.save)
@@ -122,6 +125,9 @@ class PreferencesDialog(QtGui.QDialog):
 
     def save(self):
 
+        # TODO: Check settings are correct before saving
+        # Check activated db has all necessary parameters
+        
         # Save settings
         self.settings.setValue('firstday', self.pastSpinBox.value())
         self.settings.setValue('lastday', self.nextSpinBox.value())
@@ -135,4 +141,4 @@ class PreferencesDialog(QtGui.QDialog):
                 self.db_chkbx[db.__name__].isChecked())
 
         # Refresh birthday list
-        self.main_window.refresh()
+        self.main_window.reload()
