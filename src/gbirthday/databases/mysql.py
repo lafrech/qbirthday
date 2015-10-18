@@ -18,7 +18,6 @@ from PyQt4 import QtCore, QtGui
 
 from gbirthday import load_ui
 from gbirthday.databases import DataBase
-from gbirthday.gtk_funcs import show_error_msg
 
 class MySqlPreferencesDialog(QtGui.QDialog):
     '''MySQL backend settings dialog'''
@@ -31,16 +30,34 @@ class MySqlPreferencesDialog(QtGui.QDialog):
 
         self.settings = settings
 
-        # TODO: add code here
+        # Fill fields with current values
+        self.hostEdit.setText(self.settings.value('MySQL/host', 'localhost'))
+        self.portEdit.setText(self.settings.value('MySQL/port', '3306'))
+        self.usernameEdit.setText(self.settings.value('MySQL/username', ''))
+        self.passwordEdit.setText(self.settings.value('MySQL/password', ''))
+        self.databaseEdit.setText(self.settings.value('MySQL/database', ''))
+        self.tableEdit.setText(self.settings.value('MySQL/table', 'person'))
+        self.nameRowEdit.setText(self.settings.value('MySQL/namerow', 'name'))
+        self.dateRowEdit.setText(self.settings.value('MySQL/daterow', 'date'))
+        
+        self.buttonBox.button(QtGui.QDialogButtonBox.Apply).clicked.connect(
+            self.save)
+        self.buttonBox.button(QtGui.QDialogButtonBox.Ok).clicked.connect(
+            self.save)
 
-        self.buttonBox.button(QtGui.QDialogButtonBox.Apply).clicked.connect(self.save)
-        self.buttonBox.button(QtGui.QDialogButtonBox.Ok).clicked.connect(self.save)
-
-        # TODO: disable OK and Apply if no path provided
+        # TODO: disable OK and Apply if empty/invalid field
 
     def save(self):
         '''Save MySQL backend settings'''
-        pass
+        
+        self.settings.setValue('MySQL/host', self.hostEdit.text())
+        self.settings.setValue('MySQL/port', self.portEdit.text())
+        self.settings.setValue('MySQL/username', self.usernameEdit.text())
+        self.settings.setValue('MySQL/password', self.passwordEdit.text())
+        self.settings.setValue('MySQL/database', self.databaseEdit.text())
+        self.settings.setValue('MySQL/table', self.tableEdit.text())
+        self.settings.setValue('MySQL/namerow', self.nameRowEdit.text())
+        self.settings.setValue('MySQL/daterow', self.dateRowEdit.text())
 
 class MySQL(DataBase):
     '''MySQL database import'''
@@ -54,14 +71,15 @@ class MySQL(DataBase):
 
         super().__init__(addressbook, settings)
         
-        self.host = 'localhost'
-        self.port = '3306'
-        self.username = ''
-        self.password = ''
-        self.database = ''
-        self.table = 'person'
-        self.name_row = 'name'
-        self.date_row = 'date'
+        self.host = self.settings.value('MySQL/host')
+        self.port = self.settings.value('MySQL/port')
+        self.username = self.settings.value('MySQL/username')
+        self.password = self.settings.value('MySQL/password')
+        self.database = self.settings.value('MySQL/database')
+        self.table = self.settings.value('MySQL/table')
+        self.name_row = self.settings.value('MySQL/namerow')
+        self.date_row = self.settings.value('MySQL/daterow')
+
         self.cursor = None
         self.conn = None
 
@@ -69,8 +87,10 @@ class MySQL(DataBase):
         '''establish connection'''
         try:
             import MySQLdb
-        except:
-            show_error_msg(_("Package %s is not installed." % "MySQLdb"))
+        except ImportError:
+            # TODO: show_error_msg
+            print(_("Package {} is not installed.").format("MySQLdb"))
+            return False
         try:
             self.conn = MySQLdb.connect(host=self.host,
                                     port=int(self.port),
@@ -79,8 +99,8 @@ class MySQL(DataBase):
                                     db=self.database)
             self.cursor = self.conn.cursor()
         except Exception as msg:
-            show_error_msg(_('Could not connect to MySQL-Server')
-                            + str(msg))
+            # TODO: show_error_msg
+            print(_("Could not connect to MySQL server:\n{}").format(msg))
             return False
         return True
 
@@ -96,69 +116,20 @@ class MySQL(DataBase):
             for row in rows:
                 addressbook.add(row[0], str(row[1]))
         except Exception as msg:
-            show_error_msg(_('Could not execute MySQL-query')
-                            + ': %s\n %s' % (qry, str(msg)))
+            # TODO: show_error_msg
+            print(_("Could not execute MySQL query '{}':\n{}").format(qry, msg))
         self.conn.close()
 
     def add(self, name, birthday):
         '''insert new Birthday to database'''
         birthday = str(birthday)
-        self.connect()
+        if not self.connect():
+            return
         try:
             qry = ("INSERT INTO %s (%s, %s) VALUES ('%s', '%s')" %
                 (self.table, self.name_row, self.date_row, name, birthday))
             self.cursor.execute(qry)
         except Exception as msg:
-            show_error_msg(_('Could not execute MySQL-query')
-                            + ': %s\n %s' % (qry, str(msg)))
+            print(_("Could not execute MySQL query '{}':\n{}").format(qry, msg))
         self.conn.close()
         self.addressbook.add(name, birthday)
-
-    def save_config(self, conf):
-        '''Save modifications'''
-        self.host = self.entries[0].get_text()
-        self.port = self.entries[1].get_text()
-        self.username = self.entries[2].get_text()
-        self.password = self.entries[3].get_text()
-        self.database = self.entries[4].get_text()
-        self.table = self.entries[5].get_text()
-        self.name_row = self.entries[6].get_text()
-        self.date_row = self.entries[7].get_text()
-        conf.MySQL = self
-
-
-    def create_config(self, vbox, conf):
-        '''create additional mysql config in config menu'''
-
-        # TODO
-        pass
-
-#         values = [
-#                   ['Host', self.host],
-#                   ['Port', self.port],
-#                   ['Username', self.username],
-#                   ['Password', self.password],
-#                   ['Database', self.database],
-#                   ['Table', self.table],
-#                   ['Name row', self.name_row],
-#                   ['Date row', self.date_row]
-#                  ]
-#         self.entries = []
-# 
-#         sqltable = gtk.Table(len(values), 2, False)
-#         sqltable.set_col_spacings(5)
-#         for i, value in enumerate(values):
-#             label = gtk.Label(value[0])
-#             label.set_alignment(1, 0.5)
-#             label.show()
-#             sqltable.attach(label, 0, 1, i, i + 1)
-# 
-#             entry = gtk.Entry()
-#             entry.set_text(value[1])
-#             entry.show()
-#             self.entries.append(entry)
-#             sqltable.attach(entry, 1, 2, i, i + 1)
-#         
-#         sqltable.show()
-#         vbox.pack_start(sqltable, False, False, 0)
-# 
