@@ -15,11 +15,11 @@
 # along with this program; if not, see <http://www.gnu.org/licenses/>.
 #}}}
 
-from PyQt4 import QtCore, QtGui, uic
+from PyQt4 import QtCore, QtGui
 
 import datetime
 
-from gbirthday import PICS_PATHS
+from gbirthday import PICS_PATHS, load_ui
 from .databases import DATABASES
 from .settings import Settings
 from .addressbook import AddressBook
@@ -84,7 +84,7 @@ class MainWindow(QtGui.QMainWindow):
                             QtCore.Qt.FramelessWindowHint |
                             QtCore.Qt.WindowStaysOnTopHint)  # ??
         
-        uic.loadUi('ui/mainwindow.ui', self)
+        load_ui('mainwindow.ui', self)
 
         self.databases = {}
         

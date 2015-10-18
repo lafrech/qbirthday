@@ -14,8 +14,9 @@
 # along with this program; if not, see <http://www.gnu.org/licenses/>.
 #}}}
 
-from PyQt4 import QtCore, QtGui, uic
+from PyQt4 import QtCore, QtGui
 
+from gbirthday import load_ui
 from gbirthday.databases import DataBase
 from gbirthday.gtk_funcs import show_error_msg
 
@@ -26,7 +27,7 @@ class MySqlPreferencesDialog(QtGui.QDialog):
 
         super().__init__(parent)
 
-        uic.loadUi('ui/mysqlpreferencesdialog.ui', self)
+        load_ui('mysqlpreferencesdialog.ui', self)
 
         self.settings = settings
 

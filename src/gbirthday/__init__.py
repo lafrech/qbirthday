@@ -29,7 +29,7 @@ and relatively easy to extend for other data servers.
 
 VERSION = "@VER@"
 
-from PyQt4 import QtCore, QtGui
+from PyQt4 import QtCore, QtGui, uic
 
 import os
 import sys
@@ -66,6 +66,17 @@ PICS_PATHS = {
     'gbirthday': os.path.join(IMAGES_LOCATION, 'gbirthday.png'),
     'nobirthday': os.path.join(IMAGES_LOCATION, 'nobirthday.png'),
 }
+
+UI_FILES_LOCATION = os.path.join(os.path.dirname(__file__), 'ui')
+
+def load_ui(ui_file, widget=None):
+    '''Load UI file into widget and return widget
+    
+       inputs:
+       - ui file path relative to ui files directory
+       - (optionnal) widget : if None, a new widget is created
+    '''
+    return uic.loadUi(os.path.join(UI_FILES_LOCATION, ui_file), widget)
 
 def main():
     '''Load settings, start status icon and get to work.'''

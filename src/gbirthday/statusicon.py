@@ -15,9 +15,9 @@
 # along with this program; if not, see <http://www.gnu.org/licenses/>.
 #}}}
 '''StatusIcon module'''
-from PyQt4 import QtCore, QtGui, uic
+from PyQt4 import QtCore, QtGui
 
-from gbirthday import PICS_PATHS
+from gbirthday import PICS_PATHS, load_ui
 from gbirthday import VERSION
 from gbirthday import MONTH_AT_PLACE, DAY_AT_PLACE
 from gbirthday import CURRENT_DAY
@@ -164,7 +164,7 @@ class StatusIcon(QtGui.QSystemTrayIcon):
     def add_single_manual(self):
         '''Add birthday dialog'''
 
-        add_widget = uic.loadUi('ui/add.ui')
+        add_widget = load_ui('ui/add.ui')
 
         # Fill database combobox
         # TODO: use index to allow DB name translation

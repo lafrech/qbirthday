@@ -14,8 +14,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, see <http://www.gnu.org/licenses/>.
 #}}}
-from PyQt4 import QtCore, QtGui, uic
+from PyQt4 import QtCore, QtGui
 
+from gbirthday import load_ui
 from .databases import DATABASES
 
 class IcsExportPreferencesDialog(QtGui.QDialog):
@@ -25,7 +26,7 @@ class IcsExportPreferencesDialog(QtGui.QDialog):
 
         super().__init__(parent)
 
-        uic.loadUi('ui/icsexportpreferencesdialog.ui', self)
+        load_ui('icsexportpreferencesdialog.ui', self)
 
         self.settings = settings
 
@@ -79,7 +80,7 @@ class PreferencesDialog(QtGui.QDialog):
 
         super().__init__(main_window)
         
-        uic.loadUi('ui/preferencesdialog.ui', self)
+        load_ui('preferencesdialog.ui', self)
 
         self.settings = settings
         self.main_window = main_window

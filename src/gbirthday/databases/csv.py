@@ -16,10 +16,10 @@
 
 import os
 
-from PyQt4 import QtCore, QtGui, uic
+from PyQt4 import QtCore, QtGui
 
+from gbirthday import load_ui
 from gbirthday.databases import DataBase
-from gbirthday.gtk_funcs import show_error_msg
 
 class CsvPreferencesDialog(QtGui.QDialog):
     '''CSV backend settings dialog'''
@@ -28,7 +28,7 @@ class CsvPreferencesDialog(QtGui.QDialog):
 
         super().__init__(parent)
 
-        uic.loadUi('ui/csvpreferencesdialog.ui', self)
+        load_ui('csvpreferencesdialog.ui', self)
 
         self.settings = settings
 
