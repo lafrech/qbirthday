@@ -44,14 +44,16 @@ class Birthday(QtCore.QObject):
         # Birthday today
         if delta_day == 0:
             
-            self.label_image.setPixmap(PICS_PATHS['birthdaytoday'])
+            self.label_image.setPixmap(
+                QtGui.QPixmap(PICS_PATHS['birthdaytoday']))
             
             self.label_when = QtGui.QLabel(_('Today'))
         
         # Birthday in the past
         elif delta_day < 0:
             
-            self.label_image.setPixmap(PICS_PATHS['birthdaylost'])
+            self.label_image.setPixmap(
+                QtGui.QPixmap(PICS_PATHS['birthdaylost']))
             
             if delta_day == -1:
                 self.label_when = QtGui.QLabel(_('Yesterday'))
