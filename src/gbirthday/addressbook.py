@@ -173,13 +173,13 @@ class AddressBook(object):
                     f.write('BEGIN:VALARM\n')
                     f.write('ACTION:DISPLAY\n')
                     f.write('TRIGGER;VALUE=DURATION:-P' \
-                        + alarm_days + 'D\n')
+                        + conf_alarm_days + 'D\n')
                     f.write('DESCRIPTION:' + _("Birthday: ") \
                         + self.bdays[bd][0] + '\n')
                     if conf_alarm_custom_properties != '':
                         f.write(conf_alarm_custom_properties + '\n')
                     f.write("END:VALARM\n")
-                if self.conf_custom_properties != '':
+                if conf_custom_properties != '':
                     f.write(conf_custom_properties + '\n')
                 f.write("END:VEVENT\n")
 
