@@ -164,7 +164,7 @@ class StatusIcon(QtGui.QSystemTrayIcon):
     def add_single_manual(self):
         '''Add birthday dialog'''
 
-        add_widget = load_ui('ui/add.ui')
+        add_widget = load_ui('add.ui')
 
         # Fill database combobox
         # TODO: use index to allow DB name translation
