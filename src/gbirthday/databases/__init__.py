@@ -36,8 +36,8 @@ class DataBase(object):
     TITLE = 'Unknown database'
     # Whether database can save new birthdates
     CAN_SAVE = True
-    # Whether database has configuration settings/menu
-    HAS_CONFIG = True
+    # Configuration dialog
+    CONFIG_DLG = None
     # Default configuration values
     DEFAULTS = {}
 

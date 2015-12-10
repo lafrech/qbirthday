@@ -64,7 +64,6 @@ class MySQL(DataBase):
 
     TITLE = 'MySQL'
     CAN_SAVE = True
-    HAS_CONFIG = True
     CONFIG_DLG = MySqlPreferencesDialog
 
     DEFAULTS = {

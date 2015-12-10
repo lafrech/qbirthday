@@ -57,7 +57,6 @@ class CSV(DataBase):
 
     TITLE = 'CSV-file (comma seperated value)'
     CAN_SAVE = True
-    HAS_CONFIG = True
     CONFIG_DLG = CsvPreferencesDialog
 
     DEFAULTS = {

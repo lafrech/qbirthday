@@ -23,7 +23,6 @@ class Sunbird(Lightning):
 
     TITLE = 'Sunbird/Iceowl'
     CAN_SAVE = True
-    HAS_CONFIG = False
 
     def __init__(self, addressbook, settings=None):
 

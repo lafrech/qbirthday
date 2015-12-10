@@ -111,7 +111,7 @@ class PreferencesDialog(QtGui.QDialog):
                                           type=bool)
             self.db_chkbx[db.__name__].setChecked(db_used)
             hbox.addWidget(self.db_chkbx[db.__name__])
-            if db.HAS_CONFIG:
+            if db.CONFIG_DLG is not None:
                 button = QtGui.QPushButton(_('Preferences'))
                 button.setEnabled(db_used)
                 self.db_chkbx[db.__name__].stateChanged.connect(button.setEnabled)
