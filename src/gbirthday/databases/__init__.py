@@ -38,6 +38,8 @@ class DataBase(object):
     CAN_SAVE = True
     # Whether database has configuration settings/menu
     HAS_CONFIG = True
+    # Default configuration values
+    DEFAULTS = {}
 
     def __init__(self, addressbook, settings=None):
 

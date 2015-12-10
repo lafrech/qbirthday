@@ -30,7 +30,7 @@ class CsvPreferencesDialog(QtGui.QDialog):
 
         self.settings = settings
 
-        self.filePathEdit.setText(self.settings.value('CSV/filepath', ''))
+        self.filePathEdit.setText(self.settings.value('CSV/filepath'))
         
         self.filePathButton.clicked.connect(self.get_filepath)
 
@@ -59,6 +59,10 @@ class CSV(DataBase):
     CAN_SAVE = True
     HAS_CONFIG = True
     CONFIG_DLG = CsvPreferencesDialog
+
+    DEFAULTS = {
+        'filepath': '',
+    }
 
     def __init__(self, addressbook, settings):
 

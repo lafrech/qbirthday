@@ -31,14 +31,14 @@ class MySqlPreferencesDialog(QtGui.QDialog):
         self.settings = settings
 
         # Fill fields with current values
-        self.hostEdit.setText(self.settings.value('MySQL/host', 'localhost'))
-        self.portEdit.setText(self.settings.value('MySQL/port', '3306'))
-        self.usernameEdit.setText(self.settings.value('MySQL/username', ''))
-        self.passwordEdit.setText(self.settings.value('MySQL/password', ''))
-        self.databaseEdit.setText(self.settings.value('MySQL/database', ''))
-        self.tableEdit.setText(self.settings.value('MySQL/table', 'person'))
-        self.nameRowEdit.setText(self.settings.value('MySQL/namerow', 'name'))
-        self.dateRowEdit.setText(self.settings.value('MySQL/daterow', 'date'))
+        self.hostEdit.setText(self.settings.value('MySQL/host'))
+        self.portEdit.setText(self.settings.value('MySQL/port'))
+        self.usernameEdit.setText(self.settings.value('MySQL/username'))
+        self.passwordEdit.setText(self.settings.value('MySQL/password'))
+        self.databaseEdit.setText(self.settings.value('MySQL/database'))
+        self.tableEdit.setText(self.settings.value('MySQL/table'))
+        self.nameRowEdit.setText(self.settings.value('MySQL/namerow'))
+        self.dateRowEdit.setText(self.settings.value('MySQL/daterow'))
         
         self.buttonBox.button(QtGui.QDialogButtonBox.Apply).clicked.connect(
             self.save)
@@ -67,6 +67,17 @@ class MySQL(DataBase):
     HAS_CONFIG = True
     CONFIG_DLG = MySqlPreferencesDialog
 
+    DEFAULTS = {
+        'host': 'localhost',
+        'port': '3306',
+        'username': '',
+        'password': '',
+        'database': '',
+        'table': 'person',
+        'namerow': 'name',
+        'daterow': 'date',
+    }
+        
     def __init__(self, addressbook, settings):
 
         super().__init__(addressbook, settings)
