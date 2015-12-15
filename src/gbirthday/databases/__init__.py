@@ -41,10 +41,11 @@ class DataBase(object):
     # Default configuration values
     DEFAULTS = {}
 
-    def __init__(self, addressbook, settings=None):
+    def __init__(self, mainwindow):
 
-        self.addressbook = addressbook
-        self.settings = settings
+        self.mainwindow = mainwindow
+        self.addressbook = mainwindow.addressbook
+        self.settings = mainwindow.settings
 
     def parse(self):
         '''load file / open database connection'''

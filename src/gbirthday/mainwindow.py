@@ -118,8 +118,7 @@ class MainWindow(QtGui.QMainWindow):
         self.databases = {}
         for db in DATABASES:
             if self.settings.value(db.__name__ + '/enabled', type=bool):
-                self.databases[db.__name__] = db(self.addressbook, 
-                                                 self.settings)
+                self.databases[db.__name__] = db(self)
 
         # Reload address book
         self.addressbook.reload()

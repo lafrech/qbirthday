@@ -16,7 +16,6 @@
 import os
 
 from gbirthday.databases import Lightning
-from gbirthday.gtk_funcs import show_error_msg
 
 class Sunbird(Lightning):
     '''Sunbird/Iceowl implementation (based on lightning)'''
@@ -24,9 +23,9 @@ class Sunbird(Lightning):
     TITLE = 'Sunbird/Iceowl'
     CAN_SAVE = True
 
-    def __init__(self, addressbook, settings=None):
+    def __init__(self, mainwindow):
 
-        super().__init__(addressbook, settings)
+        super().__init__(mainwindow)
 
         self.mozilla_location = os.path.join(os.environ['HOME'],
                 '.mozilla')
@@ -42,4 +41,8 @@ class Sunbird(Lightning):
         elif (os.path.exists(iceowl)):
             self.get_config_file(iceowl)
         else:
-            show_error_msg(_('Neither iceowl nor sunbird is installed'))
+            # Missing package
+            QtGui.QMessageBox.warning(self.mainwindow, 
+                QtCore.QCoreApplication.applicationName(),
+                _("Neither iceowl nor sunbird is installed"),
+                QtGui.QMessageBox.Discard)

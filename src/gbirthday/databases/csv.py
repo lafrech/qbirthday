@@ -63,9 +63,9 @@ class CSV(DataBase):
         'filepath': '',
     }
 
-    def __init__(self, addressbook, settings):
+    def __init__(self, mainwindow):
 
-        super().__init__(addressbook, settings)
+        super().__init__(mainwindow)
 
         # Possible separators
         self._separators = ['; ', ', ', ': '] 
@@ -74,11 +74,6 @@ class CSV(DataBase):
         '''open and parse file'''
         
         filepath = self.settings.value('CSV/filepath')
-
-        if filepath is None:
-            # TODO: show_error_msg
-            print('Wrong CSV backed config: missing CSV file path')
-            return
 
         try:
             with open(filepath) as f:
@@ -91,8 +86,11 @@ class CSV(DataBase):
                             self.addressbook.add(name, date)
                             break
         except IOError as e:
-            # TODO: show_error_msg
-            print('Missing CSV file {}'.format(filepath))
+            # Missing CSV file
+            QtGui.QMessageBox.warning(self.mainwindow, 
+                QtCore.QCoreApplication.applicationName(),
+                'Missing CSV file: {}'.format(filepath),
+                QtGui.QMessageBox.Discard)
 
     def add(self, name, birthday):
         '''add new person with birthday to end of csv-file'''
@@ -101,15 +99,13 @@ class CSV(DataBase):
 
         filepath = self.settings.value('CSV/filepath')
 
-        if filepath is None:
-            # TODO: show_error_msg
-            print('Wrong CSV backed config: missing CSV file path')
-            return
-
         try:
             with open(filepath, 'a') as f:
                 f.write(birthday + '; ' + name + '\n')
             self.addressbook.add(name, birthday)
         except IOError as e:
-            # TODO: show_error_msg
-            print('Missing CSV file {}'.format(filepath))
+            # Missing CSV file
+            QtGui.QMessageBox.warning(self.mainwindow, 
+                QtCore.QCoreApplication.applicationName(),
+                _('Missing CSV file: {}').format(filepath),
+                QtGui.QMessageBox.Discard)

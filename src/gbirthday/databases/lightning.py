@@ -15,7 +15,6 @@
 #}}}
 import os
 from gbirthday.databases import DataBase
-from gbirthday.gtk_funcs import show_error_msg
 
 class Lightning(DataBase):
     '''Thunderbird/Lightning implementation'''
@@ -23,9 +22,9 @@ class Lightning(DataBase):
     TITLE = 'Thunderbird/Icedove Lightning'
     CAN_SAVE = True
 
-    def __init__(self, addressbook, settings=None):
+    def __init__(self, mainwindow):
 
-        super().__init__(addressbook, settings)
+        super().__init__(mainwindow)
 
         self.THUNDERBIRD_LOCATION = os.path.join(os.environ['HOME'],
             '.mozilla-thunderbird')
@@ -65,7 +64,11 @@ class Lightning(DataBase):
                 if os.path.exists(location):
                     self.parse_birthday(location)
                     return
-        show_error_msg(_('Error reading profile file: %s' % configfile))
+        # Missing profile file
+        QtGui.QMessageBox.warning(self.mainwindow, 
+            QtCore.QCoreApplication.applicationName(),
+            _("Error reading profile file: {}").format(configfile),
+            QtGui.QMessageBox.Discard)
 
     def parse(self):
         '''open thunderbird sqlite-database'''
@@ -74,15 +77,26 @@ class Lightning(DataBase):
 
     def connect(self, filename):
         '''"connect" to sqlite3-database'''
+        
+        # TODO: use with connect as... syntax
         try:
             import sqlite3
         except:
-            show_error_msg(_("Package %s is not installed." % "SQLite3"))
+            # Missing package
+            QtGui.QMessageBox.warning(self.mainwindow, 
+                QtCore.QCoreApplication.applicationName(),
+                _("Package {} is not installed.").format("SQLite3"),
+                QtGui.QMessageBox.Discard)
+        
         try:
             self.conn = sqlite3.connect(filename)
             self.cursor = self.conn.cursor()
         except Exception as msg:
-            show_error_msg(_('sqlite3 could not connect: %s' % str(msg)))
+            # Connexion error
+            QtGui.QMessageBox.warning(self.mainwindow, 
+                QtCore.QCoreApplication.applicationName(),
+                _("sqlite3 could not connect: {}").format(str(msg)),
+                QtGui.QMessageBox.Discard)
 
     def parse_birthday(self, filename):
         import datetime
@@ -147,6 +161,10 @@ class Lightning(DataBase):
             self.cursor.execute(qry)
             self.conn.commit()
         except Exception as msg:
-            show_error_msg(_('Could not execute SQLite-query')
-                            + ': %s\n %s' % (qry, str(msg)))
+            # Query error
+            QtGui.QMessageBox.warning(self.mainwindow,
+                QtCore.QCoreApplication.applicationName(),
+                _("Could not execute {} query '{}':\n{}").format(
+                    'SQLite', qry, msg),
+                QtGui.QMessageBox.Discard)
         self.addressbook.add(name, str(birthday))

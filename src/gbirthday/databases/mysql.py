@@ -77,9 +77,9 @@ class MySQL(DataBase):
         'daterow': 'date',
     }
         
-    def __init__(self, addressbook, settings):
+    def __init__(self, mainwindow):
 
-        super().__init__(addressbook, settings)
+        super().__init__(mainwindow)
         
         self.host = self.settings.value('MySQL/host')
         self.port = self.settings.value('MySQL/port')
@@ -95,12 +95,18 @@ class MySQL(DataBase):
 
     def connect(self):
         '''establish connection'''
+
+        # TODO: use with connect as... syntax 
         try:
             import MySQLdb
         except ImportError:
-            # TODO: show_error_msg
-            print(_("Package {} is not installed.").format("MySQLdb"))
+            # Missing MySQLdb
+            QtGui.QMessageBox.warning(self.mainwindow, 
+                QtCore.QCoreApplication.applicationName(),
+                _("Package {} is not installed.").format("MySQLdb"),
+                QtGui.QMessageBox.Discard)
             return False
+
         try:
             self.conn = MySQLdb.connect(host=self.host,
                                     port=int(self.port),
@@ -109,15 +115,21 @@ class MySQL(DataBase):
                                     db=self.database)
             self.cursor = self.conn.cursor()
         except Exception as msg:
-            # TODO: show_error_msg
-            print(_("Could not connect to MySQL server:\n{}").format(msg))
+            # Connexion error
+            QtGui.QMessageBox.warning(self.mainwindow, 
+                QtCore.QCoreApplication.applicationName(),
+                _("Could not connect to MySQL server:\n{}").format(msg),
+                QtGui.QMessageBox.Discard)
             return False
+
         return True
 
     def parse(self):
         '''connect to mysql-database and get data'''
+        
         if not self.connect():
             return
+        
         try:
             qry = ("SELECT %s, %s FROM %s"
                         % (self.name_row, self.date_row, self.table))
@@ -126,8 +138,12 @@ class MySQL(DataBase):
             for row in rows:
                 addressbook.add(row[0], str(row[1]))
         except Exception as msg:
-            # TODO: show_error_msg
-            print(_("Could not execute MySQL query '{}':\n{}").format(qry, msg))
+            # Query error
+            QtGui.QMessageBox.warning(self.mainwindow, 
+                QtCore.QCoreApplication.applicationName(),
+                _("Could not execute MySQL query '{}':\n{}").format(qry, msg),
+                QtGui.QMessageBox.Discard)
+        
         self.conn.close()
 
     def add(self, name, birthday):
@@ -140,6 +156,11 @@ class MySQL(DataBase):
                 (self.table, self.name_row, self.date_row, name, birthday))
             self.cursor.execute(qry)
         except Exception as msg:
-            print(_("Could not execute MySQL query '{}':\n{}").format(qry, msg))
+            # Query error
+            QtGui.QMessageBox.warning(self.mainwindow, 
+                QtCore.QCoreApplication.applicationName(),
+                _("Could not execute {} query '{}':\n{}").format(
+                    'MySQL', qry, msg),
+                QtGui.QMessageBox.Discard)
         self.conn.close()
         self.addressbook.add(name, birthday)
