@@ -19,8 +19,6 @@ from PyQt4 import QtCore, QtGui
 
 from gbirthday import PICS_PATHS, load_ui
 from gbirthday import VERSION
-from gbirthday import MONTH_AT_PLACE, DAY_AT_PLACE
-from gbirthday import CURRENT_DAY
 from .preferencesdialog import PreferencesDialog
 
 class StatusIcon(QtGui.QSystemTrayIcon):

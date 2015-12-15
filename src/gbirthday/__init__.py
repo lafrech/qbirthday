@@ -33,16 +33,11 @@ from PyQt4 import QtCore, QtGui, uic
 
 import os
 import sys
-import time
-from textwrap import dedent
 
 # parse locales from python module
 # Do you say "1. January" or "January 1."?
 import locale
 locale.setlocale(locale.LC_ALL, '')
-DAY_AT_PLACE, MONTH_AT_PLACE = 1, 2
-if time.strftime('%x', (2000, 3, 1, 1, 0, 0, 0, 1, 0)).startswith("03"):
-    DAY_AT_PLACE, MONTH_AT_PLACE = 2, 1
 
 # for FreeBSD users: if no i18n is whished, no gettext package will be
 # available and standard messages are displayed insted a try to use
@@ -52,8 +47,6 @@ try:
     gettext.install("gbirthday")
 except ImportError:
     _ = lambda x: x
-
-CURRENT_DAY = time.strftime("%d", time.localtime(time.time()))
 
 IMAGES_LOCATION = os.path.join(os.path.dirname(__file__), 'pics')
 
@@ -86,13 +79,6 @@ def main():
     QtCore.QCoreApplication.setOrganizationName("GBirthday");
     QtCore.QCoreApplication.setApplicationName("gbirthday");
 
-    # check every 60 seconds for new day
-    # TODO: update until end of day according to current clock settings?
-    #       (might not the best idea if user changes current time)
-    # TODO: Use Qt something for this
-    #import gobject
-    #gobject.timeout_add(60000, main_window.check_new_day)
-    
     app = QtGui.QApplication([])
     # TODO: is this the right way?
     app.setQuitOnLastWindowClosed(False)

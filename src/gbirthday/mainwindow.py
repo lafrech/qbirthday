@@ -100,6 +100,14 @@ class MainWindow(QtGui.QMainWindow):
         # Status icon
         self.status_icon = StatusIcon(self, self.settings)
 
+        # Initialise current day
+        self.current_day = datetime.datetime.now().strftime("%d")
+
+        # Check every 60 seconds for new day
+        self.timer = QtCore.QTimer(self)
+        self.timer.timeout.connect(self.check_new_day)
+        self.timer.start(60 * 1000)
+    
         self.reload()
 
         # TODO: Catch mouse focus out and close window
@@ -158,9 +166,13 @@ class MainWindow(QtGui.QMainWindow):
                 self.birthdaysLayout.addWidget(birthday.label_age, row, 5)
 
     def check_new_day(self):
-        '''check for new birthday (check every 60 seconds)'''
-        global CURRENT_DAY # TODO: import from __init__ here, fails whyever
-        new_day = time.strftime("%d", time.localtime(time.time()))
-        if CURRENT_DAY != new_day:
-            CURRENT_DAY = new_day
+        '''Check for new day
+        
+           Should be called e.g. every 60 seconds to check if day has changed.
+        '''
+        
+        new_day = datetime.datetime.now().strftime("%d")
+        
+        if self.current_day != new_day:
+            self.current_day = new_day
             self.reload()
