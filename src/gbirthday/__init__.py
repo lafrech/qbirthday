@@ -64,7 +64,7 @@ UI_FILES_LOCATION = os.path.join(os.path.dirname(__file__), 'ui')
 
 def load_ui(ui_file, widget=None):
     '''Load UI file into widget and return widget
-    
+
        inputs:
        - ui file path relative to ui files directory
        - (optionnal) widget : if None, a new widget is created
@@ -80,10 +80,17 @@ def main():
     QtCore.QCoreApplication.setApplicationName("gbirthday");
 
     app = QtGui.QApplication([])
+    # TODO: is this the right place?
+    # "The doc (http://doc.qt.io/qt-4.8/qapplication.html) says:
+    # To ensure that the application's style is set correctly,
+    # it is best to call this function before the QApplication constructor,
+    # if possible."
+    # TODO: autoselect theme based on environment
+    app.setStyle("GTK+")
     # TODO: is this the right way?
     app.setQuitOnLastWindowClosed(False)
-    
-    # Main window
+
+    # Main window
     main_window = MainWindow()
 
     sys.exit(app.exec_())
