@@ -2,7 +2,7 @@ bindir = /usr/bin
 datadir = /usr/share
 sitelib = $(python -c "from distutils.sysconfig import get_python_lib; print get_python_lib(True)")
 pixmaps = $(datadir)/pixmaps
-version = 0.6.8
+version = 0.6.9
 DIST_DIR = dist
 
 install = install -p
