@@ -14,12 +14,12 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, see <http://www.gnu.org/licenses/>.
 #}}}
-'''StatusIcon module'''
+
 from PyQt4 import QtCore, QtGui
 
 from gbirthday import PICS_PATHS, load_ui
-from gbirthday import VERSION
 from .preferencesdialog import PreferencesDialog
+from .aboutdialog import AboutDialog
 
 class StatusIcon(QtGui.QSystemTrayIcon):
     '''Class to show status icon'''
@@ -41,7 +41,8 @@ class StatusIcon(QtGui.QSystemTrayIcon):
         menu.addAction("Add", self.add_single_manual)
         menu.addAction("Preferences", 
             lambda: PreferencesDialog(self.settings, self.main_window).exec_())
-        #menu.addAction("About", self.create_dialog)
+        menu.addAction("About", 
+            lambda: AboutDialog(self.main_window).exec_())
         menu.addAction("Quit", QtCore.QCoreApplication.instance().quit)
 
         # Set context menu to open on right click
@@ -102,62 +103,6 @@ class StatusIcon(QtGui.QSystemTrayIcon):
         except ImportError:
             pass
 
-    # TODO: about dialog
-#     def create_dialog(self):
-#         '''create about dialog'''
-#         QtGui.QMessageBox.about(self.app, 
-#                                 "About GBirthday",
-#                                 "GBirthday %s".format(VERSION))
-
-#         dlg = self.dlg
-#         dlg = gtk.AboutDialog()
-#         dlg.set_version(VERSION)
-#         dlg.set_comments(_('Birthday reminder'))
-#         dlg.set_name("GBirthday")
-#         image = gtk.gdk.pixbuf_new_from_file(IMAGESLOCATION + 'gbirthday.png')
-#         dlg.set_logo(image)
-#         dlg.set_icon_from_file(IMAGESLOCATION + 'birthday.png')
-#         dlg.set_copyright('Copyright \u00A9 2007 Alex Mallo, 2009 Andreas Bresser, 2009 Thomas Spura')
-#         dlg.set_license(
-# '''Licensed under the GNU General Public License Version 2
-# 
-# GBirthday is free software; you can redistribute it and\/or
-# modify it under the terms of the GNU General Public License
-# as published by the Free Software Foundation; either version 2
-# of the License, or (at your option) any later version.
-# 
-# GBirthday is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-# 
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
-# 02110-1301, USA.''')
-#         dlg.set_authors([
-#                 'Andreas Bresser <andreasbresser@gmail.com>',
-#                 'Stefan Jurco <stefan.jurco@gmail.com>',
-#                 'Alex Mallo <dernalis@gmail.com>',
-#                 'Thomas Spura <tomspur@fedoraproject.org>',
-#                 'Robert Wildburger <r.wildburger@gmx.at>',
-#                 'Jérôme Lafréchoux <jerome@jolimont.fr>'
-#                         ])
-#         dlg.set_artists(['Alex Mallo <dernalis@gmail.com>'])
-#         cred = _('translator-credit')
-#         if cred != 'translator-credit':
-#             dlg.set_translator_credits(cred)
-#         else:
-#             dlg.set_translator_credits(
-#                 _("There are no translations or the translator doesn't want to get credits for that."))
-#         dlg.set_website('http://gbirthday.sourceforge.net/')
-# 
-#         def close(w, res):
-#             if res == gtk.RESPONSE_CANCEL:
-#                 w.hide()
-#         dlg.connect('response', close)
-#         dlg.run()
-    
     # TODO: Make dedicated class for add birthdate widget
     def add_single_manual(self):
         '''Add birthday dialog'''
@@ -205,6 +150,3 @@ class StatusIcon(QtGui.QSystemTrayIcon):
         # If Cancel, just close dialog
         if add_widget.exec_():
             add_single_manual_apply_cb()
-
-# if __name__ == "__main__":
-#     _ = lambda x: x

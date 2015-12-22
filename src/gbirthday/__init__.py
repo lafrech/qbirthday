@@ -27,8 +27,6 @@ and relatively easy to extend for other data servers.
 ## pygtk-demo Status Icon: Nikos Kouremenos
 ## EvoBdayReminder.py: Axel Heim. http://www.axelheim.de/
 
-VERSION = "@VER@"
-
 from PyQt4 import QtCore, QtGui, uic
 
 import os
