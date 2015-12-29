@@ -1,6 +1,5 @@
 #!/usr/bin/python
 '''import main function from gbirthday and execute it'''
-from gbirthday import main
 try:
     from gbirthday import main
 except ImportError:
