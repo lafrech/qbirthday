@@ -78,6 +78,8 @@ def main():
     QtCore.QCoreApplication.setApplicationName("gbirthday");
 
     app = QtGui.QApplication([])
+    app.setWindowIcon(QtGui.QIcon(PICS_PATHS['gbirthday']))
+
     # TODO: is this the right way?
     app.setQuitOnLastWindowClosed(False)
     
