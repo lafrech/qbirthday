@@ -21,7 +21,6 @@ import datetime
 
 from gbirthday import PICS_PATHS, load_ui
 from .databases import DATABASES
-from .settings import Settings
 from .addressbook import AddressBook
 from .statusicon import StatusIcon
 
@@ -91,8 +90,8 @@ class MainWindow(QtGui.QMainWindow):
         self.databases = {}
         
         # Load settings
-        self.settings = Settings()
-        self.settings.load_defaults()
+        self.settings = QtCore.QSettings()
+        self.load_default_settings()
 
         # Address book
         self.addressbook = AddressBook(self, self.settings)
@@ -111,6 +110,30 @@ class MainWindow(QtGui.QMainWindow):
         self.reload()
 
         # TODO: Catch mouse focus out and close window
+
+    def load_default_settings(self):
+
+        # General settings
+        self.settings.setValue('firstday', self.settings.value('firstday', -2))
+        self.settings.setValue('lastday', self.settings.value('lastday', 30))
+        self.settings.setValue('notify_future_birthdays', 
+            self.settings.value('notify_future_birthdays', 0))
+        
+        # Database settings
+        for db in DATABASES:
+            
+            # Disable all DB by default
+            self.settings.setValue('{}/enabled'.format(db.__name__), 
+                self.settings.value('{}/enabled'.format(db.__name__), False))
+            
+            # Load DB specific default values
+            for key, val in db.DEFAULTS.items():
+                self.settings.setValue('{}/{}'.format(db.__name__, key),
+                    self.settings.value('{}/{}'.format(db.__name__, key), val))
+
+        # ICS export
+        self.settings.setValue('ics_export/enabled', 
+            self.settings.value('ics_export/enabled', False))        
 
     def showEvent(self, event):
         
