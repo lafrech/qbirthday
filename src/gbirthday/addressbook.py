@@ -25,9 +25,6 @@ class AddressBook(object):
         self.main_window = main_window
         self.settings = settings
         
-        self.firstday = settings.value('firstday', type=int)
-        self.lastday = settings.value('lastday', type=int)
-
         self.bdays = {}  # list of all birthdays. Format:
                     # {birthday: [Name1, Name2]}
                     # for example
@@ -64,9 +61,9 @@ class AddressBook(object):
     def bdays_in_period(self, firstDay=None, lastDay=None):
         '''returns True, if there is a birthday in specified period'''
         if not firstDay:
-            firstDay = self.firstday
+            firstDay = self.settings.value('firstday', type=int)
         if not lastDay:
-            lastDay = self.lastday
+            lastDay = self.settings.value('lastday', type=int)
         for day in range(firstDay, lastDay + 1):
             if day in self.bdays_dict:
                 return True
@@ -110,7 +107,8 @@ class AddressBook(object):
         self.bdays_dict = {}
 
         # iterate over specified period
-        for day_num in range(self.firstday, self.lastday + 1):
+        for day_num in range(self.settings.value('firstday', type=int),
+                             self.settings.value('lastday', type=int) + 1):
             day = now + datetime.timedelta(day_num)
 
             # For each (D-M-Y -> Name list)
