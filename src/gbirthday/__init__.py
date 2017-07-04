@@ -27,7 +27,7 @@ and relatively easy to extend for other data servers.
 ## pygtk-demo Status Icon: Nikos Kouremenos
 ## EvoBdayReminder.py: Axel Heim. http://www.axelheim.de/
 
-from PyQt4 import QtCore, QtGui, uic
+from PyQt5 import QtCore, QtGui, QtWidgets, uic
 
 import os
 import sys
@@ -77,7 +77,7 @@ def main():
     QtCore.QCoreApplication.setOrganizationName("GBirthday");
     QtCore.QCoreApplication.setApplicationName("gbirthday");
 
-    app = QtGui.QApplication([])
+    app = QtWidgets.QApplication([])
     app.setWindowIcon(QtGui.QIcon(PICS_PATHS['gbirthday']))
 
     # TODO: is this the right way?

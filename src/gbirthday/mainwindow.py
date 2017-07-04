@@ -15,7 +15,7 @@
 # along with this program; if not, see <http://www.gnu.org/licenses/>.
 #}}}
 
-from PyQt4 import QtCore, QtGui
+from PyQt5 import QtCore, QtGui, QtWidgets
 
 import datetime
 
@@ -30,12 +30,12 @@ class Birthday(QtCore.QObject):
 
         super().__init__()
 
-        label_image = QtGui.QLabel()
-        label_day = QtGui.QLabel(str(birthdate.day))
-        label_month = QtGui.QLabel(_(birthdate.strftime('%B')))
-        label_name = QtGui.QLabel(name)
-        label_when = QtGui.QLabel()
-        label_age = QtGui.QLabel(_('{} Years').format(
+        label_image = QtWidgets.QLabel()
+        label_day = QtWidgets.QLabel(str(birthdate.day))
+        label_month = QtWidgets.QLabel(_(birthdate.strftime('%B')))
+        label_name = QtWidgets.QLabel(name)
+        label_when = QtWidgets.QLabel()
+        label_age = QtWidgets.QLabel(_('{} Years').format(
             datetime.date.today().year - birthdate.year))
 
         self.labels = [
@@ -83,7 +83,7 @@ class Birthday(QtCore.QObject):
             else:
                 label_when.setText(_('%s Days') % delta_day)
 
-class MainWindow(QtGui.QMainWindow):
+class MainWindow(QtWidgets.QMainWindow):
 
     def __init__(self):
         

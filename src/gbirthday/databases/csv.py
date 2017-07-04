@@ -14,12 +14,12 @@
 # along with this program; if not, see <http://www.gnu.org/licenses/>.
 #}}}
 
-from PyQt4 import QtCore, QtGui
+from PyQt5 import QtCore, QtGui, QtWidgets
 
 from gbirthday import load_ui
 from gbirthday.databases import DataBase
 
-class CsvPreferencesDialog(QtGui.QDialog):
+class CsvPreferencesDialog(QtWidgets.QDialog):
     '''CSV backend settings dialog'''
 
     def __init__(self, settings, parent):
@@ -34,8 +34,8 @@ class CsvPreferencesDialog(QtGui.QDialog):
         
         self.filePathButton.clicked.connect(self.get_filepath)
 
-        self.buttonBox.button(QtGui.QDialogButtonBox.Apply).clicked.connect(self.save)
-        self.buttonBox.button(QtGui.QDialogButtonBox.Ok).clicked.connect(self.save)
+        self.buttonBox.button(QtWidgets.QDialogButtonBox.Apply).clicked.connect(self.save)
+        self.buttonBox.button(QtWidgets.QDialogButtonBox.Ok).clicked.connect(self.save)
 
         # TODO: disable OK and Apply if no path provided
 
@@ -43,9 +43,9 @@ class CsvPreferencesDialog(QtGui.QDialog):
         '''Get CSV file path'''
 
         self.filePathEdit.setText(
-            QtGui.QFileDialog.getOpenFileName(self, 
+            QtWidgets.QFileDialog.getOpenFileName(self, 
                 "Choose CSV file",
-                self.filePathEdit.text() or QtCore.QDir.homePath()))
+                self.filePathEdit.text() or QtCore.QDir.homePath()))[0]
 
     def save(self):
         '''Save CSV backend settings'''
@@ -87,10 +87,10 @@ class CSV(DataBase):
                             break
         except IOError as e:
             # Missing CSV file
-            QtGui.QMessageBox.warning(self.mainwindow, 
+            QtWidgets.QMessageBox.warning(self.mainwindow, 
                 QtCore.QCoreApplication.applicationName(),
                 'Missing CSV file: {}'.format(filepath),
-                QtGui.QMessageBox.Discard)
+                QtWidgets.QMessageBox.Discard)
 
     def add(self, name, birthday):
         '''add new person with birthday to end of csv-file'''
@@ -105,7 +105,7 @@ class CSV(DataBase):
             self.addressbook.add(name, birthday)
         except IOError as e:
             # Missing CSV file
-            QtGui.QMessageBox.warning(self.mainwindow, 
+            QtWidgets.QMessageBox.warning(self.mainwindow, 
                 QtCore.QCoreApplication.applicationName(),
                 _('Missing CSV file: {}').format(filepath),
-                QtGui.QMessageBox.Discard)
+                QtWidgets.QMessageBox.Discard)

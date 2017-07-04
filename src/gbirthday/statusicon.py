@@ -15,13 +15,13 @@
 # along with this program; if not, see <http://www.gnu.org/licenses/>.
 #}}}
 
-from PyQt4 import QtCore, QtGui
+from PyQt5 import QtCore, QtGui, QtWidgets
 
 from gbirthday import PICS_PATHS, load_ui
 from .preferencesdialog import PreferencesDialog
 from .aboutdialog import AboutDialog
 
-class StatusIcon(QtGui.QSystemTrayIcon):
+class StatusIcon(QtWidgets.QSystemTrayIcon):
     '''Class to show status icon'''
 
     def __init__(self, main_window, settings):
@@ -36,7 +36,7 @@ class StatusIcon(QtGui.QSystemTrayIcon):
         
         # TODO: add nice icons
         # TODO: Add action enabled only if at least one DB selected
-        menu = QtGui.QMenu()
+        menu = QtWidgets.QMenu()
         menu.addAction("Refresh", self.main_window.reload)
         menu.addAction("Add", self.add_single_manual)
         menu.addAction("Preferences", 
@@ -50,7 +50,7 @@ class StatusIcon(QtGui.QSystemTrayIcon):
 
         # Display birthdays on left click
         def tray_icon_activated_cb(reason):
-            if reason == QtGui.QSystemTrayIcon.Trigger:
+            if reason == QtWidgets.QSystemTrayIcon.Trigger:
                 # Toggle birthday window visibility
                 self.main_window.setVisible(not self.main_window.isVisible())
         self.activated.connect(tray_icon_activated_cb)
@@ -120,9 +120,9 @@ class StatusIcon(QtGui.QSystemTrayIcon):
             # TODO: check if text is not whitespace would be better
             cond = add_widget.nameEdit.text() != ''
             add_widget.buttonBox.button(
-                QtGui.QDialogButtonBox.Apply).setEnabled(cond)
+                QtWidgets.QDialogButtonBox.Apply).setEnabled(cond)
             add_widget.buttonBox.button(
-                QtGui.QDialogButtonBox.Ok).setEnabled(cond)
+                QtWidgets.QDialogButtonBox.Ok).setEnabled(cond)
         
         # Execute once to disable OK and Apply
         entry_modification_cb()
@@ -143,7 +143,7 @@ class StatusIcon(QtGui.QSystemTrayIcon):
 
         # TODO: If apply, add birthdate
         add_widget.buttonBox.button(
-            QtGui.QDialogButtonBox.Apply).clicked.connect(
+            QtWidgets.QDialogButtonBox.Apply).clicked.connect(
                 add_single_manual_apply_cb)
         
         # If OK, add birthdate and close dialog

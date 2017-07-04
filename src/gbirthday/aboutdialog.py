@@ -14,12 +14,12 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, see <http://www.gnu.org/licenses/>.
 #}}}
-from PyQt4 import QtGui
+from PyQt5 import QtGui, QtWidgets
 
 from gbirthday import PICS_PATHS, load_ui
 from gbirthday import __about__ as about
 
-class AboutDialog(QtGui.QDialog):
+class AboutDialog(QtWidgets.QDialog):
 
     def __init__(self, main_window):
 

@@ -14,12 +14,12 @@
 # along with this program; if not, see <http://www.gnu.org/licenses/>.
 #}}}
 
-from PyQt4 import QtCore, QtGui
+from PyQt5 import QtCore, QtGui, QtWidgets
 
 from gbirthday import load_ui
 from gbirthday.databases import DataBase
 
-class MySqlPreferencesDialog(QtGui.QDialog):
+class MySqlPreferencesDialog(QtWidgets.QDialog):
     '''MySQL backend settings dialog'''
 
     def __init__(self, settings, parent):
@@ -40,9 +40,9 @@ class MySqlPreferencesDialog(QtGui.QDialog):
         self.nameRowEdit.setText(self.settings.value('MySQL/namerow'))
         self.dateRowEdit.setText(self.settings.value('MySQL/daterow'))
         
-        self.buttonBox.button(QtGui.QDialogButtonBox.Apply).clicked.connect(
+        self.buttonBox.button(QtWidgets.QDialogButtonBox.Apply).clicked.connect(
             self.save)
-        self.buttonBox.button(QtGui.QDialogButtonBox.Ok).clicked.connect(
+        self.buttonBox.button(QtWidgets.QDialogButtonBox.Ok).clicked.connect(
             self.save)
 
         # TODO: disable OK and Apply if empty/invalid field
@@ -101,10 +101,10 @@ class MySQL(DataBase):
             import MySQLdb
         except ImportError:
             # Missing MySQLdb
-            QtGui.QMessageBox.warning(self.mainwindow, 
+            QtWidgets.QMessageBox.warning(self.mainwindow, 
                 QtCore.QCoreApplication.applicationName(),
                 _("Package {} is not installed.").format("MySQLdb"),
-                QtGui.QMessageBox.Discard)
+                QtWidgets.QMessageBox.Discard)
             return False
 
         try:
@@ -116,10 +116,10 @@ class MySQL(DataBase):
             self.cursor = self.conn.cursor()
         except Exception as msg:
             # Connexion error
-            QtGui.QMessageBox.warning(self.mainwindow, 
+            QtWidgets.QMessageBox.warning(self.mainwindow, 
                 QtCore.QCoreApplication.applicationName(),
                 _("Could not connect to MySQL server:\n{}").format(msg),
-                QtGui.QMessageBox.Discard)
+                QtWidgets.QMessageBox.Discard)
             return False
 
         return True
@@ -139,10 +139,10 @@ class MySQL(DataBase):
                 addressbook.add(row[0], str(row[1]))
         except Exception as msg:
             # Query error
-            QtGui.QMessageBox.warning(self.mainwindow, 
+            QtWidgets.QMessageBox.warning(self.mainwindow, 
                 QtCore.QCoreApplication.applicationName(),
                 _("Could not execute MySQL query '{}':\n{}").format(qry, msg),
-                QtGui.QMessageBox.Discard)
+                QtWidgets.QMessageBox.Discard)
         
         self.conn.close()
 
@@ -157,10 +157,10 @@ class MySQL(DataBase):
             self.cursor.execute(qry)
         except Exception as msg:
             # Query error
-            QtGui.QMessageBox.warning(self.mainwindow, 
+            QtWidgets.QMessageBox.warning(self.mainwindow, 
                 QtCore.QCoreApplication.applicationName(),
                 _("Could not execute {} query '{}':\n{}").format(
                     'MySQL', qry, msg),
-                QtGui.QMessageBox.Discard)
+                QtWidgets.QMessageBox.Discard)
         self.conn.close()
         self.addressbook.add(name, birthday)

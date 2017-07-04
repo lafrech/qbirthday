@@ -14,12 +14,12 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, see <http://www.gnu.org/licenses/>.
 #}}}
-from PyQt4 import QtCore, QtGui
+from PyQt5 import QtCore, QtGui, QtWidgets
 
 from gbirthday import load_ui
 from .databases import DATABASES
 
-class IcsExportPreferencesDialog(QtGui.QDialog):
+class IcsExportPreferencesDialog(QtWidgets.QDialog):
     '''ICS export settings dialog'''
 
     def __init__(self, settings, parent):
@@ -45,8 +45,8 @@ class IcsExportPreferencesDialog(QtGui.QDialog):
         
         self.filePathButton.clicked.connect(self.get_filepath)
         
-        self.buttonBox.button(QtGui.QDialogButtonBox.Apply).clicked.connect(self.save)
-        self.buttonBox.button(QtGui.QDialogButtonBox.Ok).clicked.connect(self.save)
+        self.buttonBox.button(QtWidgets.QDialogButtonBox.Apply).clicked.connect(self.save)
+        self.buttonBox.button(QtWidgets.QDialogButtonBox.Ok).clicked.connect(self.save)
 
         # TODO: disable OK and Apply if no path provided?
 
@@ -55,9 +55,9 @@ class IcsExportPreferencesDialog(QtGui.QDialog):
 
         # TODO: Qt5 introduces QStandardPaths. Use it as default.
         # TODO: use QFileDialog.getOpenFileName?
-        dialog = QtGui.QFileDialog(self)
+        dialog = QtWidgets.QFileDialog(self)
         dialog.setDirectory(self.filePathEdit.text() or QtCore.QDir.homePath())
-        dialog.setFileMode(QtGui.QFileDialog.AnyFile)
+        dialog.setFileMode(QtWidgets.QFileDialog.AnyFile)
         if dialog.exec_():
             self.filePathEdit.setText(dialog.selectedFiles()[0])
 
@@ -74,7 +74,7 @@ class IcsExportPreferencesDialog(QtGui.QDialog):
             self.customValarmTextEdit.toPlainText())
         self.settings.endGroup()
 
-class PreferencesDialog(QtGui.QDialog):
+class PreferencesDialog(QtWidgets.QDialog):
 
     def __init__(self, settings, main_window):
 
@@ -103,16 +103,16 @@ class PreferencesDialog(QtGui.QDialog):
         
         for db in DATABASES:
 
-            hbox = QtGui.QHBoxLayout()
+            hbox = QtWidgets.QHBoxLayout()
             self.databasesLayout.addLayout(hbox)
 
-            self.db_chkbx[db.__name__] = QtGui.QCheckBox(db.TITLE)
+            self.db_chkbx[db.__name__] = QtWidgets.QCheckBox(db.TITLE)
             db_used = self.settings.value(db.__name__ + '/enabled',
                                           type=bool)
             self.db_chkbx[db.__name__].setChecked(db_used)
             hbox.addWidget(self.db_chkbx[db.__name__])
             if db.CONFIG_DLG is not None:
-                button = QtGui.QPushButton(_('Preferences'))
+                button = QtWidgets.QPushButton(_('Preferences'))
                 button.setEnabled(db_used)
                 self.db_chkbx[db.__name__].stateChanged.connect(button.setEnabled)
                 button.clicked.connect(
@@ -121,8 +121,8 @@ class PreferencesDialog(QtGui.QDialog):
                     lambda ignore, dlg=db.CONFIG_DLG: dlg(self.settings, self).exec_())
                 hbox.addWidget(button)
 
-        self.buttonBox.button(QtGui.QDialogButtonBox.Apply).clicked.connect(self.save)
-        self.buttonBox.button(QtGui.QDialogButtonBox.Ok).clicked.connect(self.save)
+        self.buttonBox.button(QtWidgets.QDialogButtonBox.Apply).clicked.connect(self.save)
+        self.buttonBox.button(QtWidgets.QDialogButtonBox.Ok).clicked.connect(self.save)
 
     def save(self):
 
