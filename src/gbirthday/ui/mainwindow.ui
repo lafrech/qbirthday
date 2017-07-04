@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>106</width>
-    <height>66</height>
+    <width>110</width>
+    <height>69</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -23,12 +23,6 @@
    <layout class="QVBoxLayout" name="verticalLayout_2">
     <item>
      <widget class="QFrame" name="frame">
-      <property name="frameShape">
-       <enum>QFrame::Box</enum>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Sunken</enum>
-      </property>
       <layout class="QVBoxLayout" name="verticalLayout_3">
        <item>
         <widget class="QLabel" name="titleLabel">
