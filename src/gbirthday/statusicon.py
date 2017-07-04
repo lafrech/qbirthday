@@ -35,18 +35,28 @@ class StatusIcon(QtWidgets.QSystemTrayIcon):
         self.main_window = main_window
         self.settings = settings
 
-        # TODO: add nice icons
         # TODO: Add action enabled only if at least one DB selected
         menu = QtWidgets.QMenu()
-        menu.addAction("Refresh", self.main_window.reload)
-        menu.addAction("Add", self.add_single_manual)
         menu.addAction(
+            QtGui.QIcon.fromTheme("view-refresh"),
+            "Refresh",
+            self.main_window.reload)
+        menu.addAction(
+            QtGui.QIcon.fromTheme("list-add"),
+            "Add",
+            self.add_single_manual)
+        menu.addAction(
+            QtGui.QIcon.fromTheme("preferences-other"),
             "Preferences",
             lambda: PreferencesDialog(self.settings, self.main_window).exec_())
         menu.addAction(
+            QtGui.QIcon.fromTheme("help-about"),
             "About",
             lambda: AboutDialog(self.main_window).exec_())
-        menu.addAction("Quit", QtCore.QCoreApplication.instance().quit)
+        menu.addAction(
+            QtGui.QIcon.fromTheme("application-exit"),
+            "Quit",
+            QtCore.QCoreApplication.instance().quit)
 
         # Set context menu to open on right click
         self.setContextMenu(menu)
