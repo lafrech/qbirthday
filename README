@@ -1,4 +1,5 @@
-Required packages for proper working:
-(when imported, exceptions won't always be caugth in a try-except)
+Runs on Python 3
 
-gnome-python2-gnome, MySQLdb, pygtk, gtk, configparser
+Depends on PyQt5
+
+Optionally depends on MySQLdb or sqlite3
