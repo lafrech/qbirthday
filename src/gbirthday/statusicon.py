@@ -21,27 +21,30 @@ from gbirthday import PICS_PATHS, load_ui
 from .preferencesdialog import PreferencesDialog
 from .aboutdialog import AboutDialog
 
+
 class StatusIcon(QtWidgets.QSystemTrayIcon):
     '''Class to show status icon'''
 
     def __init__(self, main_window, settings):
         '''create status icon'''
-        
+
         # TODO: enlarge icon to best fit
         super().__init__(QtGui.QIcon(PICS_PATHS['birthday']),
                          main_window)
 
         self.main_window = main_window
         self.settings = settings
-        
+
         # TODO: add nice icons
         # TODO: Add action enabled only if at least one DB selected
         menu = QtWidgets.QMenu()
         menu.addAction("Refresh", self.main_window.reload)
         menu.addAction("Add", self.add_single_manual)
-        menu.addAction("Preferences", 
+        menu.addAction(
+            "Preferences",
             lambda: PreferencesDialog(self.settings, self.main_window).exec_())
-        menu.addAction("About", 
+        menu.addAction(
+            "About",
             lambda: AboutDialog(self.main_window).exec_())
         menu.addAction("Quit", QtCore.QCoreApplication.instance().quit)
 
@@ -54,7 +57,7 @@ class StatusIcon(QtWidgets.QSystemTrayIcon):
                 # Toggle birthday window visibility
                 self.main_window.setVisible(not self.main_window.isVisible())
         self.activated.connect(tray_icon_activated_cb)
-        
+
         def on_url(dialog, link):
             '''start default browser with gbirthday-website on click'''
             import webbrowser
@@ -114,7 +117,7 @@ class StatusIcon(QtWidgets.QSystemTrayIcon):
         for db in self.main_window.databases.values():
             if db.CAN_SAVE:
                 add_widget.saveComboBox.addItem(db.TITLE)
-        
+
         # Apply and OK enabled only if name not empty 
         def entry_modification_cb():
             # TODO: check if text is not whitespace would be better
@@ -123,7 +126,7 @@ class StatusIcon(QtWidgets.QSystemTrayIcon):
                 QtWidgets.QDialogButtonBox.Apply).setEnabled(cond)
             add_widget.buttonBox.button(
                 QtWidgets.QDialogButtonBox.Ok).setEnabled(cond)
-        
+
         # Execute once to disable OK and Apply
         entry_modification_cb()
         # Connect signal to check at each text modification
@@ -145,7 +148,7 @@ class StatusIcon(QtWidgets.QSystemTrayIcon):
         add_widget.buttonBox.button(
             QtWidgets.QDialogButtonBox.Apply).clicked.connect(
                 add_single_manual_apply_cb)
-        
+
         # If OK, add birthdate and close dialog
         # If Cancel, just close dialog
         if add_widget.exec_():

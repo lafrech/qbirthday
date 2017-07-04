@@ -13,18 +13,21 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, see <http://www.gnu.org/licenses/>.
 #}}}
+
 '''AddressBook module'''
+
 import datetime
 from textwrap import dedent
 
+
 class AddressBook(object):
     '''AdressBook that saves birthday and names'''
-    
+
     def __init__(self, main_window, settings):
-        
+
         self.main_window = main_window
         self.settings = settings
-        
+
         self.bdays = {}  # list of all birthdays. Format:
                     # {birthday: [Name1, Name2]}
                     # for example
@@ -46,14 +49,14 @@ class AddressBook(object):
                 birthday = datetime.date(*[int(b) for b in birthday.split('-')])
             else:
                 # if birthday is in format YYYYMMDD
-                birthday = datetime.date(int(birthday[:4]), 
-                                         int(birthday[4:6]), 
+                birthday = datetime.date(int(birthday[:4]),
+                                         int(birthday[4:6]),
                                          int(birthday[-2:]))
-                
+
         if birthday in self.bdays:
             # check for double entry - we assume that people with the same name
             # and the same birthday exists only once in our universe
-            if not (name in self.bdays[birthday]):
+            if not name in self.bdays[birthday]:
                 self.bdays[birthday].append(name)
         else:
             self.bdays[birthday] = [name]
@@ -90,7 +93,7 @@ class AddressBook(object):
 
         # delete bdays dict and reload again
         self.bdays = {}
-        
+
         for name, db in self.main_window.databases.items():
             db.parse()
 
@@ -139,7 +142,7 @@ class AddressBook(object):
             'alarm_custom_properties')
         self.settings.endGroup()
 
-        with open(conf_filepath,'w') as f:
+        with open(conf_filepath, 'w') as f:
             f.write(dedent("""\
                 BEGIN:VCALENDAR
                 VERSION:2.0
@@ -150,8 +153,8 @@ class AddressBook(object):
             now = str(now)[0:4] + str(now)[5:7] + str(now)[8:10] + 'T' \
                 + str(now)[11:13] + str(now)[14:16] + str(now)[17:19] + 'Z'
 
-            for bd in self.bdays:
-                bdate = str(bd)[0:4] + str(bd)[5:7] + str(bd)[8:10]
+            for bday in self.bdays:
+                bdate = str(bday)[0:4] + str(bday)[5:7] + str(bday)[8:10]
 
                 f.write('BEGIN:VEVENT\n')
                 f.write('UID:' + now + '-' + str(index) + '@gbirthday' + '\n')
@@ -161,7 +164,7 @@ class AddressBook(object):
                 f.write('DTSTART:' + bdate + '\n')
                 f.write('DURATION:PT0S\n')
                 f.write('CATEGORIES:' + _("Birthday") + '\n')
-                f.write('SUMMARY:' + _("Birthday: ") + self.bdays[bd][0] + '\n')
+                f.write('SUMMARY:' + _("Birthday: ") + self.bdays[bday][0] + '\n')
                 f.write(dedent("""\
                     CLASS:PRIVATE
                     TRANSP:TRANSPARENT
@@ -173,7 +176,7 @@ class AddressBook(object):
                     f.write('TRIGGER;VALUE=DURATION:-P' \
                         + conf_alarm_days + 'D\n')
                     f.write('DESCRIPTION:' + _("Birthday: ") \
-                        + self.bdays[bd][0] + '\n')
+                        + self.bdays[bday][0] + '\n')
                     if conf_alarm_custom_properties != '':
                         f.write(conf_alarm_custom_properties + '\n')
                     f.write("END:VALARM\n")
@@ -181,7 +184,6 @@ class AddressBook(object):
                     f.write(conf_custom_properties + '\n')
                 f.write("END:VEVENT\n")
 
-                index+=1;
+                index += 1
 
             f.write("END:VCALENDAR")
-

@@ -13,8 +13,15 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, see <http://www.gnu.org/licenses/>.
 #}}}
+
 import os
+import time
+import uuid
+import configparser
+import datetime
+
 from gbirthday.databases import DataBase
+
 
 class Lightning(DataBase):
     '''Thunderbird/Lightning implementation'''
@@ -26,29 +33,30 @@ class Lightning(DataBase):
 
         super().__init__(mainwindow)
 
-        self.THUNDERBIRD_LOCATION = os.path.join(os.environ['HOME'],
-            '.mozilla-thunderbird')
+        self.THUNDERBIRD_LOCATION = os.path.join(
+            os.environ['HOME'], '.mozilla-thunderbird')
         self.cursor = None
         self.conn = None
 
     def get_config_file(self, configfile):
-        import configparser
         profilefile = os.path.join(configfile, 'profiles.ini')
         if os.path.isfile(profilefile):
-            cp = configparser.ConfigParser()
-            cp.read(profilefile)
+            conf_pars = configparser.ConfigParser()
+            conf_pars.read(profilefile)
             profiles = {} # dict of founded profiles
             # get profiles from profiles.ini in thunderbird directory
-            for sec in cp.sections():
+            for sec in conf_pars.sections():
                 if sec.lower().startswith("profile"):
                     profiles[sec] = {}
-                    for opt in cp.options(sec):
-                        profiles[sec][opt.lower()] = cp.get(sec, opt)
+                    for opt in conf_pars.options(sec):
+                        profiles[sec][opt.lower()] = conf_pars.get(sec, opt)
             # get all data from profiles.ini
             for profile in profiles:
                 if profiles[profile]['isrelative']:
-                    profile_location = os.path.join(configfile,
-                                        profiles[profile]['path'])
+                    profile_location = os.path.join(
+                        configfile,
+                        profiles[profile]['path']
+                    )
                 else:
                     profile_location = profiles[profile]['path']
                 #look for calendar-data/local.sqlite first 
@@ -65,10 +73,12 @@ class Lightning(DataBase):
                     self.parse_birthday(location)
                     return
         # Missing profile file
-        QtGui.QMessageBox.warning(self.mainwindow, 
+        QtGui.QMessageBox.warning(
+            self.mainwindow,
             QtCore.QCoreApplication.applicationName(),
             _("Error reading profile file: {}").format(configfile),
-            QtGui.QMessageBox.Discard)
+            QtGui.QMessageBox.Discard
+        )
 
     def parse(self):
         '''open thunderbird sqlite-database'''
@@ -77,29 +87,32 @@ class Lightning(DataBase):
 
     def connect(self, filename):
         '''"connect" to sqlite3-database'''
-        
+
         # TODO: use with connect as... syntax
         try:
             import sqlite3
         except:
             # Missing package
-            QtGui.QMessageBox.warning(self.mainwindow, 
+            QtGui.QMessageBox.warning(
+                self.mainwindow,
                 QtCore.QCoreApplication.applicationName(),
                 _("Package {} is not installed.").format("SQLite3"),
-                QtGui.QMessageBox.Discard)
-        
+                QtGui.QMessageBox.Discard
+            )
+
         try:
             self.conn = sqlite3.connect(filename)
             self.cursor = self.conn.cursor()
         except Exception as msg:
             # Connexion error
-            QtGui.QMessageBox.warning(self.mainwindow, 
+            QtGui.QMessageBox.warning(
+                self.mainwindow,
                 QtCore.QCoreApplication.applicationName(),
                 _("sqlite3 could not connect: {}").format(str(msg)),
-                QtGui.QMessageBox.Discard)
+                QtGui.QMessageBox.Discard
+            )
 
     def parse_birthday(self, filename):
-        import datetime
         self.connect(filename)
         qry = '''SELECT title, event_start FROM cal_events ce
               INNER JOIN cal_properties cp
@@ -113,7 +126,6 @@ class Lightning(DataBase):
             self.addressbook.add(row[0], str(bday).split(' ')[0])
 
     def add(self, name, birthday):
-        import time, uuid
         # create new uuid
         event_date = int(birthday.strftime("%s"))
         event_start = (event_date + 86400) * 1000000
@@ -133,8 +145,10 @@ class Lightning(DataBase):
                 event_start, event_start_tz, event_end, event_end_tz)
                 VALUES
                 ('%s', '%s', '%s', '%s', '%s', 28, '%s', 'floating', '%s',
-                 'floating'); ''' % (calender_id, uid, create_time,
-                              create_time, name, event_start, event_end)
+                 'floating'); ''' % (
+                     calender_id, uid, create_time,
+                     create_time, name, event_start, event_end)
+
             self.cursor.execute(qry)
 
             qry = '''INSERT INTO cal_properties
@@ -162,9 +176,11 @@ class Lightning(DataBase):
             self.conn.commit()
         except Exception as msg:
             # Query error
-            QtGui.QMessageBox.warning(self.mainwindow,
+            QtGui.QMessageBox.warning(
+                self.mainwindow,
                 QtCore.QCoreApplication.applicationName(),
                 _("Could not execute {} query '{}':\n{}").format(
                     'SQLite', qry, msg),
-                QtGui.QMessageBox.Discard)
+                QtGui.QMessageBox.Discard
+            )
         self.addressbook.add(name, str(birthday))

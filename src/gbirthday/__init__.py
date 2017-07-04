@@ -27,14 +27,14 @@ and relatively easy to extend for other data servers.
 ## pygtk-demo Status Icon: Nikos Kouremenos
 ## EvoBdayReminder.py: Axel Heim. http://www.axelheim.de/
 
-from PyQt5 import QtCore, QtGui, QtWidgets, uic
-
 import os
 import sys
+import locale
+
+from PyQt5 import QtCore, QtGui, QtWidgets, uic
 
 # parse locales from python module
 # Do you say "1. January" or "January 1."?
-import locale
 locale.setlocale(locale.LC_ALL, '')
 
 # for FreeBSD users: if no i18n is whished, no gettext package will be
@@ -62,7 +62,7 @@ UI_FILES_LOCATION = os.path.join(os.path.dirname(__file__), 'ui')
 
 def load_ui(ui_file, widget=None):
     '''Load UI file into widget and return widget
-    
+
        inputs:
        - ui file path relative to ui files directory
        - (optionnal) widget : if None, a new widget is created
@@ -74,17 +74,17 @@ def main():
     from .mainwindow import MainWindow
 
     # TODO: Think twice about naming before releasing
-    QtCore.QCoreApplication.setOrganizationName("GBirthday");
-    QtCore.QCoreApplication.setApplicationName("gbirthday");
+    QtCore.QCoreApplication.setOrganizationName("GBirthday")
+    QtCore.QCoreApplication.setApplicationName("gbirthday")
 
     app = QtWidgets.QApplication([])
     app.setWindowIcon(QtGui.QIcon(PICS_PATHS['gbirthday']))
 
     # TODO: is this the right way?
     app.setQuitOnLastWindowClosed(False)
-    
+
     # Main window
-    main_window = MainWindow()
+    MainWindow()
 
     sys.exit(app.exec_())
 

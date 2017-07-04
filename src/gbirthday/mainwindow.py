@@ -15,14 +15,15 @@
 # along with this program; if not, see <http://www.gnu.org/licenses/>.
 #}}}
 
-from PyQt5 import QtCore, QtGui, QtWidgets
-
 import datetime
+
+from PyQt5 import QtCore, QtGui, QtWidgets
 
 from gbirthday import PICS_PATHS, load_ui
 from .databases import DATABASES
 from .addressbook import AddressBook
 from .statusicon import StatusIcon
+
 
 class Birthday(QtCore.QObject):
 
@@ -48,23 +49,18 @@ class Birthday(QtCore.QObject):
         ]
 
         label_day.setAlignment(QtCore.Qt.AlignRight |
-                                    QtCore.Qt.AlignVCenter)
+                               QtCore.Qt.AlignVCenter)
 
         # Birthday today
         if delta_day == 0:
-            
             label_image.setPixmap(QtGui.QPixmap(PICS_PATHS['birthdaytoday']))
-            
             label_when.setText(_('Today'))
-
             for label in self.labels:
                 label.setStyleSheet("QLabel { font: bold; }")
-        
+
         # Birthday in the past
         elif delta_day < 0:
-            
             label_image.setPixmap(QtGui.QPixmap(PICS_PATHS['birthdaylost']))
-            
             if delta_day == -1:
                 label_when.setText(_('Yesterday'))
             else:
@@ -72,12 +68,10 @@ class Birthday(QtCore.QObject):
 
             for label in self.labels:
                 label.setStyleSheet("QLabel { color : grey; }")
-        
+
         # Birthday in the future
         else:
-
             label_image.setPixmap(QtGui.QPixmap(PICS_PATHS['birthdaynext']))
-
             if delta_day == 1:
                 label_when.setText(_('Tomorrow'))
             else:
@@ -86,17 +80,16 @@ class Birthday(QtCore.QObject):
 class MainWindow(QtWidgets.QMainWindow):
 
     def __init__(self):
-        
+
         super().__init__()
-        
+
         self.setWindowFlags(QtCore.Qt.Tool |
                             QtCore.Qt.FramelessWindowHint |
                             QtCore.Qt.WindowStaysOnTopHint)  # ??
-        
-        load_ui('mainwindow.ui', self)
 
+        load_ui('mainwindow.ui', self)
         self.databases = {}
-        
+
         # Load settings
         self.settings = QtCore.QSettings()
         self.load_default_settings()
@@ -114,7 +107,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.timer = QtCore.QTimer(self)
         self.timer.timeout.connect(self.check_new_day)
         self.timer.start(60 * 1000)
-    
+
         self.reload()
 
         # TODO: Catch mouse focus out and close window
@@ -124,29 +117,37 @@ class MainWindow(QtWidgets.QMainWindow):
         # General settings
         self.settings.setValue('firstday', self.settings.value('firstday', -2))
         self.settings.setValue('lastday', self.settings.value('lastday', 30))
-        self.settings.setValue('notify_future_birthdays', 
-            self.settings.value('notify_future_birthdays', 0))
-        
+        self.settings.setValue(
+            'notify_future_birthdays',
+            self.settings.value('notify_future_birthdays', 0)
+        )
+
         # Database settings
         for db in DATABASES:
-            
+
             # Disable all DB by default
-            self.settings.setValue('{}/enabled'.format(db.__name__), 
-                self.settings.value('{}/enabled'.format(db.__name__), False))
-            
+            self.settings.setValue(
+                '{}/enabled'.format(db.__name__),
+                self.settings.value('{}/enabled'.format(db.__name__), False)
+            )
+
             # Load DB specific default values
             for key, val in db.DEFAULTS.items():
-                self.settings.setValue('{}/{}'.format(db.__name__, key),
-                    self.settings.value('{}/{}'.format(db.__name__, key), val))
+                self.settings.setValue(
+                    '{}/{}'.format(db.__name__, key),
+                    self.settings.value('{}/{}'.format(db.__name__, key), val)
+                )
 
         # ICS export
-        self.settings.setValue('ics_export/enabled', 
-            self.settings.value('ics_export/enabled', False))        
+        self.settings.setValue(
+            'ics_export/enabled',
+            self.settings.value('ics_export/enabled', False)
+        )
 
     def showEvent(self, event):
-        
+
         super().showEvent(event)
-        
+
         # Window shall appear under mouse cursor
         self.move(QtGui.QCursor.pos() - QtCore.QPoint(self.width() / 2, 0))
 
@@ -161,7 +162,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         # Reload address book
         self.addressbook.reload()
-        
+
         # Reload status icon
         self.status_icon.reload_set_icon()
 
@@ -177,7 +178,7 @@ class MainWindow(QtWidgets.QMainWindow):
             widget = self.birthdaysLayout.itemAt(i).widget()
             self.birthdaysLayout.removeWidget(widget)
             widget.setParent(None)
-        
+
         # Add birthdays
         firstday = self.settings.value('firstday', type=int)
         lastday = self.settings.value('lastday', type=int)
@@ -194,12 +195,10 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def check_new_day(self):
         '''Check for new day
-        
+
            Should be called e.g. every 60 seconds to check if day has changed.
         '''
-        
         new_day = datetime.datetime.now().strftime("%d")
-        
         if self.current_day != new_day:
             self.current_day = new_day
             self.reload()

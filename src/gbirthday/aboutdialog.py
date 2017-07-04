@@ -1,4 +1,3 @@
-# -*- coding: UTF-8 -*-
 # vim: foldmethod=marker
 #{{{ License header: GPLv2+
 # This program is free software; you can redistribute it and/or modify
@@ -19,6 +18,7 @@ from PyQt5 import QtGui, QtWidgets
 from gbirthday import PICS_PATHS, load_ui
 from gbirthday import __about__ as about
 
+
 class AboutDialog(QtWidgets.QDialog):
 
     def __init__(self, main_window):
@@ -37,20 +37,20 @@ class AboutDialog(QtWidgets.QDialog):
             "Copyright © {}".format(about.__copyright__))
         self.uriLabel.setText(
             "<a href={uri}>{uri}</a>".format(uri=about.__uri__))
-        
+
         # Authors
         self.authorsTextEdit.insertPlainText(about.__authors__)
-        
+
         # Translators
         translators = _('translator-credit')
         if translators == 'translator-credit':
             translators = _("There are no translations or the translator "
                      "doesn't want to get credits for that.")
         self.translatorsTextEdit.insertPlainText(translators)
-        
+
         # Artists
         self.artistsTextEdit.insertPlainText(about.__artists__)
-        
+
         # License
         self.licenseTextEdit.insertPlainText(about.__license_long__)
         self.licenseTextEdit.moveCursor(QtGui.QTextCursor.Start)

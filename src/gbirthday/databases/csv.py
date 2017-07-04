@@ -14,43 +14,41 @@
 # along with this program; if not, see <http://www.gnu.org/licenses/>.
 #}}}
 
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5 import QtCore, QtWidgets
 
 from gbirthday import load_ui
 from gbirthday.databases import DataBase
+
 
 class CsvPreferencesDialog(QtWidgets.QDialog):
     '''CSV backend settings dialog'''
 
     def __init__(self, settings, parent):
-
         super().__init__(parent)
-
         load_ui('csvpreferencesdialog.ui', self)
-
         self.settings = settings
-
         self.filePathEdit.setText(self.settings.value('CSV/filepath'))
-        
         self.filePathButton.clicked.connect(self.get_filepath)
-
-        self.buttonBox.button(QtWidgets.QDialogButtonBox.Apply).clicked.connect(self.save)
-        self.buttonBox.button(QtWidgets.QDialogButtonBox.Ok).clicked.connect(self.save)
+        self.buttonBox.button(
+            QtWidgets.QDialogButtonBox.Apply).clicked.connect(self.save)
+        self.buttonBox.button(
+            QtWidgets.QDialogButtonBox.Ok).clicked.connect(self.save)
 
         # TODO: disable OK and Apply if no path provided
 
     def get_filepath(self):
         '''Get CSV file path'''
-
         self.filePathEdit.setText(
-            QtWidgets.QFileDialog.getOpenFileName(self, 
+            QtWidgets.QFileDialog.getOpenFileName(
+                self,
                 "Choose CSV file",
-                self.filePathEdit.text() or QtCore.QDir.homePath()))[0]
+                self.filePathEdit.text() or QtCore.QDir.homePath()
+            ))[0]
 
     def save(self):
         '''Save CSV backend settings'''
-        
         self.settings.setValue('CSV/filepath', self.filePathEdit.text())
+
 
 class CSV(DataBase):
     '''import from CSV-file'''
@@ -68,11 +66,11 @@ class CSV(DataBase):
         super().__init__(mainwindow)
 
         # Possible separators
-        self._separators = ['; ', ', ', ': '] 
+        self._separators = ['; ', ', ', ': ']
 
     def parse(self):
         '''open and parse file'''
-        
+
         filepath = self.settings.value('CSV/filepath')
 
         try:
@@ -87,7 +85,7 @@ class CSV(DataBase):
                             break
         except IOError as e:
             # Missing CSV file
-            QtWidgets.QMessageBox.warning(self.mainwindow, 
+            QtWidgets.QMessageBox.warning(self.mainwindow,
                 QtCore.QCoreApplication.applicationName(),
                 'Missing CSV file: {}'.format(filepath),
                 QtWidgets.QMessageBox.Discard)
@@ -105,7 +103,9 @@ class CSV(DataBase):
             self.addressbook.add(name, birthday)
         except IOError as e:
             # Missing CSV file
-            QtWidgets.QMessageBox.warning(self.mainwindow, 
+            QtWidgets.QMessageBox.warning(
+                self.mainwindow,
                 QtCore.QCoreApplication.applicationName(),
                 _('Missing CSV file: {}').format(filepath),
-                QtWidgets.QMessageBox.Discard)
+                QtWidgets.QMessageBox.Discard
+            )

@@ -1,4 +1,3 @@
-# -*- coding: UTF-8 -*-
 # vim: foldmethod=marker
 #{{{ License header: GPLv2+
 # This program is free software; you can redistribute it and/or modify
@@ -14,10 +13,12 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, see <http://www.gnu.org/licenses/>.
 #}}}
-from PyQt5 import QtCore, QtGui, QtWidgets
+
+from PyQt5 import QtCore, QtWidgets
 
 from gbirthday import load_ui
 from .databases import DATABASES
+
 
 class IcsExportPreferencesDialog(QtWidgets.QDialog):
     '''ICS export settings dialog'''
@@ -34,7 +35,7 @@ class IcsExportPreferencesDialog(QtWidgets.QDialog):
         self.filePathEdit.setText(self.settings.value('filepath'))
         self.alarmsCheckBox.setChecked(
             self.settings.value('alarm', False, type=bool))
-        # TODO: add default values?
+        # TODO: add default values?
         self.alarmsDelaySpinBox.setValue(
             self.settings.value('alarm_days', type=int))
         self.customVeventTextEdit.setPlainText(
@@ -42,9 +43,9 @@ class IcsExportPreferencesDialog(QtWidgets.QDialog):
         self.customValarmTextEdit.setPlainText(
             self.settings.value('alarm_custom_properties'))
         self.settings.endGroup()
-        
+
         self.filePathButton.clicked.connect(self.get_filepath)
-        
+
         self.buttonBox.button(QtWidgets.QDialogButtonBox.Apply).clicked.connect(self.save)
         self.buttonBox.button(QtWidgets.QDialogButtonBox.Ok).clicked.connect(self.save)
 
@@ -63,23 +64,24 @@ class IcsExportPreferencesDialog(QtWidgets.QDialog):
 
     def save(self):
         '''Save ICS export settings'''
-        
+
         self.settings.beginGroup('ics_export')
         self.settings.setValue('filepath', self.filePathEdit.text())
         self.settings.setValue('alarm', self.alarmsCheckBox.isChecked())
         self.settings.setValue('alarm_days', self.alarmsDelaySpinBox.value())
         self.settings.setValue('custom_properties',
-            self.customVeventTextEdit.toPlainText())
+                               self.customVeventTextEdit.toPlainText())
         self.settings.setValue('alarm_custom_properties',
-            self.customValarmTextEdit.toPlainText())
+                               self.customValarmTextEdit.toPlainText())
         self.settings.endGroup()
+
 
 class PreferencesDialog(QtWidgets.QDialog):
 
     def __init__(self, settings, main_window):
 
         super().__init__(main_window)
-        
+
         load_ui('preferencesdialog.ui', self)
 
         self.settings = settings
@@ -100,7 +102,7 @@ class PreferencesDialog(QtWidgets.QDialog):
             lambda: IcsExportPreferencesDialog(self.settings, self).exec_())
 
         self.db_chkbx = {}
-        
+
         for db in DATABASES:
 
             hbox = QtWidgets.QHBoxLayout()
@@ -128,18 +130,18 @@ class PreferencesDialog(QtWidgets.QDialog):
 
         # TODO: Check settings are correct before saving
         # Check activated db has all necessary parameters
-        
+
         # Save settings
         self.settings.setValue('firstday', self.pastSpinBox.value())
         self.settings.setValue('lastday', self.nextSpinBox.value())
         self.settings.setValue('notify_future_bdays',
-            self.notifyNextSpinBox.value())
+                               self.notifyNextSpinBox.value())
         self.settings.setValue('ics_export/enabled',
-            self.icsExportCheckBox.isChecked())
+                               self.icsExportCheckBox.isChecked())
 
         for db in DATABASES:
             self.settings.setValue(db.__name__ + '/enabled',
-                self.db_chkbx[db.__name__].isChecked())
+                                   self.db_chkbx[db.__name__].isChecked())
 
         # Refresh birthday list
         self.main_window.reload()

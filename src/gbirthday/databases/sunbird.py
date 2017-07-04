@@ -13,9 +13,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, see <http://www.gnu.org/licenses/>.
 #}}}
+
 import os
 
 from gbirthday.databases import Lightning
+
 
 class Sunbird(Lightning):
     '''Sunbird/Iceowl implementation (based on lightning)'''
@@ -27,22 +29,23 @@ class Sunbird(Lightning):
 
         super().__init__(mainwindow)
 
-        self.mozilla_location = os.path.join(os.environ['HOME'],
-                '.mozilla')
+        self.mozilla_location = os.path.join(os.environ['HOME'], '.mozilla')
 
     def parse(self):
         '''load file / open database connection'''
         sunbird = os.path.join(self.mozilla_location, 'sunbird')
         iceowl = os.path.join(self.mozilla_location, 'iceowl')
 
-        if (os.path.exists(sunbird)):
+        if os.path.exists(sunbird):
             # extract path from profiles.ini
             self.get_config_file(sunbird)
-        elif (os.path.exists(iceowl)):
+        elif os.path.exists(iceowl):
             self.get_config_file(iceowl)
         else:
             # Missing package
-            QtGui.QMessageBox.warning(self.mainwindow, 
+            QtGui.QMessageBox.warning(
+                self.mainwindow,
                 QtCore.QCoreApplication.applicationName(),
                 _("Neither iceowl nor sunbird is installed"),
-                QtGui.QMessageBox.Discard)
+                QtGui.QMessageBox.Discard
+            )
