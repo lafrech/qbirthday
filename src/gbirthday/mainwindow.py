@@ -1,4 +1,3 @@
-# -*- coding: UTF-8 -*-
 # vim: foldmethod=marker
 #{{{ License header: GPLv2+
 # This program is free software; you can redistribute it and/or modify
