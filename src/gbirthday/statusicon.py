@@ -62,7 +62,8 @@ class StatusIcon(QtWidgets.QSystemTrayIcon):
 
         # Display birthdays on left click
         def tray_icon_activated_cb(reason):
-            if reason == QtWidgets.QSystemTrayIcon.Trigger:
+            if (reason == QtWidgets.QSystemTrayIcon.Trigger or
+                    reason == QtWidgets.QSystemTrayIcon.DoubleClick):
                 # Toggle birthday window visibility
                 self.main_window.setVisible(not self.main_window.isVisible())
         self.activated.connect(tray_icon_activated_cb)
