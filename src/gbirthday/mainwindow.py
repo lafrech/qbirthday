@@ -150,6 +150,9 @@ class MainWindow(QtWidgets.QMainWindow):
         # Window shall appear under mouse cursor
         self.move(QtGui.QCursor.pos() - QtCore.QPoint(self.width() / 2, 0))
 
+        # Ensure the window is not minimized on virtual desktop change
+        self.showNormal()
+
     def reload(self):
         '''Reload data from databases'''
 
