@@ -68,11 +68,6 @@ class StatusIcon(QtWidgets.QSystemTrayIcon):
                 self.main_window.setVisible(not self.main_window.isVisible())
         self.activated.connect(tray_icon_activated_cb)
 
-        def on_url(dialog, link):
-            '''start default browser with gbirthday-website on click'''
-            import webbrowser
-            webbrowser.open(link)
-
         self.show()
 
     def reload_set_icon(self):
