@@ -34,12 +34,12 @@ class AboutDialog(QtWidgets.QDialog):
             "{} {}".format(about.__title__, about.__version__))
         self.descLabel.setText(_(about.__summary__))
         self.copyrightLabel.setText(
-            "Copyright © {}".format(about.__copyright__))
+            "Copyright ©\n{}".format('\n'.join(about.__copyright__)))
         self.uriLabel.setText(
             "<a href={uri}>{uri}</a>".format(uri=about.__uri__))
 
         # Authors
-        self.authorsTextEdit.insertPlainText(about.__authors__)
+        self.authorsTextEdit.insertPlainText('\n'.join(about.__authors__))
 
         # Translators
         translators = _('translator-credit')
