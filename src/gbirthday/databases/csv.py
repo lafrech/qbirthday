@@ -43,7 +43,7 @@ class CsvPreferencesDialog(QtWidgets.QDialog):
                 self,
                 "Choose CSV file",
                 self.filePathEdit.text() or QtCore.QDir.homePath()
-            ))[0]
+            )[0])
 
     def save(self):
         '''Save CSV backend settings'''
