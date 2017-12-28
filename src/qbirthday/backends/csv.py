@@ -20,7 +20,7 @@ class CSVPreferencesDialog(QtWidgets.QDialog):
         self.buttonBox.button(
             QtWidgets.QDialogButtonBox.Ok).clicked.connect(self.save)
 
-        # TODO: disable OK and Apply if no path provided
+        # TODO: disable OK and Apply if no path provided
 
     def get_filepath(self):
         '''Get CSV file path'''
@@ -61,8 +61,8 @@ class CSVBackend(BaseBackend):
         filepath = self.settings.value('CSV/filepath')
 
         try:
-            with open(filepath) as f:
-                for line in f:
+            with open(filepath) as csv_file:
+                for line in csv_file:
                     # check if any of the seperators are in the text
                     for sep in self._separators:
                         if len(line.split(sep)) > 1:
@@ -70,9 +70,10 @@ class CSVBackend(BaseBackend):
                             name = line.split(sep, 1)[1][:-1]
                             self.addressbook.add(name, date)
                             break
-        except IOError as e:
-            # Missing CSV file
-            QtWidgets.QMessageBox.warning(self.mainwindow,
+        except IOError:
+            # Missing CSV file
+            QtWidgets.QMessageBox.warning(
+                self.mainwindow,
                 QtCore.QCoreApplication.applicationName(),
                 'Missing CSV file: {}'.format(filepath),
                 QtWidgets.QMessageBox.Discard)
@@ -85,11 +86,11 @@ class CSVBackend(BaseBackend):
         filepath = self.settings.value('CSV/filepath')
 
         try:
-            with open(filepath, 'a') as f:
-                f.write(birthday + '; ' + name + '\n')
+            with open(filepath, 'a') as csv_file:
+                csv_file.write(birthday + '; ' + name + '\n')
             self.addressbook.add(name, birthday)
-        except IOError as e:
-            # Missing CSV file
+        except IOError:
+            # Missing CSV file
             QtWidgets.QMessageBox.warning(
                 self.mainwindow,
                 QtCore.QCoreApplication.applicationName(),

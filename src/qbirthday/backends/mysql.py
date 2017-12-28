@@ -32,7 +32,7 @@ class MySqlPreferencesDialog(QtWidgets.QDialog):
         self.buttonBox.button(
             QtWidgets.QDialogButtonBox.Ok).clicked.connect(self.save)
 
-        # TODO: disable OK and Apply if empty/invalid field
+        # TODO: disable OK and Apply if empty/invalid field
 
     def save(self):
         '''Save MySQL backend settings'''
@@ -85,11 +85,11 @@ class MySQLBackend(BaseBackend):
     def connect(self):
         '''establish connection'''
 
-        # TODO: use with connect as... syntax 
+        # TODO: use with connect as... syntax
         try:
             import MySQLdb
         except ImportError:
-            # Missing MySQLdb
+            # Missing MySQLdb
             QtWidgets.QMessageBox.warning(
                 self.mainwindow,
                 QtCore.QCoreApplication.applicationName(),
@@ -99,14 +99,15 @@ class MySQLBackend(BaseBackend):
             return False
 
         try:
-            self.conn = MySQLdb.connect(host=self.host,
-                                    port=int(self.port),
-                                    user=self.username,
-                                    passwd=self.password,
-                                    db=self.database)
+            self.conn = MySQLdb.connect(
+                host=self.host,
+                port=int(self.port),
+                user=self.username,
+                passwd=self.password,
+                db=self.database)
             self.cursor = self.conn.cursor()
         except Exception as msg:
-            # Connexion error
+            # Connexion error
             QtWidgets.QMessageBox.warning(
                 self.mainwindow,
                 QtCore.QCoreApplication.applicationName(),
@@ -125,13 +126,13 @@ class MySQLBackend(BaseBackend):
 
         try:
             qry = ("SELECT %s, %s FROM %s"
-                        % (self.name_row, self.date_row, self.table))
+                   % (self.name_row, self.date_row, self.table))
             self.cursor.execute(qry)
             rows = self.cursor.fetchall()
             for row in rows:
                 self.addressbook.add(row[0], str(row[1]))
         except Exception as msg:
-            # Query error
+            # Query error
             QtWidgets.QMessageBox.warning(
                 self.mainwindow,
                 QtCore.QCoreApplication.applicationName(),
@@ -147,11 +148,12 @@ class MySQLBackend(BaseBackend):
         if not self.connect():
             return
         try:
-            qry = ("INSERT INTO %s (%s, %s) VALUES ('%s', '%s')" %
+            qry = (
+                "INSERT INTO %s (%s, %s) VALUES ('%s', '%s')" %
                 (self.table, self.name_row, self.date_row, name, birthday))
             self.cursor.execute(qry)
         except Exception as msg:
-            # Query error
+            # Query error
             QtWidgets.QMessageBox.warning(
                 self.mainwindow,
                 QtCore.QCoreApplication.applicationName(),

@@ -22,7 +22,7 @@ class LightningBackend(BaseBackend):
 
         super().__init__(mainwindow)
 
-        self.THUNDERBIRD_LOCATION = os.path.join(
+        self.thunderbird_location = os.path.join(
             os.environ['HOME'], '.mozilla-thunderbird')
         self.cursor = None
         self.conn = None
@@ -32,7 +32,7 @@ class LightningBackend(BaseBackend):
         if os.path.isfile(profilefile):
             conf_pars = configparser.ConfigParser()
             conf_pars.read(profilefile)
-            profiles = {} # dict of founded profiles
+            profiles = {}  # dict of founded profiles
             # get profiles from profiles.ini in thunderbird directory
             for sec in conf_pars.sections():
                 if sec.lower().startswith("profile"):
@@ -48,9 +48,10 @@ class LightningBackend(BaseBackend):
                     )
                 else:
                     profile_location = profiles[profile]['path']
-                #look for calendar-data/local.sqlite first 
-                #(new in sunbird/lightning 1.0)
-                location = os.path.join(profile_location, 'calendar-data/local.sqlite')
+                # look for calendar-data/local.sqlite first
+                # (new in sunbird/lightning 1.0)
+                location = os.path.join(
+                    profile_location, 'calendar-data/local.sqlite')
                 print(location)
                 if os.path.exists(location):
                     self.parse_birthday(location)
@@ -61,7 +62,7 @@ class LightningBackend(BaseBackend):
                 if os.path.exists(location):
                     self.parse_birthday(location)
                     return
-        # Missing profile file
+        # Missing profile file
         QtWidgets.QMessageBox.warning(
             self.mainwindow,
             QtCore.QCoreApplication.applicationName(),
@@ -71,8 +72,8 @@ class LightningBackend(BaseBackend):
 
     def parse(self):
         '''open thunderbird sqlite-database'''
-        if (os.path.exists(self.THUNDERBIRD_LOCATION)):
-            self.get_config_file(self.THUNDERBIRD_LOCATION)
+        if os.path.exists(self.thunderbird_location):
+            self.get_config_file(self.thunderbird_location)
 
     def connect(self, filename):
         '''"connect" to sqlite3-database'''
@@ -80,7 +81,7 @@ class LightningBackend(BaseBackend):
         # TODO: use with connect as... syntax
         try:
             import sqlite3
-        except:
+        except ImportError:
             # Missing package
             QtWidgets.QMessageBox.warning(
                 self.mainwindow,
@@ -93,7 +94,7 @@ class LightningBackend(BaseBackend):
             self.conn = sqlite3.connect(filename)
             self.cursor = self.conn.cursor()
         except Exception as msg:
-            # Connexion error
+            # Connexion error
             QtWidgets.QMessageBox.warning(
                 self.mainwindow,
                 QtCore.QCoreApplication.applicationName(),
@@ -164,7 +165,7 @@ class LightningBackend(BaseBackend):
             self.cursor.execute(qry)
             self.conn.commit()
         except Exception as msg:
-            # Query error
+            # Query error
             QtWidgets.QMessageBox.warning(
                 self.mainwindow,
                 QtCore.QCoreApplication.applicationName(),

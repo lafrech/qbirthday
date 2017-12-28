@@ -11,15 +11,15 @@ class BaseBackend(abc.ABC):
     - override class attributes if needed
     """
 
-    # Backend name
+    # Backend name
     NAME = ''
-    # Backend name displayed to user
+    # Backend name displayed to user
     TITLE = ''
     # Whether backend can save new birthdays
     CAN_SAVE = False
-    # Configuration dialog
+    # Configuration dialog
     CONFIG_DLG = None
-    # Default configuration values
+    # Default configuration values
     DEFAULTS = {}
 
     def __init__(self, mainwindow):
