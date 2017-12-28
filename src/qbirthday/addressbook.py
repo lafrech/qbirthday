@@ -70,7 +70,7 @@ class AddressBook(object):
 
     def reload(self):
         '''
-        reload all bdays from all databases and update bdays,
+        reload all bdays from all backends and update bdays,
         all birthdays added with addressbook.add() are deleted after
         this
         '''
@@ -78,7 +78,7 @@ class AddressBook(object):
         # delete bdays dict and reload again
         self.bdays = {}
 
-        for name, db in self.main_window.databases.items():
+        for name, db in self.main_window.backends.items():
             db.parse()
 
         self.update()

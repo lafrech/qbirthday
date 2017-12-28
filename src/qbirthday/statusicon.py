@@ -114,9 +114,9 @@ class StatusIcon(QtWidgets.QSystemTrayIcon):
 
         add_widget = load_ui('add.ui')
 
-        # Fill database combobox
+        # Fill backend combobox
         # TODO: use index to allow DB name translation
-        for db in self.main_window.databases.values():
+        for db in self.main_window.backends.values():
             if db.CAN_SAVE:
                 add_widget.saveComboBox.addItem(db.TITLE)
 
@@ -136,7 +136,7 @@ class StatusIcon(QtWidgets.QSystemTrayIcon):
 
         def add_single_manual_apply_cb():
             '''Save new added person'''
-            for db in self.main_window.databases.values():
+            for db in self.main_window.backends.values():
                 if db.TITLE == add_widget.saveComboBox.currentText():
                     birthdate = add_widget.dateWidget.selectedDate().toPyDate()
                     # FIXME: ugly fix for #563405 adding to Lightning

@@ -8,12 +8,13 @@ import datetime
 
 from PyQt5 import QtCore, QtWidgets
 
-from qbirthday.databases import DataBase
+from .base import BaseBackend
 
 
-class Lightning(DataBase):
-    '''Thunderbird/Lightning implementation'''
+class LightningBackend(BaseBackend):
+    """Thunderbird/Lightning backend"""
 
+    NAME = 'Lightning'
     TITLE = 'Thunderbird/Icedove Lightning'
     CAN_SAVE = True
 

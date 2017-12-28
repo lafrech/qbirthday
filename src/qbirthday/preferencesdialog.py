@@ -3,7 +3,7 @@
 from PyQt5 import QtCore, QtWidgets
 
 from qbirthday import load_ui
-from .databases import DATABASES
+from .backends import BACKENDS
 
 
 class IcsExportPreferencesDialog(QtWidgets.QDialog):
@@ -87,35 +87,39 @@ class PreferencesDialog(QtWidgets.QDialog):
         self.icsExportButton.clicked.connect(
             lambda: IcsExportPreferencesDialog(self.settings, self).exec_())
 
-        self.db_chkbx = {}
+        self.bcknd_chkbx = {}
 
-        for db in DATABASES:
+        for bcknd in BACKENDS:
 
             hbox = QtWidgets.QHBoxLayout()
-            self.databasesLayout.addLayout(hbox)
+            self.backendsLayout.addLayout(hbox)
 
-            self.db_chkbx[db.__name__] = QtWidgets.QCheckBox(db.TITLE)
-            db_used = self.settings.value(db.__name__ + '/enabled',
+            self.bcknd_chkbx[bcknd.NAME] = QtWidgets.QCheckBox(bcknd.TITLE)
+            bcknd_used = self.settings.value(bcknd.NAME + '/enabled',
                                           type=bool)
-            self.db_chkbx[db.__name__].setChecked(db_used)
-            hbox.addWidget(self.db_chkbx[db.__name__])
-            if db.CONFIG_DLG is not None:
+            self.bcknd_chkbx[bcknd.NAME].setChecked(bcknd_used)
+            hbox.addWidget(self.bcknd_chkbx[bcknd.NAME])
+            if bcknd.CONFIG_DLG is not None:
                 button = QtWidgets.QPushButton(_('Preferences'))
-                button.setEnabled(db_used)
-                self.db_chkbx[db.__name__].stateChanged.connect(button.setEnabled)
+                button.setEnabled(bcknd_used)
+                self.bcknd_chkbx[bcknd.NAME].stateChanged.connect(
+                    button.setEnabled)
                 button.clicked.connect(
                     # http://stackoverflow.com/questions/2295290/
                     # http://stackoverflow.com/questions/18836291/
-                    lambda ignore, dlg=db.CONFIG_DLG: dlg(self.settings, self).exec_())
+                    lambda ignore, dlg=bcknd.CONFIG_DLG: dlg(
+                        self.settings, self).exec_())
                 hbox.addWidget(button)
 
-        self.buttonBox.button(QtWidgets.QDialogButtonBox.Apply).clicked.connect(self.save)
-        self.buttonBox.button(QtWidgets.QDialogButtonBox.Ok).clicked.connect(self.save)
+        self.buttonBox.button(
+            QtWidgets.QDialogButtonBox.Apply).clicked.connect(self.save)
+        self.buttonBox.button(
+            QtWidgets.QDialogButtonBox.Ok).clicked.connect(self.save)
 
     def save(self):
 
         # TODO: Check settings are correct before saving
-        # Check activated db has all necessary parameters
+        # Check activated backend has all necessary parameters
 
         # Save settings
         self.settings.setValue('firstday', self.pastSpinBox.value())
@@ -125,9 +129,9 @@ class PreferencesDialog(QtWidgets.QDialog):
         self.settings.setValue('ics_export/enabled',
                                self.icsExportCheckBox.isChecked())
 
-        for db in DATABASES:
-            self.settings.setValue(db.__name__ + '/enabled',
-                                   self.db_chkbx[db.__name__].isChecked())
+        for bcknd in BACKENDS:
+            self.settings.setValue(bcknd.NAME + '/enabled',
+                                   self.bcknd_chkbx[bcknd.NAME].isChecked())
 
         # Refresh birthday list
         self.main_window.reload()

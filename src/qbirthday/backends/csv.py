@@ -3,11 +3,11 @@
 from PyQt5 import QtCore, QtWidgets
 
 from qbirthday import load_ui
-from qbirthday.databases import DataBase
+from .base import BaseBackend
 
 
-class CsvPreferencesDialog(QtWidgets.QDialog):
-    '''CSV backend settings dialog'''
+class CSVPreferencesDialog(QtWidgets.QDialog):
+    """CSV backend settings dialog"""
 
     def __init__(self, settings, parent):
         super().__init__(parent)
@@ -36,12 +36,13 @@ class CsvPreferencesDialog(QtWidgets.QDialog):
         self.settings.setValue('CSV/filepath', self.filePathEdit.text())
 
 
-class CSV(DataBase):
-    '''import from CSV-file'''
+class CSVBackend(BaseBackend):
+    """CSV file backend"""
 
+    NAME = 'CSV'
     TITLE = 'CSV-file (comma seperated value)'
     CAN_SAVE = True
-    CONFIG_DLG = CsvPreferencesDialog
+    CONFIG_DLG = CSVPreferencesDialog
 
     DEFAULTS = {
         'filepath': '',

@@ -3,11 +3,11 @@
 from PyQt5 import QtCore, QtWidgets
 
 from qbirthday import load_ui
-from qbirthday.databases import DataBase
+from .base import BaseBackend
 
 
 class MySqlPreferencesDialog(QtWidgets.QDialog):
-    '''MySQL backend settings dialog'''
+    """MySQL backend settings dialog"""
 
     def __init__(self, settings, parent):
 
@@ -47,9 +47,10 @@ class MySqlPreferencesDialog(QtWidgets.QDialog):
         self.settings.setValue('MySQL/daterow', self.dateRowEdit.text())
 
 
-class MySQL(DataBase):
-    '''MySQL database import'''
+class MySQLBackend(BaseBackend):
+    """MySQL backend"""
 
+    NAME = 'MySQL'
     TITLE = 'MySQL'
     CAN_SAVE = True
     CONFIG_DLG = MySqlPreferencesDialog

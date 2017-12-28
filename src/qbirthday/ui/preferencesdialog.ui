@@ -88,14 +88,14 @@
       </layout>
      </item>
      <item row="4" column="0">
-      <widget class="QLabel" name="databasesLabel">
+      <widget class="QLabel" name="backendsLabel">
        <property name="text">
         <string>Databases</string>
        </property>
       </widget>
      </item>
      <item row="4" column="1">
-      <layout class="QVBoxLayout" name="databasesLayout"/>
+      <layout class="QVBoxLayout" name="backendsLayout"/>
      </item>
     </layout>
    </item>

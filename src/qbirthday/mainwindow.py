@@ -5,7 +5,7 @@ import datetime
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 from qbirthday import PICS_PATHS, load_ui
-from .databases import DATABASES
+from .backends import BACKENDS
 from .addressbook import AddressBook
 from .statusicon import StatusIcon
 
@@ -73,7 +73,7 @@ class MainWindow(QtWidgets.QMainWindow):
                             QtCore.Qt.WindowStaysOnTopHint)  # ??
 
         load_ui('mainwindow.ui', self)
-        self.databases = {}
+        self.backends = {}
 
         # Load settings
         self.settings = QtCore.QSettings()
@@ -107,20 +107,22 @@ class MainWindow(QtWidgets.QMainWindow):
             self.settings.value('notify_future_birthdays', 0)
         )
 
-        # Database settings
-        for db in DATABASES:
+        # Backend settings
+        for bcknd in BACKENDS:
 
             # Disable all DB by default
             self.settings.setValue(
-                '{}/enabled'.format(db.__name__),
-                self.settings.value('{}/enabled'.format(db.__name__), False)
+                '{}/enabled'.format(bcknd.NAME),
+                self.settings.value(
+                    '{}/enabled'.format(bcknd.NAME), False)
             )
 
             # Load DB specific default values
-            for key, val in db.DEFAULTS.items():
+            for key, val in bcknd.DEFAULTS.items():
                 self.settings.setValue(
-                    '{}/{}'.format(db.__name__, key),
-                    self.settings.value('{}/{}'.format(db.__name__, key), val)
+                    '{}/{}'.format(bcknd.NAME, key),
+                    self.settings.value(
+                        '{}/{}'.format(bcknd.NAME, key), val)
                 )
 
         # ICS export
@@ -142,13 +144,13 @@ class MainWindow(QtWidgets.QMainWindow):
         self.showNormal()
 
     def reload(self):
-        '''Reload data from databases'''
+        '''Reload data from backends'''
 
-        # Instantiate database backends
-        self.databases = {}
-        for db in DATABASES:
-            if self.settings.value(db.__name__ + '/enabled', type=bool):
-                self.databases[db.__name__] = db(self)
+        # Instantiate backends
+        self.backends = {}
+        for bcknd in BACKENDS:
+            if self.settings.value(bcknd.NAME + '/enabled', type=bool):
+                self.backends[bcknd.NAME] = bcknd(self)
 
         # Reload address book
         self.addressbook.reload()

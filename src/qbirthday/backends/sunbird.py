@@ -1,15 +1,16 @@
-"""Sunbird/Iceowl backend (based on lightning)"""
+"""Sunbird/Iceowl backend (based on Lightning)"""
 
 import os
 
 from PyQt5 import QtCore, QtWidgets
 
-from qbirthday.databases import Lightning
+from .lightning import LightningBackend
 
 
-class Sunbird(Lightning):
-    '''Sunbird/Iceowl implementation (based on lightning)'''
+class SunbirdBackend(LightningBackend):
+    """Sunbird/Iceowl backend (based on Lightning)"""
 
+    NAME = 'Sunbird'
     TITLE = 'Sunbird/Iceowl'
     CAN_SAVE = True
 
