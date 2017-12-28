@@ -15,8 +15,8 @@
 #}}}
 from PyQt5 import QtGui, QtWidgets
 
-from gbirthday import PICS_PATHS, load_ui
-from gbirthday import __about__ as about
+from qbirthday import PICS_PATHS, load_ui
+from qbirthday import __about__ as about
 
 
 class AboutDialog(QtWidgets.QDialog):
@@ -29,7 +29,7 @@ class AboutDialog(QtWidgets.QDialog):
 
         # About
         self.imageLabel.setPixmap(QtGui.QPixmap(
-            PICS_PATHS['gbirthday']))
+            PICS_PATHS['qbirthday']))
         self.nameLabel.setText(
             "{} {}".format(about.__title__, about.__version__))
         self.descLabel.setText(_(about.__summary__))

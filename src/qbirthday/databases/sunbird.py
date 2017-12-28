@@ -16,7 +16,7 @@
 
 import os
 
-from gbirthday.databases import Lightning
+from qbirthday.databases import Lightning
 
 
 class Sunbird(Lightning):

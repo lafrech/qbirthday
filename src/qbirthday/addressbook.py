@@ -146,7 +146,7 @@ class AddressBook(object):
             f.write(dedent("""\
                 BEGIN:VCALENDAR
                 VERSION:2.0
-                PRODID:-//gbirthday//EN
+                PRODID:-//qbirthday//EN
                 """))
 
             now = datetime.datetime.now()
@@ -157,7 +157,7 @@ class AddressBook(object):
                 bdate = str(bday)[0:4] + str(bday)[5:7] + str(bday)[8:10]
 
                 f.write('BEGIN:VEVENT\n')
-                f.write('UID:' + now + '-' + str(index) + '@gbirthday' + '\n')
+                f.write('UID:' + now + '-' + str(index) + '@qbirthday' + '\n')
                 f.write('CREATED:' + now + '\n')
                 f.write('LAST-MODIFIED:' + now + '\n')
                 f.write('DTSTAMP:' + now + '\n')

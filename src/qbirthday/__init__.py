@@ -13,7 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, see <http://www.gnu.org/licenses/>.
 #}}}
-'''GBirthday
+'''QBirthday
 
 A KBirthday clone working with different data servers:
  - CSV-file (comma-seperated value)
@@ -42,7 +42,7 @@ locale.setlocale(locale.LC_ALL, '')
 # translated strings
 try:
     import gettext
-    gettext.install("gbirthday")
+    gettext.install("qbirthday")
 except ImportError:
     _ = lambda x: x
 
@@ -54,7 +54,7 @@ PICS_PATHS = {
     'birthday': os.path.join(IMAGES_LOCATION, 'birthday.png'),
     'birthdayred': os.path.join(IMAGES_LOCATION, 'birthdayred.png'),
     'birthdaytoday': os.path.join(IMAGES_LOCATION, 'birthdaytoday.png'),
-    'gbirthday': os.path.join(IMAGES_LOCATION, 'gbirthday.png'),
+    'qbirthday': os.path.join(IMAGES_LOCATION, 'qbirthday.png'),
     'nobirthday': os.path.join(IMAGES_LOCATION, 'nobirthday.png'),
 }
 
@@ -74,11 +74,11 @@ def main():
     from .mainwindow import MainWindow
 
     # TODO: Think twice about naming before releasing
-    QtCore.QCoreApplication.setOrganizationName("GBirthday")
-    QtCore.QCoreApplication.setApplicationName("gbirthday")
+    QtCore.QCoreApplication.setOrganizationName("QBirthday")
+    QtCore.QCoreApplication.setApplicationName("qbirthday")
 
     app = QtWidgets.QApplication([])
-    app.setWindowIcon(QtGui.QIcon(PICS_PATHS['gbirthday']))
+    app.setWindowIcon(QtGui.QIcon(PICS_PATHS['qbirthday']))
 
     # TODO: is this the right way?
     app.setQuitOnLastWindowClosed(False)

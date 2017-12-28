@@ -1,12 +1,12 @@
 #!/usr/bin/python3
-'''import main function from gbirthday and execute it'''
+'''import main function from qbirthday and execute it'''
 try:
-    from gbirthday import main
+    from qbirthday import main
 except ImportError:
     # maybe it's installed in a private location
     import os, sys
-    usr_share_path = os.path.join('/', 'usr', 'share', 'gbirthday')
+    usr_share_path = os.path.join('/', 'usr', 'share', 'qbirthday')
     if os.path.exists(usr_share_path):
         sys.path.insert(0, usr_share_path)
-        from gbirthday import main
+        from qbirthday import main
 main()

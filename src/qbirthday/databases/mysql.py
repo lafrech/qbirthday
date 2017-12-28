@@ -16,8 +16,8 @@
 
 from PyQt5 import QtCore, QtWidgets
 
-from gbirthday import load_ui
-from gbirthday.databases import DataBase
+from qbirthday import load_ui
+from qbirthday.databases import DataBase
 
 
 class MySqlPreferencesDialog(QtWidgets.QDialog):

@@ -16,7 +16,7 @@
 
 from PyQt5 import QtCore, QtWidgets
 
-from gbirthday import load_ui
+from qbirthday import load_ui
 from .databases import DATABASES
 
 

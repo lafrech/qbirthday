@@ -16,7 +16,7 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-from gbirthday import PICS_PATHS, load_ui
+from qbirthday import PICS_PATHS, load_ui
 from .preferencesdialog import PreferencesDialog
 from .aboutdialog import AboutDialog
 
@@ -100,7 +100,7 @@ class StatusIcon(QtWidgets.QSystemTrayIcon):
         try:
             # TODO: import this on top of script?
             import pynotify
-            if pynotify.init("gbirthday"):
+            if pynotify.init("qbirthday"):
                 lastday = self.settings.value('lastday', type=int)
                 notify_future_bdays = self.settings.value(
                     'notify_future_bdays ', type=int)

@@ -20,7 +20,7 @@ import uuid
 import configparser
 import datetime
 
-from gbirthday.databases import DataBase
+from qbirthday.databases import DataBase
 
 
 class Lightning(DataBase):

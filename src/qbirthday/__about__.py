@@ -14,9 +14,9 @@
 # along with this program; if not, see <http://www.gnu.org/licenses/>.
 #}}}
 
-__title__ = "GBirthday"
+__title__ = "QBirthday"
 __summary__ = "Birthday reminder"
-__uri__ = "https://github.com/lafrech/gbirthday"
+__uri__ = "https://github.com/lafrech/qbirthday"
 
 __version__ = "0.6.8"
 
@@ -43,12 +43,12 @@ __copyright__ = (
 __license__ = "GNU General Public License Version 2"
 __license_long__ = """Licensed under the GNU General Public License Version 2
 
-GBirthday is free software; you can redistribute it and/or
+QBirthday is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
 as published by the Free Software Foundation; either version 2
 of the License, or (at your option) any later version.
 
-GBirthday is distributed in the hope that it will be useful,
+QBirthday is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.

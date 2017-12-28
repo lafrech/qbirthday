@@ -18,7 +18,7 @@ import datetime
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-from gbirthday import PICS_PATHS, load_ui
+from qbirthday import PICS_PATHS, load_ui
 from .databases import DATABASES
 from .addressbook import AddressBook
 from .statusicon import StatusIcon
