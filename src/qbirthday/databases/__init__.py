@@ -58,10 +58,7 @@ class DataBase(object):
     def save_config(self, conf):
         '''record current entries in config menu into configuration'''
         raise NotImplementedError
-    
-    def create_config(self, vbox, conf):
-        '''create additional pygtk config in config menu'''
-        raise NotImplementedError
+
 
 from .csv import CSV
 from .lightning import Lightning
