@@ -55,10 +55,6 @@ class DataBase(object):
         '''save new birthday to file/database (only if CAN_SAVE == true)'''
         raise NotImplementedError
 
-    def save_config(self, conf):
-        '''record current entries in config menu into configuration'''
-        raise NotImplementedError
-
 
 from .csv import CSV
 from .lightning import Lightning
