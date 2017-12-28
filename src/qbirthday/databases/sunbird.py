@@ -16,6 +16,8 @@
 
 import os
 
+from PyQt5 import QtCore, QtWidgets
+
 from qbirthday.databases import Lightning
 
 
@@ -43,9 +45,9 @@ class Sunbird(Lightning):
             self.get_config_file(iceowl)
         else:
             # Missing package
-            QtGui.QMessageBox.warning(
+            QtWidgets.QMessageBox.warning(
                 self.mainwindow,
                 QtCore.QCoreApplication.applicationName(),
                 _("Neither iceowl nor sunbird is installed"),
-                QtGui.QMessageBox.Discard
+                QtWidgets.QMessageBox.Discard
             )

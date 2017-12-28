@@ -20,6 +20,8 @@ import uuid
 import configparser
 import datetime
 
+from PyQt5 import QtCore, QtWidgets
+
 from qbirthday.databases import DataBase
 
 
@@ -73,11 +75,11 @@ class Lightning(DataBase):
                     self.parse_birthday(location)
                     return
         # Missing profile file
-        QtGui.QMessageBox.warning(
+        QtWidgets.QMessageBox.warning(
             self.mainwindow,
             QtCore.QCoreApplication.applicationName(),
             _("Error reading profile file: {}").format(configfile),
-            QtGui.QMessageBox.Discard
+            QtWidgets.QMessageBox.Discard
         )
 
     def parse(self):
@@ -93,11 +95,11 @@ class Lightning(DataBase):
             import sqlite3
         except:
             # Missing package
-            QtGui.QMessageBox.warning(
+            QtWidgets.QMessageBox.warning(
                 self.mainwindow,
                 QtCore.QCoreApplication.applicationName(),
                 _("Package {} is not installed.").format("SQLite3"),
-                QtGui.QMessageBox.Discard
+                QtWidgets.QMessageBox.Discard
             )
 
         try:
@@ -105,11 +107,11 @@ class Lightning(DataBase):
             self.cursor = self.conn.cursor()
         except Exception as msg:
             # Connexion error
-            QtGui.QMessageBox.warning(
+            QtWidgets.QMessageBox.warning(
                 self.mainwindow,
                 QtCore.QCoreApplication.applicationName(),
                 _("sqlite3 could not connect: {}").format(str(msg)),
-                QtGui.QMessageBox.Discard
+                QtWidgets.QMessageBox.Discard
             )
 
     def parse_birthday(self, filename):
@@ -176,11 +178,11 @@ class Lightning(DataBase):
             self.conn.commit()
         except Exception as msg:
             # Query error
-            QtGui.QMessageBox.warning(
+            QtWidgets.QMessageBox.warning(
                 self.mainwindow,
                 QtCore.QCoreApplication.applicationName(),
                 _("Could not execute {} query '{}':\n{}").format(
                     'SQLite', qry, msg),
-                QtGui.QMessageBox.Discard
+                QtWidgets.QMessageBox.Discard
             )
         self.addressbook.add(name, str(birthday))
