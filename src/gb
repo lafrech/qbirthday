@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 '''import main function from gbirthday and execute it'''
 try:
     from gbirthday import main

@@ -32,36 +32,40 @@ class DataBase(object):
      you have to add your Database to the databases-list
     '''
 
-    def __init__(self, title='Unknown', can_save=True, has_config=True):
-        # Title that will be displayed to the user
-        self.TITLE = title
-        # new entries can be saved
-        self.CAN_SAVE = can_save
-        # additional config options for database connection or fukebane(s)
-        self.HAS_CONFIG = has_config
+    # Database name displayed to user
+    TITLE = 'Unknown database'
+    # Whether database can save new birthdates
+    CAN_SAVE = True
+    # Configuration dialog
+    CONFIG_DLG = None
+    # Default configuration values
+    DEFAULTS = {}
 
-    def parse(self, addressbook, conf):
+    def __init__(self, mainwindow):
+
+        self.mainwindow = mainwindow
+        self.addressbook = mainwindow.addressbook
+        self.settings = mainwindow.settings
+
+    def parse(self):
         '''load file / open database connection'''
-        # XXX: set addressbook in __init__?
-        self.ab = addressbook
-        pass
+        raise NotImplementedError
 
     def add(self, name, birthday):
         '''save new birthday to file/database (only if CAN_SAVE == true)'''
-        pass
+        raise NotImplementedError
 
     def save_config(self, conf):
         '''record current entries in config menu into configuration'''
-        pass
+        raise NotImplementedError
     
     def create_config(self, vbox, conf):
         '''create additional pygtk config in config menu'''
-        pass
+        raise NotImplementedError
 
-from csv import CSV
-from lightning import Lightning
-from mysql import MySQL
-from sunbird import Sunbird
+from .csv import CSV
+from .lightning import Lightning
+from .mysql import MySQL
+from .sunbird import Sunbird
 
-mysql_db = MySQL()
-DATABASES = [CSV(), Lightning(), mysql_db, Sunbird()]
+DATABASES = [CSV, Lightning, MySQL, Sunbird]

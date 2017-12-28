@@ -13,33 +13,104 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, see <http://www.gnu.org/licenses/>.
 #}}}
-import gtk
+
+from PyQt5 import QtCore, QtWidgets
+
+from gbirthday import load_ui
 from gbirthday.databases import DataBase
-from gbirthday.gtk_funcs import show_error_msg
+
+
+class MySqlPreferencesDialog(QtWidgets.QDialog):
+    '''MySQL backend settings dialog'''
+
+    def __init__(self, settings, parent):
+
+        super().__init__(parent)
+
+        load_ui('mysqlpreferencesdialog.ui', self)
+
+        self.settings = settings
+
+        # Fill fields with current values
+        self.hostEdit.setText(self.settings.value('MySQL/host'))
+        self.portEdit.setText(self.settings.value('MySQL/port'))
+        self.usernameEdit.setText(self.settings.value('MySQL/username'))
+        self.passwordEdit.setText(self.settings.value('MySQL/password'))
+        self.databaseEdit.setText(self.settings.value('MySQL/database'))
+        self.tableEdit.setText(self.settings.value('MySQL/table'))
+        self.nameRowEdit.setText(self.settings.value('MySQL/namerow'))
+        self.dateRowEdit.setText(self.settings.value('MySQL/daterow'))
+
+        self.buttonBox.button(
+            QtWidgets.QDialogButtonBox.Apply).clicked.connect(self.save)
+        self.buttonBox.button(
+            QtWidgets.QDialogButtonBox.Ok).clicked.connect(self.save)
+
+        # TODO: disable OK and Apply if empty/invalid field
+
+    def save(self):
+        '''Save MySQL backend settings'''
+
+        self.settings.setValue('MySQL/host', self.hostEdit.text())
+        self.settings.setValue('MySQL/port', self.portEdit.text())
+        self.settings.setValue('MySQL/username', self.usernameEdit.text())
+        self.settings.setValue('MySQL/password', self.passwordEdit.text())
+        self.settings.setValue('MySQL/database', self.databaseEdit.text())
+        self.settings.setValue('MySQL/table', self.tableEdit.text())
+        self.settings.setValue('MySQL/namerow', self.nameRowEdit.text())
+        self.settings.setValue('MySQL/daterow', self.dateRowEdit.text())
+
 
 class MySQL(DataBase):
     '''MySQL database import'''
 
-    def __init__(self):
-        super(MySQL, self).__init__(title='MySQL')
-        self.host = 'localhost'
-        self.port = '3306'
-        self.username = ''
-        self.password = ''
-        self.database = ''
-        self.table = 'person'
-        self.name_row = 'name'
-        self.date_row = 'date'
-        self.ab = None
+    TITLE = 'MySQL'
+    CAN_SAVE = True
+    CONFIG_DLG = MySqlPreferencesDialog
+
+    DEFAULTS = {
+        'host': 'localhost',
+        'port': '3306',
+        'username': '',
+        'password': '',
+        'database': '',
+        'table': 'person',
+        'namerow': 'name',
+        'daterow': 'date',
+    }
+
+    def __init__(self, mainwindow):
+
+        super().__init__(mainwindow)
+
+        self.host = self.settings.value('MySQL/host')
+        self.port = self.settings.value('MySQL/port')
+        self.username = self.settings.value('MySQL/username')
+        self.password = self.settings.value('MySQL/password')
+        self.database = self.settings.value('MySQL/database')
+        self.table = self.settings.value('MySQL/table')
+        self.name_row = self.settings.value('MySQL/namerow')
+        self.date_row = self.settings.value('MySQL/daterow')
+
         self.cursor = None
         self.conn = None
 
     def connect(self):
         '''establish connection'''
+
+        # TODO: use with connect as... syntax 
         try:
             import MySQLdb
-        except:
-            show_error_msg(_("Package %s is not installed." % "MySQLdb"))
+        except ImportError:
+            # Missing MySQLdb
+            QtWidgets.QMessageBox.warning(
+                self.mainwindow,
+                QtCore.QCoreApplication.applicationName(),
+                _("Package {} is not installed.").format("MySQLdb"),
+                QtWidgets.QMessageBox.Discard
+            )
+            return False
+
         try:
             self.conn = MySQLdb.connect(host=self.host,
                                     port=int(self.port),
@@ -48,85 +119,58 @@ class MySQL(DataBase):
                                     db=self.database)
             self.cursor = self.conn.cursor()
         except Exception as msg:
-            show_error_msg(_('Could not connect to MySQL-Server')
-                            + str(msg))
+            # Connexion error
+            QtWidgets.QMessageBox.warning(
+                self.mainwindow,
+                QtCore.QCoreApplication.applicationName(),
+                _("Could not connect to MySQL server:\n{}").format(msg),
+                QtWidgets.QMessageBox.Discard
+            )
             return False
+
         return True
 
-    def parse(self, addressbook, conf):
+    def parse(self):
         '''connect to mysql-database and get data'''
-        # XXX: set addressbook in __init__?
-        self.ab = addressbook
+
         if not self.connect():
             return
+
         try:
             qry = ("SELECT %s, %s FROM %s"
                         % (self.name_row, self.date_row, self.table))
             self.cursor.execute(qry)
             rows = self.cursor.fetchall()
             for row in rows:
-                addressbook.add(row[0], str(row[1]))
+                self.addressbook.add(row[0], str(row[1]))
         except Exception as msg:
-            show_error_msg(_('Could not execute MySQL-query')
-                            + ': %s\n %s' % (qry, str(msg)))
+            # Query error
+            QtWidgets.QMessageBox.warning(
+                self.mainwindow,
+                QtCore.QCoreApplication.applicationName(),
+                _("Could not execute MySQL query '{}':\n{}").format(qry, msg),
+                QtWidgets.QMessageBox.Discard
+            )
+
         self.conn.close()
 
     def add(self, name, birthday):
         '''insert new Birthday to database'''
         birthday = str(birthday)
-        self.connect()
+        if not self.connect():
+            return
         try:
             qry = ("INSERT INTO %s (%s, %s) VALUES ('%s', '%s')" %
                 (self.table, self.name_row, self.date_row, name, birthday))
             self.cursor.execute(qry)
         except Exception as msg:
-            show_error_msg(_('Could not execute MySQL-query')
-                            + ': %s\n %s' % (qry, str(msg)))
+            # Query error
+            QtWidgets.QMessageBox.warning(
+                self.mainwindow,
+                QtCore.QCoreApplication.applicationName(),
+                _("Could not execute {} query '{}':\n{}").format(
+                    'MySQL', qry, msg),
+                QtWidgets.QMessageBox.Discard
+            )
         self.conn.close()
-        self.ab.add(name, birthday)
-
-    def save_config(self, conf):
-        '''Save modifications'''
-        self.host = self.entries[0].get_text()
-        self.port = self.entries[1].get_text()
-        self.username = self.entries[2].get_text()
-        self.password = self.entries[3].get_text()
-        self.database = self.entries[4].get_text()
-        self.table = self.entries[5].get_text()
-        self.name_row = self.entries[6].get_text()
-        self.date_row = self.entries[7].get_text()
-        conf.MySQL = self
-
-
-    def create_config(self, vbox, conf):
-        '''create additional mysql config in config menu'''
-        
-        values = [
-                  ['Host', self.host],
-                  ['Port', self.port],
-                  ['Username', self.username],
-                  ['Password', self.password],
-                  ['Database', self.database],
-                  ['Table', self.table],
-                  ['Name row', self.name_row],
-                  ['Date row', self.date_row]
-                 ]
-        self.entries = []
-
-        sqltable = gtk.Table(len(values), 2, False)
-        sqltable.set_col_spacings(5)
-        for i, value in enumerate(values):
-            label = gtk.Label(value[0])
-            label.set_alignment(1, 0.5)
-            label.show()
-            sqltable.attach(label, 0, 1, i, i + 1)
-
-            entry = gtk.Entry()
-            entry.set_text(value[1])
-            entry.show()
-            self.entries.append(entry)
-            sqltable.attach(entry, 1, 2, i, i + 1)
-        
-        sqltable.show()
-        vbox.pack_start(sqltable, False, False, 0)
-
+        self.addressbook.add(name, birthday)
