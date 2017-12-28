@@ -1,5 +1,7 @@
 #!/usr/bin/python3
-'''import main function from qbirthday and execute it'''
+"""Launch qbirthday"""
+
+
 try:
     from qbirthday import main
 except ImportError:

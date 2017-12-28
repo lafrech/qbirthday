@@ -1,31 +1,12 @@
-# vim: foldmethod=marker
-#{{{ License header: GPLv2+
-# This program is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU Library General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, see <http://www.gnu.org/licenses/>.
-#}}}
-'''QBirthday
+"""QBirthday
 
-A KBirthday clone working with different data servers:
- - CSV-file (comma-seperated value)
- - MySQL
- - Thunderbird/Icedove Lightning
- - Sunbrid / IceOwl
+A KBirthday clone working with different backends
+and relatively easy to extend to use other backends.
 
-and relatively easy to extend for other data servers.
-'''
-### Original source from:
-## pygtk-demo Status Icon: Nikos Kouremenos
-## EvoBdayReminder.py: Axel Heim. http://www.axelheim.de/
+Original source from:
+- pygtk-demo Status Icon: Nikos Kouremenos
+- EvoBdayReminder.py: Axel Heim. http://www.axelheim.de/
+"""
 
 import os
 import sys
