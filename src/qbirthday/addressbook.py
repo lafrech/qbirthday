@@ -118,12 +118,16 @@ class AddressBook(object):
         index = 0
 
         self.settings.beginGroup('ics_export')
-        conf_filepath = self.settings.value('filepath')
-        conf_alarm = self.settings.value('alarm')
-        conf_alarm_days = self.settings.value('alarm_days')
-        conf_custom_properties = self.settings.value('custom_properties')
+        conf_filepath = self.settings.value(
+            'filepath', type=str)
+        conf_alarm = self.settings.value(
+            'alarm', type=bool)
+        conf_alarm_days = self.settings.value(
+            'alarm_days', type=int)
+        conf_custom_properties = self.settings.value(
+            'custom_properties', type=str)
         conf_alarm_custom_properties = self.settings.value(
-            'alarm_custom_properties')
+            'alarm_custom_properties', type=str)
         self.settings.endGroup()
 
         with open(conf_filepath, 'w') as f:
@@ -158,7 +162,7 @@ class AddressBook(object):
                     f.write('BEGIN:VALARM\n')
                     f.write('ACTION:DISPLAY\n')
                     f.write('TRIGGER;VALUE=DURATION:-P' \
-                        + conf_alarm_days + 'D\n')
+                        + str(conf_alarm_days) + 'D\n')
                     f.write('DESCRIPTION:' + _("Birthday: ") \
                         + self.bdays[bday][0] + '\n')
                     if conf_alarm_custom_properties != '':

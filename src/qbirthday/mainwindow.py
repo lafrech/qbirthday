@@ -8,6 +8,7 @@ from qbirthday import PICS_PATHS, load_ui
 from .backends import BACKENDS
 from .addressbook import AddressBook
 from .statusicon import StatusIcon
+from .settings import Settings
 
 
 class Birthday(QtCore.QObject):
@@ -76,8 +77,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.backends = {}
 
         # Load settings
-        self.settings = QtCore.QSettings()
-        self.load_default_settings()
+        self.settings = Settings()
 
         # Address book
         self.addressbook = AddressBook(self, self.settings)
@@ -96,40 +96,6 @@ class MainWindow(QtWidgets.QMainWindow):
         self.reload()
 
         # TODO: Catch mouse focus out and close window
-
-    def load_default_settings(self):
-
-        # General settings
-        self.settings.setValue('firstday', self.settings.value('firstday', -2))
-        self.settings.setValue('lastday', self.settings.value('lastday', 30))
-        self.settings.setValue(
-            'notify_future_birthdays',
-            self.settings.value('notify_future_birthdays', 0)
-        )
-
-        # Backend settings
-        for bcknd in BACKENDS:
-
-            # Disable all DB by default
-            self.settings.setValue(
-                '{}/enabled'.format(bcknd.NAME),
-                self.settings.value(
-                    '{}/enabled'.format(bcknd.NAME), False)
-            )
-
-            # Load DB specific default values
-            for key, val in bcknd.DEFAULTS.items():
-                self.settings.setValue(
-                    '{}/{}'.format(bcknd.NAME, key),
-                    self.settings.value(
-                        '{}/{}'.format(bcknd.NAME, key), val)
-                )
-
-        # ICS export
-        self.settings.setValue(
-            'ics_export/enabled',
-            self.settings.value('ics_export/enabled', False)
-        )
 
     def showEvent(self, event):
 

@@ -18,14 +18,16 @@ class MySqlPreferencesDialog(QtWidgets.QDialog):
         self.settings = settings
 
         # Fill fields with current values
-        self.hostEdit.setText(self.settings.value('MySQL/host'))
-        self.portEdit.setText(self.settings.value('MySQL/port'))
-        self.usernameEdit.setText(self.settings.value('MySQL/username'))
-        self.passwordEdit.setText(self.settings.value('MySQL/password'))
-        self.databaseEdit.setText(self.settings.value('MySQL/database'))
-        self.tableEdit.setText(self.settings.value('MySQL/table'))
-        self.nameRowEdit.setText(self.settings.value('MySQL/namerow'))
-        self.dateRowEdit.setText(self.settings.value('MySQL/daterow'))
+        self.settings.beginGroup('MySQL')
+        self.hostEdit.setText(self.settings.value('host', type=str))
+        self.portEdit.setText(self.settings.value('port', type=int))
+        self.usernameEdit.setText(self.settings.value('username', type=str))
+        self.passwordEdit.setText(self.settings.value('password', type=str))
+        self.databaseEdit.setText(self.settings.value('database', type=str))
+        self.tableEdit.setText(self.settings.value('table', type=str))
+        self.nameRowEdit.setText(self.settings.value('namerow', type=str))
+        self.dateRowEdit.setText(self.settings.value('daterow', type=str))
+        self.settings.endGroup()
 
         self.buttonBox.button(
             QtWidgets.QDialogButtonBox.Apply).clicked.connect(self.save)
@@ -37,14 +39,16 @@ class MySqlPreferencesDialog(QtWidgets.QDialog):
     def save(self):
         '''Save MySQL backend settings'''
 
-        self.settings.setValue('MySQL/host', self.hostEdit.text())
-        self.settings.setValue('MySQL/port', self.portEdit.text())
-        self.settings.setValue('MySQL/username', self.usernameEdit.text())
-        self.settings.setValue('MySQL/password', self.passwordEdit.text())
-        self.settings.setValue('MySQL/database', self.databaseEdit.text())
-        self.settings.setValue('MySQL/table', self.tableEdit.text())
-        self.settings.setValue('MySQL/namerow', self.nameRowEdit.text())
-        self.settings.setValue('MySQL/daterow', self.dateRowEdit.text())
+        self.settings.beginGroup('MySQL')
+        self.settings.setValue('host', self.hostEdit.text())
+        self.settings.setValue('port', int(self.portEdit.text()))
+        self.settings.setValue('username', self.usernameEdit.text())
+        self.settings.setValue('password', self.passwordEdit.text())
+        self.settings.setValue('database', self.databaseEdit.text())
+        self.settings.setValue('table', self.tableEdit.text())
+        self.settings.setValue('namerow', self.nameRowEdit.text())
+        self.settings.setValue('daterow', self.dateRowEdit.text())
+        self.settings.endGroup()
 
 
 class MySQLBackend(BaseBackend):
@@ -57,7 +61,7 @@ class MySQLBackend(BaseBackend):
 
     DEFAULTS = {
         'host': 'localhost',
-        'port': '3306',
+        'port': 3306,
         'username': '',
         'password': '',
         'database': '',
@@ -70,14 +74,16 @@ class MySQLBackend(BaseBackend):
 
         super().__init__(mainwindow)
 
-        self.host = self.settings.value('MySQL/host')
-        self.port = self.settings.value('MySQL/port')
-        self.username = self.settings.value('MySQL/username')
-        self.password = self.settings.value('MySQL/password')
-        self.database = self.settings.value('MySQL/database')
-        self.table = self.settings.value('MySQL/table')
-        self.name_row = self.settings.value('MySQL/namerow')
-        self.date_row = self.settings.value('MySQL/daterow')
+        self.settings.beginGroup('MySQL')
+        self.host = self.settings.value('host', type=str)
+        self.port = self.settings.value('port', type=int)
+        self.username = self.settings.value('username', type=str)
+        self.password = self.settings.value('password', type=str)
+        self.database = self.settings.value('database', type=str)
+        self.table = self.settings.value('table', type=str)
+        self.name_row = self.settings.value('namerow', type=str)
+        self.date_row = self.settings.value('daterow', type=str)
+        self.settings.endGroup()
 
         self.cursor = None
         self.conn = None
@@ -101,7 +107,7 @@ class MySQLBackend(BaseBackend):
         try:
             self.conn = MySQLdb.connect(
                 host=self.host,
-                port=int(self.port),
+                port=self.port,
                 user=self.username,
                 passwd=self.password,
                 db=self.database)

@@ -58,7 +58,7 @@ class CSVBackend(BaseBackend):
     def parse(self):
         '''open and parse file'''
 
-        filepath = self.settings.value('CSV/filepath')
+        filepath = self.settings.value('CSV/filepath', type=str)
 
         try:
             with open(filepath) as csv_file:
@@ -83,7 +83,7 @@ class CSVBackend(BaseBackend):
 
         birthday = str(birthday)
 
-        filepath = self.settings.value('CSV/filepath')
+        filepath = self.settings.value('CSV/filepath', type=str)
 
         try:
             with open(filepath, 'a') as csv_file:
