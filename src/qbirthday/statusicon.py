@@ -139,9 +139,6 @@ class StatusIcon(QtWidgets.QSystemTrayIcon):
             for db in self.main_window.backends.values():
                 if db.TITLE == add_widget.saveComboBox.currentText():
                     birthdate = add_widget.dateWidget.selectedDate().toPyDate()
-                    # FIXME: ugly fix for #563405 adding to Lightning
-                    if db.TITLE == 'Thunderbird/Icedove Lightning':
-                        db.ab = self.main_window.addressbook
                     db.add(add_widget.nameEdit.text(), birthdate)
             add_widget.nameEdit.clear()
             self.main_window.reload()
