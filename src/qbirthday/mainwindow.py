@@ -6,7 +6,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 from qbirthday import PICS_PATHS, load_ui
 from .backends import BACKENDS
-from .addressbook import AddressBook
+from .birthday_list import BirthdayList
 from .statusicon import StatusIcon
 from .settings import Settings
 
@@ -44,7 +44,7 @@ class Birthday(QtCore.QObject):
             for label in self.labels:
                 label.setStyleSheet("QLabel { font: bold; }")
 
-        # Birthday in the past
+        # Birthday in the past
         elif delta_day < 0:
             label_image.setPixmap(QtGui.QPixmap(PICS_PATHS['birthdaylost']))
             if delta_day == -1:
@@ -55,13 +55,14 @@ class Birthday(QtCore.QObject):
             for label in self.labels:
                 label.setStyleSheet("QLabel { color : grey; }")
 
-        # Birthday in the future
+        # Birthday in the future
         else:
             label_image.setPixmap(QtGui.QPixmap(PICS_PATHS['birthdaynext']))
             if delta_day == 1:
                 label_when.setText(_('Tomorrow'))
             else:
                 label_when.setText(_('%s Days') % delta_day)
+
 
 class MainWindow(QtWidgets.QMainWindow):
 
@@ -76,13 +77,8 @@ class MainWindow(QtWidgets.QMainWindow):
         load_ui('mainwindow.ui', self)
         self.backends = {}
 
-        # Load settings
         self.settings = Settings()
-
-        # Address book
-        self.addressbook = AddressBook(self, self.settings)
-
-        # Status icon
+        self.bday_list = BirthdayList(self, self.settings)
         self.status_icon = StatusIcon(self, self.settings)
 
         # Initialise current day
@@ -118,34 +114,30 @@ class MainWindow(QtWidgets.QMainWindow):
             if self.settings.value(bcknd.NAME + '/enabled', type=bool):
                 self.backends[bcknd.NAME] = bcknd(self)
 
-        # Reload address book
-        self.addressbook.reload()
+        # Reload birthdays
+        self.bday_list.reload()
 
-        # Reload status icon
+        # Reload status icon
         self.status_icon.reload_set_icon()
 
-        # Set title
-        if self.addressbook.bdays_in_period():
+        # Set title
+        if self.bday_list.bdays_in_period():
             self.titleLabel.setText(_('Birthdays'))
         else:
             self.titleLabel.setText(_('No birthdays in specified period'))
 
         # Empty birthday list
-        # http://stackoverflow.com/questions/4528347/
+        # http://stackoverflow.com/questions/4528347/
         for i in reversed(range(self.birthdaysLayout.count())):
             widget = self.birthdaysLayout.itemAt(i).widget()
             self.birthdaysLayout.removeWidget(widget)
             widget.setParent(None)
 
-        # Add birthdays
+        # Add birthdays
         firstday = self.settings.value('firstday', type=int)
         lastday = self.settings.value('lastday', type=int)
         for delta_day in range(firstday, lastday + 1):
-            for name in self.addressbook.check_day(delta_day):
-                for date, names in self.addressbook.bdays.items():
-                    if name in names:
-                        birthdate = date
-
+            for birthdate, name in self.bday_list.check_day(delta_day):
                 birthday = Birthday(delta_day, name, birthdate)
                 row = self.birthdaysLayout.rowCount()
                 for col, label in enumerate(birthday.labels):

@@ -24,12 +24,12 @@ class BaseBackend(abc.ABC):
 
     def __init__(self, mainwindow):
         self.mainwindow = mainwindow
-        self.addressbook = mainwindow.addressbook
+        self.bday_list = mainwindow.bday_list
         self.settings = mainwindow.settings
 
     @abc.abstractmethod
     def parse(self):
-        """Load birthdays from file/database to address book"""
+        """Load birthdays from file/database to birthday list"""
 
     @abc.abstractmethod
     def add(self, name, birthday):

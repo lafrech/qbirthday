@@ -136,7 +136,7 @@ class MySQLBackend(BaseBackend):
             self.cursor.execute(qry)
             rows = self.cursor.fetchall()
             for row in rows:
-                self.addressbook.add(row[0], str(row[1]))
+                self.bday_list.add(row[0], row[1])
         except Exception as msg:
             # Query error
             QtWidgets.QMessageBox.warning(
@@ -150,13 +150,13 @@ class MySQLBackend(BaseBackend):
 
     def add(self, name, birthday):
         '''insert new Birthday to database'''
-        birthday = str(birthday)
         if not self.connect():
             return
         try:
             qry = (
                 "INSERT INTO %s (%s, %s) VALUES ('%s', '%s')" %
-                (self.table, self.name_row, self.date_row, name, birthday))
+                (self.table, self.name_row, self.date_row, name, str(birthday))
+            )
             self.cursor.execute(qry)
         except Exception as msg:
             # Query error
@@ -168,4 +168,4 @@ class MySQLBackend(BaseBackend):
                 QtWidgets.QMessageBox.Discard
             )
         self.conn.close()
-        self.addressbook.add(name, birthday)
+        self.bday_list.add(name, birthday)

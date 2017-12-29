@@ -1,5 +1,7 @@
 """CSV file backend"""
 
+import datetime as dt
+
 from PyQt5 import QtCore, QtWidgets
 
 from qbirthday import load_ui
@@ -53,6 +55,7 @@ class CSVBackend(BaseBackend):
         super().__init__(mainwindow)
 
         # Possible separators
+        # TODO: Pick only one separator? Exclude comma?
         self._separators = ['; ', ', ', ': ']
 
     def parse(self):
@@ -66,9 +69,10 @@ class CSVBackend(BaseBackend):
                     # check if any of the seperators are in the text
                     for sep in self._separators:
                         if len(line.split(sep)) > 1:
-                            date = line.split(sep, 1)[0]
+                            date = dt.datetime.strptime(
+                                line.split(sep, 1)[0], '%Y-%m-%d').date()
                             name = line.split(sep, 1)[1][:-1]
-                            self.addressbook.add(name, date)
+                            self.bday_list.add(name, date)
                             break
         except IOError:
             # Missing CSV file
@@ -81,14 +85,12 @@ class CSVBackend(BaseBackend):
     def add(self, name, birthday):
         '''add new person with birthday to end of csv-file'''
 
-        birthday = str(birthday)
-
         filepath = self.settings.value('CSV/filepath', type=str)
 
         try:
             with open(filepath, 'a') as csv_file:
-                csv_file.write(birthday + '; ' + name + '\n')
-            self.addressbook.add(name, birthday)
+                csv_file.write(str(birthday) + '; ' + name + '\n')
+            self.bday_list.add(name, birthday)
         except IOError:
             # Missing CSV file
             QtWidgets.QMessageBox.warning(

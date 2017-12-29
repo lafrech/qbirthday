@@ -4,7 +4,7 @@ import os
 import time
 import uuid
 import configparser
-import datetime
+import datetime as dt
 
 from PyQt5 import QtCore, QtWidgets
 
@@ -112,8 +112,8 @@ class LightningBackend(BaseBackend):
               ce.title != '';'''
         self.cursor.execute(qry)
         for row in self.cursor:
-            bday = datetime.datetime.utcfromtimestamp(int(row[1]) / 1000000)
-            self.addressbook.add(row[0], str(bday).split(' ')[0])
+            bday = dt.datetime.utcfromtimestamp(int(row[1]) / 1000000).date()
+            self.bday_list.add(row[0], bday)
 
     def add(self, name, birthday):
         # create new uuid
@@ -173,4 +173,4 @@ class LightningBackend(BaseBackend):
                     'SQLite', qry, msg),
                 QtWidgets.QMessageBox.Discard
             )
-        self.addressbook.add(name, str(birthday))
+        self.bday_list.add(name, birthday)

@@ -13,14 +13,14 @@ class StatusIcon(QtWidgets.QSystemTrayIcon):
     def __init__(self, main_window, settings):
         '''create status icon'''
 
-        # TODO: enlarge icon to best fit
+        # TODO: enlarge icon to best fit
         super().__init__(QtGui.QIcon(PICS_PATHS['birthday']),
                          main_window)
 
         self.main_window = main_window
         self.settings = settings
 
-        # TODO: Add action enabled only if at least one DB selected
+        # TODO: Add action enabled only if at least one DB selected
         menu = QtWidgets.QMenu()
         menu.addAction(
             QtGui.QIcon.fromTheme("view-refresh"),
@@ -43,10 +43,10 @@ class StatusIcon(QtWidgets.QSystemTrayIcon):
             "Quit",
             QtCore.QCoreApplication.instance().quit)
 
-        # Set context menu to open on right click
+        # Set context menu to open on right click
         self.setContextMenu(menu)
 
-        # Display birthdays on left click
+        # Display birthdays on left click
         def tray_icon_activated_cb(reason):
             if (reason == QtWidgets.QSystemTrayIcon.Trigger or
                     reason == QtWidgets.QSystemTrayIcon.DoubleClick):
@@ -70,12 +70,12 @@ class StatusIcon(QtWidgets.QSystemTrayIcon):
     def reload_set_icon(self):
         '''Check, if there is a birthday and set icon and notify accordingly.'''
 
-        addressbook = self.main_window.addressbook
+        bday_list = self.main_window.bday_list
 
         # check if a birthday is in specified period
-        if addressbook.bdays_in_period():
+        if bday_list.bdays_in_period():
             # check if birthday today
-            if addressbook.check_day(0):
+            if bday_list.check_day(0):
                 self.setIcon(QtGui.QIcon(PICS_PATHS['birthdayred']))
             else:
                 self.setIcon(QtGui.QIcon(PICS_PATHS['birthday']))
@@ -84,7 +84,7 @@ class StatusIcon(QtWidgets.QSystemTrayIcon):
 
         # show notification of birthdays in the future
         try:
-            # TODO: import this on top of script?
+            # TODO: import this on top of script?
             import pynotify
             if pynotify.init("qbirthday"):
                 lastday = self.settings.value('lastday', type=int)
@@ -101,35 +101,35 @@ class StatusIcon(QtWidgets.QSystemTrayIcon):
                             noty_string = _("Birthday in %s Days:") % day
                     else:
                         continue
-                    for name in addressbook.check_day(day):
+                    for _, name in bday_list.check_day(day):
                         notify = pynotify.Notification(
                                         noty_string, name)
                         notify.show()
         except ImportError:
             pass
 
-    # TODO: Make dedicated class for add birthdate widget
+    # TODO: Make dedicated class for add birthdate widget
     def add_single_manual(self):
         '''Add birthday dialog'''
 
         add_widget = load_ui('add.ui')
 
-        # Fill backend combobox
-        # TODO: use index to allow DB name translation
+        # Fill backend combobox
+        # TODO: use index to allow DB name translation
         for db in self.main_window.backends.values():
             if db.CAN_SAVE:
                 add_widget.saveComboBox.addItem(db.TITLE)
 
         # Apply and OK enabled only if name not empty 
         def entry_modification_cb():
-            # TODO: check if text is not whitespace would be better
+            # TODO: check if text is not whitespace would be better
             cond = add_widget.nameEdit.text() != ''
             add_widget.buttonBox.button(
                 QtWidgets.QDialogButtonBox.Apply).setEnabled(cond)
             add_widget.buttonBox.button(
                 QtWidgets.QDialogButtonBox.Ok).setEnabled(cond)
 
-        # Execute once to disable OK and Apply
+        # Execute once to disable OK and Apply
         entry_modification_cb()
         # Connect signal to check at each text modification
         add_widget.nameEdit.textChanged.connect(entry_modification_cb)
@@ -148,7 +148,7 @@ class StatusIcon(QtWidgets.QSystemTrayIcon):
             QtWidgets.QDialogButtonBox.Apply).clicked.connect(
                 add_single_manual_apply_cb)
 
-        # If OK, add birthdate and close dialog
-        # If Cancel, just close dialog
+        # If OK, add birthdate and close dialog
+        # If Cancel, just close dialog
         if add_widget.exec_():
             add_single_manual_apply_cb()
