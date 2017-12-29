@@ -137,12 +137,10 @@ class AddressBook(object):
                 PRODID:-//qbirthday//EN
                 """))
 
-            now = datetime.datetime.now()
-            now = str(now)[0:4] + str(now)[5:7] + str(now)[8:10] + 'T' \
-                + str(now)[11:13] + str(now)[14:16] + str(now)[17:19] + 'Z'
+            now = datetime.datetime.now().strftime('%Y%m%dT%H%M%SZ')
 
             for bday in self.bdays:
-                bdate = str(bday)[0:4] + str(bday)[5:7] + str(bday)[8:10]
+                bdate = bday.strftime('%Y%m%d')
 
                 f.write('BEGIN:VEVENT\n')
                 f.write('UID:' + now + '-' + str(index) + '@qbirthday' + '\n')
