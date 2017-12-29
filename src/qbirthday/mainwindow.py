@@ -5,66 +5,13 @@ import datetime
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 from qbirthday import PICS_PATHS, load_ui
-from .backends import BACKENDS
 from .birthday_list import BirthdayList
 from .statusicon import StatusIcon
 from .settings import Settings
 
 
-class Birthday(QtCore.QObject):
-
-    def __init__(self, delta_day, name, birthdate):
-
-        super().__init__()
-
-        label_image = QtWidgets.QLabel()
-        label_day = QtWidgets.QLabel(str(birthdate.day))
-        label_month = QtWidgets.QLabel(_(birthdate.strftime('%B')))
-        label_name = QtWidgets.QLabel(name)
-        label_when = QtWidgets.QLabel()
-        label_age = QtWidgets.QLabel(_('{} Years').format(
-            datetime.date.today().year - birthdate.year))
-
-        self.labels = [
-            label_image,
-            label_day,
-            label_month,
-            label_name,
-            label_when,
-            label_age
-        ]
-
-        label_day.setAlignment(QtCore.Qt.AlignRight |
-                               QtCore.Qt.AlignVCenter)
-
-        # Birthday today
-        if delta_day == 0:
-            label_image.setPixmap(QtGui.QPixmap(PICS_PATHS['birthdaytoday']))
-            label_when.setText(_('Today'))
-            for label in self.labels:
-                label.setStyleSheet("QLabel { font: bold; }")
-
-        # Birthday in the past
-        elif delta_day < 0:
-            label_image.setPixmap(QtGui.QPixmap(PICS_PATHS['birthdaylost']))
-            if delta_day == -1:
-                label_when.setText(_('Yesterday'))
-            else:
-                label_when.setText(_('%s Days ago') % str(delta_day * -1))
-
-            for label in self.labels:
-                label.setStyleSheet("QLabel { color : grey; }")
-
-        # Birthday in the future
-        else:
-            label_image.setPixmap(QtGui.QPixmap(PICS_PATHS['birthdaynext']))
-            if delta_day == 1:
-                label_when.setText(_('Tomorrow'))
-            else:
-                label_when.setText(_('%s Days') % delta_day)
-
-
 class MainWindow(QtWidgets.QMainWindow):
+    """Main window"""
 
     def __init__(self):
 
@@ -75,7 +22,6 @@ class MainWindow(QtWidgets.QMainWindow):
                             QtCore.Qt.WindowStaysOnTopHint)  # ??
 
         load_ui('mainwindow.ui', self)
-        self.backends = {}
 
         self.settings = Settings()
         self.bday_list = BirthdayList(self, self.settings)
@@ -94,6 +40,7 @@ class MainWindow(QtWidgets.QMainWindow):
         # TODO: Catch mouse focus out and close window
 
     def showEvent(self, event):
+        """Callback for "show" event"""
 
         super().showEvent(event)
 
@@ -106,13 +53,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.showNormal()
 
     def reload(self):
-        '''Reload data from backends'''
-
-        # Instantiate backends
-        self.backends = {}
-        for bcknd in BACKENDS:
-            if self.settings.value(bcknd.NAME + '/enabled', type=bool):
-                self.backends[bcknd.NAME] = bcknd(self)
+        """Reload birthdays and update GUI accordingly"""
 
         # Reload birthdays
         self.bday_list.reload()
@@ -138,17 +79,71 @@ class MainWindow(QtWidgets.QMainWindow):
         lastday = self.settings.value('lastday', type=int)
         for delta_day in range(firstday, lastday + 1):
             for birthdate, name in self.bday_list.check_day(delta_day):
-                birthday = Birthday(delta_day, name, birthdate)
                 row = self.birthdaysLayout.rowCount()
-                for col, label in enumerate(birthday.labels):
+                for col, label in enumerate(self.make_birthday_line(
+                        delta_day, name, birthdate)):
                     self.birthdaysLayout.addWidget(label, row, col)
 
     def check_new_day(self):
-        '''Check for new day
+        """Check for new day
 
            Should be called e.g. every 60 seconds to check if day has changed.
-        '''
+        """
         new_day = datetime.datetime.now().strftime("%d")
         if self.current_day != new_day:
             self.current_day = new_day
             self.reload()
+
+    @staticmethod
+    def make_birthday_line(delta_day, name, birthdate):
+        """Return a row as a list of widgets
+
+        deltaday (int): day index in specified period
+        name (str): person name
+        birthdate (dt.date): date of birth
+        """
+
+        label_image = QtWidgets.QLabel()
+        label_day = QtWidgets.QLabel(str(birthdate.day))
+        label_month = QtWidgets.QLabel(_(birthdate.strftime('%B')))
+        label_name = QtWidgets.QLabel(name)
+        label_when = QtWidgets.QLabel()
+        label_age = QtWidgets.QLabel(_('{} Years').format(
+            datetime.date.today().year - birthdate.year))
+
+        label_day.setAlignment(QtCore.Qt.AlignRight |
+                               QtCore.Qt.AlignVCenter)
+
+        labels = [
+            label_image,
+            label_day,
+            label_month,
+            label_name,
+            label_when,
+            label_age
+        ]
+
+        # Birthday today
+        if delta_day == 0:
+            label_image.setPixmap(QtGui.QPixmap(PICS_PATHS['birthdaytoday']))
+            label_when.setText(_('Today'))
+            for label in labels:
+                label.setStyleSheet("QLabel { font: bold; }")
+        # Birthday in the past
+        elif delta_day < 0:
+            label_image.setPixmap(QtGui.QPixmap(PICS_PATHS['birthdaylost']))
+            if delta_day == -1:
+                label_when.setText(_('Yesterday'))
+            else:
+                label_when.setText(_('%s Days ago') % str(delta_day * -1))
+            for label in labels:
+                label.setStyleSheet("QLabel { color : grey; }")
+        # Birthday in the future
+        else:
+            label_image.setPixmap(QtGui.QPixmap(PICS_PATHS['birthdaynext']))
+            if delta_day == 1:
+                label_when.setText(_('Tomorrow'))
+            else:
+                label_when.setText(_('%s Days') % delta_day)
+
+        return labels

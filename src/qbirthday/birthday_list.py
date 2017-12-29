@@ -8,6 +8,8 @@ import datetime as dt
 from textwrap import dedent
 from collections import defaultdict
 
+from .backends import BACKENDS
+
 
 class BirthdayList:
     """Structure storing all birthdates and birthdays in specified period"""
@@ -16,6 +18,8 @@ class BirthdayList:
 
         self.main_window = main_window
         self.settings = settings
+
+        self.backends = {}
 
         # dict storing all birthdates
         # key: dt.date
@@ -59,13 +63,22 @@ class BirthdayList:
 
         self._birthdates.clear()
 
-        for bcknd in self.main_window.backends.values():
-            bcknd.parse()
+        self.backends.clear()
+        for bcknd_cls in BACKENDS:
+            if self.settings.value(bcknd_cls.NAME + '/enabled', type=bool):
+                bcknd = bcknd_cls(self.main_window)
+                bcknd.parse()
+                self.backends[bcknd_cls.NAME] = bcknd
 
         self._update()
 
         if self.settings.value('ics_export/enabled', type=bool):
             self._export()
+
+    @property
+    def read_write_backends(self):
+        """Return list of all read-write backends (exclude RO backends)"""
+        return [bcknd for bcknd in self.backends.values() if bcknd.CAN_SAVE]
 
     def _update(self):
         """Update self.birthdays with all birthdays in specified period"""

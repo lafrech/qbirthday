@@ -116,9 +116,8 @@ class StatusIcon(QtWidgets.QSystemTrayIcon):
 
         # Fill backend combobox
         # TODO: use index to allow DB name translation
-        for db in self.main_window.backends.values():
-            if db.CAN_SAVE:
-                add_widget.saveComboBox.addItem(db.TITLE)
+        for bcknd in self.main_window.bday_list.read_write_backends:
+            add_widget.saveComboBox.addItem(bcknd.TITLE)
 
         # Apply and OK enabled only if name not empty 
         def entry_modification_cb():
@@ -136,10 +135,10 @@ class StatusIcon(QtWidgets.QSystemTrayIcon):
 
         def add_single_manual_apply_cb():
             '''Save new added person'''
-            for db in self.main_window.backends.values():
-                if db.TITLE == add_widget.saveComboBox.currentText():
+            for bcknd in self.main_window.bday_list.read_write_backends:
+                if bcknd.TITLE == add_widget.saveComboBox.currentText():
                     birthdate = add_widget.dateWidget.selectedDate().toPyDate()
-                    db.add(add_widget.nameEdit.text(), birthdate)
+                    bcknd.add(add_widget.nameEdit.text(), birthdate)
             add_widget.nameEdit.clear()
             self.main_window.reload()
 
