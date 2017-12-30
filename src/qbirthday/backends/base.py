@@ -22,14 +22,12 @@ class BaseBackend(abc.ABC):
     # Default configuration values
     DEFAULTS = {}
 
-    def __init__(self, mainwindow):
-        self.mainwindow = mainwindow
-        self.bday_list = mainwindow.bday_list
-        self.settings = mainwindow.settings
+    def __init__(self, settings):
+        self.settings = settings
 
     @abc.abstractmethod
     def parse(self):
-        """Load birthdays from file/database to birthday list"""
+        """Return birthdates as list of (name, date) tuples"""
 
     @abc.abstractmethod
     def add(self, name, birthday):

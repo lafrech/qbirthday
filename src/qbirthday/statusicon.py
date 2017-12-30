@@ -5,6 +5,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from qbirthday import PICS_PATHS, load_ui
 from .preferencesdialog import PreferencesDialog
 from .aboutdialog import AboutDialog
+from .backends.exceptions import BackendWriteError
 
 
 class StatusIcon(QtWidgets.QSystemTrayIcon):
@@ -18,6 +19,7 @@ class StatusIcon(QtWidgets.QSystemTrayIcon):
                          main_window)
 
         self.main_window = main_window
+        self.bday_list = main_window.bday_list
         self.settings = settings
 
         # TODO: Add action enabled only if at least one DB selected
@@ -70,12 +72,10 @@ class StatusIcon(QtWidgets.QSystemTrayIcon):
     def reload_set_icon(self):
         '''Check, if there is a birthday and set icon and notify accordingly.'''
 
-        bday_list = self.main_window.bday_list
-
         # check if a birthday is in specified period
-        if bday_list.bdays_in_period():
+        if self.bday_list.bdays_in_period():
             # check if birthday today
-            if bday_list.check_day(0):
+            if self.bday_list.check_day(0):
                 self.setIcon(QtGui.QIcon(PICS_PATHS['birthdayred']))
             else:
                 self.setIcon(QtGui.QIcon(PICS_PATHS['birthday']))
@@ -101,7 +101,7 @@ class StatusIcon(QtWidgets.QSystemTrayIcon):
                             noty_string = _("Birthday in %s Days:") % day
                     else:
                         continue
-                    for _, name in bday_list.check_day(day):
+                    for _, name in self.bday_list.check_day(day):
                         notify = pynotify.Notification(
                                         noty_string, name)
                         notify.show()
@@ -116,7 +116,7 @@ class StatusIcon(QtWidgets.QSystemTrayIcon):
 
         # Fill backend combobox
         # TODO: use index to allow DB name translation
-        for bcknd in self.main_window.bday_list.read_write_backends:
+        for bcknd in self.bday_list.read_write_backends:
             add_widget.saveComboBox.addItem(bcknd.TITLE)
 
         # Apply and OK enabled only if name not empty 
@@ -135,10 +135,16 @@ class StatusIcon(QtWidgets.QSystemTrayIcon):
 
         def add_single_manual_apply_cb():
             '''Save new added person'''
-            for bcknd in self.main_window.bday_list.read_write_backends:
+            for bcknd in self.bday_list.read_write_backends:
                 if bcknd.TITLE == add_widget.saveComboBox.currentText():
+                    name = add_widget.nameEdit.text()
                     birthdate = add_widget.dateWidget.selectedDate().toPyDate()
-                    bcknd.add(add_widget.nameEdit.text(), birthdate)
+                    try:
+                        bcknd.add(name, birthdate)
+                    except BackendWriteError as exc:
+                        self.main_window.show_error_message(str(exc))
+                    else:
+                        self.bday_list.add(name, birthdate)
             add_widget.nameEdit.clear()
             self.main_window.reload()
 

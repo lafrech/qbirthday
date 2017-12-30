@@ -6,9 +6,9 @@ import uuid
 import configparser
 import datetime as dt
 
-from PyQt5 import QtCore, QtWidgets
-
 from .base import BaseBackend
+from .exceptions import (
+    BackendMissingLibraryError, BackendReadError, BackendWriteError)
 
 
 class LightningBackend(BaseBackend):
@@ -18,9 +18,9 @@ class LightningBackend(BaseBackend):
     TITLE = 'Thunderbird/Icedove Lightning'
     CAN_SAVE = True
 
-    def __init__(self, mainwindow):
+    def __init__(self, settings):
 
-        super().__init__(mainwindow)
+        super().__init__(settings)
 
         self.thunderbird_location = os.path.join(
             os.environ['HOME'], '.mozilla-thunderbird')
@@ -52,22 +52,17 @@ class LightningBackend(BaseBackend):
                 # (new in sunbird/lightning 1.0)
                 location = os.path.join(
                     profile_location, 'calendar-data/local.sqlite')
-                print(location)
                 if os.path.exists(location):
                     self.parse_birthday(location)
                     return
                 # ... and now the old one
                 location = os.path.join(profile_location, 'storage.sdb')
-                print(location)
                 if os.path.exists(location):
                     self.parse_birthday(location)
                     return
         # Missing profile file
-        QtWidgets.QMessageBox.warning(
-            self.mainwindow,
-            QtCore.QCoreApplication.applicationName(),
+        raise BackendReadError(
             _("Error reading profile file: {}").format(configfile),
-            QtWidgets.QMessageBox.Discard
         )
 
     def parse(self):
@@ -75,35 +70,27 @@ class LightningBackend(BaseBackend):
         if os.path.exists(self.thunderbird_location):
             self.get_config_file(self.thunderbird_location)
 
-    def connect(self, filename):
+    def _connect(self, filename):
         '''"connect" to sqlite3-database'''
 
         # TODO: use with connect as... syntax
         try:
             import sqlite3
         except ImportError:
-            # Missing package
-            QtWidgets.QMessageBox.warning(
-                self.mainwindow,
-                QtCore.QCoreApplication.applicationName(),
-                _("Package {} is not installed.").format("SQLite3"),
-                QtWidgets.QMessageBox.Discard
-            )
+            raise BackendMissingLibraryError(
+                _("Missing {} library.").format("SQLite3"))
 
         try:
             self.conn = sqlite3.connect(filename)
             self.cursor = self.conn.cursor()
-        except Exception as msg:
-            # Connexion error
-            QtWidgets.QMessageBox.warning(
-                self.mainwindow,
-                QtCore.QCoreApplication.applicationName(),
-                _("sqlite3 could not connect: {}").format(str(msg)),
-                QtWidgets.QMessageBox.Discard
-            )
+        except Exception as exc:
+            raise ConnectionError(exc)
 
     def parse_birthday(self, filename):
-        self.connect(filename)
+        try:
+            self._connect(filename)
+        except ConnectionError as exc:
+            raise BackendReadError(exc)
         qry = '''SELECT title, event_start FROM cal_events ce
               INNER JOIN cal_properties cp
               ON ce.id = cp.item_id
@@ -111,9 +98,11 @@ class LightningBackend(BaseBackend):
               cp.value == 'Birthday' AND
               ce.title != '';'''
         self.cursor.execute(qry)
+        birthdates = []
         for row in self.cursor:
             bday = dt.datetime.utcfromtimestamp(int(row[1]) / 1000000).date()
-            self.bday_list.add(row[0], bday)
+            birthdates.append((row[0], bday))
+        return birthdates
 
     def add(self, name, birthday):
         # create new uuid
@@ -165,12 +154,7 @@ class LightningBackend(BaseBackend):
             self.cursor.execute(qry)
             self.conn.commit()
         except Exception as msg:
-            # Query error
-            QtWidgets.QMessageBox.warning(
-                self.mainwindow,
-                QtCore.QCoreApplication.applicationName(),
+            raise BackendWriteError(
                 _("Could not execute {} query '{}':\n{}").format(
-                    'SQLite', qry, msg),
-                QtWidgets.QMessageBox.Discard
+                    'SQLite', qry, msg)
             )
-        self.bday_list.add(name, birthday)

@@ -9,6 +9,7 @@ from textwrap import dedent
 from collections import defaultdict
 
 from .backends import BACKENDS
+from .backends.exceptions import BackendReadError
 
 
 class BirthdayList:
@@ -66,8 +67,13 @@ class BirthdayList:
         self.backends.clear()
         for bcknd_cls in BACKENDS:
             if self.settings.value(bcknd_cls.NAME + '/enabled', type=bool):
-                bcknd = bcknd_cls(self.main_window)
-                bcknd.parse()
+                bcknd = bcknd_cls(self.settings)
+                try:
+                    birthdates = bcknd.parse()
+                except BackendReadError as exc:
+                    self.main_window.show_error_message(str(exc))
+                for name, date in birthdates:
+                    self.add(name, date)
                 self.backends[bcknd_cls.NAME] = bcknd
 
         self._update()

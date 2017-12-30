@@ -2,9 +2,8 @@
 
 import os
 
-from PyQt5 import QtCore, QtWidgets
-
 from .lightning import LightningBackend
+from .exceptions import BackendMissingLibraryError
 
 
 class SunbirdBackend(LightningBackend):
@@ -14,9 +13,9 @@ class SunbirdBackend(LightningBackend):
     TITLE = 'Sunbird/Iceowl'
     CAN_SAVE = True
 
-    def __init__(self, mainwindow):
+    def __init__(self, settings):
 
-        super().__init__(mainwindow)
+        super().__init__(settings)
 
         self.mozilla_location = os.path.join(os.environ['HOME'], '.mozilla')
 
@@ -31,10 +30,5 @@ class SunbirdBackend(LightningBackend):
         elif os.path.exists(iceowl):
             self.get_config_file(iceowl)
         else:
-            # Missing package
-            QtWidgets.QMessageBox.warning(
-                self.mainwindow,
-                QtCore.QCoreApplication.applicationName(),
-                _("Neither iceowl nor sunbird is installed"),
-                QtWidgets.QMessageBox.Discard
-            )
+            raise BackendMissingLibraryError(
+                _("Neither iceowl nor sunbird is installed"))

@@ -6,6 +6,7 @@ from PyQt5 import QtCore, QtWidgets
 
 from qbirthday import load_ui
 from .base import BaseBackend
+from .exceptions import BackendReadError, BackendWriteError
 
 
 class CSVPreferencesDialog(QtWidgets.QDialog):
@@ -50,10 +51,8 @@ class CSVBackend(BaseBackend):
         'filepath': '',
     }
 
-    def __init__(self, mainwindow):
-
-        super().__init__(mainwindow)
-
+    def __init__(self, settings):
+        super().__init__(settings)
         # Possible separators
         # TODO: Pick only one separator? Exclude comma?
         self._separators = ['; ', ', ', ': ']
@@ -62,6 +61,8 @@ class CSVBackend(BaseBackend):
         '''open and parse file'''
 
         filepath = self.settings.value('CSV/filepath', type=str)
+
+        birthdates = []
 
         try:
             with open(filepath) as csv_file:
@@ -72,15 +73,13 @@ class CSVBackend(BaseBackend):
                             date = dt.datetime.strptime(
                                 line.split(sep, 1)[0], '%Y-%m-%d').date()
                             name = line.split(sep, 1)[1][:-1]
-                            self.bday_list.add(name, date)
+                            birthdates.append((name, date))
                             break
         except IOError:
-            # Missing CSV file
-            QtWidgets.QMessageBox.warning(
-                self.mainwindow,
-                QtCore.QCoreApplication.applicationName(),
-                'Missing CSV file: {}'.format(filepath),
-                QtWidgets.QMessageBox.Discard)
+            raise BackendReadError(
+                _("Can't open CSV file: {}").format(filepath))
+
+        return birthdates
 
     def add(self, name, birthday):
         '''add new person with birthday to end of csv-file'''
@@ -90,12 +89,6 @@ class CSVBackend(BaseBackend):
         try:
             with open(filepath, 'a') as csv_file:
                 csv_file.write(str(birthday) + '; ' + name + '\n')
-            self.bday_list.add(name, birthday)
         except IOError:
-            # Missing CSV file
-            QtWidgets.QMessageBox.warning(
-                self.mainwindow,
-                QtCore.QCoreApplication.applicationName(),
-                _('Missing CSV file: {}').format(filepath),
-                QtWidgets.QMessageBox.Discard
-            )
+            raise BackendWriteError(
+                _("Can't open CSV file: {}").format(filepath))

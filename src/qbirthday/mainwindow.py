@@ -147,3 +147,11 @@ class MainWindow(QtWidgets.QMainWindow):
                 label_when.setText(_('%s Days') % delta_day)
 
         return labels
+
+    def show_error_message(self, msg):
+        """Display an error message in a dialog box"""
+        QtWidgets.QMessageBox.warning(
+            self,
+            QtCore.QCoreApplication.applicationName(),
+            msg,
+            QtWidgets.QMessageBox.Close)

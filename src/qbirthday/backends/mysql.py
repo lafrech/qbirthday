@@ -1,9 +1,11 @@
 """MySQL backend"""
 
-from PyQt5 import QtCore, QtWidgets
+from PyQt5 import QtWidgets
 
 from qbirthday import load_ui
 from .base import BaseBackend
+from .exceptions import (
+    BackendMissingLibraryError, BackendReadError, BackendWriteError)
 
 
 class MySqlPreferencesDialog(QtWidgets.QDialog):
@@ -70,9 +72,9 @@ class MySQLBackend(BaseBackend):
         'daterow': 'date',
     }
 
-    def __init__(self, mainwindow):
+    def __init__(self, settings):
 
-        super().__init__(mainwindow)
+        super().__init__(settings)
 
         self.settings.beginGroup('MySQL')
         self.host = self.settings.value('host', type=str)
@@ -88,21 +90,14 @@ class MySQLBackend(BaseBackend):
         self.cursor = None
         self.conn = None
 
-    def connect(self):
+    def _connect(self):
         '''establish connection'''
 
-        # TODO: use with connect as... syntax
         try:
             import MySQLdb
         except ImportError:
-            # Missing MySQLdb
-            QtWidgets.QMessageBox.warning(
-                self.mainwindow,
-                QtCore.QCoreApplication.applicationName(),
-                _("Package {} is not installed.").format("MySQLdb"),
-                QtWidgets.QMessageBox.Discard
-            )
-            return False
+            raise BackendMissingLibraryError(
+                _("Missing {} library.").format("MySQLdb"))
 
         try:
             self.conn = MySQLdb.connect(
@@ -112,46 +107,44 @@ class MySQLBackend(BaseBackend):
                 passwd=self.password,
                 db=self.database)
             self.cursor = self.conn.cursor()
-        except Exception as msg:
-            # Connexion error
-            QtWidgets.QMessageBox.warning(
-                self.mainwindow,
-                QtCore.QCoreApplication.applicationName(),
-                _("Could not connect to MySQL server:\n{}").format(msg),
-                QtWidgets.QMessageBox.Discard
-            )
-            return False
-
-        return True
+        except Exception as exc:
+            raise ConnectionError(exc)
 
     def parse(self):
         '''connect to mysql-database and get data'''
 
-        if not self.connect():
-            return
+        # TODO: use a context manager
+        try:
+            self._connect()
+        except ConnectionError as exc:
+            raise BackendReadError(exc)
 
         try:
             qry = ("SELECT %s, %s FROM %s"
                    % (self.name_row, self.date_row, self.table))
             self.cursor.execute(qry)
             rows = self.cursor.fetchall()
+            birthdates = []
             for row in rows:
-                self.bday_list.add(row[0], row[1])
+                birthdates.append((row[0], row[1]))
         except Exception as msg:
-            # Query error
-            QtWidgets.QMessageBox.warning(
-                self.mainwindow,
-                QtCore.QCoreApplication.applicationName(),
-                _("Could not execute MySQL query '{}':\n{}").format(qry, msg),
-                QtWidgets.QMessageBox.Discard
-            )
-
-        self.conn.close()
+            raise BackendReadError(
+                _("Could not execute {} query '{}':\n{}").format(
+                    'MySQL', qry, msg))
+        else:
+            return birthdates
+        finally:
+            self.conn.close()
 
     def add(self, name, birthday):
         '''insert new Birthday to database'''
-        if not self.connect():
-            return
+
+        # TODO: use a context manager
+        try:
+            self._connect()
+        except ConnectionError as exc:
+            raise BackendWriteError(exc)
+
         try:
             qry = (
                 "INSERT INTO %s (%s, %s) VALUES ('%s', '%s')" %
@@ -159,13 +152,8 @@ class MySQLBackend(BaseBackend):
             )
             self.cursor.execute(qry)
         except Exception as msg:
-            # Query error
-            QtWidgets.QMessageBox.warning(
-                self.mainwindow,
-                QtCore.QCoreApplication.applicationName(),
+            raise BackendWriteError(
                 _("Could not execute {} query '{}':\n{}").format(
-                    'MySQL', qry, msg),
-                QtWidgets.QMessageBox.Discard
-            )
-        self.conn.close()
-        self.bday_list.add(name, birthday)
+                    'MySQL', qry, msg))
+        finally:
+            self.conn.close()
