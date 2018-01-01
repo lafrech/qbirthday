@@ -72,8 +72,9 @@ class BirthdayList:
                     birthdates = bcknd.parse()
                 except BackendReadError as exc:
                     self.main_window.show_error_message(str(exc))
-                for name, date in birthdates:
-                    self.add(name, date)
+                else:
+                    for name, date in birthdates:
+                        self.add(name, date)
                 self.backends[bcknd_cls.NAME] = bcknd
 
         self._update()
