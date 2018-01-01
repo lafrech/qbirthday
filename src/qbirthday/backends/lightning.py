@@ -43,17 +43,8 @@ class LightningBackend(BaseRWBackend):
                     profile_location = profile_dir / profiles[profile]['path']
                 else:
                     profile_location = profiles[profile]['path']
-                # look for calendar-data/local.sqlite first
-                # (new in sunbird/lightning 1.0)
-                location = profile_location / 'calendar-data/local.sqlite'
-                if location.is_file():
-                    self.parse_birthday(location)
-                    return
-                # ... and now the old one
-                location = profile_location / 'storage.sdb'
-                if location.is_file():
-                    self.parse_birthday(location)
-                    return
+                db_location = profile_location / 'calendar-data/local.sqlite'
+                self.parse_birthday(db_location)
         # Missing profile file
         raise BackendReadError(
             _("Error reading profile file: {}").format(profile_dir),
