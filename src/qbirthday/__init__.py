@@ -8,11 +8,12 @@ Original source from:
 - EvoBdayReminder.py: Axel Heim. http://www.axelheim.de/
 """
 
-import os
 import sys
 import locale
 
 from PyQt5 import QtCore, QtGui, QtWidgets, uic
+
+from .paths import PICS_PATHS, UI_FILES_DIR
 
 # parse locales from python module
 # Do you say "1. January" or "January 1."?
@@ -27,20 +28,6 @@ try:
 except ImportError:
     _ = lambda x: x  # noqa
 
-IMAGES_LOCATION = os.path.join(os.path.dirname(__file__), 'pics')
-
-PICS_PATHS = {
-    'birthdaylost': os.path.join(IMAGES_LOCATION, 'birthdaylost.png'),
-    'birthdaynext': os.path.join(IMAGES_LOCATION, 'birthdaynext.png'),
-    'birthday': os.path.join(IMAGES_LOCATION, 'birthday.png'),
-    'birthdayred': os.path.join(IMAGES_LOCATION, 'birthdayred.png'),
-    'birthdaytoday': os.path.join(IMAGES_LOCATION, 'birthdaytoday.png'),
-    'qbirthday': os.path.join(IMAGES_LOCATION, 'qbirthday.png'),
-    'nobirthday': os.path.join(IMAGES_LOCATION, 'nobirthday.png'),
-}
-
-UI_FILES_LOCATION = os.path.join(os.path.dirname(__file__), 'ui')
-
 
 def load_ui(ui_file, widget=None):
     '''Load UI file into widget and return widget
@@ -49,7 +36,7 @@ def load_ui(ui_file, widget=None):
        - ui file path relative to ui files directory
        - (optionnal) widget : if None, a new widget is created
     '''
-    return uic.loadUi(os.path.join(UI_FILES_LOCATION, ui_file), widget)
+    return uic.loadUi(str(UI_FILES_DIR / ui_file), widget)
 
 
 def main():

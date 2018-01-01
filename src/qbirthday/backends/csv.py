@@ -6,6 +6,7 @@ import csv
 from PyQt5 import QtCore, QtWidgets
 
 from qbirthday import load_ui
+from qbirthday.paths import APP_DATA_LOCATION
 from .base import BaseRWBackend
 from .exceptions import BackendReadError, BackendWriteError
 
@@ -48,7 +49,7 @@ class CSVBackend(BaseRWBackend):
     CONFIG_DLG = CSVPreferencesDialog
 
     DEFAULTS = {
-        'filepath': '',
+        'filepath': str(APP_DATA_LOCATION / 'qbirthday.csv'),
         'delimiter': ','
     }
 

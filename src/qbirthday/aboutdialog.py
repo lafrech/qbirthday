@@ -15,8 +15,7 @@ class AboutDialog(QtWidgets.QDialog):
         load_ui('aboutdialog.ui', self)
 
         # About
-        self.imageLabel.setPixmap(QtGui.QPixmap(
-            PICS_PATHS['qbirthday']))
+        self.imageLabel.setPixmap(QtGui.QPixmap(PICS_PATHS['qbirthday']))
         self.nameLabel.setText(
             "{} {}".format(about.__title__, about.__version__))
         self.descLabel.setText(_(about.__summary__))

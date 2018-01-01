@@ -3,17 +3,11 @@
 Override QSettings to add default values
 """
 
-from pathlib import Path
-
 from PyQt5 import QtCore
 
+from .paths import GENERIC_DATA_LOCATION
 from .backends import BACKENDS
 
-
-DEFAULT_DATA_FILE_DIR = Path(
-    QtCore.QStandardPaths.writableLocation(
-        QtCore.QStandardPaths.GenericDataLocation)) / 'qbirthday'
-DEFAULT_DATA_FILE_DIR.mkdir(exist_ok=True)
 
 CONFIG_DEFAULTS = {
     'firstday': -2,
@@ -23,7 +17,7 @@ CONFIG_DEFAULTS = {
 
 ICS_EXPORT_CONFIG_DEFAULTS = {
     'enabled': False,
-    'filepath': str(DEFAULT_DATA_FILE_DIR / 'qbirthday.ics'),
+    'filepath': str(GENERIC_DATA_LOCATION / 'qbirthday.ics'),
     'alarm': False,
     'alarm_custom_properties': '',
     'alarm_days': 1,
