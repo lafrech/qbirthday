@@ -22,7 +22,7 @@ class MySqlPreferencesDialog(QtWidgets.QDialog):
         # Fill fields with current values
         self.settings.beginGroup('MySQL')
         self.hostEdit.setText(self.settings.value('host', type=str))
-        self.portEdit.setText(self.settings.value('port', type=int))
+        self.portEdit.setText(str(self.settings.value('port', type=int)))
         self.usernameEdit.setText(self.settings.value('username', type=str))
         self.passwordEdit.setText(self.settings.value('password', type=str))
         self.databaseEdit.setText(self.settings.value('database', type=str))
