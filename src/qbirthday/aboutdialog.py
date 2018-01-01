@@ -14,7 +14,7 @@ class AboutDialog(QtWidgets.QDialog):
 
         load_ui('aboutdialog.ui', self)
 
-        # About
+        # About
         self.imageLabel.setPixmap(QtGui.QPixmap(
             PICS_PATHS['qbirthday']))
         self.nameLabel.setText(
@@ -32,12 +32,12 @@ class AboutDialog(QtWidgets.QDialog):
         translators = _('translator-credit')
         if translators == 'translator-credit':
             translators = _("There are no translations or the translator "
-                     "doesn't want to get credits for that.")
+                            "doesn't want to get credits for that.")
         self.translatorsTextEdit.insertPlainText(translators)
 
-        # Artists
+        # Artists
         self.artistsTextEdit.insertPlainText(about.__artists__)
 
-        # License
+        # License
         self.licenseTextEdit.insertPlainText(about.__license_long__)
         self.licenseTextEdit.moveCursor(QtGui.QTextCursor.Start)

@@ -1,6 +1,5 @@
 """CSV file backend"""
 
-import os
 import datetime as dt
 import csv
 

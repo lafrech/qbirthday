@@ -25,7 +25,7 @@ try:
     import gettext
     gettext.install("qbirthday")
 except ImportError:
-    _ = lambda x: x
+    _ = lambda x: x  # noqa
 
 IMAGES_LOCATION = os.path.join(os.path.dirname(__file__), 'pics')
 
@@ -41,6 +41,7 @@ PICS_PATHS = {
 
 UI_FILES_LOCATION = os.path.join(os.path.dirname(__file__), 'ui')
 
+
 def load_ui(ui_file, widget=None):
     '''Load UI file into widget and return widget
 
@@ -50,24 +51,26 @@ def load_ui(ui_file, widget=None):
     '''
     return uic.loadUi(os.path.join(UI_FILES_LOCATION, ui_file), widget)
 
+
 def main():
     '''Load settings, start status icon and get to work.'''
     from .mainwindow import MainWindow
 
-    # TODO: Think twice about naming before releasing
+    # TODO: Think twice about naming before releasing
     QtCore.QCoreApplication.setOrganizationName("QBirthday")
     QtCore.QCoreApplication.setApplicationName("qbirthday")
 
     app = QtWidgets.QApplication([])
     app.setWindowIcon(QtGui.QIcon(PICS_PATHS['qbirthday']))
 
-    # TODO: is this the right way?
+    # TODO: is this the right way?
     app.setQuitOnLastWindowClosed(False)
 
-    # Main window
+    # Main window
     MainWindow()
 
     sys.exit(app.exec_())
+
 
 if __name__ == '__main__':
     main()

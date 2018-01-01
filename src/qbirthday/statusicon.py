@@ -59,7 +59,7 @@ class StatusIcon(QtWidgets.QSystemTrayIcon):
         self._show_when_systray_available()
 
     def _show_when_systray_available(self):
-        """Show status icon when system tray is available 
+        """Show status icon when system tray is available
 
         If available, show icon, otherwise, set a timer to check back later.
         This is a workaround for https://bugreports.qt.io/browse/QTBUG-61898
@@ -70,7 +70,7 @@ class StatusIcon(QtWidgets.QSystemTrayIcon):
             QtCore.QTimer.singleShot(1000, self._show_when_systray_available)
 
     def reload_set_icon(self):
-        '''Check, if there is a birthday and set icon and notify accordingly.'''
+        """Check if there is a birthday, set icon and notify accordingly"""
 
         # check if a birthday is in specified period
         if self.bday_list.bdays_in_period():
@@ -119,7 +119,7 @@ class StatusIcon(QtWidgets.QSystemTrayIcon):
         for bcknd in self.bday_list.read_write_backends:
             add_widget.saveComboBox.addItem(bcknd.TITLE)
 
-        # Apply and OK enabled only if name not empty 
+        # Apply and OK enabled only if name not empty
         def entry_modification_cb():
             # TODO: check if text is not whitespace would be better
             cond = add_widget.nameEdit.text() != ''

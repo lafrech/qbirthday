@@ -10,12 +10,12 @@ __author__ = "Jérôme Lafréchoux"
 __email__ = "jerome@jolimont.fr"
 
 __authors__ = (
-"Andreas Bresser <andreas@phidev.org>",
-"Stefan Jurco <stefan.jurco@gmail.com>",
-"Alex Mallo <dernalis@gmail.com>",
-"Thomas Spura <tomspur@fedoraproject.org>",
-"Robert Wildburger <r.wildburger@gmx.at>",
-"Jérôme Lafréchoux <jerome@jolimont.fr>",
+    "Andreas Bresser <andreas@phidev.org>",
+    "Stefan Jurco <stefan.jurco@gmail.com>",
+    "Alex Mallo <dernalis@gmail.com>",
+    "Thomas Spura <tomspur@fedoraproject.org>",
+    "Robert Wildburger <r.wildburger@gmx.at>",
+    "Jérôme Lafréchoux <jerome@jolimont.fr>",
 )
 __artists__ = "Alex Mallo <dernalis@gmail.com>"
 
