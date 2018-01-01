@@ -1,13 +1,15 @@
 """Preferences dialog"""
 
-from PyQt5 import QtCore, QtWidgets
+from pathlib import Path
+
+from PyQt5 import QtWidgets
 
 from qbirthday import load_ui
 from .backends import BACKENDS
 
 
 class IcsExportPreferencesDialog(QtWidgets.QDialog):
-    '''ICS export settings dialog'''
+    """ICS export settings dialog"""
 
     def __init__(self, settings, parent):
 
@@ -40,18 +42,22 @@ class IcsExportPreferencesDialog(QtWidgets.QDialog):
         # TODO: disable OK and Apply if no path provided?
 
     def get_filepath(self):
-        '''Get export file path'''
+        """Get export file path"""
 
-        # TODO: Qt5 introduces QStandardPaths. Use it as default.
+        current_filepath = Path(self.filePathEdit.text()).resolve()
+        current_filedir = current_filepath.parent
+
         # TODO: use QFileDialog.getOpenFileName?
         dialog = QtWidgets.QFileDialog(self)
-        dialog.setDirectory(self.filePathEdit.text() or QtCore.QDir.homePath())
+        dialog.setDirectory(str(current_filedir))
         dialog.setFileMode(QtWidgets.QFileDialog.AnyFile)
         if dialog.exec_():
             self.filePathEdit.setText(dialog.selectedFiles()[0])
 
     def save(self):
-        '''Save ICS export settings'''
+        """Save ICS export settings"""
+
+        # TODO: Validate settings before saving? (filepath writable?)
 
         self.settings.beginGroup('ics_export')
         self.settings.setValue('filepath', self.filePathEdit.text())
@@ -65,6 +71,7 @@ class IcsExportPreferencesDialog(QtWidgets.QDialog):
 
 
 class PreferencesDialog(QtWidgets.QDialog):
+    """Settings dialog"""
 
     def __init__(self, settings, main_window):
 
@@ -119,6 +126,7 @@ class PreferencesDialog(QtWidgets.QDialog):
             QtWidgets.QDialogButtonBox.Ok).clicked.connect(self.save)
 
     def save(self):
+        """Save settings"""
 
         # TODO: Validate settings before saving?
 
