@@ -9,14 +9,12 @@ from .backends.exceptions import BackendWriteError
 
 
 class StatusIcon(QtWidgets.QSystemTrayIcon):
-    '''Class to show status icon'''
+    """Status icon"""
 
     def __init__(self, main_window, settings):
-        '''create status icon'''
 
         # TODO: enlarge icon to best fit
-        super().__init__(QtGui.QIcon(PICS_PATHS['birthday']),
-                         main_window)
+        super().__init__(QtGui.QIcon(PICS_PATHS['birthday']), main_window)
 
         self.main_window = main_window
         self.bday_list = main_window.bday_list
@@ -70,47 +68,19 @@ class StatusIcon(QtWidgets.QSystemTrayIcon):
             QtCore.QTimer.singleShot(1000, self._show_when_systray_available)
 
     def reload_set_icon(self):
-        """Check if there is a birthday, set icon and notify accordingly"""
-
-        # check if a birthday is in specified period
+        """Set icon according to birthday status"""
         if self.bday_list.bdays_in_period():
-            # check if birthday today
             if self.bday_list.check_day(0):
+                # Birthday today
                 self.setIcon(QtGui.QIcon(PICS_PATHS['birthdayred']))
             else:
                 self.setIcon(QtGui.QIcon(PICS_PATHS['birthday']))
         else:
             self.setIcon(QtGui.QIcon(PICS_PATHS['nobirthday']))
 
-        # show notification of birthdays in the future
-        try:
-            # TODO: import this on top of script?
-            import pynotify
-            if pynotify.init("qbirthday"):
-                lastday = self.settings.value('lastday', type=int)
-                notify_future_bdays = self.settings.value(
-                    'notify_future_bdays ', type=int)
-                for day in range(lastday+1):
-                    noty_string = None
-                    if day == 0:
-                        noty_string = _("Birthday today:")
-                    elif day <= notify_future_bdays:
-                        if day == 1:
-                            noty_string = _("Birthday tomorrow:")
-                        else:
-                            noty_string = _("Birthday in %s Days:") % day
-                    else:
-                        continue
-                    for _, name in self.bday_list.check_day(day):
-                        notify = pynotify.Notification(
-                                        noty_string, name)
-                        notify.show()
-        except ImportError:
-            pass
-
     # TODO: Make dedicated class for add birthdate widget
     def add_single_manual(self):
-        '''Add birthday dialog'''
+        """Add birthday dialog"""
 
         add_widget = load_ui('add.ui')
 
@@ -134,7 +104,7 @@ class StatusIcon(QtWidgets.QSystemTrayIcon):
         add_widget.nameEdit.textChanged.connect(entry_modification_cb)
 
         def add_single_manual_apply_cb():
-            '''Save new added person'''
+            """Save new added birthdate"""
             for bcknd in self.bday_list.read_write_backends:
                 if bcknd.TITLE == add_widget.saveComboBox.currentText():
                     name = add_widget.nameEdit.text()
