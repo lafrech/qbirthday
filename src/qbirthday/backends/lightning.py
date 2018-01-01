@@ -1,10 +1,10 @@
 """Thunderbird/Lightning backend"""
 
-import os
 import time
 import uuid
 import configparser
 import datetime as dt
+from pathlib import Path
 
 from .base import BaseRWBackend
 from .exceptions import (
@@ -21,16 +21,15 @@ class LightningBackend(BaseRWBackend):
 
         super().__init__(settings)
 
-        self.thunderbird_location = os.path.join(
-            os.environ['HOME'], '.mozilla-thunderbird')
+        self.thunderbird_location = Path / '.mozilla-thunderbird'
         self.cursor = None
         self.conn = None
 
-    def get_config_file(self, configfile):
-        profilefile = os.path.join(configfile, 'profiles.ini')
-        if os.path.isfile(profilefile):
+    def get_config_file(self, profile_dir):
+        profilefile = profile_dir / 'profiles.ini'
+        if profilefile.is_file():
             conf_pars = configparser.ConfigParser()
-            conf_pars.read(profilefile)
+            conf_pars.read(str(profilefile))
             profiles = {}  # dict of founded profiles
             # get profiles from profiles.ini in thunderbird directory
             for sec in conf_pars.sections():
@@ -41,35 +40,31 @@ class LightningBackend(BaseRWBackend):
             # get all data from profiles.ini
             for profile in profiles:
                 if profiles[profile]['isrelative']:
-                    profile_location = os.path.join(
-                        configfile,
-                        profiles[profile]['path']
-                    )
+                    profile_location = profile_dir / profiles[profile]['path']
                 else:
                     profile_location = profiles[profile]['path']
                 # look for calendar-data/local.sqlite first
                 # (new in sunbird/lightning 1.0)
-                location = os.path.join(
-                    profile_location, 'calendar-data/local.sqlite')
-                if os.path.exists(location):
+                location = profile_location / 'calendar-data/local.sqlite'
+                if location.is_file():
                     self.parse_birthday(location)
                     return
                 # ... and now the old one
-                location = os.path.join(profile_location, 'storage.sdb')
-                if os.path.exists(location):
+                location = profile_location / 'storage.sdb'
+                if location.is_file():
                     self.parse_birthday(location)
                     return
         # Missing profile file
         raise BackendReadError(
-            _("Error reading profile file: {}").format(configfile),
+            _("Error reading profile file: {}").format(profile_dir),
         )
 
     def parse(self):
         '''open thunderbird sqlite-database'''
-        if os.path.exists(self.thunderbird_location):
+        if self.thunderbird_location.exists():
             self.get_config_file(self.thunderbird_location)
 
-    def _connect(self, filename):
+    def _connect(self, filepath):
         '''"connect" to sqlite3-database'''
 
         # TODO: use with connect as... syntax
@@ -80,14 +75,14 @@ class LightningBackend(BaseRWBackend):
                 _("Missing {} library.").format("SQLite3"))
 
         try:
-            self.conn = sqlite3.connect(filename)
+            self.conn = sqlite3.connect(str(filepath))
             self.cursor = self.conn.cursor()
         except Exception as exc:
             raise ConnectionError(exc)
 
-    def parse_birthday(self, filename):
+    def parse_birthday(self, filepath):
         try:
-            self._connect(filename)
+            self._connect(filepath)
         except ConnectionError as exc:
             raise BackendReadError(exc)
         qry = '''SELECT title, event_start FROM cal_events ce
@@ -116,7 +111,7 @@ class LightningBackend(BaseRWBackend):
             rows = self.cursor.fetchall()
             calender_id = rows[0][0]
             # lets assume there is at least one calendar
-            # TODO: implement code to insert new calendar if it none exists!
+            # TODO: implement code to insert new calendar if none exists!
 
             qry = '''INSERT INTO "cal_events"
                 (cal_id, id, time_created, last_modified, title, flags,

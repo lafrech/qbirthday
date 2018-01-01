@@ -1,6 +1,6 @@
 """Sunbird/Iceowl backend (based on Lightning)"""
 
-import os
+from pathlib import Path
 
 from .lightning import LightningBackend
 from .exceptions import BackendMissingLibraryError
@@ -16,18 +16,18 @@ class SunbirdBackend(LightningBackend):
 
         super().__init__(settings)
 
-        self.mozilla_location = os.path.join(os.environ['HOME'], '.mozilla')
+        self.mozilla_location = Path.home() / '.mozilla'
 
     def parse(self):
-        '''load file / open database connection'''
-        sunbird = os.path.join(self.mozilla_location, 'sunbird')
-        iceowl = os.path.join(self.mozilla_location, 'iceowl')
+        """load file / open database connection"""
+        sunbird_filepath = self.mozilla_location / 'sunbird'
+        iceowl_filepath = self.mozilla_location / 'iceowl'
 
-        if os.path.exists(sunbird):
+        if sunbird_filepath.exists():
             # extract path from profiles.ini
-            self.get_config_file(sunbird)
-        elif os.path.exists(iceowl):
-            self.get_config_file(iceowl)
+            self.get_config_file(sunbird_filepath)
+        elif iceowl_filepath.exists():
+            self.get_config_file(iceowl_filepath)
         else:
             raise BackendMissingLibraryError(
-                _("Neither iceowl nor sunbird is installed"))
+                _("No iceowl / sunbird profile found"))
