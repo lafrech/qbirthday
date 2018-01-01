@@ -3,7 +3,7 @@
 from PyQt5 import QtWidgets
 
 from qbirthday import load_ui
-from .base import BaseBackend
+from .base import BaseRWBackend
 from .exceptions import (
     BackendMissingLibraryError, BackendReadError, BackendWriteError)
 
@@ -53,12 +53,11 @@ class MySqlPreferencesDialog(QtWidgets.QDialog):
         self.settings.endGroup()
 
 
-class MySQLBackend(BaseBackend):
+class MySQLBackend(BaseRWBackend):
     """MySQL backend"""
 
     NAME = 'MySQL'
     TITLE = 'MySQL'
-    CAN_SAVE = True
     CONFIG_DLG = MySqlPreferencesDialog
 
     DEFAULTS = {

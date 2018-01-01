@@ -3,11 +3,11 @@
 import abc
 
 
-class BaseBackend(abc.ABC):
-    """Abstract class for all backends
+class BaseROBackend(abc.ABC):
+    """Abstract class for read-only backends
 
     To create a child class
-    - create parse and add methods
+    - create parse method
     - override class attributes if needed
     """
 
@@ -15,8 +15,6 @@ class BaseBackend(abc.ABC):
     NAME = ''
     # Backend name displayed to user
     TITLE = ''
-    # Whether backend can save new birthdays
-    CAN_SAVE = False
     # Configuration dialog
     CONFIG_DLG = None
     # Default configuration values
@@ -29,9 +27,15 @@ class BaseBackend(abc.ABC):
     def parse(self):
         """Return birthdates as list of (name, date) tuples"""
 
+
+class BaseRWBackend(BaseROBackend):
+    """Abstract class for all backends
+
+    To create a child class
+    - create parse and add methods
+    - override class attributes if needed
+    """
+
     @abc.abstractmethod
     def add(self, name, birthday):
-        """Save birthday to file/database
-
-        If CAN_SAVE is False, this method should raise NotImplementedError
-        """
+        """Save birthday to file/database"""

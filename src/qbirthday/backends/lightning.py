@@ -6,17 +6,16 @@ import uuid
 import configparser
 import datetime as dt
 
-from .base import BaseBackend
+from .base import BaseRWBackend
 from .exceptions import (
     BackendMissingLibraryError, BackendReadError, BackendWriteError)
 
 
-class LightningBackend(BaseBackend):
+class LightningBackend(BaseRWBackend):
     """Thunderbird/Lightning backend"""
 
     NAME = 'Lightning'
     TITLE = 'Thunderbird/Icedove Lightning'
-    CAN_SAVE = True
 
     def __init__(self, settings):
 

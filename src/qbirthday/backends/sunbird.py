@@ -11,7 +11,6 @@ class SunbirdBackend(LightningBackend):
 
     NAME = 'Sunbird'
     TITLE = 'Sunbird/Iceowl'
-    CAN_SAVE = True
 
     def __init__(self, settings):
 

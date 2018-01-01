@@ -8,7 +8,7 @@ import datetime as dt
 from textwrap import dedent
 from collections import defaultdict
 
-from .backends import BACKENDS
+from .backends import BACKENDS, BaseRWBackend
 from .backends.exceptions import BackendReadError
 
 
@@ -83,8 +83,9 @@ class BirthdayList:
 
     @property
     def read_write_backends(self):
-        """Return list of all read-write backends (exclude RO backends)"""
-        return [bcknd for bcknd in self.backends.values() if bcknd.CAN_SAVE]
+        """Return list of all read-write backends"""
+        return [bcknd for bcknd in self.backends.values()
+                if isinstance(bcknd, BaseRWBackend)]
 
     def _update(self):
         """Update self.birthdays with all birthdays in specified period"""

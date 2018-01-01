@@ -5,7 +5,7 @@ import datetime as dt
 from PyQt5 import QtCore, QtWidgets
 
 from qbirthday import load_ui
-from .base import BaseBackend
+from .base import BaseRWBackend
 from .exceptions import BackendReadError, BackendWriteError
 
 
@@ -39,12 +39,11 @@ class CSVPreferencesDialog(QtWidgets.QDialog):
         self.settings.setValue('CSV/filepath', self.filePathEdit.text())
 
 
-class CSVBackend(BaseBackend):
+class CSVBackend(BaseRWBackend):
     """CSV file backend"""
 
     NAME = 'CSV'
     TITLE = 'CSV-file (comma seperated value)'
-    CAN_SAVE = True
     CONFIG_DLG = CSVPreferencesDialog
 
     DEFAULTS = {
