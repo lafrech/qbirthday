@@ -1,6 +1,6 @@
 """Module defining paths
 
-PICS_DIR and UI_FILES_DIR are Path instances
+PICS_DIR, UI_FILES_DIR and QM_FILES_DIR are Path instances
 They must be cast as str when fed to Qt objects
 
 PICS_PATHS is a dict of strings
@@ -36,3 +36,5 @@ PICS_PATHS = {
 }
 
 UI_FILES_DIR = Path(__file__).parent / 'ui'
+
+QM_FILES_DIR = Path(__file__).parents[2] / 'i18n'

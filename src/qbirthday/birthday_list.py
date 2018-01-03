@@ -8,14 +8,18 @@ import datetime as dt
 from textwrap import dedent
 from collections import defaultdict
 
+from PyQt5 import QtCore
+
 from .backends import BACKENDS, BaseRWBackend
 from .backends.exceptions import BackendReadError
 
 
-class BirthdayList:
+class BirthdayList(QtCore.QObject):
     """Structure storing all birthdates and birthdays in specified period"""
 
     def __init__(self, main_window, settings):
+
+        super().__init__()
 
         self.main_window = main_window
         self.settings = settings
@@ -137,8 +141,8 @@ class BirthdayList:
                 f.write('DTSTAMP:' + now + '\n')
                 f.write('DTSTART:' + bdate + '\n')
                 f.write('DURATION:PT0S\n')
-                f.write('CATEGORIES:' + _("Birthday") + '\n')
-                f.write('SUMMARY:' + _("Birthday: ") + self._birthdates[
+                f.write('CATEGORIES:' + self.tr("Birthday") + '\n')
+                f.write('SUMMARY:' + self.tr("Birthday: ") + self._birthdates[
                     bday][0] + '\n')
                 f.write(dedent("""
                     CLASS:PRIVATE
@@ -150,7 +154,7 @@ class BirthdayList:
                     f.write('ACTION:DISPLAY\n')
                     f.write('TRIGGER;VALUE=DURATION:-P'
                             + str(conf_alarm_days) + 'D\n')
-                    f.write('DESCRIPTION:' + _("Birthday: ")
+                    f.write('DESCRIPTION:' + self.tr("Birthday: ")
                             + self._birthdates[bday][0] + '\n')
                     if conf_alarm_custom_properties != '':
                         f.write(conf_alarm_custom_properties + '\n')

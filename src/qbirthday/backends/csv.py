@@ -60,7 +60,7 @@ class CSVBackend(BaseRWBackend):
 
     def _raise_invalid_row_error(self, row):
         raise ValueError(
-            _('Invalid row "{row}" in CSV file {filepath}')
+            self.tr('Invalid row "{row}" in CSV file {filepath}')
             .format(row=self._delimiter.join(row), filepath=self._filepath))
 
     def parse(self):
@@ -86,7 +86,7 @@ class CSVBackend(BaseRWBackend):
                         birthdates.append((name, date))
         except IOError:
             raise BackendReadError(
-                _("Can't open CSV file: {}").format(self._filepath))
+                self.tr("Can't open CSV file: {}").format(self._filepath))
         except ValueError as exc:
             raise BackendReadError(exc)
 
@@ -102,4 +102,4 @@ class CSVBackend(BaseRWBackend):
                 writer.writerow((str(birthday), name))
         except IOError:
             raise BackendWriteError(
-                _("Can't open CSV file: {}").format(self._filepath))
+                self.tr("Can't open CSV file: {}").format(self._filepath))

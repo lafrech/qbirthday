@@ -1,7 +1,10 @@
 """Information about QBirthday"""
 
+from PyQt5 import QtCore
+
+
 __title__ = "QBirthday"
-__summary__ = "Birthday reminder"
+__summary__ = QtCore.QT_TR_NOOP("Birthday reminder")
 __uri__ = "https://github.com/lafrech/qbirthday"
 
 __version__ = "0.6.8"

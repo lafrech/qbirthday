@@ -6,3 +6,4 @@ gbirthday.spec
 .coverage
 *.swp
 dist
+i18n/*.qm

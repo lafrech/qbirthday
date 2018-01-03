@@ -96,7 +96,7 @@ class MySQLBackend(BaseRWBackend):
             import MySQLdb
         except ImportError:
             raise BackendMissingLibraryError(
-                _("Missing {} library.").format("MySQLdb"))
+                self.tr("Missing {} library.").format("MySQLdb"))
 
         try:
             self.conn = MySQLdb.connect(
@@ -128,8 +128,8 @@ class MySQLBackend(BaseRWBackend):
                 birthdates.append((row[0], row[1]))
         except Exception as msg:
             raise BackendReadError(
-                _("Could not execute {} query '{}':\n{}").format(
-                    'MySQL', qry, msg))
+                self.tr("Could not execute SQL query '{}':\n{}").format(
+                    qry, msg))
         else:
             return birthdates
         finally:
@@ -152,7 +152,7 @@ class MySQLBackend(BaseRWBackend):
             self.cursor.execute(qry)
         except Exception as msg:
             raise BackendWriteError(
-                _("Could not execute {} query '{}':\n{}").format(
-                    'MySQL', qry, msg))
+                self.tr("Could not execute SQL query '{}':\n{}").format(
+                    qry, msg))
         finally:
             self.conn.close()

@@ -18,7 +18,7 @@ class AboutDialog(QtWidgets.QDialog):
         self.imageLabel.setPixmap(QtGui.QPixmap(PICS_PATHS['qbirthday']))
         self.nameLabel.setText(
             "{} {}".format(about.__title__, about.__version__))
-        self.descLabel.setText(_(about.__summary__))
+        self.descLabel.setText(self.tr(about.__summary__))
         self.copyrightLabel.setText(
             "Copyright ©\n{}".format('\n'.join(about.__copyright__)))
         self.uriLabel.setText(
@@ -28,10 +28,11 @@ class AboutDialog(QtWidgets.QDialog):
         self.authorsTextEdit.insertPlainText('\n'.join(about.__authors__))
 
         # Translators
-        translators = _('translator-credit')
+        translators = self.tr('translator-credit')
         if translators == 'translator-credit':
-            translators = _("There are no translations or the translator "
-                            "doesn't want to get credits for that.")
+            translators = self.tr(
+                "There are no translations or the translator "
+                "doesn't want to get credits for that.")
         self.translatorsTextEdit.insertPlainText(translators)
 
         # Artists

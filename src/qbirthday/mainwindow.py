@@ -63,9 +63,10 @@ class MainWindow(QtWidgets.QMainWindow):
 
         # Set title
         if self.bday_list.bdays_in_period():
-            self.titleLabel.setText(_('Birthdays'))
+            self.titleLabel.setText(self.tr('Birthdays'))
         else:
-            self.titleLabel.setText(_('No birthdays in specified period'))
+            self.titleLabel.setText(
+                self.tr('No birthdays in specified period'))
 
         # Empty birthday list
         # http://stackoverflow.com/questions/4528347/
@@ -94,21 +95,20 @@ class MainWindow(QtWidgets.QMainWindow):
             self.current_day = new_day
             self.reload()
 
-    @staticmethod
-    def make_birthday_line(delta_day, name, birthdate):
+    def make_birthday_line(self, delta_day, name, birthdate):
         """Return a row as a list of widgets
 
         deltaday (int): day index in specified period
         name (str): person name
         birthdate (dt.date): date of birth
         """
-
         label_image = QtWidgets.QLabel()
+        # TODO: use Qt to localize day + month
         label_day = QtWidgets.QLabel(str(birthdate.day))
-        label_month = QtWidgets.QLabel(_(birthdate.strftime('%B')))
+        label_month = QtWidgets.QLabel(birthdate.strftime('%B'))
         label_name = QtWidgets.QLabel(name)
         label_when = QtWidgets.QLabel()
-        label_age = QtWidgets.QLabel(_('{} Years').format(
+        label_age = QtWidgets.QLabel(self.tr('{} years old').format(
             datetime.date.today().year - birthdate.year))
 
         label_day.setAlignment(QtCore.Qt.AlignRight |
@@ -126,25 +126,26 @@ class MainWindow(QtWidgets.QMainWindow):
         # Birthday today
         if delta_day == 0:
             label_image.setPixmap(QtGui.QPixmap(PICS_PATHS['birthdaytoday']))
-            label_when.setText(_('Today'))
+            label_when.setText(self.tr('Today'))
             for label in labels:
                 label.setStyleSheet("QLabel { font: bold; }")
         # Birthday in the past
         elif delta_day < 0:
             label_image.setPixmap(QtGui.QPixmap(PICS_PATHS['birthdaylost']))
             if delta_day == -1:
-                label_when.setText(_('Yesterday'))
+                label_when.setText(self.tr('Yesterday'))
             else:
-                label_when.setText(_('%s Days ago') % str(delta_day * -1))
+                label_when.setText(
+                    self.tr('{} days ago').format(- delta_day))
             for label in labels:
                 label.setStyleSheet("QLabel { color : grey; }")
         # Birthday in the future
         else:
             label_image.setPixmap(QtGui.QPixmap(PICS_PATHS['birthdaynext']))
             if delta_day == 1:
-                label_when.setText(_('Tomorrow'))
+                label_when.setText(self.tr('Tomorrow'))
             else:
-                label_when.setText(_('%s Days') % delta_day)
+                label_when.setText(self.tr('{} days').format(delta_day))
 
         return labels
 

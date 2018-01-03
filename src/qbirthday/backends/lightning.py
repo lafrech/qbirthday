@@ -47,7 +47,7 @@ class LightningBackend(BaseRWBackend):
                 self.parse_birthday(db_location)
         # Missing profile file
         raise BackendReadError(
-            _("Error reading profile file: {}").format(profile_dir),
+            self.tr("Error reading profile file: {}").format(profile_dir),
         )
 
     def parse(self):
@@ -63,7 +63,7 @@ class LightningBackend(BaseRWBackend):
             import sqlite3
         except ImportError:
             raise BackendMissingLibraryError(
-                _("Missing {} library.").format("SQLite3"))
+                self.tr("Missing {} library.").format("SQLite3"))
 
         try:
             self.conn = sqlite3.connect(str(filepath))
@@ -140,6 +140,6 @@ class LightningBackend(BaseRWBackend):
             self.conn.commit()
         except Exception as msg:
             raise BackendWriteError(
-                _("Could not execute {} query '{}':\n{}").format(
-                    'SQLite', qry, msg)
+                self.tr("Could not execute SQLite query '{}':\n{}").format(
+                    qry, msg)
             )

@@ -21,26 +21,27 @@ class StatusIcon(QtWidgets.QSystemTrayIcon):
         self.settings = settings
 
         # TODO: Add action enabled only if at least one DB selected
+        # TODO: Is there a standard translation in Qt for those menu actions?
         menu = QtWidgets.QMenu()
         menu.addAction(
             QtGui.QIcon.fromTheme("view-refresh"),
-            "Refresh",
+            self.tr("Refresh"),
             self.main_window.reload)
         menu.addAction(
             QtGui.QIcon.fromTheme("list-add"),
-            "Add",
+            self.tr("Add"),
             self.add_single_manual)
         menu.addAction(
             QtGui.QIcon.fromTheme("preferences-other"),
-            "Preferences",
+            self.tr("Preferences"),
             lambda: PreferencesDialog(self.settings, self.main_window).exec_())
         menu.addAction(
             QtGui.QIcon.fromTheme("help-about"),
-            "About",
+            self.tr("About"),
             lambda: AboutDialog(self.main_window).exec_())
         menu.addAction(
             QtGui.QIcon.fromTheme("application-exit"),
-            "Quit",
+            self.tr("Quit"),
             QtCore.QCoreApplication.instance().quit)
 
         # Set context menu to open on right click

@@ -9,24 +9,10 @@ Original source from:
 """
 
 import sys
-import locale
 
 from PyQt5 import QtCore, QtGui, QtWidgets, uic
 
-from .paths import PICS_PATHS, UI_FILES_DIR
-
-# parse locales from python module
-# Do you say "1. January" or "January 1."?
-locale.setlocale(locale.LC_ALL, '')
-
-# for FreeBSD users: if no i18n is whished, no gettext package will be
-# available and standard messages are displayed insted a try to use
-# translated strings
-try:
-    import gettext
-    gettext.install("qbirthday")
-except ImportError:
-    _ = lambda x: x  # noqa
+from .paths import PICS_PATHS, UI_FILES_DIR, QM_FILES_DIR
 
 
 def load_ui(ui_file, widget=None):
@@ -49,6 +35,20 @@ def main():
 
     app = QtWidgets.QApplication([])
     app.setWindowIcon(QtGui.QIcon(PICS_PATHS['qbirthday']))
+
+    # Internationalization
+    # Use system locale
+    locale = QtCore.QLocale.system().name()
+    # Load default translator for Qt strings
+    translator_qt = QtCore.QTranslator()
+    translator_qt.load(
+        'qt_{}'.format(locale),
+        QtCore.QLibraryInfo.location(QtCore.QLibraryInfo.TranslationsPath))
+    app.installTranslator(translator_qt)
+    # Load translator for own strings
+    translator = QtCore.QTranslator()
+    translator.load(str(QM_FILES_DIR / 'qbirthday_{}'.format(locale)))
+    app.installTranslator(translator)
 
     # TODO: is this the right way?
     app.setQuitOnLastWindowClosed(False)

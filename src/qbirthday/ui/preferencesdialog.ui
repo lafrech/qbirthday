@@ -46,7 +46,7 @@
      <item row="3" column="0">
       <widget class="QLabel" name="icsExportLabel">
        <property name="text">
-        <string>ICS Calendar export</string>
+        <string>iCalendar export</string>
        </property>
       </widget>
      </item>

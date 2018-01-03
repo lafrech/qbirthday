@@ -109,7 +109,7 @@ class PreferencesDialog(QtWidgets.QDialog):
             self.bcknd_chkbx[bcknd.NAME].setChecked(bcknd_used)
             hbox.addWidget(self.bcknd_chkbx[bcknd.NAME])
             if bcknd.CONFIG_DLG is not None:
-                button = QtWidgets.QPushButton(_('Preferences'))
+                button = QtWidgets.QPushButton(self.tr('Preferences'))
                 button.setEnabled(bcknd_used)
                 self.bcknd_chkbx[bcknd.NAME].stateChanged.connect(
                     button.setEnabled)

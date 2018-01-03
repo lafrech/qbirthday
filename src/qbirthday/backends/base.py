@@ -2,8 +2,17 @@
 
 import abc
 
+from PyQt5 import QtCore
 
-class BaseROBackend(abc.ABC):
+
+class AbstractQObjectMetaclass(QtCore.pyqtWrapperType, abc.ABCMeta):
+    """Metaclass for an abstract class inheriting QObject
+
+    See https://stackoverflow.com/questions/46837947/
+    """
+
+
+class BaseROBackend(QtCore.QObject, metaclass=AbstractQObjectMetaclass):
     """Abstract class for read-only backends
 
     To create a child class
