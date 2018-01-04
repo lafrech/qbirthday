@@ -111,8 +111,9 @@ class MainWindow(QtWidgets.QMainWindow):
         label_age = QtWidgets.QLabel(self.tr('{} years old').format(
             datetime.date.today().year - birthdate.year))
 
-        label_day.setAlignment(QtCore.Qt.AlignRight |
-                               QtCore.Qt.AlignVCenter)
+        label_day.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
+        label_when.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
+        label_age.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
 
         labels = [
             label_image,
