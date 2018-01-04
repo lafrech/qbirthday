@@ -3,3 +3,9 @@ Runs on Python 3
 Depends on PyQt5
 
 Optionally depends on MySQLdb or sqlite3
+
+Translations:
+
+- Update ts files: pylupdate5 -noobsolete qbirthday.pro
+- Update translations strings using Qt Linguist GUI
+- Create/update qm files: lrelease -qt=5 qbirthday.pro
