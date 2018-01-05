@@ -1,7 +1,3 @@
-# Internationalization compiled files
-i18n/*.qm
-
-
 # Everything below is copy-pasted from Github gitignore
 # https://github.com/github/gitignore
 
