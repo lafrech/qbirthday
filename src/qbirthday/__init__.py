@@ -12,12 +12,12 @@ import sys
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+from .mainwindow import MainWindow
 from .paths import PICS_PATHS, QM_FILES_DIR
 
 
 def main():
     '''Load settings, start status icon and get to work.'''
-    from .mainwindow import MainWindow
 
     # TODO: Think twice about naming before releasing
     QtCore.QCoreApplication.setOrganizationName("QBirthday")
@@ -47,7 +47,3 @@ def main():
     MainWindow()
 
     sys.exit(app.exec_())
-
-
-if __name__ == '__main__':
-    main()

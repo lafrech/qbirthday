@@ -1,14 +1,8 @@
 #!/usr/bin/python3
 """Launch qbirthday"""
 
+from qbirthday import main
 
-try:
-    from qbirthday import main
-except ImportError:
-    # maybe it's installed in a private location
-    import os, sys
-    usr_share_path = os.path.join('/', 'usr', 'share', 'qbirthday')
-    if os.path.exists(usr_share_path):
-        sys.path.insert(0, usr_share_path)
-        from qbirthday import main
-main()
+
+if __name__ == '__main__':
+    main()
