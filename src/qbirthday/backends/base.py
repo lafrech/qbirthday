@@ -30,6 +30,7 @@ class BaseROBackend(QtCore.QObject, metaclass=AbstractQObjectMetaclass):
     DEFAULTS = {}
 
     def __init__(self, settings):
+        super().__init__()
         self.settings = settings
 
     @abc.abstractmethod

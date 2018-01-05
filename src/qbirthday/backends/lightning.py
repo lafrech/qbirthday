@@ -21,11 +21,31 @@ class LightningBackend(BaseRWBackend):
 
         super().__init__(settings)
 
-        self.thunderbird_location = Path / '.mozilla-thunderbird'
+        self.thunderbird_location = Path.home() / '.mozilla-thunderbird'
         self.cursor = None
         self.conn = None
 
-    def get_config_file(self, profile_dir):
+    def _parse_birthday(self, filepath):
+        try:
+            self._connect(filepath)
+        except ConnectionError as exc:
+            raise BackendReadError(exc)
+        qry = '''SELECT title, event_start FROM cal_events ce
+              INNER JOIN cal_properties cp
+              ON ce.id = cp.item_id
+              WHERE cp.key == 'CATEGORIES' AND
+              cp.value == 'Birthday' AND
+              ce.title != '';'''
+        self.cursor.execute(qry)
+        birthdates = []
+        for row in self.cursor:
+            bday = dt.datetime.utcfromtimestamp(int(row[1]) / 1000000).date()
+            birthdates.append((row[0], bday))
+        return birthdates
+
+    def parse(self):
+        '''open thunderbird sqlite-database'''
+        profile_dir = self.thunderbird_location
         profilefile = profile_dir / 'profiles.ini'
         if profilefile.is_file():
             conf_pars = configparser.ConfigParser()
@@ -44,16 +64,11 @@ class LightningBackend(BaseRWBackend):
                 else:
                     profile_location = profiles[profile]['path']
                 db_location = profile_location / 'calendar-data/local.sqlite'
-                self.parse_birthday(db_location)
+                self._parse_birthday(db_location)
         # Missing profile file
         raise BackendReadError(
             self.tr("Error reading profile file: {}").format(profile_dir),
         )
-
-    def parse(self):
-        '''open thunderbird sqlite-database'''
-        if self.thunderbird_location.exists():
-            self.get_config_file(self.thunderbird_location)
 
     def _connect(self, filepath):
         '''"connect" to sqlite3-database'''
@@ -70,24 +85,6 @@ class LightningBackend(BaseRWBackend):
             self.cursor = self.conn.cursor()
         except Exception as exc:
             raise ConnectionError(exc)
-
-    def parse_birthday(self, filepath):
-        try:
-            self._connect(filepath)
-        except ConnectionError as exc:
-            raise BackendReadError(exc)
-        qry = '''SELECT title, event_start FROM cal_events ce
-              INNER JOIN cal_properties cp
-              ON ce.id = cp.item_id
-              WHERE cp.key == 'CATEGORIES' AND
-              cp.value == 'Birthday' AND
-              ce.title != '';'''
-        self.cursor.execute(qry)
-        birthdates = []
-        for row in self.cursor:
-            bday = dt.datetime.utcfromtimestamp(int(row[1]) / 1000000).date()
-            birthdates.append((row[0], bday))
-        return birthdates
 
     def add(self, name, birthday):
         # create new uuid
