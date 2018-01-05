@@ -37,4 +37,4 @@ PICS_PATHS = {
 
 UI_FILES_DIR = Path(__file__).parent / 'ui'
 
-QM_FILES_DIR = Path(__file__).parents[2] / 'i18n'
+QM_FILES_DIR = Path(__file__).parent / 'i18n'

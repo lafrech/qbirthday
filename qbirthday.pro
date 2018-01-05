@@ -1,6 +1,6 @@
 SRCDIR = src/qbirthday
 UIDIR = src/qbirthday/ui
-I18NDIR = i18n
+I18NDIR = src/qbirthday/i18n
 
 SOURCES = \
     $$SRCDIR/__init__.py \
