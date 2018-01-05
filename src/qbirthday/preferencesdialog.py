@@ -2,10 +2,10 @@
 
 from pathlib import Path
 
-from PyQt5 import QtWidgets
+from PyQt5 import QtWidgets, uic
 
-from qbirthday import load_ui
 from .backends import BACKENDS
+from .paths import UI_FILES_DIR
 
 
 class IcsExportPreferencesDialog(QtWidgets.QDialog):
@@ -15,7 +15,7 @@ class IcsExportPreferencesDialog(QtWidgets.QDialog):
 
         super().__init__(parent)
 
-        load_ui('icsexportpreferencesdialog.ui', self)
+        uic.loadUi(str(UI_FILES_DIR / 'icsexportpreferencesdialog.ui'), self)
 
         self.settings = settings
 
@@ -77,7 +77,7 @@ class PreferencesDialog(QtWidgets.QDialog):
 
         super().__init__(main_window)
 
-        load_ui('preferencesdialog.ui', self)
+        uic.loadUi(str(UI_FILES_DIR / 'preferencesdialog.ui'), self)
 
         self.settings = settings
         self.main_window = main_window

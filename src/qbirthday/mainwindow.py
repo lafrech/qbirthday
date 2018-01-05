@@ -2,12 +2,12 @@
 
 import datetime
 
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5 import QtCore, QtGui, QtWidgets, uic
 
-from qbirthday import PICS_PATHS, load_ui
 from .birthday_list import BirthdayList
 from .statusicon import StatusIcon
 from .settings import Settings
+from .paths import PICS_PATHS, UI_FILES_DIR
 
 
 class MainWindow(QtWidgets.QMainWindow):
@@ -21,7 +21,7 @@ class MainWindow(QtWidgets.QMainWindow):
                             QtCore.Qt.FramelessWindowHint |
                             QtCore.Qt.WindowStaysOnTopHint)  # ??
 
-        load_ui('mainwindow.ui', self)
+        uic.loadUi(str(UI_FILES_DIR / 'mainwindow.ui'), self)
 
         self.settings = Settings()
         self.bday_list = BirthdayList(self, self.settings)

@@ -1,18 +1,19 @@
 """About dialog"""
 
-from PyQt5 import QtGui, QtWidgets
+from PyQt5 import QtGui, QtWidgets, uic
 
-from qbirthday import PICS_PATHS, load_ui
 from qbirthday import __about__ as about
+from .paths import PICS_PATHS, UI_FILES_DIR
 
 
 class AboutDialog(QtWidgets.QDialog):
+    """About Dialog"""
 
     def __init__(self, main_window):
 
         super().__init__(main_window)
 
-        load_ui('aboutdialog.ui', self)
+        uic.loadUi(str(UI_FILES_DIR / 'aboutdialog.ui'), self)
 
         # About
         self.imageLabel.setPixmap(QtGui.QPixmap(PICS_PATHS['qbirthday']))

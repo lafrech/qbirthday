@@ -1,11 +1,11 @@
 """Status icon"""
 
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5 import QtCore, QtGui, QtWidgets, uic
 
-from qbirthday import PICS_PATHS, load_ui
 from .preferencesdialog import PreferencesDialog
 from .aboutdialog import AboutDialog
 from .backends.exceptions import BackendWriteError
+from .paths import PICS_PATHS, UI_FILES_DIR
 
 
 class StatusIcon(QtWidgets.QSystemTrayIcon):
@@ -83,7 +83,7 @@ class StatusIcon(QtWidgets.QSystemTrayIcon):
     def add_single_manual(self):
         """Add birthday dialog"""
 
-        add_widget = load_ui('add.ui')
+        add_widget = uic.loadUi(str(UI_FILES_DIR / 'add.ui'))
 
         # Fill backend combobox
         # TODO: use index to allow DB name translation

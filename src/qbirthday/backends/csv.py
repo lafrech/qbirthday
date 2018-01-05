@@ -3,9 +3,9 @@
 import datetime as dt
 import csv
 
-from PyQt5 import QtCore, QtWidgets
+from PyQt5 import QtCore, QtWidgets, uic
 
-from qbirthday import load_ui
+from qbirthday.paths import UI_FILES_DIR
 from qbirthday.paths import APP_DATA_LOCATION
 from .base import BaseRWBackend
 from .exceptions import BackendReadError, BackendWriteError
@@ -16,7 +16,7 @@ class CSVPreferencesDialog(QtWidgets.QDialog):
 
     def __init__(self, settings, parent):
         super().__init__(parent)
-        load_ui('csvpreferencesdialog.ui', self)
+        uic.loadUi(str(UI_FILES_DIR / 'csvpreferencesdialog.ui'), self)
         self.settings = settings
         self.filePathEdit.setText(self.settings.value('CSV/filepath'))
         self.filePathButton.clicked.connect(self.get_filepath)

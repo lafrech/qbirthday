@@ -10,19 +10,9 @@ Original source from:
 
 import sys
 
-from PyQt5 import QtCore, QtGui, QtWidgets, uic
+from PyQt5 import QtCore, QtGui, QtWidgets
 
-from .paths import PICS_PATHS, UI_FILES_DIR, QM_FILES_DIR
-
-
-def load_ui(ui_file, widget=None):
-    '''Load UI file into widget and return widget
-
-       inputs:
-       - ui file path relative to ui files directory
-       - (optionnal) widget : if None, a new widget is created
-    '''
-    return uic.loadUi(str(UI_FILES_DIR / ui_file), widget)
+from .paths import PICS_PATHS, QM_FILES_DIR
 
 
 def main():

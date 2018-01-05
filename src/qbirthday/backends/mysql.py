@@ -1,8 +1,8 @@
 """MySQL backend"""
 
-from PyQt5 import QtWidgets
+from PyQt5 import QtWidgets, uic
 
-from qbirthday import load_ui
+from qbirthday.paths import UI_FILES_DIR
 from .base import BaseRWBackend
 from .exceptions import (
     BackendMissingLibraryError, BackendReadError, BackendWriteError)
@@ -15,7 +15,7 @@ class MySqlPreferencesDialog(QtWidgets.QDialog):
 
         super().__init__(parent)
 
-        load_ui('mysqlpreferencesdialog.ui', self)
+        uic.loadUi(str(UI_FILES_DIR / 'mysqlpreferencesdialog.ui'), self)
 
         self.settings = settings
 
