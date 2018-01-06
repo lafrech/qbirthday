@@ -7,8 +7,8 @@ from PyQt5 import QtCore, QtWidgets, uic
 
 from qbirthday.paths import UI_FILES_DIR
 from qbirthday.paths import APP_DATA_LOCATION
-from .base import BaseRWBackend
-from .exceptions import BackendReadError, BackendWriteError
+from .base import BaseBackend
+from .exceptions import BackendReadError
 
 
 class CSVPreferencesDialog(QtWidgets.QDialog):
@@ -41,7 +41,7 @@ class CSVPreferencesDialog(QtWidgets.QDialog):
         self.settings.setValue('CSV/filepath', self.filePathEdit.text())
 
 
-class CSVBackend(BaseRWBackend):
+class CSVBackend(BaseBackend):
     """CSV file backend"""
 
     NAME = 'CSV'
@@ -91,15 +91,3 @@ class CSVBackend(BaseRWBackend):
             raise BackendReadError(exc)
 
         return birthdates
-
-    def add(self, name, birthday):
-        '''add new person with birthday to end of csv-file'''
-
-        try:
-            with open(self._filepath, 'a') as csv_file:
-                writer = csv.writer(csv_file, delimiter=self._delimiter,
-                                    lineterminator='\n')
-                writer.writerow((str(birthday), name))
-        except IOError:
-            raise BackendWriteError(
-                self.tr("Can't open CSV file: {}").format(self._filepath))

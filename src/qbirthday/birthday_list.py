@@ -10,7 +10,7 @@ from collections import defaultdict
 
 from PyQt5 import QtCore
 
-from .backends import BACKENDS, BaseRWBackend
+from .backends import BACKENDS
 from .backends.exceptions import BackendReadError
 
 
@@ -85,12 +85,6 @@ class BirthdayList(QtCore.QObject):
 
         if self.settings.value('ics_export/enabled', type=bool):
             self._export()
-
-    @property
-    def read_write_backends(self):
-        """Return list of all read-write backends"""
-        return [bcknd for bcknd in self.backends.values()
-                if isinstance(bcknd, BaseRWBackend)]
 
     def _update(self):
         """Update self.birthdays with all birthdays in specified period"""

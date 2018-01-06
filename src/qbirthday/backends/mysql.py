@@ -3,9 +3,8 @@
 from PyQt5 import QtWidgets, uic
 
 from qbirthday.paths import UI_FILES_DIR
-from .base import BaseRWBackend
-from .exceptions import (
-    BackendMissingLibraryError, BackendReadError, BackendWriteError)
+from .base import BaseBackend
+from .exceptions import BackendMissingLibraryError, BackendReadError
 
 
 class MySqlPreferencesDialog(QtWidgets.QDialog):
@@ -53,7 +52,7 @@ class MySqlPreferencesDialog(QtWidgets.QDialog):
         self.settings.endGroup()
 
 
-class MySQLBackend(BaseRWBackend):
+class MySQLBackend(BaseBackend):
     """MySQL backend"""
 
     NAME = 'MySQL'
@@ -132,27 +131,5 @@ class MySQLBackend(BaseRWBackend):
                     qry, msg))
         else:
             return birthdates
-        finally:
-            self.conn.close()
-
-    def add(self, name, birthday):
-        '''insert new Birthday to database'''
-
-        # TODO: use a context manager
-        try:
-            self._connect()
-        except ConnectionError as exc:
-            raise BackendWriteError(exc)
-
-        try:
-            qry = (
-                "INSERT INTO %s (%s, %s) VALUES ('%s', '%s')" %
-                (self.table, self.name_row, self.date_row, name, str(birthday))
-            )
-            self.cursor.execute(qry)
-        except Exception as msg:
-            raise BackendWriteError(
-                self.tr("Could not execute SQL query '{}':\n{}").format(
-                    qry, msg))
         finally:
             self.conn.close()

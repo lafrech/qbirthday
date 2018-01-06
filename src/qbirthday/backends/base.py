@@ -12,7 +12,7 @@ class AbstractQObjectMetaclass(type(QtCore.QObject), abc.ABCMeta):
     """
 
 
-class BaseROBackend(QtCore.QObject, metaclass=AbstractQObjectMetaclass):
+class BaseBackend(QtCore.QObject, metaclass=AbstractQObjectMetaclass):
     """Abstract class for read-only backends
 
     To create a child class
@@ -36,16 +36,3 @@ class BaseROBackend(QtCore.QObject, metaclass=AbstractQObjectMetaclass):
     @abc.abstractmethod
     def parse(self):
         """Return birthdates as list of (name, date) tuples"""
-
-
-class BaseRWBackend(BaseROBackend):
-    """Abstract class for all backends
-
-    To create a child class
-    - create parse and add methods
-    - override class attributes if needed
-    """
-
-    @abc.abstractmethod
-    def add(self, name, birthday):
-        """Save birthday to file/database"""

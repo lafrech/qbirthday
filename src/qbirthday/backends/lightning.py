@@ -1,17 +1,14 @@
 """Thunderbird/Lightning backend"""
 
-import time
-import uuid
 import configparser
 import datetime as dt
 from pathlib import Path
 
-from .base import BaseRWBackend
-from .exceptions import (
-    BackendMissingLibraryError, BackendReadError, BackendWriteError)
+from .base import BaseBackend
+from .exceptions import BackendMissingLibraryError, BackendReadError
 
 
-class LightningBackend(BaseRWBackend):
+class LightningBackend(BaseBackend):
     """Thunderbird/Lightning backend"""
 
     NAME = 'Lightning'
@@ -85,58 +82,3 @@ class LightningBackend(BaseRWBackend):
             self.cursor = self.conn.cursor()
         except Exception as exc:
             raise ConnectionError(exc)
-
-    def add(self, name, birthday):
-        # create new uuid
-        event_date = int(birthday.strftime("%s"))
-        event_start = (event_date + 86400) * 1000000
-        event_end = (event_date + 172800) * 1000000
-        uid = str(uuid.uuid4())
-        create_time = str(int(time.time()) * 1000000)
-        try:
-            qry = '''SELECT id from cal_calendars LIMIT 1;'''
-            self.cursor.execute(qry)
-            rows = self.cursor.fetchall()
-            calender_id = rows[0][0]
-            # lets assume there is at least one calendar
-            # TODO: implement code to insert new calendar if none exists!
-
-            qry = '''INSERT INTO "cal_events"
-                (cal_id, id, time_created, last_modified, title, flags,
-                event_start, event_start_tz, event_end, event_end_tz)
-                VALUES
-                ('%s', '%s', '%s', '%s', '%s', 28, '%s', 'floating', '%s',
-                 'floating'); ''' % (
-                     calender_id, uid, create_time,
-                     create_time, name, event_start, event_end)
-
-            self.cursor.execute(qry)
-
-            qry = '''INSERT INTO cal_properties
-                     (item_id, key, value)
-                     VALUES
-                     ('%s', 'CATEGORIES', 'Birthday');''' % uid
-            self.cursor.execute(qry)
-            qry = '''INSERT INTO cal_properties
-                     (item_id, key, value)
-                     VALUES
-                     ('%s', 'TRANSP', 'TRANSPARENT');''' % uid
-            self.cursor.execute(qry)
-            qry = '''INSERT INTO cal_properties
-                     (item_id, key, value)
-                     VALUES
-                     ('%s', 'X-MOZ-GENERATION', '1');''' % uid
-            self.cursor.execute(qry)
-            # birthday repeats yearly
-            qry = '''INSERT INTO "cal_recurrence"
-                     (item_id, recur_index, recur_type, is_negative, count,
-                     interval)
-                     VALUES
-                     ('%s', 1, 'YEARLY', 0, -1, 1);''' % uid
-            self.cursor.execute(qry)
-            self.conn.commit()
-        except Exception as msg:
-            raise BackendWriteError(
-                self.tr("Could not execute SQLite query '{}':\n{}").format(
-                    qry, msg)
-            )
