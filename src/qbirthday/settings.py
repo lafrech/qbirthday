@@ -12,7 +12,6 @@ from .backends import BACKENDS
 CONFIG_DEFAULTS = {
     'firstday': -2,
     'lastday': 30,
-    'notify_future_birthdays': 0,
 }
 
 ICS_EXPORT_CONFIG_DEFAULTS = {

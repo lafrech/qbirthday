@@ -84,8 +84,6 @@ class PreferencesDialog(QtWidgets.QDialog):
 
         self.pastSpinBox.setValue(self.settings.value('firstday', type=int))
         self.nextSpinBox.setValue(self.settings.value('lastday', type=int))
-        self.notifyNextSpinBox.setValue(
-            self.settings.value('notify_future_bdays', type=int))
         self.icsExportCheckBox.setChecked(
             self.settings.value('ics_export/enabled', type=bool))
         self.icsExportButton.setEnabled(
@@ -133,8 +131,6 @@ class PreferencesDialog(QtWidgets.QDialog):
         # Save settings
         self.settings.setValue('firstday', self.pastSpinBox.value())
         self.settings.setValue('lastday', self.nextSpinBox.value())
-        self.settings.setValue('notify_future_bdays',
-                               self.notifyNextSpinBox.value())
         self.settings.setValue('ics_export/enabled',
                                self.icsExportCheckBox.isChecked())
 
