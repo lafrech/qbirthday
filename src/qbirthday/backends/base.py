@@ -5,7 +5,7 @@ import abc
 from PyQt5 import QtCore
 
 
-class AbstractQObjectMetaclass(QtCore.pyqtWrapperType, abc.ABCMeta):
+class AbstractQObjectMetaclass(type(QtCore.QObject), abc.ABCMeta):
     """Metaclass for an abstract class inheriting QObject
 
     See https://stackoverflow.com/questions/46837947/
