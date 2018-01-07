@@ -11,6 +11,10 @@ from .base import BaseBackend
 from .exceptions import BackendReadError
 
 
+BACKEND_ID = 'CSV'
+BACKEND_NAME = 'CSV-file (comma separated value)'
+
+
 class CSVPreferencesDialog(QtWidgets.QDialog):
     """CSV backend settings dialog"""
 
@@ -44,8 +48,6 @@ class CSVPreferencesDialog(QtWidgets.QDialog):
 class CSVBackend(BaseBackend):
     """CSV file backend"""
 
-    NAME = 'CSV'
-    TITLE = 'CSV-file (comma seperated value)'
     CONFIG_DLG = CSVPreferencesDialog
 
     DEFAULTS = {
@@ -91,3 +93,6 @@ class CSVBackend(BaseBackend):
             raise BackendReadError(exc)
 
         return birthdates
+
+
+BACKEND = CSVBackend

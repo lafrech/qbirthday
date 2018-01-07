@@ -1,8 +1,15 @@
 """Base class for all backends"""
 
 import abc
+import importlib
 
 from PyQt5 import QtCore
+
+from .exceptions import BackendMissingLibraryError
+
+
+MISSING_LIB_ERR_STR = QtCore.QT_TRANSLATE_NOOP(
+    "Backends", "Missing {} library.")
 
 
 class AbstractQObjectMetaclass(type(QtCore.QObject), abc.ABCMeta):
@@ -20,10 +27,6 @@ class BaseBackend(QtCore.QObject, metaclass=AbstractQObjectMetaclass):
     - override class attributes if needed
     """
 
-    # Backend name
-    NAME = ''
-    # Backend name displayed to user
-    TITLE = ''
     # Configuration dialog
     CONFIG_DLG = None
     # Default configuration values
@@ -36,3 +39,21 @@ class BaseBackend(QtCore.QObject, metaclass=AbstractQObjectMetaclass):
     @abc.abstractmethod
     def parse(self):
         """Return birthdates as list of (name, date) tuples"""
+
+
+def try_import(module_name, lib_name=None):
+    """Import module
+
+    In case of ImportError, raise BackendMissingLibraryError
+    module_name: name of the module to import
+    lib_name: name of the python lib containing the module
+        (default to module_name)
+    """
+    lib_name = lib_name or module_name
+    try:
+        module = importlib.import_module(module_name)
+    except ImportError:
+        import_err = QtCore.QCoreApplication.translate(
+            "Backends", MISSING_LIB_ERR_STR).format(lib_name)
+        raise BackendMissingLibraryError(import_err)
+    return module

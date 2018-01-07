@@ -47,10 +47,16 @@ class Settings(QtCore.QSettings):
         self.endGroup()
         # Backend settings
         for bcknd in BACKENDS:
-            self.beginGroup(bcknd.NAME)
+            self.beginGroup(bcknd.id)
             # Disable all backends by default
             self.setDefaultValue('enabled', False)
-            # Load backend specific default values
-            for key, val in bcknd.DEFAULTS.items():
-                self.setDefaultValue(key, val)
+            if bcknd.cls is not None:
+                # If backend available, Load backend specific default values
+                for key, val in bcknd.cls.DEFAULTS.items():
+                    self.setDefaultValue(key, val)
+            else:
+                # If backend unavailable and enabled in config, warn user
+                if self.value('enabled') is True:
+                    # TODO: display warning
+                    pass
             self.endGroup()

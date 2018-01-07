@@ -100,23 +100,28 @@ class PreferencesDialog(QtWidgets.QDialog):
 
             hbox = QtWidgets.QHBoxLayout()
             self.backendsLayout.addLayout(hbox)
+            self.bcknd_chkbx[bcknd.id] = QtWidgets.QCheckBox(bcknd.name)
+            hbox.addWidget(self.bcknd_chkbx[bcknd.id])
 
-            self.bcknd_chkbx[bcknd.NAME] = QtWidgets.QCheckBox(bcknd.TITLE)
-            bcknd_used = self.settings.value(
-                bcknd.NAME + '/enabled', type=bool)
-            self.bcknd_chkbx[bcknd.NAME].setChecked(bcknd_used)
-            hbox.addWidget(self.bcknd_chkbx[bcknd.NAME])
-            if bcknd.CONFIG_DLG is not None:
-                button = QtWidgets.QPushButton(self.tr('Preferences'))
-                button.setEnabled(bcknd_used)
-                self.bcknd_chkbx[bcknd.NAME].stateChanged.connect(
-                    button.setEnabled)
-                button.clicked.connect(
-                    # http://stackoverflow.com/questions/2295290/
-                    # http://stackoverflow.com/questions/18836291/
-                    lambda ignore, dlg=bcknd.CONFIG_DLG: dlg(
-                        self.settings, self).exec_())
-                hbox.addWidget(button)
+            if bcknd.cls is not None:
+                bcknd_used = self.settings.value(
+                    bcknd.id + '/enabled', type=bool)
+                self.bcknd_chkbx[bcknd.id].setChecked(bcknd_used)
+                if bcknd.cls.CONFIG_DLG is not None:
+                    button = QtWidgets.QPushButton(self.tr('Preferences'))
+                    button.setEnabled(bcknd_used)
+                    self.bcknd_chkbx[bcknd.id].stateChanged.connect(
+                        button.setEnabled)
+                    button.clicked.connect(
+                        # http://stackoverflow.com/questions/2295290/
+                        # http://stackoverflow.com/questions/18836291/
+                        lambda ignore, dlg=bcknd.cls.CONFIG_DLG: dlg(
+                            self.settings, self).exec_())
+                    hbox.addWidget(button)
+            else:
+                self.bcknd_chkbx[bcknd.id].setChecked(False)
+                self.bcknd_chkbx[bcknd.id].setEnabled(False)
+                self.bcknd_chkbx[bcknd.id].setToolTip(bcknd.exc_str)
 
         self.buttonBox.button(
             QtWidgets.QDialogButtonBox.Apply).clicked.connect(self.save)
@@ -135,8 +140,8 @@ class PreferencesDialog(QtWidgets.QDialog):
                                self.icsExportCheckBox.isChecked())
 
         for bcknd in BACKENDS:
-            self.settings.setValue(bcknd.NAME + '/enabled',
-                                   self.bcknd_chkbx[bcknd.NAME].isChecked())
+            self.settings.setValue(bcknd.id + '/enabled',
+                                   self.bcknd_chkbx[bcknd.id].isChecked())
 
         # Refresh birthday list
         self.main_window.reload()

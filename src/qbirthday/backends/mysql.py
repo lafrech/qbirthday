@@ -3,8 +3,21 @@
 from PyQt5 import QtWidgets, uic
 
 from qbirthday.paths import UI_FILES_DIR
-from .base import BaseBackend
+from .base import BaseBackend, try_import
 from .exceptions import BackendMissingLibraryError, BackendReadError
+
+
+BACKEND_ID = 'MySQL'
+BACKEND_NAME = 'MySQL database'
+
+
+try:
+    # pylint: disable=invalid-name
+    MySQLdb = try_import('MySQLdb', 'mysqlclient')
+except BackendMissingLibraryError as exc:
+    exc.bcknd_id = BACKEND_ID
+    exc.bcknd_name = BACKEND_NAME
+    raise exc
 
 
 class MySqlPreferencesDialog(QtWidgets.QDialog):
@@ -55,8 +68,6 @@ class MySqlPreferencesDialog(QtWidgets.QDialog):
 class MySQLBackend(BaseBackend):
     """MySQL backend"""
 
-    NAME = 'MySQL'
-    TITLE = 'MySQL'
     CONFIG_DLG = MySqlPreferencesDialog
 
     DEFAULTS = {
@@ -90,12 +101,6 @@ class MySQLBackend(BaseBackend):
 
     def _connect(self):
         '''establish connection'''
-
-        try:
-            import MySQLdb
-        except ImportError:
-            raise BackendMissingLibraryError(
-                self.tr("Missing {} library.").format("MySQLdb"))
 
         try:
             self.conn = MySQLdb.connect(
@@ -133,3 +138,6 @@ class MySQLBackend(BaseBackend):
             return birthdates
         finally:
             self.conn.close()
+
+
+BACKEND = MySQLBackend

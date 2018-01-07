@@ -4,15 +4,25 @@ import configparser
 import datetime as dt
 from pathlib import Path
 
-from .base import BaseBackend
+from .base import BaseBackend, try_import
 from .exceptions import BackendMissingLibraryError, BackendReadError
+
+
+BACKEND_ID = 'Lightning'
+BACKEND_NAME = 'Thunderbird/Icedove Lightning'
+
+
+try:
+    # pylint: disable=invalid-name
+    sqlite3 = try_import('sqlite3')
+except BackendMissingLibraryError as exc:
+    exc.bcknd_id = BACKEND_ID
+    exc.bcknd_name = BACKEND_NAME
+    raise exc
 
 
 class LightningBackend(BaseBackend):
     """Thunderbird/Lightning backend"""
-
-    NAME = 'Lightning'
-    TITLE = 'Thunderbird/Icedove Lightning'
 
     def __init__(self, settings):
 
@@ -72,13 +82,10 @@ class LightningBackend(BaseBackend):
 
         # TODO: use with connect as... syntax
         try:
-            import sqlite3
-        except ImportError:
-            raise BackendMissingLibraryError(
-                self.tr("Missing {} library.").format("SQLite3"))
-
-        try:
             self.conn = sqlite3.connect(str(filepath))
             self.cursor = self.conn.cursor()
         except Exception as exc:
             raise ConnectionError(exc)
+
+
+BACKEND = LightningBackend

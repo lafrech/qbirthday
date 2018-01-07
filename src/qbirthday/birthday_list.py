@@ -24,8 +24,6 @@ class BirthdayList(QtCore.QObject):
         self.main_window = main_window
         self.settings = settings
 
-        self.backends = {}
-
         # dict storing all birthdates
         # key: dt.date
         # value: list of names
@@ -68,18 +66,17 @@ class BirthdayList(QtCore.QObject):
 
         self._birthdates.clear()
 
-        self.backends.clear()
-        for bcknd_cls in BACKENDS:
-            if self.settings.value(bcknd_cls.NAME + '/enabled', type=bool):
-                bcknd = bcknd_cls(self.settings)
+        for bcknd in BACKENDS:
+            if (bcknd.cls is not None and
+                    self.settings.value(bcknd.id + '/enabled', type=bool)):
+                bcknd_inst = bcknd.cls(self.settings)
                 try:
-                    birthdates = bcknd.parse()
+                    birthdates = bcknd_inst.parse()
                 except BackendReadError as exc:
                     self.main_window.show_error_message(str(exc))
                 else:
                     for name, date in birthdates:
                         self.add(name, date)
-                self.backends[bcknd_cls.NAME] = bcknd
 
         self._update()
 
