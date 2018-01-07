@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="2.0" language="fr_FR" sourcelanguage="">
+<!DOCTYPE TS>
+<TS version="2.1" language="fr_FR">
 <context>
     <name>AboutDialog</name>
     <message>
@@ -115,7 +116,7 @@
         <translation>Propriétés ICS personnalisées pour VALARM</translation>
     </message>
     <message>
-        <location filename="../ui/preferencesdialog.ui" line="74"/>
+        <location filename="../ui/preferencesdialog.ui" line="98"/>
         <source>Preferences</source>
         <translation>Préférences</translation>
     </message>
@@ -165,12 +166,7 @@
         <translation>Anniversaires passés</translation>
     </message>
     <message>
-        <location filename="../ui/preferencesdialog.ui" line="48"/>
-        <source>Next birthdays</source>
-        <translation>Prochains anniversaires</translation>
-    </message>
-    <message>
-        <location filename="../ui/preferencesdialog.ui" line="83"/>
+        <location filename="../ui/preferencesdialog.ui" line="72"/>
         <source>Databases</source>
         <translation>Bases de données</translation>
     </message>
@@ -180,9 +176,19 @@
         <translation>Configuration de l&apos;export iCalendar</translation>
     </message>
     <message>
-        <location filename="../ui/preferencesdialog.ui" line="58"/>
+        <location filename="../ui/preferencesdialog.ui" line="82"/>
         <source>iCalendar export</source>
         <translation>Export iCalendar</translation>
+    </message>
+    <message>
+        <location filename="../ui/preferencesdialog.ui" line="58"/>
+        <source> days</source>
+        <translation> jours</translation>
+    </message>
+    <message>
+        <location filename="../ui/preferencesdialog.ui" line="51"/>
+        <source>Future birthdays</source>
+        <translation>Anniversaires à venir</translation>
     </message>
 </context>
 <context>
