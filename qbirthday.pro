@@ -21,7 +21,6 @@ SOURCES = \
 
 FORMS = \
     $$UIDIR/aboutdialog.ui \
-    $$UIDIR/add.ui \
     $$UIDIR/csvpreferencesdialog.ui \
     $$UIDIR/icsexportpreferencesdialog.ui \
     $$UIDIR/mainwindow.ui \
