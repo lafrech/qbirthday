@@ -181,14 +181,19 @@
 <context>
     <name>ICSExport</name>
     <message>
-        <location filename="../ics_export.py" line="44"/>
+        <location filename="../ics_export.py" line="48"/>
         <source>Birthday</source>
         <translation>Anniversaire</translation>
     </message>
     <message>
-        <location filename="../ics_export.py" line="55"/>
+        <location filename="../ics_export.py" line="60"/>
         <source>Birthday: </source>
         <translation>Anniversaire : </translation>
+    </message>
+    <message>
+        <location filename="../ics_export.py" line="72"/>
+        <source>Can&apos;t write iCalendar file: {}</source>
+        <translation>Impossible d&apos;écrire le fichier iCalendar : {}</translation>
     </message>
 </context>
 <context>
