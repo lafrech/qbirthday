@@ -12,6 +12,7 @@ from PyQt5 import QtCore
 from .ics_export import ICSExport
 from .backends import BACKENDS
 from .backends.exceptions import BackendReadError
+from .exceptions import ICSExportError
 
 
 class BirthdayList(QtCore.QObject):
@@ -82,7 +83,10 @@ class BirthdayList(QtCore.QObject):
         self._update()
 
         if self.settings.value('ics_export/enabled', type=bool):
-            self.ics_export.write(self._birthdates)
+            try:
+                self.ics_export.write(self._birthdates)
+            except ICSExportError as exc:
+                self.main_window.show_error_message(str(exc))
 
     def _update(self):
         """Update self.birthdays with all birthdays in specified period"""
