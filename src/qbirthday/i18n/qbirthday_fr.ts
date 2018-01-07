@@ -23,19 +23,6 @@
     </message>
 </context>
 <context>
-    <name>BirthdayList</name>
-    <message>
-        <location filename="../birthday_list.py" line="135"/>
-        <source>Birthday</source>
-        <translation>Anniversaire</translation>
-    </message>
-    <message>
-        <location filename="../birthday_list.py" line="148"/>
-        <source>Birthday: </source>
-        <translation>Anniversaire : </translation>
-    </message>
-</context>
-<context>
     <name>CSVBackend</name>
     <message>
         <location filename="../backends/csv.py" line="64"/>
@@ -189,6 +176,19 @@
         <location filename="../ui/preferencesdialog.ui" line="51"/>
         <source>Future birthdays</source>
         <translation>Anniversaires à venir</translation>
+    </message>
+</context>
+<context>
+    <name>ICSExport</name>
+    <message>
+        <location filename="../ics_export.py" line="44"/>
+        <source>Birthday</source>
+        <translation>Anniversaire</translation>
+    </message>
+    <message>
+        <location filename="../ics_export.py" line="55"/>
+        <source>Birthday: </source>
+        <translation>Anniversaire : </translation>
     </message>
 </context>
 <context>
