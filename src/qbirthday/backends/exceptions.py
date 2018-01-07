@@ -1,7 +1,9 @@
 """Backend exceptions"""
 
+from qbirthday.exceptions import QBirthdayError
 
-class BackendError(Exception):
+
+class BackendError(QBirthdayError):
     """Generic backend error"""
 
 
