@@ -14,37 +14,22 @@
     </message>
 </context>
 <context>
-    <name>AddDialog</name>
+    <name>Backends</name>
     <message>
-        <location filename="../ui/add.ui" line="14"/>
-        <source>Add birthdate</source>
-        <translation>Ajouter une date de naissance</translation>
-    </message>
-    <message>
-        <location filename="../ui/add.ui" line="25"/>
-        <source>Name</source>
-        <translation>Nom</translation>
-    </message>
-    <message>
-        <location filename="../ui/add.ui" line="42"/>
-        <source>Birth date</source>
-        <translation>Date de naissance</translation>
-    </message>
-    <message>
-        <location filename="../ui/add.ui" line="52"/>
-        <source>Save in</source>
-        <translation>Enregistrer dans</translation>
+        <location filename="../backends/base.py" line="11"/>
+        <source>Missing {} library.</source>
+        <translation>La bibliothèque {} n&apos;est pas installée.</translation>
     </message>
 </context>
 <context>
     <name>BirthdayList</name>
     <message>
-        <location filename="../birthday_list.py" line="144"/>
+        <location filename="../birthday_list.py" line="135"/>
         <source>Birthday</source>
         <translation>Anniversaire</translation>
     </message>
     <message>
-        <location filename="../birthday_list.py" line="157"/>
+        <location filename="../birthday_list.py" line="148"/>
         <source>Birthday: </source>
         <translation>Anniversaire : </translation>
     </message>
@@ -52,12 +37,12 @@
 <context>
     <name>CSVBackend</name>
     <message>
-        <location filename="../backends/csv.py" line="62"/>
+        <location filename="../backends/csv.py" line="64"/>
         <source>Invalid row &quot;{row}&quot; in CSV file {filepath}</source>
         <translation>Ligne invalide {row} dans le fichier CSV {filepath}</translation>
     </message>
     <message>
-        <location filename="../backends/csv.py" line="104"/>
+        <location filename="../backends/csv.py" line="90"/>
         <source>Can&apos;t open CSV file: {}</source>
         <translation>Impossible d&apos;ouvrir le fichier CSV : {}</translation>
     </message>
@@ -130,7 +115,7 @@
         <translation>Propriétés ICS personnalisées pour VALARM</translation>
     </message>
     <message>
-        <location filename="../ui/preferencesdialog.ui" line="84"/>
+        <location filename="../ui/preferencesdialog.ui" line="74"/>
         <source>Preferences</source>
         <translation>Préférences</translation>
     </message>
@@ -180,17 +165,12 @@
         <translation>Anniversaires passés</translation>
     </message>
     <message>
-        <location filename="../ui/preferencesdialog.ui" line="35"/>
+        <location filename="../ui/preferencesdialog.ui" line="48"/>
         <source>Next birthdays</source>
         <translation>Prochains anniversaires</translation>
     </message>
     <message>
-        <location filename="../ui/preferencesdialog.ui" line="42"/>
-        <source>Notification: Future birthdays</source>
-        <translation>Notification : anniversaires futurs</translation>
-    </message>
-    <message>
-        <location filename="../ui/preferencesdialog.ui" line="93"/>
+        <location filename="../ui/preferencesdialog.ui" line="83"/>
         <source>Databases</source>
         <translation>Bases de données</translation>
     </message>
@@ -200,7 +180,7 @@
         <translation>Configuration de l&apos;export iCalendar</translation>
     </message>
     <message>
-        <location filename="../ui/preferencesdialog.ui" line="49"/>
+        <location filename="../ui/preferencesdialog.ui" line="58"/>
         <source>iCalendar export</source>
         <translation>Export iCalendar</translation>
     </message>
@@ -208,26 +188,15 @@
 <context>
     <name>LightningBackend</name>
     <message>
-        <location filename="../backends/lightning.py" line="49"/>
+        <location filename="../backends/lightning.py" line="76"/>
         <source>Error reading profile file: {}</source>
         <translation>Erreur de lecture du fichier de profil : {}</translation>
-    </message>
-    <message>
-        <location filename="../backends/lightning.py" line="65"/>
-        <source>Missing {} library.</source>
-        <translation>Bibliothèque {} manquante.</translation>
-    </message>
-    <message>
-        <location filename="../backends/lightning.py" line="142"/>
-        <source>Could not execute SQLite query &apos;{}&apos;:
-{}</source>
-        <translation>Impossible d&apos;exécuter la requête SQL &apos;{}&apos; : {}</translation>
     </message>
 </context>
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../mainwindow.py" line="66"/>
+        <location filename="../ui/mainwindow.ui" line="42"/>
         <source>Birthdays</source>
         <translation>Anniversaires</translation>
     </message>
@@ -275,12 +244,7 @@
 <context>
     <name>MySQLBackend</name>
     <message>
-        <location filename="../backends/mysql.py" line="98"/>
-        <source>Missing {} library.</source>
-        <translation>Bibliothèque {} manquante.</translation>
-    </message>
-    <message>
-        <location filename="../backends/mysql.py" line="154"/>
+        <location filename="../backends/mysql.py" line="134"/>
         <source>Could not execute SQL query &apos;{}&apos;:
 {}</source>
         <translation>Impossible d&apos;exécuter la requête SQL &apos;{}&apos; : {}</translation>
@@ -289,7 +253,7 @@
 <context>
     <name>PreferencesDialog</name>
     <message>
-        <location filename="../preferencesdialog.py" line="112"/>
+        <location filename="../preferencesdialog.py" line="111"/>
         <source>Preferences</source>
         <translation>Préférences</translation>
     </message>
@@ -305,27 +269,22 @@
 <context>
     <name>StatusIcon</name>
     <message>
-        <location filename="../statusicon.py" line="26"/>
+        <location filename="../statusicon.py" line="24"/>
         <source>Refresh</source>
         <translation>Recharger</translation>
     </message>
     <message>
-        <location filename="../statusicon.py" line="30"/>
-        <source>Add</source>
-        <translation>Ajouter</translation>
-    </message>
-    <message>
-        <location filename="../statusicon.py" line="34"/>
+        <location filename="../statusicon.py" line="28"/>
         <source>Preferences</source>
         <translation>Préférences</translation>
     </message>
     <message>
-        <location filename="../statusicon.py" line="38"/>
+        <location filename="../statusicon.py" line="32"/>
         <source>About</source>
         <translation>À propos</translation>
     </message>
     <message>
-        <location filename="../statusicon.py" line="42"/>
+        <location filename="../statusicon.py" line="36"/>
         <source>Quit</source>
         <translation>Sortir</translation>
     </message>
