@@ -5,11 +5,11 @@ in a specified period around today's date.
 """
 
 import datetime as dt
-from textwrap import dedent
 from collections import defaultdict
 
 from PyQt5 import QtCore
 
+from .ics_export import ICSExport
 from .backends import BACKENDS
 from .backends.exceptions import BackendReadError
 
@@ -23,6 +23,7 @@ class BirthdayList(QtCore.QObject):
 
         self.main_window = main_window
         self.settings = settings
+        self.ics_export = ICSExport(settings)
 
         # dict storing all birthdates
         # key: dt.date
@@ -81,7 +82,7 @@ class BirthdayList(QtCore.QObject):
         self._update()
 
         if self.settings.value('ics_export/enabled', type=bool):
-            self._export()
+            self.ics_export.write(self._birthdates)
 
     def _update(self):
         """Update self.birthdays with all birthdays in specified period"""
@@ -93,67 +94,3 @@ class BirthdayList(QtCore.QObject):
                 if day.day == date.day and day.month == date.month:
                     self._birthdays[day_num].extend(
                         [(date, name) for name in birthdate_list])
-
-    def _export(self):
-        '''Export birthday list as iCalendar file'''
-
-        # This loop index is used to generate unique UIDs
-        index = 0
-
-        self.settings.beginGroup('ics_export')
-        conf_filepath = self.settings.value(
-            'filepath', type=str)
-        conf_alarm = self.settings.value(
-            'alarm', type=bool)
-        conf_alarm_days = self.settings.value(
-            'alarm_days', type=int)
-        conf_custom_properties = self.settings.value(
-            'custom_properties', type=str)
-        conf_alarm_custom_properties = self.settings.value(
-            'alarm_custom_properties', type=str)
-        self.settings.endGroup()
-
-        with open(conf_filepath, 'w') as f:
-            f.write(dedent("""
-                BEGIN:VCALENDAR
-                VERSION:2.0
-                PRODID:-//qbirthday//EN
-                """))
-
-            now = dt.datetime.now().strftime('%Y%m%dT%H%M%SZ')
-
-            for bday in self._birthdates:
-                bdate = bday.strftime('%Y%m%d')
-
-                f.write('BEGIN:VEVENT\n')
-                f.write('UID:' + now + '-' + str(index) + '@qbirthday' + '\n')
-                f.write('CREATED:' + now + '\n')
-                f.write('LAST-MODIFIED:' + now + '\n')
-                f.write('DTSTAMP:' + now + '\n')
-                f.write('DTSTART:' + bdate + '\n')
-                f.write('DURATION:PT0S\n')
-                f.write('CATEGORIES:' + self.tr("Birthday") + '\n')
-                f.write('SUMMARY:' + self.tr("Birthday: ") + self._birthdates[
-                    bday][0] + '\n')
-                f.write(dedent("""
-                    CLASS:PRIVATE
-                    TRANSP:TRANSPARENT
-                    RRULE:FREQ=YEARLY
-                    """))
-                if conf_alarm:
-                    f.write('BEGIN:VALARM\n')
-                    f.write('ACTION:DISPLAY\n')
-                    f.write('TRIGGER;VALUE=DURATION:-P'
-                            + str(conf_alarm_days) + 'D\n')
-                    f.write('DESCRIPTION:' + self.tr("Birthday: ")
-                            + self._birthdates[bday][0] + '\n')
-                    if conf_alarm_custom_properties != '':
-                        f.write(conf_alarm_custom_properties + '\n')
-                    f.write("END:VALARM\n")
-                if conf_custom_properties != '':
-                    f.write(conf_custom_properties + '\n')
-                f.write("END:VEVENT\n")
-
-                index += 1
-
-            f.write("END:VCALENDAR")

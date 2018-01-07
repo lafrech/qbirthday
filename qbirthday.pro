@@ -7,6 +7,7 @@ SOURCES = \
     $$SRCDIR/__about__.py \
     $$SRCDIR/aboutdialog.py \
     $$SRCDIR/birthday_list.py \
+    $$SRCDIR/ics_export.py \
     $$SRCDIR/mainwindow.py \
     $$SRCDIR/paths.py \
     $$SRCDIR/preferencesdialog.py \
