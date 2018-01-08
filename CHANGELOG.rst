@@ -1,8 +1,8 @@
 Changelog
 ---------
 
-0.7.0 (unreleased)
-++++++++++++++++++
+0.7.0b1 (2018-01-09)
+++++++++++++++++++++
 
 - Rename as QBirthday
 - Use Python3

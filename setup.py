@@ -7,14 +7,14 @@ with open('README.rst') as readme_file:
     LONG_DESCRIPTION = readme_file.read()
 
 setup(
-    name="QBirthday",
-    version="0.6.8",
-    description="QBirthday birthday reminder",
+    name='qbirthday',
+    version='0.7.0b1',
+    description='QBirthday birthday reminder',
     long_description=LONG_DESCRIPTION,
-    author="Jérôme Lafréchoux",
-    author_email="jerome@jolimont.fr",
-    license="GPLv2",
-    keywords="QBirthday birthday reminder",
+    author='Jérôme Lafréchoux',
+    author_email='jerome@jolimont.fr',
+    license='GPLv2',
+    keywords='QBirthday birthday reminder',
     packages=find_packages('src'),
     package_dir={'': 'src'},
     entry_points={'gui_scripts': ['qbirthday = qbirthday:main']},
@@ -35,9 +35,9 @@ setup(
     install_requires=[
         'PyQt5>=5.7',
     ],
-    url="https://github.com/lafrech/qbirthday",
+    url='https://github.com/lafrech/qbirthday',
     project_urls={
-        "Bug Tracker": "https://github.com/lafrech/qbirthday/issues",
-        "Source Code": "https://github.com/lafrech/qbirthday",
+        'Bug Tracker': 'https://github.com/lafrech/qbirthday/issues',
+        'Source Code': 'https://github.com/lafrech/qbirthday',
     }
 )
