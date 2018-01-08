@@ -11,7 +11,7 @@ Changelog
 - Remove "add" feature
 - Remove Sundbird/Iceowl backend
 - Replace Makefile with Setuptools setup.py
-
+- CSV file delimiter configurable and must be consistent in the whole file
 
 0.6.10
 ++++++
