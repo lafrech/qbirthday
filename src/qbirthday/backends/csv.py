@@ -24,6 +24,7 @@ class CSVPreferencesDialog(QtWidgets.QDialog):
         self.settings = settings
         self.filePathEdit.setText(self.settings.value('CSV/filepath'))
         self.filePathButton.clicked.connect(self.get_filepath)
+        self.delimiterEdit.setText(self.settings.value('CSV/delimiter'))
         self.buttonBox.button(
             QtWidgets.QDialogButtonBox.Apply).clicked.connect(self.save)
         self.buttonBox.button(
@@ -43,6 +44,7 @@ class CSVPreferencesDialog(QtWidgets.QDialog):
     def save(self):
         '''Save CSV backend settings'''
         self.settings.setValue('CSV/filepath', self.filePathEdit.text())
+        self.settings.setValue('CSV/delimiter', self.delimiterEdit.text())
 
 
 class CSVBackend(BaseBackend):

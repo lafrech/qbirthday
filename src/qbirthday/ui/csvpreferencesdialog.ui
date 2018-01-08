@@ -29,6 +29,33 @@
     </layout>
    </item>
    <item>
+    <layout class="QHBoxLayout" name="delimiterLayout">
+     <item>
+      <widget class="QLabel" name="delimiterLabel">
+       <property name="text">
+        <string>Delimiter</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="delimiterHorizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="delimiterEdit"/>
+     </item>
+    </layout>
+   </item>
+   <item>
     <widget class="QDialogButtonBox" name="buttonBox">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
