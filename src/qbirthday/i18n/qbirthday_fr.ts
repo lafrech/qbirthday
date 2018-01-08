@@ -25,12 +25,12 @@
 <context>
     <name>CSVBackend</name>
     <message>
-        <location filename="../backends/csv.py" line="64"/>
+        <location filename="../backends/csv.py" line="66"/>
         <source>Invalid row &quot;{row}&quot; in CSV file {filepath}</source>
         <translation>Ligne invalide {row} dans le fichier CSV {filepath}</translation>
     </message>
     <message>
-        <location filename="../backends/csv.py" line="90"/>
+        <location filename="../backends/csv.py" line="92"/>
         <source>Can&apos;t open CSV file: {}</source>
         <translation>Impossible d&apos;ouvrir le fichier CSV : {}</translation>
     </message>
@@ -177,6 +177,11 @@
         <source>Future birthdays</source>
         <translation>Anniversaires à venir</translation>
     </message>
+    <message>
+        <location filename="../ui/csvpreferencesdialog.ui" line="36"/>
+        <source>Delimiter</source>
+        <translation>Séparateur</translation>
+    </message>
 </context>
 <context>
     <name>ICSExport</name>
@@ -199,7 +204,7 @@
 <context>
     <name>LightningBackend</name>
     <message>
-        <location filename="../backends/lightning.py" line="76"/>
+        <location filename="../backends/lightning.py" line="68"/>
         <source>Error reading profile file: {}</source>
         <translation>Erreur de lecture du fichier de profil : {}</translation>
     </message>
