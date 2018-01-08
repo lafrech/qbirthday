@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>316</width>
-    <height>254</height>
+    <height>275</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -83,16 +83,16 @@
       </widget>
      </item>
      <item row="6" column="0">
-      <widget class="QLabel" name="nameRowLabel">
+      <widget class="QLabel" name="nameColLabel">
        <property name="text">
-        <string>Name row</string>
+        <string>&quot;Name&quot; column</string>
        </property>
       </widget>
      </item>
      <item row="7" column="0">
-      <widget class="QLabel" name="dateRowLabel">
+      <widget class="QLabel" name="dateColLabel">
        <property name="text">
-        <string>Date row</string>
+        <string>&quot;Birthdate&quot; column</string>
        </property>
       </widget>
      </item>
@@ -100,10 +100,10 @@
       <widget class="QLineEdit" name="tableEdit"/>
      </item>
      <item row="6" column="1">
-      <widget class="QLineEdit" name="nameRowEdit"/>
+      <widget class="QLineEdit" name="nameColEdit"/>
      </item>
      <item row="7" column="1">
-      <widget class="QLineEdit" name="dateRowEdit"/>
+      <widget class="QLineEdit" name="dateColEdit"/>
      </item>
     </layout>
    </item>

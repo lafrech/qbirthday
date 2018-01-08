@@ -39,8 +39,8 @@ class MySqlPreferencesDialog(QtWidgets.QDialog):
         self.passwordEdit.setText(self.settings.value('password', type=str))
         self.databaseEdit.setText(self.settings.value('database', type=str))
         self.tableEdit.setText(self.settings.value('table', type=str))
-        self.nameRowEdit.setText(self.settings.value('namerow', type=str))
-        self.dateRowEdit.setText(self.settings.value('daterow', type=str))
+        self.nameColEdit.setText(self.settings.value('namecol', type=str))
+        self.dateColEdit.setText(self.settings.value('datecol', type=str))
         self.settings.endGroup()
 
         self.buttonBox.button(
@@ -60,8 +60,8 @@ class MySqlPreferencesDialog(QtWidgets.QDialog):
         self.settings.setValue('password', self.passwordEdit.text())
         self.settings.setValue('database', self.databaseEdit.text())
         self.settings.setValue('table', self.tableEdit.text())
-        self.settings.setValue('namerow', self.nameRowEdit.text())
-        self.settings.setValue('daterow', self.dateRowEdit.text())
+        self.settings.setValue('namecol', self.nameColEdit.text())
+        self.settings.setValue('datecol', self.dateColEdit.text())
         self.settings.endGroup()
 
 
@@ -77,8 +77,8 @@ class MySQLBackend(BaseBackend):
         'password': '',
         'database': '',
         'table': 'person',
-        'namerow': 'name',
-        'daterow': 'date',
+        'namecol': 'name',
+        'datecol': 'date',
     }
 
     def __init__(self, settings):
@@ -92,8 +92,8 @@ class MySQLBackend(BaseBackend):
         self.password = self.settings.value('password', type=str)
         self.database = self.settings.value('database', type=str)
         self.table = self.settings.value('table', type=str)
-        self.name_row = self.settings.value('namerow', type=str)
-        self.date_row = self.settings.value('daterow', type=str)
+        self.name_col = self.settings.value('namecol', type=str)
+        self.date_col = self.settings.value('datecol', type=str)
         self.settings.endGroup()
 
         self.cursor = None
@@ -124,7 +124,7 @@ class MySQLBackend(BaseBackend):
 
         try:
             qry = ("SELECT %s, %s FROM %s"
-                   % (self.name_row, self.date_row, self.table))
+                   % (self.name_col, self.date_col, self.table))
             self.cursor.execute(qry)
             rows = self.cursor.fetchall()
             birthdates = []
