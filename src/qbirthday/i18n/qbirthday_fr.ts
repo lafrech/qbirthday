@@ -138,16 +138,6 @@
         <translation>Table</translation>
     </message>
     <message>
-        <location filename="../ui/mysqlpreferencesdialog.ui" line="88"/>
-        <source>Name row</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ui/mysqlpreferencesdialog.ui" line="95"/>
-        <source>Date row</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../ui/preferencesdialog.ui" line="28"/>
         <source>Past birthdays</source>
         <translation>Anniversaires passés</translation>
@@ -182,6 +172,16 @@
         <source>Delimiter</source>
         <translation>Séparateur</translation>
     </message>
+    <message>
+        <location filename="../ui/mysqlpreferencesdialog.ui" line="88"/>
+        <source>&quot;Name&quot; column</source>
+        <translation>Colonne &quot;Nom&quot;</translation>
+    </message>
+    <message>
+        <location filename="../ui/mysqlpreferencesdialog.ui" line="95"/>
+        <source>&quot;Birthdate&quot; column</source>
+        <translation>Colonne &quot;Date de naissance&quot;</translation>
+    </message>
 </context>
 <context>
     <name>ICSExport</name>
@@ -212,7 +212,7 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../ui/mainwindow.ui" line="42"/>
+        <location filename="../mainwindow.py" line="66"/>
         <source>Birthdays</source>
         <translation>Anniversaires</translation>
     </message>
