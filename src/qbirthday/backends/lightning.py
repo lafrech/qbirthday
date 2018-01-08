@@ -24,23 +24,25 @@ class LightningBackend(BaseBackend):
         self.cursor = None
         self.conn = None
 
-    def _parse_birthday(self, filepath):
+    @staticmethod
+    def _parse_profile(filepath):
         try:
-            self._connect(filepath)
-        except ConnectionError as exc:
+            with sqlite3.connect(str(filepath)) as conn:
+                cursor = conn.cursor()
+                qry = '''SELECT title, event_start FROM cal_events ce
+                      INNER JOIN cal_properties cp
+                      ON ce.id = cp.item_id
+                      WHERE cp.key == 'CATEGORIES' AND
+                      cp.value == 'Birthday' AND
+                      ce.title != '';'''
+                cursor.execute(qry)
+                birthdates = [
+                    (name, dt.datetime.utcfromtimestamp(
+                        int(bdate_ts) / 1000000).date())
+                    for name, bdate_ts in cursor]
+                return birthdates
+        except sqlite3.Error as exc:
             raise BackendReadError(exc)
-        qry = '''SELECT title, event_start FROM cal_events ce
-              INNER JOIN cal_properties cp
-              ON ce.id = cp.item_id
-              WHERE cp.key == 'CATEGORIES' AND
-              cp.value == 'Birthday' AND
-              ce.title != '';'''
-        self.cursor.execute(qry)
-        birthdates = []
-        for row in self.cursor:
-            bday = dt.datetime.utcfromtimestamp(int(row[1]) / 1000000).date()
-            birthdates.append((row[0], bday))
-        return birthdates
 
     def parse(self):
         '''open thunderbird sqlite-database'''
@@ -63,21 +65,11 @@ class LightningBackend(BaseBackend):
                 else:
                     profile_location = profiles[profile]['path']
                 db_location = profile_location / 'calendar-data/local.sqlite'
-                self._parse_birthday(db_location)
+                return self._parse_profile(db_location)
         # Missing profile file
         raise BackendReadError(
             self.tr("Error reading profile file: {}").format(profile_dir),
         )
-
-    def _connect(self, filepath):
-        '''"connect" to sqlite3-database'''
-
-        # TODO: use with connect as... syntax
-        try:
-            self.conn = sqlite3.connect(str(filepath))
-            self.cursor = self.conn.cursor()
-        except Exception as exc:
-            raise ConnectionError(exc)
 
 
 BACKEND = LightningBackend
