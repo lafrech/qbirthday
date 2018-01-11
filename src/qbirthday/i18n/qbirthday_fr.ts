@@ -204,15 +204,20 @@
 <context>
     <name>LightningBackend</name>
     <message>
-        <location filename="../backends/lightning.py" line="68"/>
-        <source>Error reading profile file: {}</source>
-        <translation>Erreur de lecture du fichier de profil : {}</translation>
+        <location filename="../backends/lightning.py" line="52"/>
+        <source>Cannot find Lightning profile directory</source>
+        <translation>Impossible de trouver le répertoire de profil de Lightning</translation>
+    </message>
+    <message>
+        <location filename="../backends/lightning.py" line="74"/>
+        <source>Error reading profile file {}</source>
+        <translation>Erreur à la lecture du fichier de profil {}</translation>
     </message>
 </context>
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../mainwindow.py" line="66"/>
+        <location filename="../ui/mainwindow.ui" line="42"/>
         <source>Birthdays</source>
         <translation>Anniversaires</translation>
     </message>
