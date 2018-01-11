@@ -1,6 +1,12 @@
 Changelog
 ---------
 
+0.7.0b2 (unreleased)
+++++++++++++++++++++
+
+- Add license to wheel file
+- Fix Lightning backend (thunderbird profile directory location)
+
 0.7.0b1 (2018-01-09)
 ++++++++++++++++++++
 
@@ -12,6 +18,10 @@ Changelog
 - Remove Sundbird/Iceowl backend
 - Replace Makefile with Setuptools setup.py
 - CSV file delimiter configurable and must be consistent in the whole file
+- Drop all translation files since translation is now based on Qt.
+  It should be possible to migrate old translation files but most strings were
+  changed in the code anyway.
+- Add French translation.
 
 0.6.10
 ++++++
