@@ -1,7 +1,7 @@
 Changelog
 ---------
 
-0.7.0b2 (unreleased)
+0.7.0b2 (2018-01-11)
 ++++++++++++++++++++
 
 - Add license to wheel file

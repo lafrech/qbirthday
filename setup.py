@@ -8,7 +8,7 @@ with open('README.rst') as readme_file:
 
 setup(
     name='qbirthday',
-    version='0.7.0b1',
+    version='0.7.0b2',
     description='QBirthday birthday reminder',
     long_description=LONG_DESCRIPTION,
     author='Jérôme Lafréchoux',

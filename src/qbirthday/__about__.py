@@ -7,7 +7,7 @@ __title__ = "QBirthday"
 __summary__ = QtCore.QT_TR_NOOP("Birthday reminder")
 __uri__ = "https://github.com/lafrech/qbirthday"
 
-__version__ = "0.7.0b1"
+__version__ = "0.7.0b2"
 
 __author__ = "Jérôme Lafréchoux"
 __email__ = "jerome@jolimont.fr"
