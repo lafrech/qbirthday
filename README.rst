@@ -8,7 +8,7 @@ QBirthday is a birthday reminder status icon.
 Features
 ========
 
-- Several backends available (CSV file, Thunderbird/Lightning, MySQL databse).
+- Several backends available (CSV file, Lightning, MySQL databse).
 - Extendable to other backends.
 - iCalendar export.
 

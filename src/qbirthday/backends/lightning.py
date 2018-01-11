@@ -1,4 +1,4 @@
-"""Thunderbird/Lightning backend"""
+"""Lightning backend"""
 
 import configparser
 import datetime as dt
@@ -10,19 +10,18 @@ from .exceptions import BackendReadError
 
 
 BACKEND_ID = 'Lightning'
-BACKEND_NAME = 'Thunderbird/Icedove Lightning'
+BACKEND_NAME = 'Lightning'
 
 
 class LightningBackend(BaseBackend):
-    """Thunderbird/Lightning backend"""
+    """Lightning backend
 
-    def __init__(self, settings):
-
-        super().__init__(settings)
-
-        self.thunderbird_location = Path.home() / '.mozilla-thunderbird'
-        self.cursor = None
-        self.conn = None
+    The user should add birthdates with
+    - Category: Birthday
+    - Start date: Birth date (year matters for age calculation)
+    - Title: Name of the person
+    The Repeat parameter does not matter
+    """
 
     @staticmethod
     def _parse_profile(filepath):
@@ -45,9 +44,14 @@ class LightningBackend(BaseBackend):
             raise BackendReadError(exc)
 
     def parse(self):
-        '''open thunderbird sqlite-database'''
-        profile_dir = self.thunderbird_location
-        profilefile = profile_dir / 'profiles.ini'
+        """Parse Lightning sqlite database in Thunderbird profile directory"""
+        profiles_dir = Path.home() / '.thunderbird'
+        if not profiles_dir.is_dir():
+            profiles_dir = Path.home() / '.mozilla-thunderbird'
+            if not profiles_dir.is_dir():
+                raise BackendReadError(
+                    self.tr("Cannot find Lightning profile directory"))
+        profilefile = profiles_dir / 'profiles.ini'
         if profilefile.is_file():
             conf_pars = configparser.ConfigParser()
             conf_pars.read(str(profilefile))
@@ -61,15 +65,14 @@ class LightningBackend(BaseBackend):
             # get all data from profiles.ini
             for profile in profiles:
                 if profiles[profile]['isrelative']:
-                    profile_location = profile_dir / profiles[profile]['path']
+                    profile_location = profiles_dir / profiles[profile]['path']
                 else:
                     profile_location = profiles[profile]['path']
                 db_location = profile_location / 'calendar-data/local.sqlite'
                 return self._parse_profile(db_location)
         # Missing profile file
         raise BackendReadError(
-            self.tr("Error reading profile file: {}").format(profile_dir),
-        )
+            self.tr("Error reading profile file {}").format(str(profilefile)))
 
 
 BACKEND = LightningBackend
