@@ -21,6 +21,20 @@ QBirthday runs on Python >= 3.5.
 It requires PyQt5 and optionally depends on mysqlclient if a MySQL database is used as backend.
 
 
+Installation
+============
+
+Either as root or in a virtualenv:
+::
+
+    $ pip install gbirthday
+
+To use MySQL backend, install mysqlclient:
+::
+
+    $ pip install mysqlclient
+
+
 History
 =======
 
