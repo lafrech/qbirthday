@@ -33,16 +33,16 @@ class CSVPreferencesDialog(QtWidgets.QDialog):
         # TODO: disable OK and Apply if no path provided
 
     def get_filepath(self):
-        '''Get CSV file path'''
-        self.filePathEdit.setText(
-            QtWidgets.QFileDialog.getOpenFileName(
-                self,
-                "Choose CSV file",
-                self.filePathEdit.text() or QtCore.QDir.homePath()
-            )[0])
+        """Get CSV file path"""
+        filepath, _ = QtWidgets.QFileDialog.getOpenFileName(
+            self,
+            "Choose CSV file",
+            self.filePathEdit.text() or QtCore.QDir.homePath())
+        if filepath:
+            self.filePathEdit.setText(filepath)
 
     def save(self):
-        '''Save CSV backend settings'''
+        """Save CSV backend settings"""
         self.settings.setValue('CSV/filepath', self.filePathEdit.text())
         self.settings.setValue('CSV/delimiter', self.delimiterEdit.text())
 
