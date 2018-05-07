@@ -24,15 +24,17 @@ It requires PyQt5 and optionally depends on mysqlclient if a MySQL database is u
 Installation
 ============
 
-Either as root or in a virtualenv:
+Either as root or in a Python3 virtual environment:
 ::
 
-    $ pip install gbirthday
+    $ pip install qbirthday
 
 To use MySQL backend, install mysqlclient:
 ::
 
     $ pip install mysqlclient
+
+Note: If running with the global Python interpreter (i.e. not in a virtualenv), the default Python interpreter is probably Python2. In this case, you may have to install and use `pip3` rather than `pip`.
 
 
 History
