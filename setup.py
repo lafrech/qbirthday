@@ -1,5 +1,4 @@
 """Setup file"""
-
 from setuptools import setup, find_packages
 
 
@@ -28,10 +27,11 @@ setup(
         ('License :: OSI Approved :: '
          'GNU General Public License v2 or later (GPLv2+)'),
         'Operating System :: POSIX :: Linux',
-        'Programming Language :: Python :: 3.5',
-        'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
     ],
+    python_requires=">=3.7",
     install_requires=[
         'PyQt5>=5.7',
     ],
