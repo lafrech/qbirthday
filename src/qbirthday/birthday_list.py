@@ -49,8 +49,8 @@ class BirthdayList(QtCore.QObject):
 
     def bdays_in_period(self):
         """Return True, if there is a birthday in specified period"""
-        first_day = self.settings.value('firstday', type=int)
-        last_day = self.settings.value('lastday', type=int)
+        first_day = self.settings.value("firstday", type=int)
+        last_day = self.settings.value("lastday", type=int)
         for day in range(first_day, last_day + 1):
             if day in self._birthdays:
                 return True
@@ -69,8 +69,9 @@ class BirthdayList(QtCore.QObject):
         self._birthdates.clear()
 
         for bcknd in BACKENDS:
-            if (bcknd.cls is not None and
-                    self.settings.value(bcknd.id + '/enabled', type=bool)):
+            if bcknd.cls is not None and self.settings.value(
+                bcknd.id + "/enabled", type=bool
+            ):
                 bcknd_inst = bcknd.cls(self.settings)
                 try:
                     birthdates = bcknd_inst.parse()
@@ -82,7 +83,7 @@ class BirthdayList(QtCore.QObject):
 
         self._update()
 
-        if self.settings.value('ics_export/enabled', type=bool):
+        if self.settings.value("ics_export/enabled", type=bool):
             try:
                 self.ics_export.write(self._birthdates)
             except ICSExportError as exc:
@@ -91,10 +92,13 @@ class BirthdayList(QtCore.QObject):
     def _update(self):
         """Update self.birthdays with all birthdays in specified period"""
         self._birthdays.clear()
-        for day_num in range(self.settings.value('firstday', type=int),
-                             self.settings.value('lastday', type=int) + 1):
+        for day_num in range(
+            self.settings.value("firstday", type=int),
+            self.settings.value("lastday", type=int) + 1,
+        ):
             day = dt.date.today() + dt.timedelta(day_num)
             for date, birthdate_list in self._birthdates.items():
                 if day.day == date.day and day.month == date.month:
                     self._birthdays[day_num].extend(
-                        [(date, name) for name in birthdate_list])
+                        [(date, name) for name in birthdate_list]
+                    )

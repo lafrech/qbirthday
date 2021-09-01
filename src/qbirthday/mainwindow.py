@@ -17,11 +17,13 @@ class MainWindow(QtWidgets.QMainWindow):
 
         super().__init__()
 
-        self.setWindowFlags(QtCore.Qt.Tool |
-                            QtCore.Qt.FramelessWindowHint |
-                            QtCore.Qt.WindowStaysOnTopHint)  # ??
+        self.setWindowFlags(
+            QtCore.Qt.Tool
+            | QtCore.Qt.FramelessWindowHint
+            | QtCore.Qt.WindowStaysOnTopHint
+        )  # ??
 
-        uic.loadUi(str(UI_FILES_DIR / 'mainwindow.ui'), self)
+        uic.loadUi(str(UI_FILES_DIR / "mainwindow.ui"), self)
 
         self.settings = Settings()
         self.bday_list = BirthdayList(self, self.settings)
@@ -46,8 +48,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         # Window shall appear under system tray icon
         systray_icon_pos = self.status_icon.geometry().center()
-        self.move(systray_icon_pos.x() - self.width() / 2,
-                  systray_icon_pos.y())
+        self.move(systray_icon_pos.x() - self.width() / 2, systray_icon_pos.y())
 
         # Ensure the window is not minimized on virtual desktop change
         self.showNormal()
@@ -63,10 +64,9 @@ class MainWindow(QtWidgets.QMainWindow):
 
         # Set title
         if self.bday_list.bdays_in_period():
-            self.titleLabel.setText(self.tr('Birthdays'))
+            self.titleLabel.setText(self.tr("Birthdays"))
         else:
-            self.titleLabel.setText(
-                self.tr('No birthdays in specified period'))
+            self.titleLabel.setText(self.tr("No birthdays in specified period"))
 
         # Empty birthday list
         # http://stackoverflow.com/questions/4528347/
@@ -76,19 +76,20 @@ class MainWindow(QtWidgets.QMainWindow):
             widget.setParent(None)
 
         # Add birthdays
-        firstday = self.settings.value('firstday', type=int)
-        lastday = self.settings.value('lastday', type=int)
+        firstday = self.settings.value("firstday", type=int)
+        lastday = self.settings.value("lastday", type=int)
         for delta_day in range(firstday, lastday + 1):
             for birthdate, name in self.bday_list.check_day(delta_day):
                 row = self.birthdaysLayout.rowCount()
-                for col, label in enumerate(self.make_birthday_line(
-                        delta_day, name, birthdate)):
+                for col, label in enumerate(
+                    self.make_birthday_line(delta_day, name, birthdate)
+                ):
                     self.birthdaysLayout.addWidget(label, row, col)
 
     def check_new_day(self):
         """Check for new day
 
-           Should be called e.g. every 60 seconds to check if day has changed.
+        Should be called e.g. every 60 seconds to check if day has changed.
         """
         new_day = datetime.datetime.now().strftime("%d")
         if self.current_day != new_day:
@@ -105,11 +106,12 @@ class MainWindow(QtWidgets.QMainWindow):
         label_image = QtWidgets.QLabel()
         # TODO: use Qt to localize day + month
         label_day = QtWidgets.QLabel(str(birthdate.day))
-        label_month = QtWidgets.QLabel(birthdate.strftime('%B'))
+        label_month = QtWidgets.QLabel(birthdate.strftime("%B"))
         label_name = QtWidgets.QLabel(name)
         label_when = QtWidgets.QLabel()
-        label_age = QtWidgets.QLabel(self.tr('{} years old').format(
-            datetime.date.today().year - birthdate.year))
+        label_age = QtWidgets.QLabel(
+            self.tr("{} years old").format(datetime.date.today().year - birthdate.year)
+        )
 
         label_day.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
         label_when.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
@@ -121,32 +123,31 @@ class MainWindow(QtWidgets.QMainWindow):
             label_month,
             label_name,
             label_when,
-            label_age
+            label_age,
         ]
 
         # Birthday today
         if delta_day == 0:
-            label_image.setPixmap(QtGui.QPixmap(PICS_PATHS['birthdaytoday']))
-            label_when.setText(self.tr('Today'))
+            label_image.setPixmap(QtGui.QPixmap(PICS_PATHS["birthdaytoday"]))
+            label_when.setText(self.tr("Today"))
             for label in labels:
                 label.setStyleSheet("QLabel { font: bold; }")
         # Birthday in the past
         elif delta_day < 0:
-            label_image.setPixmap(QtGui.QPixmap(PICS_PATHS['birthdaylost']))
+            label_image.setPixmap(QtGui.QPixmap(PICS_PATHS["birthdaylost"]))
             if delta_day == -1:
-                label_when.setText(self.tr('Yesterday'))
+                label_when.setText(self.tr("Yesterday"))
             else:
-                label_when.setText(
-                    self.tr('{} days ago').format(- delta_day))
+                label_when.setText(self.tr("{} days ago").format(-delta_day))
             for label in labels:
                 label.setStyleSheet("QLabel { color : grey; }")
         # Birthday in the future
         else:
-            label_image.setPixmap(QtGui.QPixmap(PICS_PATHS['birthdaynext']))
+            label_image.setPixmap(QtGui.QPixmap(PICS_PATHS["birthdaynext"]))
             if delta_day == 1:
-                label_when.setText(self.tr('Tomorrow'))
+                label_when.setText(self.tr("Tomorrow"))
             else:
-                label_when.setText(self.tr('{} days').format(delta_day))
+                label_when.setText(self.tr("{} days").format(delta_day))
 
         return labels
 
@@ -156,4 +157,5 @@ class MainWindow(QtWidgets.QMainWindow):
             self,
             QtCore.QCoreApplication.applicationName(),
             msg,
-            QtWidgets.QMessageBox.Close)
+            QtWidgets.QMessageBox.Close,
+        )

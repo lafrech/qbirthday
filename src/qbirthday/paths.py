@@ -11,30 +11,36 @@ from pathlib import Path
 from PyQt5 import QtCore
 
 
-GENERIC_DATA_LOCATION = Path(
-    QtCore.QStandardPaths.writableLocation(
-        QtCore.QStandardPaths.GenericDataLocation)) / 'QBirthday'
-APP_DATA_LOCATION = Path(
-    QtCore.QStandardPaths.writableLocation(
-        QtCore.QStandardPaths.AppDataLocation)) / 'QBirthday'
+GENERIC_DATA_LOCATION = (
+    Path(
+        QtCore.QStandardPaths.writableLocation(
+            QtCore.QStandardPaths.GenericDataLocation
+        )
+    )
+    / "QBirthday"
+)
+APP_DATA_LOCATION = (
+    Path(QtCore.QStandardPaths.writableLocation(QtCore.QStandardPaths.AppDataLocation))
+    / "QBirthday"
+)
 
 # Create default data storage directories
 GENERIC_DATA_LOCATION.mkdir(exist_ok=True)
 APP_DATA_LOCATION.mkdir(exist_ok=True)
 
 
-PICS_DIR = Path(__file__).parent / 'pics'
+PICS_DIR = Path(__file__).parent / "pics"
 
 PICS_PATHS = {
-    'birthdaylost': str(PICS_DIR / 'birthdaylost.png'),
-    'birthdaynext': str(PICS_DIR / 'birthdaynext.png'),
-    'birthday': str(PICS_DIR / 'birthday.png'),
-    'birthdayred': str(PICS_DIR / 'birthdayred.png'),
-    'birthdaytoday': str(PICS_DIR / 'birthdaytoday.png'),
-    'qbirthday': str(PICS_DIR / 'qbirthday.png'),
-    'nobirthday': str(PICS_DIR / 'nobirthday.png'),
+    "birthdaylost": str(PICS_DIR / "birthdaylost.png"),
+    "birthdaynext": str(PICS_DIR / "birthdaynext.png"),
+    "birthday": str(PICS_DIR / "birthday.png"),
+    "birthdayred": str(PICS_DIR / "birthdayred.png"),
+    "birthdaytoday": str(PICS_DIR / "birthdaytoday.png"),
+    "qbirthday": str(PICS_DIR / "qbirthday.png"),
+    "nobirthday": str(PICS_DIR / "nobirthday.png"),
 }
 
-UI_FILES_DIR = Path(__file__).parent / 'ui'
+UI_FILES_DIR = Path(__file__).parent / "ui"
 
-QM_FILES_DIR = Path(__file__).parent / 'i18n'
+QM_FILES_DIR = Path(__file__).parent / "i18n"

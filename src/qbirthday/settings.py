@@ -10,17 +10,17 @@ from .backends import BACKENDS
 
 
 CONFIG_DEFAULTS = {
-    'firstday': -2,
-    'lastday': 30,
+    "firstday": -2,
+    "lastday": 30,
 }
 
 ICS_EXPORT_CONFIG_DEFAULTS = {
-    'enabled': False,
-    'filepath': str(GENERIC_DATA_LOCATION / 'qbirthday.ics'),
-    'alarm': False,
-    'alarm_custom_properties': '',
-    'alarm_days': 1,
-    'custom_properties': '',
+    "enabled": False,
+    "filepath": str(GENERIC_DATA_LOCATION / "qbirthday.ics"),
+    "alarm": False,
+    "alarm_custom_properties": "",
+    "alarm_days": 1,
+    "custom_properties": "",
 }
 
 
@@ -41,7 +41,7 @@ class Settings(QtCore.QSettings):
         for key, val in CONFIG_DEFAULTS.items():
             self.setDefaultValue(key, val)
         # ICS export
-        self.beginGroup('ics_export')
+        self.beginGroup("ics_export")
         for key, val in ICS_EXPORT_CONFIG_DEFAULTS.items():
             self.setDefaultValue(key, val)
         self.endGroup()
@@ -49,14 +49,14 @@ class Settings(QtCore.QSettings):
         for bcknd in BACKENDS:
             self.beginGroup(bcknd.id)
             # Disable all backends by default
-            self.setDefaultValue('enabled', False)
+            self.setDefaultValue("enabled", False)
             if bcknd.cls is not None:
                 # If backend available, Load backend specific default values
                 for key, val in bcknd.cls.DEFAULTS.items():
                     self.setDefaultValue(key, val)
             else:
                 # If backend unavailable and enabled in config, warn user
-                if self.value('enabled') is True:
+                if self.value("enabled") is True:
                     # TODO: display warning
                     pass
             self.endGroup()

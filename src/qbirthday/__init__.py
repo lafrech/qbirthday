@@ -17,14 +17,14 @@ from .paths import PICS_PATHS, QM_FILES_DIR
 
 
 def main():
-    '''Load settings, start status icon and get to work.'''
+    """Load settings, start status icon and get to work."""
 
     # TODO: Think twice about naming before releasing
     QtCore.QCoreApplication.setOrganizationName("QBirthday")
     QtCore.QCoreApplication.setApplicationName("qbirthday")
 
     app = QtWidgets.QApplication([])
-    app.setWindowIcon(QtGui.QIcon(PICS_PATHS['qbirthday']))
+    app.setWindowIcon(QtGui.QIcon(PICS_PATHS["qbirthday"]))
 
     # Internationalization
     # Use system locale
@@ -32,12 +32,13 @@ def main():
     # Load default translator for Qt strings
     translator_qt = QtCore.QTranslator()
     translator_qt.load(
-        'qt_{}'.format(locale),
-        QtCore.QLibraryInfo.location(QtCore.QLibraryInfo.TranslationsPath))
+        "qt_{}".format(locale),
+        QtCore.QLibraryInfo.location(QtCore.QLibraryInfo.TranslationsPath),
+    )
     app.installTranslator(translator_qt)
     # Load translator for own strings
     translator = QtCore.QTranslator()
-    translator.load(str(QM_FILES_DIR / 'qbirthday_{}'.format(locale)))
+    translator.load(str(QM_FILES_DIR / "qbirthday_{}".format(locale)))
     app.installTranslator(translator)
 
     # TODO: is this the right way?

@@ -8,8 +8,7 @@ from PyQt5 import QtCore
 from .exceptions import BackendMissingLibraryError
 
 
-MISSING_LIB_ERR_STR = QtCore.QT_TRANSLATE_NOOP(
-    "Backends", "Missing {} library.")
+MISSING_LIB_ERR_STR = QtCore.QT_TRANSLATE_NOOP("Backends", "Missing {} library.")
 
 
 class AbstractQObjectMetaclass(type(QtCore.QObject), abc.ABCMeta):
@@ -54,6 +53,7 @@ def try_import(module_name, lib_name=None):
         module = importlib.import_module(module_name)
     except ImportError:
         import_err = QtCore.QCoreApplication.translate(
-            "Backends", MISSING_LIB_ERR_STR).format(lib_name)
+            "Backends", MISSING_LIB_ERR_STR
+        ).format(lib_name)
         raise BackendMissingLibraryError(import_err)
     return module

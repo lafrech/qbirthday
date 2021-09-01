@@ -13,7 +13,7 @@ class StatusIcon(QtWidgets.QSystemTrayIcon):
     def __init__(self, main_window, settings):
 
         # TODO: enlarge icon to best fit
-        super().__init__(QtGui.QIcon(PICS_PATHS['birthday']), main_window)
+        super().__init__(QtGui.QIcon(PICS_PATHS["birthday"]), main_window)
 
         self.main_window = main_window
         self.bday_list = main_window.bday_list
@@ -24,29 +24,36 @@ class StatusIcon(QtWidgets.QSystemTrayIcon):
         menu.addAction(
             QtGui.QIcon.fromTheme("view-refresh"),
             self.tr("Refresh"),
-            self.main_window.reload)
+            self.main_window.reload,
+        )
         menu.addAction(
             QtGui.QIcon.fromTheme("preferences-other"),
             self.tr("Preferences"),
-            lambda: PreferencesDialog(self.settings, self.main_window).exec_())
+            lambda: PreferencesDialog(self.settings, self.main_window).exec_(),
+        )
         menu.addAction(
             QtGui.QIcon.fromTheme("help-about"),
             self.tr("About"),
-            lambda: AboutDialog(self.main_window).exec_())
+            lambda: AboutDialog(self.main_window).exec_(),
+        )
         menu.addAction(
             QtGui.QIcon.fromTheme("application-exit"),
             self.tr("Quit"),
-            QtCore.QCoreApplication.instance().quit)
+            QtCore.QCoreApplication.instance().quit,
+        )
 
         # Set context menu to open on right click
         self.setContextMenu(menu)
 
         # Display birthdays on left click
         def tray_icon_activated_cb(reason):
-            if (reason == QtWidgets.QSystemTrayIcon.Trigger or
-                    reason == QtWidgets.QSystemTrayIcon.DoubleClick):
+            if (
+                reason == QtWidgets.QSystemTrayIcon.Trigger
+                or reason == QtWidgets.QSystemTrayIcon.DoubleClick
+            ):
                 # Toggle birthday window visibility
                 self.main_window.setVisible(not self.main_window.isVisible())
+
         self.activated.connect(tray_icon_activated_cb)
 
         self._show_when_systray_available()
@@ -67,8 +74,8 @@ class StatusIcon(QtWidgets.QSystemTrayIcon):
         if self.bday_list.bdays_in_period():
             if self.bday_list.check_day(0):
                 # Birthday today
-                self.setIcon(QtGui.QIcon(PICS_PATHS['birthdayred']))
+                self.setIcon(QtGui.QIcon(PICS_PATHS["birthdayred"]))
             else:
-                self.setIcon(QtGui.QIcon(PICS_PATHS['birthday']))
+                self.setIcon(QtGui.QIcon(PICS_PATHS["birthday"]))
         else:
-            self.setIcon(QtGui.QIcon(PICS_PATHS['nobirthday']))
+            self.setIcon(QtGui.QIcon(PICS_PATHS["nobirthday"]))
