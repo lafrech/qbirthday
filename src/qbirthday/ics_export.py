@@ -35,10 +35,10 @@ class ICSExport(QtCore.QObject):
                 ics_file.write("PRODID:-//qbirthday//EN\n")
                 for index, bday in enumerate(birthdates):
                     ics_file.write("BEGIN:VEVENT\n")
-                    ics_file.write("UID:{}-{}@qbirthday\n".format(now, index))
-                    ics_file.write("CREATED:{}\n".format(now))
-                    ics_file.write("LAST-MODIFIED:{}\n".format(now))
-                    ics_file.write("DTSTAMP:{}\n".format(now))
+                    ics_file.write(f"UID:{now}-{index}@qbirthday\n")
+                    ics_file.write(f"CREATED:{now}\n")
+                    ics_file.write(f"LAST-MODIFIED:{now}\n")
+                    ics_file.write(f"DTSTAMP:{now}\n")
                     ics_file.write("DTSTART:{}\n".format(bday.strftime("%Y%m%d")))
                     ics_file.write("DURATION:PT0S\n")
                     ics_file.write("CATEGORIES:{}\n".format(self.tr("Birthday")))
@@ -53,9 +53,7 @@ class ICSExport(QtCore.QObject):
                     if conf_alarm:
                         ics_file.write("BEGIN:VALARM\n")
                         ics_file.write("ACTION:DISPLAY\n")
-                        ics_file.write(
-                            "TRIGGER;VALUE=DURATION:-P{}D\n".format(conf_alarm_days)
-                        )
+                        ics_file.write(f"TRIGGER;VALUE=DURATION:-P{conf_alarm_days}D\n")
                         ics_file.write(
                             "DESCRIPTION:{}{}\n".format(
                                 self.tr("Birthday: "), birthdates[bday][0]
@@ -70,7 +68,7 @@ class ICSExport(QtCore.QObject):
                         ics_file.write("\n")
                     ics_file.write("END:VEVENT\n")
                 ics_file.write("END:VCALENDAR")
-        except IOError:
+        except OSError:
             raise ICSExportError(
-                self.tr("Can't write iCalendar file: {}".format(conf_filepath))
+                self.tr(f"Can't write iCalendar file: {conf_filepath}")
             )

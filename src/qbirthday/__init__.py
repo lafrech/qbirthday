@@ -32,13 +32,13 @@ def main():
     # Load default translator for Qt strings
     translator_qt = QtCore.QTranslator()
     translator_qt.load(
-        "qt_{}".format(locale),
+        f"qt_{locale}",
         QtCore.QLibraryInfo.location(QtCore.QLibraryInfo.TranslationsPath),
     )
     app.installTranslator(translator_qt)
     # Load translator for own strings
     translator = QtCore.QTranslator()
-    translator.load(str(QM_FILES_DIR / "qbirthday_{}".format(locale)))
+    translator.load(str(QM_FILES_DIR / f"qbirthday_{locale}"))
     app.installTranslator(translator)
 
     # TODO: is this the right way?

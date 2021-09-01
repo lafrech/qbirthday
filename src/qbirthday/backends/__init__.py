@@ -19,7 +19,7 @@ BACKENDS = []
 
 for module_name in ("csv", "mysql", "lightning"):
     try:
-        module = importlib.import_module("qbirthday.backends.{}".format(module_name))
+        module = importlib.import_module(f"qbirthday.backends.{module_name}")
     except BackendMissingLibraryError as exc:
         BACKENDS.append(
             BackendDescription(exc.bcknd_id, exc.bcknd_name, None, str(exc))

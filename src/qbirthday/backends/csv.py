@@ -86,7 +86,7 @@ class CSVBackend(BaseBackend):
                     else:
                         name = row[1].strip()
                         birthdates.append((name, date))
-        except IOError:
+        except OSError:
             raise BackendReadError(
                 self.tr("Can't open CSV file: {}").format(self._filepath)
             )

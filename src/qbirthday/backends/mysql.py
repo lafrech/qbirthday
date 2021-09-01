@@ -124,7 +124,7 @@ class MySQLBackend(BaseBackend):
             raise BackendReadError(exc)
 
         try:
-            qry = "SELECT %s, %s FROM %s" % (self.name_col, self.date_col, self.table)
+            qry = f"SELECT {self.name_col}, {self.date_col} FROM {self.table}"
             self.cursor.execute(qry)
             rows = self.cursor.fetchall()
             birthdates = []
