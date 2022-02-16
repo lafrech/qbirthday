@@ -56,18 +56,7 @@ class StatusIcon(QtWidgets.QSystemTrayIcon):
 
         self.activated.connect(tray_icon_activated_cb)
 
-        self._show_when_systray_available()
-
-    def _show_when_systray_available(self):
-        """Show status icon when system tray is available
-
-        If available, show icon, otherwise, set a timer to check back later.
-        This is a workaround for https://bugreports.qt.io/browse/QTBUG-61898
-        """
-        if self.isSystemTrayAvailable():
-            self.show()
-        else:
-            QtCore.QTimer.singleShot(1000, self._show_when_systray_available)
+        self.show()
 
     def reload_set_icon(self):
         """Set icon according to birthday status"""
