@@ -1,6 +1,12 @@
 Changelog
 ---------
 
+0.7.0b4 (2022-02-16)
+++++++++++++++++++++
+
+- Support Python 3.10
+- Require PyQt5>=5.15 and remove workaround for bug in PyQt5 < 5.12.4
+
 0.7.0b3 (2021-09-01)
 ++++++++++++++++++++
 
