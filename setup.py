@@ -36,7 +36,7 @@ setup(
     ],
     python_requires=">=3.7",
     install_requires=[
-        "PyQt5>=5.7",
+        "PyQt5>=5.15",
     ],
     url="https://github.com/lafrech/qbirthday",
     project_urls={
