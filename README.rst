@@ -44,7 +44,7 @@ QBirthday is a Qt port of GBirthday, a GTK application.
 Project links
 =============
 
-- PyPI: https://pypi.python.org/pypi/marshmallow
+- PyPI: https://pypi.python.org/pypi/qbirthday
 - Changelog: https://github.com/lafrech/qbirthday/blob/master/CHANGELOG.rst
 - Issues: https://github.com/lafrech/qbirthday/issues
 
