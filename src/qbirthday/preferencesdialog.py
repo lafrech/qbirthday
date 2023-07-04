@@ -12,7 +12,6 @@ class IcsExportPreferencesDialog(QtWidgets.QDialog):
     """ICS export settings dialog"""
 
     def __init__(self, settings, parent):
-
         super().__init__(parent)
 
         uic.loadUi(str(UI_FILES_DIR / "icsexportpreferencesdialog.ui"), self)
@@ -76,7 +75,6 @@ class PreferencesDialog(QtWidgets.QDialog):
     """Settings dialog"""
 
     def __init__(self, settings, main_window):
-
         super().__init__(main_window)
 
         uic.loadUi(str(UI_FILES_DIR / "preferencesdialog.ui"), self)
@@ -101,7 +99,6 @@ class PreferencesDialog(QtWidgets.QDialog):
         self.bcknd_chkbx = {}
 
         for bcknd in BACKENDS:
-
             hbox = QtWidgets.QHBoxLayout()
             self.backendsLayout.addLayout(hbox)
             self.bcknd_chkbx[bcknd.id] = QtWidgets.QCheckBox(bcknd.name)

@@ -11,7 +11,6 @@ class StatusIcon(QtWidgets.QSystemTrayIcon):
     """Status icon"""
 
     def __init__(self, main_window, settings):
-
         # TODO: enlarge icon to best fit
         super().__init__(QtGui.QIcon(PICS_PATHS["birthday"]), main_window)
 

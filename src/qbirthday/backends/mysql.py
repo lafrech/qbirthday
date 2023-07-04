@@ -24,7 +24,6 @@ class MySqlPreferencesDialog(QtWidgets.QDialog):
     """MySQL backend settings dialog"""
 
     def __init__(self, settings, parent):
-
         super().__init__(parent)
 
         uic.loadUi(str(UI_FILES_DIR / "mysqlpreferencesdialog.ui"), self)
@@ -82,7 +81,6 @@ class MySQLBackend(BaseBackend):
     }
 
     def __init__(self, settings):
-
         super().__init__(settings)
 
         self.settings.beginGroup("MySQL")

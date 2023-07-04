@@ -19,7 +19,6 @@ class BirthdayList(QtCore.QObject):
     """Structure storing all birthdates and birthdays in specified period"""
 
     def __init__(self, main_window, settings):
-
         super().__init__()
 
         self.main_window = main_window

@@ -25,7 +25,7 @@ for module_name in ("csv", "mysql", "lightning"):
             BackendDescription(exc.bcknd_id, exc.bcknd_name, None, str(exc))
         )
     else:
-        bcknd_id = getattr(module, "BACKEND_ID")
-        bcknd_name = getattr(module, "BACKEND_NAME")
-        bcknd_cls = getattr(module, "BACKEND")
+        bcknd_id = module.BACKEND_ID
+        bcknd_name = module.BACKEND_NAME
+        bcknd_cls = module.BACKEND
         BACKENDS.append(BackendDescription(bcknd_id, bcknd_name, bcknd_cls, None))

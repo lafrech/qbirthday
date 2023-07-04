@@ -10,7 +10,6 @@ class AboutDialog(QtWidgets.QDialog):
     """About Dialog"""
 
     def __init__(self, main_window):
-
         super().__init__(main_window)
 
         uic.loadUi(str(UI_FILES_DIR / "aboutdialog.ui"), self)
