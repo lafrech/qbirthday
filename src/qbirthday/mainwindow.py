@@ -48,7 +48,10 @@ class MainWindow(QtWidgets.QMainWindow):
 
         # Window shall appear under system tray icon
         systray_icon_pos = self.status_icon.geometry().center()
-        self.move(systray_icon_pos.x() - self.width() / 2, systray_icon_pos.y())
+        self.move(
+            systray_icon_pos.x() - self.width()//2,
+            systray_icon_pos.y(),
+        )
 
         # Ensure the window is not minimized on virtual desktop change
         self.showNormal()
