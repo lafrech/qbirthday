@@ -16,7 +16,7 @@ Features
 Requirements
 ============
 
-QBirthday runs on Python >= 3.7.
+QBirthday runs on Python >= 3.8.
 
 It requires PyQt5 and optionally depends on mysqlclient if a MySQL database is used as backend.
 
