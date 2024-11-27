@@ -19,7 +19,6 @@ from .paths import PICS_PATHS, QM_FILES_DIR
 def main():
     """Load settings, start status icon and get to work."""
 
-    # TODO: Think twice about naming before releasing
     QtCore.QCoreApplication.setOrganizationName("QBirthday")
     QtCore.QCoreApplication.setApplicationName("qbirthday")
 
