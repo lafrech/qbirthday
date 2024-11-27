@@ -1,6 +1,6 @@
 [project]
 name = "qbirthday"
-version = "0.7.0"
+version = "0.7.1"
 description = "QBirthday birthday reminder"
 readme = "README.rst"
 license = { file = "LICENSE" }
