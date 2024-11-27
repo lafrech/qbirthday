@@ -1,0 +1,62 @@
+[project]
+name = "qbirthday"
+version = "0.7.0b5"
+description = "QBirthday birthday reminder"
+readme = "README.rst"
+license = { file = "LICENSE" }
+authors = [{ name = "Jérôme Lafréchoux", email = "jerome@jolimont.fr" }]
+maintainers = [
+  { name = "Jérôme Lafréchoux", email = "jerome@jolimont.fr" },
+]
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Intended Audience :: End Users/Desktop",
+  "Environment :: X11 Applications :: Qt",
+  "License :: OSI Approved :: GNU General Public License v2 or later (GPLv2+)",
+  "Operating System :: POSIX :: Linux",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+]
+requires-python = ">=3.8"
+dependencies = [
+  "PyQt5>=5.15",
+]
+
+[project.urls]
+Source = "https://github.com/lafrech/qbirthday"
+Issues = "https://github.com/lafrech/qbirthday/issues"
+Changelog = "https://github.com/lafrech/qbirthday/blob/master/CHANGELOG.rst"
+
+[build-system]
+requires = ["flit_core<4"]
+build-backend = "flit_core.buildapi"
+
+[tool.flit.sdist]
+include = [
+  "CHANGELOG.rst",
+  "CONTRIBUTING.rst",
+]
+
+[tool.ruff]
+src = ["src"]
+fix = true
+show-fixes = true
+output-format = "full"
+
+[tool.ruff.format]
+docstring-code-format = true
+
+[tool.ruff.lint]
+ignore = ["E203", "E266", "E501", "E731"]
+select = [
+  "B",  # flake8-bugbear
+  "E",  # pycodestyle error
+  "F",  # pyflakes
+  "I",  # isort
+  "UP", # pyupgrade
+  "W",  # pycodestyle warning
+]
