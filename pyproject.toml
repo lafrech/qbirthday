@@ -25,6 +25,9 @@ dependencies = [
   "PyQt5>=5.15",
 ]
 
+[project.scripts]
+qbirthday = "qbirthday:main"
+
 [project.urls]
 Source = "https://github.com/lafrech/qbirthday"
 Issues = "https://github.com/lafrech/qbirthday/issues"
