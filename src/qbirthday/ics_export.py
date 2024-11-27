@@ -68,7 +68,7 @@ class ICSExport(QtCore.QObject):
                         ics_file.write("\n")
                     ics_file.write("END:VEVENT\n")
                 ics_file.write("END:VCALENDAR")
-        except OSError:
+        except OSError as exc:
             raise ICSExportError(
                 self.tr(f"Can't write iCalendar file: {conf_filepath}")
-            )
+            ) from exc

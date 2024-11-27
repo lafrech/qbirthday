@@ -2,9 +2,9 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-from .preferencesdialog import PreferencesDialog
 from .aboutdialog import AboutDialog
 from .paths import PICS_PATHS
+from .preferencesdialog import PreferencesDialog
 
 
 class StatusIcon(QtWidgets.QSystemTrayIcon):

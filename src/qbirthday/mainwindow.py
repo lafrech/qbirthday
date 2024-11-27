@@ -5,9 +5,9 @@ import datetime
 from PyQt5 import QtCore, QtGui, QtWidgets, uic
 
 from .birthday_list import BirthdayList
-from .statusicon import StatusIcon
-from .settings import Settings
 from .paths import PICS_PATHS, UI_FILES_DIR
+from .settings import Settings
+from .statusicon import StatusIcon
 
 
 class MainWindow(QtWidgets.QMainWindow):

@@ -7,7 +7,6 @@ from PyQt5 import QtCore
 
 from .exceptions import BackendMissingLibraryError
 
-
 MISSING_LIB_ERR_STR = QtCore.QT_TRANSLATE_NOOP("Backends", "Missing {} library.")
 
 
@@ -51,9 +50,9 @@ def try_import(module_name, lib_name=None):
     lib_name = lib_name or module_name
     try:
         module = importlib.import_module(module_name)
-    except ImportError:
+    except ImportError as exc:
         import_err = QtCore.QCoreApplication.translate(
             "Backends", MISSING_LIB_ERR_STR
         ).format(lib_name)
-        raise BackendMissingLibraryError(import_err)
+        raise BackendMissingLibraryError(import_err) from exc
     return module

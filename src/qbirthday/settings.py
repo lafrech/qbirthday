@@ -5,9 +5,8 @@ Override QSettings to add default values
 
 from PyQt5 import QtCore
 
-from .paths import GENERIC_DATA_LOCATION
 from .backends import BACKENDS
-
+from .paths import GENERIC_DATA_LOCATION
 
 CONFIG_DEFAULTS = {
     "firstday": -2,

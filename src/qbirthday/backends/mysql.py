@@ -3,9 +3,9 @@
 from PyQt5 import QtWidgets, uic
 
 from qbirthday.paths import UI_FILES_DIR
+
 from .base import BaseBackend, try_import
 from .exceptions import BackendMissingLibraryError, BackendReadError
-
 
 BACKEND_ID = "MySQL"
 BACKEND_NAME = "MySQL database"
@@ -110,7 +110,7 @@ class MySQLBackend(BaseBackend):
             )
             self.cursor = self.conn.cursor()
         except Exception as exc:
-            raise ConnectionError(exc)
+            raise ConnectionError(exc) from exc
 
     def parse(self):
         """connect to mysql-database and get data"""
@@ -119,7 +119,7 @@ class MySQLBackend(BaseBackend):
         try:
             self._connect()
         except ConnectionError as exc:
-            raise BackendReadError(exc)
+            raise BackendReadError(exc) from exc
 
         try:
             qry = f"SELECT {self.name_col}, {self.date_col} FROM {self.table}"
@@ -128,10 +128,10 @@ class MySQLBackend(BaseBackend):
             birthdates = []
             for row in rows:
                 birthdates.append((row[0], row[1]))
-        except Exception as msg:
+        except Exception as exc:
             raise BackendReadError(
-                self.tr("Could not execute SQL query '{}':\n{}").format(qry, msg)
-            )
+                self.tr("Could not execute SQL query '{}':\n{}").format(qry, exc)
+            ) from exc
         else:
             return birthdates
         finally:

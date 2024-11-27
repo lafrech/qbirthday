@@ -10,7 +10,6 @@ from pathlib import Path
 
 from PyQt5 import QtCore
 
-
 GENERIC_DATA_LOCATION = (
     Path(
         QtCore.QStandardPaths.writableLocation(

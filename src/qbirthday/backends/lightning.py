@@ -2,12 +2,11 @@
 
 import configparser
 import datetime as dt
-from pathlib import Path
 import sqlite3
+from pathlib import Path
 
 from .base import BaseBackend
 from .exceptions import BackendReadError
-
 
 BACKEND_ID = "Lightning"
 BACKEND_NAME = "Lightning"
@@ -41,7 +40,7 @@ class LightningBackend(BaseBackend):
                 ]
                 return birthdates
         except sqlite3.Error as exc:
-            raise BackendReadError(exc)
+            raise BackendReadError(exc) from exc
 
     def parse(self):
         """Parse Lightning sqlite database in Thunderbird profile directory"""

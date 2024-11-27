@@ -9,10 +9,10 @@ from collections import defaultdict
 
 from PyQt5 import QtCore
 
-from .ics_export import ICSExport
 from .backends import BACKENDS
 from .backends.exceptions import BackendReadError
 from .exceptions import ICSExportError
+from .ics_export import ICSExport
 
 
 class BirthdayList(QtCore.QObject):

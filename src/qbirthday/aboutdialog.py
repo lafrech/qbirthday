@@ -3,6 +3,7 @@
 from PyQt5 import QtGui, QtWidgets, uic
 
 from qbirthday import __about__ as about
+
 from .paths import PICS_PATHS, UI_FILES_DIR
 
 
@@ -21,7 +22,7 @@ class AboutDialog(QtWidgets.QDialog):
         self.copyrightLabel.setText(
             "Copyright ©\n{}".format("\n".join(about.__copyright__))
         )
-        self.uriLabel.setText("<a href={uri}>{uri}</a>".format(uri=about.__uri__))
+        self.uriLabel.setText(f"<a href={about.__uri__}>{about.__uri__}</a>")
 
         # Authors
         self.authorsTextEdit.insertPlainText("\n".join(about.__authors__))

@@ -1,15 +1,14 @@
 """CSV file backend"""
 
-import datetime as dt
 import csv
+import datetime as dt
 
 from PyQt5 import QtCore, QtWidgets, uic
 
-from qbirthday.paths import UI_FILES_DIR
-from qbirthday.paths import APP_DATA_LOCATION
+from qbirthday.paths import APP_DATA_LOCATION, UI_FILES_DIR
+
 from .base import BaseBackend
 from .exceptions import BackendReadError
-
 
 BACKEND_ID = "CSV"
 BACKEND_NAME = "CSV-file (comma separated value)"
@@ -86,12 +85,12 @@ class CSVBackend(BaseBackend):
                     else:
                         name = row[1].strip()
                         birthdates.append((name, date))
-        except OSError:
+        except OSError as exc:
             raise BackendReadError(
                 self.tr("Can't open CSV file: {}").format(self._filepath)
-            )
+            ) from exc
         except ValueError as exc:
-            raise BackendReadError(exc)
+            raise BackendReadError(exc) from exc
 
         return birthdates
 

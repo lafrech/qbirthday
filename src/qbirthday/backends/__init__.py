@@ -5,7 +5,6 @@ from collections import namedtuple
 
 from .exceptions import BackendMissingLibraryError
 
-
 # TODO: translate display names
 
 # Backend description tuple
