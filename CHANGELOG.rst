@@ -1,6 +1,20 @@
 Changelog
 ---------
 
+0.7.0 (2024-11-27)
+++++++++++++++++++
+
+- Support Python 3.11, 3.12 and 3.13
+- Drop Python 3.8
+- Use pyproject.toml
+- Drop qb script : users should install and use qbirthday command
+
+0.7.0b5 (2023-07-04)
+++++++++++++++++++++
+
+- Fix passing coords as float to window move method
+- Drop Python 3.7
+
 0.7.0b4 (2022-02-16)
 ++++++++++++++++++++
 
